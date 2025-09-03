@@ -3,26 +3,52 @@
 namespace ArtPulse\Frontend;
 
 class EventSubmissionShortcode {
-	/**
-	 * Transient key used when WooCommerce is unavailable.
-	 */
-	private const NOTICE_KEY = 'ap_event_notices';
+        /**
+         * Transient key used when WooCommerce is unavailable.
+         */
+        private const NOTICE_KEY = 'ap_event_notices';
 
-	/**
-	 * Store a notice for later display.
-	 */
-	protected static function add_notice( string $message, string $type = 'error' ): void {
-		if ( function_exists( 'wc_add_notice' ) ) {
-			wc_add_notice( $message, $type );
-			return;
-		}
-		$notices   = get_transient( self::NOTICE_KEY ) ?: array();
-		$notices[] = array(
-			'message' => $message,
-			'type'    => $type,
-		);
-		set_transient( self::NOTICE_KEY, $notices, defined( 'MINUTE_IN_SECONDS' ) ? MINUTE_IN_SECONDS : 60 );
-	}
+       /**
+        * Internal log of notices for testing.
+        *
+        * @var array<int, array{message:string, type:string}>
+        */
+       private static array $notice_log = array();
+
+       /**
+        * Retrieve any logged notices.
+        */
+       public static function get_notice_log(): array {
+               return self::$notice_log;
+       }
+
+       /**
+        * Reset the internal notice log.
+        */
+       public static function reset_notice_log(): void {
+               self::$notice_log = array();
+       }
+
+       /**
+        * Store a notice for later display.
+        */
+       protected static function add_notice( string $message, string $type = 'error' ): void {
+               $entry = array(
+                       'message' => $message,
+                       'type'    => $type,
+               );
+
+               if ( function_exists( 'wc_add_notice' ) ) {
+                       wc_add_notice( $message, $type );
+                       self::$notice_log[] = $entry;
+                       return;
+               }
+
+               $notices   = get_transient( self::NOTICE_KEY ) ?: array();
+               $notices[] = $entry;
+               self::$notice_log[] = $entry;
+               set_transient( self::NOTICE_KEY, $notices, defined( 'MINUTE_IN_SECONDS' ) ? MINUTE_IN_SECONDS : 60 );
+       }
 
 	/**
 	 * Output any stored notices.
