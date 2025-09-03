@@ -72,6 +72,39 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                 parent::tear_down();
         }
 
+        public function test_namespaced_redirect_stubs_used_when_globals_disabled(): void {
+                $globalRefCalled    = false;
+                $globalRedirectCalled = false;
+
+                $refHandle = \Patchwork\redefine( '\\wp_get_referer', function () use ( &$globalRefCalled ) {
+                        $globalRefCalled = true;
+                        return '/global';
+                } );
+                $redirHandle = \Patchwork\redefine( '\\wp_safe_redirect', function ( $url ) use ( &$globalRedirectCalled ) {
+                        $globalRedirectCalled = true;
+                        throw new \RuntimeException( 'global redirect used' );
+                } );
+
+                $proxy = new class extends \ArtPulse\Frontend\EventSubmissionShortcode {
+                        public static function trigger(): void {
+                                parent::maybe_redirect();
+                        }
+                };
+
+                $this->expectException( \RuntimeException::class );
+                $this->expectExceptionMessage( 'redirect' );
+
+                try {
+                        $proxy::trigger();
+                } finally {
+                        \Patchwork\restore( $refHandle );
+                        \Patchwork\restore( $redirHandle );
+                        $this->assertFalse( $globalRefCalled );
+                        $this->assertFalse( $globalRedirectCalled );
+                        $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
+                }
+        }
+
         public function test_redirect_occurs_when_org_invalid(): void {
                 // Organization belongs to another user
                \ArtPulse\Frontend\StubState::$post_authors[99] = 2;
