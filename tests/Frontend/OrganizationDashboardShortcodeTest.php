@@ -42,11 +42,12 @@ class OrganizationDashboardShortcodeTest extends TestCase {
                \ArtPulse\Frontend\StubState::$shortcodes['[ap_user_dashboard]'] = '<div class="ap-dashboard-grid"></div>';
         }
 
-	public function test_dashboard_renders_grid(): void {
+        public function test_dashboard_renders_grid(): void {
                 $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 10;
                 $html = OrganizationDashboardShortcode::render( array() );
-		$this->assertStringContainsString( 'ap-dashboard-grid', $html );
-	}
+                $this->assertStringContainsString( 'ap-dashboard-grid', $html );
+                $this->assertStringNotContainsString( 'Access denied', $html );
+        }
 
         public function test_analytics_hidden_without_cap(): void {
                 $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 10;
