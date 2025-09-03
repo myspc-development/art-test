@@ -31,6 +31,20 @@ namespace ArtPulse\Frontend\Tests {
         function the_post(): void {
                 MockStorage::$have_posts = false;
         }
+
+        function the_title(): void {
+                echo 'Test Org';
+        }
+
+        function the_content(): void {
+                echo 'Org Content';
+        }
+
+        function the_post_thumbnail( $size, $attr = array() ): void {}
+
+        function get_the_ID(): int {
+                return 1;
+        }
 }
 
 namespace {
