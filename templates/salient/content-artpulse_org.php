@@ -1,6 +1,6 @@
 <?php
-while ( \have_posts() ) :
-  \get_header();
+\get_header();
+if ( \have_posts() ) :
   \the_post(); ?>
   <div class="nectar-portfolio-single-media">
     <?php \the_post_thumbnail('full',['class'=>'img-responsive']); ?>
@@ -52,4 +52,4 @@ while ( \have_posts() ) :
   <?php endif; ?>
   <?php echo \ArtPulse\Frontend\ap_share_buttons( \get_permalink(), \get_the_title(), \get_post_type(), \get_the_ID() ); ?>
   <?php \get_footer(); ?>
-<?php endwhile; ?>
+<?php endif; ?>
