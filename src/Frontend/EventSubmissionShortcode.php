@@ -55,16 +55,7 @@ class EventSubmissionShortcode {
                $target = \ArtPulse\Core\Plugin::get_event_submission_url();
        }
 
-	if ( null === $redirect ) {
-		if ( function_exists( __NAMESPACE__ . '\wp_safe_redirect' ) ) {
-			$redirect = __NAMESPACE__ . '\wp_safe_redirect';
-		} elseif ( function_exists( 'wp_safe_redirect' ) ) {
-			$redirect = '\wp_safe_redirect';
-		} else {
-			// Fallback for tests when globals are unavailable.
-			$redirect = __NAMESPACE__ . '\wp_safe_redirect';
-		}
-	}
+
 
 	if ( is_callable( $redirect ) ) {
 		$redirect( $target );

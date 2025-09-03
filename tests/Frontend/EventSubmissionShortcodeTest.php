@@ -65,7 +65,7 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                 parent::tear_down();
         }
 
-        public function test_invalid_org_rejected(): void {
+        public function test_redirect_occurs_when_org_invalid(): void {
                 // Organization belongs to another user
                \ArtPulse\Frontend\StubState::$post_authors[99] = 2;
                \ArtPulse\Frontend\StubState::$function_exists_map['wp_safe_redirect'] = false;
@@ -85,7 +85,7 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                 $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
         }
 
-        public function test_start_date_after_end_date_rejected(): void {
+        public function test_redirect_occurs_on_invalid_date_range(): void {
                $_POST['event_start_date'] = '2024-02-01';
                $_POST['event_end_date']   = '2024-01-01';
                \ArtPulse\Frontend\StubState::$function_exists_map['wp_safe_redirect'] = false;
@@ -105,7 +105,7 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                 $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
         }
 
-        public function test_banner_prepend_and_notice_on_success(): void {
+        public function test_redirect_occurs_after_successful_upload(): void {
                 // Pretend banner uploaded and media handler returns ID 55
                 // Also upload one additional image with ID 11 and place banner second in order
                 \ArtPulse\Frontend\StubState::$media_returns = array(
@@ -216,7 +216,7 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
         }
 
-       public function test_meta_logged_when_upload_partially_fails(): void {
+       public function test_redirect_occurs_after_failed_upload(): void {
                \ArtPulse\Frontend\StubState::$media_returns = array(
                        'event_banner' => 55,
                        'ap_image'     => new \WP_Error( 'upload_error', 'bad' ),
@@ -247,6 +247,8 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                } catch ( \RuntimeException $e ) {
                        $this->assertSame( 'redirect', $e->getMessage() );
                }
+
+               $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
 
                $gallery_calls = array_filter(
                        \ArtPulse\Frontend\StubState::$meta_log,
