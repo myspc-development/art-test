@@ -10,7 +10,10 @@ class DashboardNewsBlock {
 		if ( ! function_exists( 'register_block_type_from_metadata' ) ) {
 			return;
 		}
-		register_block_type_from_metadata( __DIR__ . '/../../blocks/dashboard-news' );
+		$registry = \WP_Block_Type_Registry::get_instance();
+		if ( ! $registry->is_registered( 'artpulse/dashboard-news' ) ) {
+			register_block_type_from_metadata( __DIR__ . '/../../blocks/dashboard-news' );
+		}
 	}
 
 	public static function render_callback( $attributes ) {
