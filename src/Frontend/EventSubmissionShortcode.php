@@ -613,9 +613,10 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
                        $banner_id = $final_image_ids[0];
                }
 
-               // Persist gallery and banner meta immediately so StubState::$meta_log records both
-               // keys even if the request redirects. Cast to the expected types inline to guarantee
-               // consistent storage even when uploads fail.
+               // Persist gallery and banner meta as soon as the final IDs are determined.
+               // Doing this before setting thumbnails or further validation ensures StubState::$meta_log
+               // captures entries for both keys even if the request redirects. Cast to the expected types
+               // inline to guarantee consistent storage.
                update_post_meta(
                        $post_id,
                        '_ap_submission_images',
