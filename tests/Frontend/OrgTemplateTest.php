@@ -48,13 +48,17 @@ namespace ArtPulse\Frontend\Tests {
                         $this->assertStringContainsString( '09:00 - 17:00', $html );
                 }
 
-                public function test_loop_outputs_content_when_have_posts_true(): void {
+                public function test_output_unchanged_for_single_post(): void {
                         MockStorage::$have_posts = true;
                         ob_start();
                         include __DIR__ . '/../../templates/salient/content-artpulse_org.php';
                         $html = ob_get_clean();
                         $this->assertFalse( MockStorage::$have_posts );
-                        $this->assertStringContainsString( 'Org Content', $html );
+                        $expected = '<div class="nectar-portfolio-single-media">' . PHP_EOL
+                                . '      </div>' . PHP_EOL
+                                . '  <h1 class="entry-title">Test Org</h1>' . PHP_EOL
+                                . '    <div class="entry-content">Org Content</div>';
+                        $this->assertSame( $expected, trim( $html ) );
                 }
         }
 }
