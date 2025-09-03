@@ -243,17 +243,15 @@ class DashboardWidgetController {
         }
 
         public static function import_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-                $nonce_check = Auth::verify_nonce( $request, 'ap_import_layout' );
-                if ( is_wp_error( $nonce_check ) ) {
-                        $nonce_check->add_data( array( 'status' => 403 ) );
-                        return $nonce_check;
-                }
+               $nonce_check = Auth::verify_nonce( $request, 'ap_import_layout' );
+               if ( is_wp_error( $nonce_check ) ) {
+                       return $nonce_check;
+               }
 
-                $cap_check = Auth::require_cap( 'edit_posts' );
-                if ( is_wp_error( $cap_check ) ) {
-                        $cap_check->add_data( array( 'status' => 403 ) );
-                        return $cap_check;
-                }
+               $cap_check = Auth::require_cap( 'edit_posts' );
+               if ( is_wp_error( $cap_check ) ) {
+                       return $cap_check;
+               }
 
                 $data = $request->get_json_params();
                 $role = sanitize_key( $data['role'] ?? '' );
