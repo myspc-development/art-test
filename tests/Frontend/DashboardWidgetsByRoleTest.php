@@ -1,10 +1,10 @@
 <?php
-require_once __DIR__ . '/_Html.php';
-
 namespace ArtPulse\Frontend;
 
 use WP_UnitTestCase;
 use function ArtPulse\Frontend\Html\extract_widget_ids;
+
+require_once __DIR__ . '/_Html.php';
 
 /**
  * @backupGlobals disabled
