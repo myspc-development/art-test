@@ -73,17 +73,17 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                \ArtPulse\Frontend\StubState::$function_exists_map['ArtPulse\\Frontend\\wp_safe_redirect'] = true;
                \ArtPulse\Frontend\StubState::$function_exists_map['ArtPulse\\Frontend\\wp_get_referer']    = true;
 
-                try {
-                        EventSubmissionShortcode::maybe_handle_form();
-                        $this->fail( 'Expected redirect' );
-                } catch ( \RuntimeException $e ) {
-                        $this->assertSame( 'redirect', $e->getMessage() );
-                }
+               $this->expectException( \RuntimeException::class );
+               $this->expectExceptionMessage( 'redirect' );
 
-                $this->assertSame( 'Invalid organization selected.', \ArtPulse\Frontend\StubState::$notice );
-                $this->assertEmpty( \ArtPulse\Frontend\StubState::$inserted_post );
-                $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
-        }
+               try {
+                       EventSubmissionShortcode::maybe_handle_form();
+               } finally {
+                       $this->assertSame( 'Invalid organization selected.', \ArtPulse\Frontend\StubState::$notice );
+                       $this->assertEmpty( \ArtPulse\Frontend\StubState::$inserted_post );
+                       $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
+               }
+       }
 
         public function test_redirect_occurs_on_invalid_date_range(): void {
                $_POST['event_start_date'] = '2024-02-01';
@@ -93,17 +93,17 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                \ArtPulse\Frontend\StubState::$function_exists_map['ArtPulse\\Frontend\\wp_safe_redirect'] = true;
                \ArtPulse\Frontend\StubState::$function_exists_map['ArtPulse\\Frontend\\wp_get_referer']    = true;
 
-                try {
-                        EventSubmissionShortcode::maybe_handle_form();
-                        $this->fail( 'Expected redirect' );
-                } catch ( \RuntimeException $e ) {
-                        $this->assertSame( 'redirect', $e->getMessage() );
-                }
+               $this->expectException( \RuntimeException::class );
+               $this->expectExceptionMessage( 'redirect' );
 
-                $this->assertSame( 'Start date cannot be later than end date.', \ArtPulse\Frontend\StubState::$notice );
-                $this->assertEmpty( \ArtPulse\Frontend\StubState::$inserted_post );
-                $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
-        }
+               try {
+                       EventSubmissionShortcode::maybe_handle_form();
+               } finally {
+                       $this->assertSame( 'Start date cannot be later than end date.', \ArtPulse\Frontend\StubState::$notice );
+                       $this->assertEmpty( \ArtPulse\Frontend\StubState::$inserted_post );
+                       $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
+               }
+       }
 
         public function test_redirect_occurs_after_successful_upload(): void {
                 // Pretend banner uploaded and media handler returns ID 55
@@ -128,30 +128,30 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                 );
                 $_POST['image_order'] = '11,55';
 
+               $this->expectException( \RuntimeException::class );
+               $this->expectExceptionMessage( 'redirect' );
+
                try {
                        EventSubmissionShortcode::maybe_handle_form();
-                       $this->fail( 'Expected redirect' );
-               } catch ( \RuntimeException $e ) {
-                       $this->assertSame( 'redirect', $e->getMessage() );
+               } finally {
+                       $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
+
+                       $gallery_calls = array_filter(
+                               \ArtPulse\Frontend\StubState::$meta_log,
+                               static fn( $args ) => $args[1] === '_ap_submission_images'
+                       );
+                       $banner_calls = array_filter(
+                               \ArtPulse\Frontend\StubState::$meta_log,
+                               static fn( $args ) => $args[1] === 'event_banner_id'
+                       );
+
+                       $this->assertCount( 1, $gallery_calls );
+                       $this->assertSame( array( 55, 11 ), array_values( $gallery_calls )[0][2] );
+                       $this->assertCount( 1, $banner_calls );
+                       $this->assertSame( 55, array_values( $banner_calls )[0][2] );
+                       $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
                }
-
-               $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
-
-               $gallery_calls = array_filter(
-                       \ArtPulse\Frontend\StubState::$meta_log,
-                       static fn( $args ) => $args[1] === '_ap_submission_images'
-               );
-               $banner_calls = array_filter(
-                       \ArtPulse\Frontend\StubState::$meta_log,
-                       static fn( $args ) => $args[1] === 'event_banner_id'
-               );
-
-               $this->assertCount( 1, $gallery_calls );
-               $this->assertSame( array( 55, 11 ), array_values( $gallery_calls )[0][2] );
-               $this->assertCount( 1, $banner_calls );
-               $this->assertSame( 55, array_values( $banner_calls )[0][2] );
-               $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
-        }
+       }
 
        public function test_meta_logged_when_banner_missing(): void {
                 // Upload a single additional image
@@ -164,57 +164,57 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                         'size'     => 1,
                 );
 
+               $this->expectException( \RuntimeException::class );
+               $this->expectExceptionMessage( 'redirect' );
+
                try {
                        EventSubmissionShortcode::maybe_handle_form();
-                       $this->fail( 'Expected redirect' );
-               } catch ( \RuntimeException $e ) {
-                       $this->assertSame( 'redirect', $e->getMessage() );
+               } finally {
+                       $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
+
+                       $gallery_calls = array_filter(
+                               \ArtPulse\Frontend\StubState::$meta_log,
+                               static fn( $args ) => $args[1] === '_ap_submission_images'
+                       );
+                       $banner_calls = array_filter(
+                               \ArtPulse\Frontend\StubState::$meta_log,
+                               static fn( $args ) => $args[1] === 'event_banner_id'
+                       );
+
+                       $this->assertCount( 1, $gallery_calls );
+                       $this->assertSame( array( 11 ), array_values( $gallery_calls )[0][2] );
+                       $this->assertCount( 1, $banner_calls );
+                       $this->assertSame( 11, array_values( $banner_calls )[0][2] );
+                       $this->assertSame( 11, \ArtPulse\Frontend\StubState::$thumbnail );
+                       $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
                }
-
-               $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
-
-               $gallery_calls = array_filter(
-                       \ArtPulse\Frontend\StubState::$meta_log,
-                       static fn( $args ) => $args[1] === '_ap_submission_images'
-               );
-               $banner_calls = array_filter(
-                       \ArtPulse\Frontend\StubState::$meta_log,
-                       static fn( $args ) => $args[1] === 'event_banner_id'
-               );
-
-               $this->assertCount( 1, $gallery_calls );
-               $this->assertSame( array( 11 ), array_values( $gallery_calls )[0][2] );
-               $this->assertCount( 1, $banner_calls );
-               $this->assertSame( 11, array_values( $banner_calls )[0][2] );
-               $this->assertSame( 11, \ArtPulse\Frontend\StubState::$thumbnail );
-               $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
-        }
+       }
 
         public function test_meta_logged_when_no_images_uploaded(): void {
+               $this->expectException( \RuntimeException::class );
+               $this->expectExceptionMessage( 'redirect' );
+
                try {
                        EventSubmissionShortcode::maybe_handle_form();
-                       $this->fail( 'Expected redirect' );
-               } catch ( \RuntimeException $e ) {
-                       $this->assertSame( 'redirect', $e->getMessage() );
+               } finally {
+                       $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
+
+                       $gallery_calls = array_filter(
+                               \ArtPulse\Frontend\StubState::$meta_log,
+                               static fn( $args ) => $args[1] === '_ap_submission_images'
+                       );
+                       $banner_calls = array_filter(
+                               \ArtPulse\Frontend\StubState::$meta_log,
+                               static fn( $args ) => $args[1] === 'event_banner_id'
+                       );
+
+                       $this->assertCount( 1, $gallery_calls );
+                       $this->assertSame( array(), array_values( $gallery_calls )[0][2] );
+                       $this->assertCount( 1, $banner_calls );
+                       $this->assertSame( 0, array_values( $banner_calls )[0][2] );
+                       $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
                }
-
-               $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
-
-               $gallery_calls = array_filter(
-                       \ArtPulse\Frontend\StubState::$meta_log,
-                       static fn( $args ) => $args[1] === '_ap_submission_images'
-               );
-               $banner_calls = array_filter(
-                       \ArtPulse\Frontend\StubState::$meta_log,
-                       static fn( $args ) => $args[1] === 'event_banner_id'
-               );
-
-               $this->assertCount( 1, $gallery_calls );
-               $this->assertSame( array(), array_values( $gallery_calls )[0][2] );
-               $this->assertCount( 1, $banner_calls );
-               $this->assertSame( 0, array_values( $banner_calls )[0][2] );
-               $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
-        }
+       }
 
        public function test_redirect_occurs_after_failed_upload(): void {
                \ArtPulse\Frontend\StubState::$media_returns = array(
@@ -241,28 +241,28 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                \ArtPulse\Frontend\StubState::$function_exists_map['wp_safe_redirect'] = true;
                \ArtPulse\Frontend\StubState::$function_exists_map['wp_get_referer']    = true;
 
+               $this->expectException( \RuntimeException::class );
+               $this->expectExceptionMessage( 'redirect' );
+
                try {
                        EventSubmissionShortcode::maybe_handle_form();
-                       $this->fail( 'Expected redirect' );
-               } catch ( \RuntimeException $e ) {
-                       $this->assertSame( 'redirect', $e->getMessage() );
+               } finally {
+                       $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
+
+                       $gallery_calls = array_filter(
+                               \ArtPulse\Frontend\StubState::$meta_log,
+                               static fn( $args ) => $args[1] === '_ap_submission_images'
+                       );
+                       $banner_calls = array_filter(
+                               \ArtPulse\Frontend\StubState::$meta_log,
+                               static fn( $args ) => $args[1] === 'event_banner_id'
+                       );
+
+                       $this->assertCount( 1, $gallery_calls );
+                       $this->assertSame( array( 55 ), array_values( $gallery_calls )[0][2] );
+                       $this->assertCount( 1, $banner_calls );
+                       $this->assertSame( 55, array_values( $banner_calls )[0][2] );
+                       $this->assertSame( 'Error uploading additional image. Please try again.', \ArtPulse\Frontend\StubState::$notice );
                }
-
-               $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
-
-               $gallery_calls = array_filter(
-                       \ArtPulse\Frontend\StubState::$meta_log,
-                       static fn( $args ) => $args[1] === '_ap_submission_images'
-               );
-               $banner_calls = array_filter(
-                       \ArtPulse\Frontend\StubState::$meta_log,
-                       static fn( $args ) => $args[1] === 'event_banner_id'
-               );
-
-               $this->assertCount( 1, $gallery_calls );
-               $this->assertSame( array( 55 ), array_values( $gallery_calls )[0][2] );
-               $this->assertCount( 1, $banner_calls );
-               $this->assertSame( 55, array_values( $banner_calls )[0][2] );
-               $this->assertSame( 'Error uploading additional image. Please try again.', \ArtPulse\Frontend\StubState::$notice );
        }
 }
