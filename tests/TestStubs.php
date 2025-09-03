@@ -131,13 +131,17 @@ namespace {
                 function get_footer() {}
         }
 
-        // Provide loop stubs so tests can observe loop state transitions. These
-        // override core functions unconditionally.
-        function have_posts() {
-                return MockStorage::$have_posts;
+        // Provide loop stubs so tests can observe loop state transitions. Use
+        // WordPress' native implementations when available.
+        if ( ! function_exists( 'have_posts' ) ) {
+                function have_posts() {
+                        return MockStorage::$have_posts;
+                }
         }
-        function the_post() {
-                MockStorage::$have_posts = false;
+        if ( ! function_exists( 'the_post' ) ) {
+                function the_post() {
+                        MockStorage::$have_posts = false;
+                }
         }
 
         // If the WordPress test suite is available, let core functions be loaded
