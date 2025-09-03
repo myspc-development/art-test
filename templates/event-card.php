@@ -89,7 +89,7 @@ if ( $start && strtotime( $start ) > $now ) {
             <span class="screen-reader-text"><?php esc_html_e( 'Type:', 'artpulse' ); ?> <?php echo esc_html( implode( ', ', $types ) ); ?></span>
         <?php endif; ?>
         <?php if ( $org_name || $org_email ) : ?>
-            <span class="screen-reader-text"><?php esc_html_e( 'Organizer:', 'artpulse' ); ?> <?php echo esc_html( $org_name ); ?><?php if ( $org_email ) : ?> (<?php echo esc_html( preg_replace( '/(?:&#0*64;|@)/', '&#64;', antispambot( $org_email ) ) ); ?>)<?php endif; ?></span>
+            <span class="screen-reader-text"><?php esc_html_e( 'Organizer:', 'artpulse' ); ?> <?php echo esc_html( $org_name ); ?><?php if ( $org_email ) : ?> (<?php echo \ArtPulse\Util\ap_obfuscate_email( $org_email ); ?>)<?php endif; ?></span>
         <?php endif; ?>
         <?php
             $rsvps      = get_post_meta( $event_id, 'event_rsvp_list', true );
