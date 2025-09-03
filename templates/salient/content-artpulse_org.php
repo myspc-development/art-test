@@ -1,5 +1,7 @@
 <?php
-\get_header();
+if ( ! defined( 'WP_ENV_FOR_TESTS' ) ) {
+  \get_header();
+}
 
 // During tests various template helpers are defined in a namespaced context
 // so we need to explicitly call them when the test flag is set. When running
@@ -75,8 +77,5 @@ if ( defined( 'WP_ENV_FOR_TESTS' ) ) {
       <?php endforeach; ?>
     </ul>
   <?php endif; ?>
-  <?php if ( ! defined( 'WP_ENV_FOR_TESTS' ) ) : ?>
-    <?php echo \ArtPulse\Frontend\ap_share_buttons( \get_permalink(), \get_the_title(), \get_post_type(), $get_the_ID() ); ?>
-  <?php endif; ?>
-  <?php \get_footer(); ?>
+
 <?php } ?>
