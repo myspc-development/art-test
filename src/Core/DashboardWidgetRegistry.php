@@ -8,6 +8,7 @@ use WP_Roles;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Admin\RolePresets;
 use ArtPulse\Core\WidgetFlags;
+use ArtPulse\Core\WidgetRegistryLoader;
 use ArtPulse\Support\WidgetIds;
 use ArtPulse\Widgets\Placeholder\ApPlaceholderWidget;
 
@@ -1231,7 +1232,9 @@ class DashboardWidgetRegistry {
 	 * Render all widgets visible to the specified user in a basic grid layout.
 	 */
        public static function render_for_role( int $user_id ): void {
-	       $role = DashboardController::get_role( $user_id );
+               self::init();
+               WidgetRegistryLoader::register_widgets();
+               $role = DashboardController::get_role( $user_id );
 
 	       do_action( 'ap_before_widgets', $role );
 
@@ -1289,7 +1292,8 @@ class DashboardWidgetRegistry {
 			       $html = ob_get_clean();
 		       }
 
-		       $sections[ $section ][] = '<div class="postbox" data-slug="' . esc_attr( $id ) . '"><div class="inside">' . $html . '</div></div>';
+                       $sections[ $section ][] =
+                               '<div class="postbox" id="' . esc_attr( $id ) . '" data-widget-id="' . esc_attr( $id ) . '"><div class="inside">' . $html . '</div></div>';
 		       ++$rendered;
 	       }
 
