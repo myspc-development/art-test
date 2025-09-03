@@ -1,5 +1,5 @@
 <?php
-if ( \have_posts() ) :
+while ( \have_posts() ) :
   \get_header();
   \the_post(); ?>
   <div class="nectar-portfolio-single-media">
@@ -52,4 +52,4 @@ if ( \have_posts() ) :
   <?php endif; ?>
   <?php echo \ArtPulse\Frontend\ap_share_buttons( \get_permalink(), \get_the_title(), \get_post_type(), \get_the_ID() ); ?>
   <?php \get_footer(); ?>
-<?php endif; ?>
+<?php endwhile; ?>
