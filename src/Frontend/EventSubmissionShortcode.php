@@ -397,8 +397,11 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
 		$rsvp_url           = esc_url_raw( $_POST['event_rsvp_url'] ?? '' );
 		$organizer_name     = sanitize_text_field( $_POST['event_organizer_name'] ?? '' );
 		$organizer_email    = sanitize_email( $_POST['event_organizer_email'] ?? '' );
-		$event_org     = absint( $_POST['event_org'] ?? 0 );
-		$org_post      = $event_org ? get_post( $event_org ) : null;
+               $event_org    = absint( $_POST['event_org'] ?? 0 );
+               $get_post_fn  = __NAMESPACE__ . '\get_post';
+               $org_post     = $event_org
+                       ? ( function_exists( $get_post_fn ) ? $get_post_fn( $event_org ) : \get_post( $event_org ) )
+                       : null;
                 $event_artists      = isset( $_POST['event_artists'] ) ? array_map( 'intval', (array) $_POST['event_artists'] ) : array();
                 $event_type         = intval( $_POST['event_type'] ?? 0 );
                 $featured           = isset( $_POST['event_featured'] ) ? '1' : '0';
@@ -409,18 +412,23 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
                         return;
                 }
 
-		// Ensure a valid organization is selected and belongs to the current user.
-		if ( ! $event_org || ! $org_post ) {
-			self::add_notice( __( 'Please select an organization.', 'artpulse' ), 'error' );
-			self::maybe_redirect();
-			return;
-		}
+               // Ensure a valid organization is selected.
+               if ( ! $event_org || ! $org_post ) {
+                       self::add_notice( __( 'Please select an organization.', 'artpulse' ), 'error' );
+                       self::maybe_redirect();
+                       return;
+               }
 
-		if ( $org_post->post_type !== 'artpulse_org' || (int) $org_post->post_author !== $user_id ) {
-			self::add_notice( 'Invalid organization selected.', 'error' );
-			self::maybe_redirect();
-			return;
-		}
+               // Only perform additional checks when the post object is valid.
+               if (
+                       ! is_object( $org_post ) ||
+                       $org_post->post_type !== 'artpulse_org' ||
+                       (int) ( $org_post->post_author ?? 0 ) !== $user_id
+               ) {
+                       self::add_notice( 'Invalid organization selected.', 'error' );
+                       self::maybe_redirect();
+                       return;
+               }
 
                 // Validate start and end dates when both provided.
                 if ( $start_date && $end_date && strtotime( $start_date ) > strtotime( $end_date ) ) {
