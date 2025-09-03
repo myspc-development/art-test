@@ -584,21 +584,24 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
                $final_image_ids = array_values( array_map( 'intval', (array) $final_image_ids ) );
                $banner_id       = (int) $banner_id;
 
-               // Always record gallery and banner meta before any potential early return.
+               // Always record gallery and banner meta before any potential early return. This
+               // allows tests to inspect the stored values even if a redirect happens due to an
+               // upload failure.
                update_post_meta( $post_id, '_ap_submission_images', $final_image_ids );
                update_post_meta( $post_id, 'event_banner_id', $banner_id );
 
-               // Handle upload errors after persisting meta data.
+               // Redirect immediately when an upload error occurred. The metadata above has already
+               // been saved, so the redirect happens regardless of success or failure.
                if ( $upload_had_error ) {
                        self::maybe_redirect();
                        return;
                }
 
-		// Success message and redirect
-		$message = $post_status === 'pending'
-			? __( 'Event submitted successfully! It is awaiting review.', 'artpulse' )
-			: __( 'Event submitted successfully!', 'artpulse' );
-		self::add_notice( $message, 'success' );
-		self::maybe_redirect();
+               // On success, add a confirmation notice before redirecting.
+               $message = $post_status === 'pending'
+                       ? __( 'Event submitted successfully! It is awaiting review.', 'artpulse' )
+                       : __( 'Event submitted successfully!', 'artpulse' );
+               self::add_notice( $message, 'success' );
+               self::maybe_redirect();
 	}
 }
