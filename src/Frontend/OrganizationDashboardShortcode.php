@@ -125,17 +125,6 @@ class OrganizationDashboardShortcode {
 
 	public static function handle_ajax_add_event() {
 		check_ajax_referer( 'ap_org_dashboard_nonce', 'nonce' );
-
-               $cap_fn    = __NAMESPACE__ . '\\current_user_can';
-               $can_create = function_exists( $cap_fn )
-                       ? $cap_fn( 'create_artpulse_events' )
-                       : \current_user_can( 'create_artpulse_events' );
-
-               if ( ! $can_create ) {
-                       wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-                       return;
-               }
-
 		$title              = sanitize_text_field( $_POST['ap_event_title'] );
 		$date               = sanitize_text_field( $_POST['ap_event_date'] );
 		$start_date         = sanitize_text_field( $_POST['ap_event_start_date'] ?? '' );
@@ -159,6 +148,11 @@ class OrganizationDashboardShortcode {
 		$event_type         = intval( $_POST['ap_event_type'] ?? 0 );
 		$featured           = isset( $_POST['ap_event_featured'] ) ? '1' : '0';
 		$org_id             = intval( $_POST['ap_event_organization'] );
+		$user_org = get_user_meta( get_current_user_id(), 'ap_organization_id', true );
+		if ( ! $user_org || (int) $user_org !== $org_id ) {
+			wp_send_json_error( [ 'message' => 'Invalid organization selected.' ] );
+			return;
+		}
 
 		$data = array(
 			'title'              => $title,
