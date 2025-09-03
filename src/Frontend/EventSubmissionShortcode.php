@@ -522,10 +522,11 @@ class EventSubmissionShortcode {
                $final_image_ids = array_values( array_map( 'intval', (array) $final_image_ids ) );
                $banner_id       = (int) $banner_id;
 
-               // Update Post Meta with Image IDs and banner ID
+               // Update Post Meta with Image IDs and banner ID before any early returns
                update_post_meta( $post_id, '_ap_submission_images', $final_image_ids );
                update_post_meta( $post_id, 'event_banner_id', $banner_id );
 
+               // Handle upload errors after persisting meta data.
                if ( $upload_had_error ) {
                        self::maybe_redirect();
                        return;

@@ -190,4 +190,52 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                $this->assertSame( 0, array_values( $banner_calls )[0][2] );
                $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
         }
+
+       public function test_meta_logged_when_upload_partially_fails(): void {
+               \ArtPulse\Frontend\StubState::$media_returns = array(
+                       'event_banner' => 55,
+                       'ap_image'     => new \WP_Error( 'upload_error', 'bad' ),
+               );
+
+               $_FILES['event_banner'] = array(
+                       'name'     => 'b.jpg',
+                       'tmp_name' => '/tmp/b',
+                       'type'     => 'image/jpeg',
+                       'error'    => 0,
+                       'size'     => 1,
+               );
+
+               $_FILES['image_1'] = array(
+                       'name'     => 'a.jpg',
+                       'tmp_name' => '/tmp/a',
+                       'type'     => 'image/jpeg',
+                       'error'    => 0,
+                       'size'     => 1,
+               );
+
+               \ArtPulse\Frontend\StubState::$function_exists_map['wp_safe_redirect'] = true;
+               \ArtPulse\Frontend\StubState::$function_exists_map['wp_get_referer']    = true;
+
+               try {
+                       EventSubmissionShortcode::maybe_handle_form();
+                       $this->fail( 'Expected redirect' );
+               } catch ( \RuntimeException $e ) {
+                       $this->assertSame( 'redirect', $e->getMessage() );
+               }
+
+               $gallery_calls = array_filter(
+                       \ArtPulse\Frontend\StubState::$meta_log,
+                       static fn( $args ) => $args[1] === '_ap_submission_images'
+               );
+               $banner_calls = array_filter(
+                       \ArtPulse\Frontend\StubState::$meta_log,
+                       static fn( $args ) => $args[1] === 'event_banner_id'
+               );
+
+               $this->assertCount( 1, $gallery_calls );
+               $this->assertSame( array( 55 ), array_values( $gallery_calls )[0][2] );
+               $this->assertCount( 1, $banner_calls );
+               $this->assertSame( 55, array_values( $banner_calls )[0][2] );
+               $this->assertSame( 'Error uploading additional image. Please try again.', \ArtPulse\Frontend\StubState::$notice );
+       }
 }
