@@ -29,6 +29,8 @@ class EventCardTaxonomyTest extends WP_UnitTestCase {
                        $this->removed_insert_hooked_blocks = true;
                }
 
+               add_filter( 'hooked_block_types', '__return_empty_array', 10, 0 );
+
                TaxonomiesRegistrar::register_event_types();
                TaxonomiesRegistrar::insert_default_event_types();
 
@@ -55,6 +57,8 @@ class EventCardTaxonomyTest extends WP_UnitTestCase {
                if ( ! empty( $this->removed_insert_hooked_blocks ) ) {
                        add_filter( 'render_block', 'insert_hooked_blocks', 10, 2 );
                }
+
+               remove_filter( 'hooked_block_types', '__return_empty_array', 10 );
 
                unregister_taxonomy( 'event_type' );
                parent::tear_down();
