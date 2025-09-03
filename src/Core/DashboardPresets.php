@@ -69,6 +69,7 @@ class DashboardPresets {
                                 'widget_membership',
                                 'widget_account_tools',
                                 'widget_my_follows',
+                                'widget_favorites',
                                 'widget_recommended_for_you',
                                 'widget_local_events',
                                 'widget_my_events',
