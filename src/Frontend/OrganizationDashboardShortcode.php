@@ -110,10 +110,8 @@ class OrganizationDashboardShortcode {
                 if ( ! is_user_logged_in() ) {
                         return '<p>' . esc_html__( 'You must be logged in to view this dashboard.', 'artpulse' ) . '</p>';
                 }
-                if (
-                        ! \ArtPulse\Frontend\current_user_can( 'organization' ) &&
-                        ! \ArtPulse\Frontend\current_user_can( 'administrator' )
-                ) {
+                $org_id = get_user_meta( get_current_user_id(), 'ap_organization_id', true );
+                if ( ! $org_id ) {
                         return '<p>' . esc_html__( 'Access denied.', 'artpulse' ) . '</p>';
                 }
                 $mode = ap_get_ui_mode();
