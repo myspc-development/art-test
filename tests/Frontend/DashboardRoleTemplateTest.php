@@ -13,7 +13,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 class DashboardRoleTemplateTest extends WP_UnitTestCase {
 
-        protected function set_up(): void {
+	public function set_up(): void {
                 parent::set_up();
 
                 // Swallow any stdout/stderr produced during these tests.
