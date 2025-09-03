@@ -2,6 +2,7 @@
 namespace ArtPulse\Blocks;
 
 use ArtPulse\Frontend\EventCardShortcode;
+use WP_Block_Type_Registry;
 
 class EventCardBlock {
 	public static function register(): void {
@@ -12,6 +13,10 @@ class EventCardBlock {
 		if ( ! function_exists( 'register_block_type_from_metadata' ) ) {
 			return;
 		}
+		if ( WP_Block_Type_Registry::get_instance()->is_registered( 'artpulse/event-card' ) ) {
+			return;
+		}
+
 		register_block_type_from_metadata(
 			__DIR__ . '/../../blocks/event-card',
 			array(
