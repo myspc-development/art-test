@@ -597,25 +597,33 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
                        $final_image_ids = $reordered;
                }
 
-                // Ensure the banner is included in the submission images and handle fallbacks.
-                if ( $banner_id ) {
-                        // Remove any existing occurrences so the banner can be prepended.
-                        $final_image_ids = array_values( array_diff( $final_image_ids, array( $banner_id ) ) );
-                        array_unshift( $final_image_ids, $banner_id );
-                } elseif ( ! empty( $final_image_ids ) ) {
-                        set_post_thumbnail( $post_id, $final_image_ids[0] );
-                        $banner_id = $final_image_ids[0];
-                }
+               // Ensure the banner is included in the submission images and handle fallbacks
+               // before persisting any metadata. This guarantees the meta is stored even if a
+               // subsequent validation triggers a redirect.
+               if ( $banner_id ) {
+                       // Remove any existing occurrences so the banner can be prepended.
+                       $final_image_ids = array_values( array_diff( $final_image_ids, array( $banner_id ) ) );
+                       array_unshift( $final_image_ids, $banner_id );
+               } elseif ( ! empty( $final_image_ids ) ) {
+                       // No banner was explicitly uploaded; treat the first image as the banner.
+                       $banner_id = $final_image_ids[0];
+               }
 
                // Persist gallery and banner meta immediately so StubState::$meta_log records both
-               // keys even if the request redirects due to upload failures. Cast to the expected
-               // types inline to guarantee consistent storage even when uploads fail.
+               // keys even if the request redirects. Cast to the expected types inline to guarantee
+               // consistent storage even when uploads fail.
                update_post_meta(
                        $post_id,
                        '_ap_submission_images',
                        array_values( array_map( 'intval', (array) $final_image_ids ) )
                );
                update_post_meta( $post_id, 'event_banner_id', (int) $banner_id );
+
+               // Set the featured image after persisting meta to ensure the meta is logged before any
+               // unexpected early exit from set_post_thumbnail or later validation checks.
+               if ( $banner_id ) {
+                       set_post_thumbnail( $post_id, $banner_id );
+               }
 
                // Redirect immediately when an upload error occurred. The metadata above has already
                // been saved, so the redirect happens regardless of success or failure.
