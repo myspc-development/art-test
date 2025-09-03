@@ -125,11 +125,8 @@ class OrganizationDashboardShortcode {
 	public static function handle_ajax_add_event() {
 		check_ajax_referer( 'ap_org_dashboard_nonce', 'nonce' );
 
-               $cap_fn    = __NAMESPACE__ . '\current_user_can';
                $can_create = true;
-               if ( function_exists( $cap_fn ) ) {
-                       $can_create = $cap_fn( 'create_artpulse_events' );
-               }
+               $can_create = \ArtPulse\Frontend\current_user_can( 'create_artpulse_events' );
 
                if ( ! $can_create ) {
                        wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
