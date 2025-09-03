@@ -3,6 +3,7 @@ namespace ArtPulse\Core;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardPresets;
+use ArtPulse\Core\RoleResolver;
 use ArtPulse\Admin\UserLayoutManager;
 use ArtPulse\Admin\DashboardWidgetTools;
 
@@ -182,14 +183,8 @@ class DashboardWidgetManager {
                        return;
                }
 
-               // Determine the user's primary role.
-               $role = '';
-               if ( $user instanceof \WP_User && ! empty( $user->roles ) ) {
-                       $role = sanitize_key( (string) $user->roles[0] );
-               }
-               if ( ! $role ) {
-                       $role = UserLayoutManager::get_primary_role( $user_id );
-               }
+               // Determine the user's effective role.
+               $role = RoleResolver::resolve( $user_id );
 
                // Compute the canonical default layout for the role.
                $ids = DashboardPresets::forRole( $role );
