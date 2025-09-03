@@ -599,14 +599,15 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
                         $banner_id = $final_image_ids[0];
                 }
 
-               // Normalize types for meta updates.
-               $final_image_ids = array_values( array_map( 'intval', (array) $final_image_ids ) );
-               $banner_id       = (int) $banner_id;
-
                // Persist gallery and banner meta immediately so StubState::$meta_log records both
-               // keys even if the request redirects due to upload failures.
-               update_post_meta( $post_id, '_ap_submission_images', $final_image_ids );
-               update_post_meta( $post_id, 'event_banner_id', $banner_id );
+               // keys even if the request redirects due to upload failures. Cast to the expected
+               // types inline to guarantee consistent storage even when uploads fail.
+               update_post_meta(
+                       $post_id,
+                       '_ap_submission_images',
+                       array_values( array_map( 'intval', (array) $final_image_ids ) )
+               );
+               update_post_meta( $post_id, 'event_banner_id', (int) $banner_id );
 
                // Redirect immediately when an upload error occurred. The metadata above has already
                // been saved, so the redirect happens regardless of success or failure.
