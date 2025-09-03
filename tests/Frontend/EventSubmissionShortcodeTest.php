@@ -142,7 +142,7 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
         }
 
-        public function test_first_gallery_image_used_as_banner_when_missing(): void {
+       public function test_meta_logged_when_banner_missing(): void {
                 // Upload a single additional image
                 \ArtPulse\Frontend\StubState::$media_returns   = array( 'ap_image' => 11 );
                 $_FILES['image_1'] = array(

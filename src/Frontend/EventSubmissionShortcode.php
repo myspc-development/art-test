@@ -527,11 +527,11 @@ class EventSubmissionShortcode {
                         $banner_id = $final_image_ids[0];
                 }
 
-               // Normalize types for meta updates.
+               // Normalize types for meta updates and persist immediately so logs survive errors.
                $final_image_ids = array_values( array_map( 'intval', (array) $final_image_ids ) );
                $banner_id       = (int) $banner_id;
 
-               // Update Post Meta with Image IDs and banner ID before any early returns
+               // Always record gallery and banner meta before any potential early return.
                update_post_meta( $post_id, '_ap_submission_images', $final_image_ids );
                update_post_meta( $post_id, 'event_banner_id', $banner_id );
 
