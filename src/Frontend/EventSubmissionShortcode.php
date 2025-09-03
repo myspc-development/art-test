@@ -43,16 +43,25 @@ class EventSubmissionShortcode {
 		}
 	}
 
-	/**
-	 * Redirect back to the form when possible.
-	 */
+        /**
+         * Redirect back to the form when possible.
+         */
         protected static function maybe_redirect(): void {
-               $target = function_exists( 'wp_get_referer' )
-                       ? wp_get_referer()
-                       : \ArtPulse\Core\Plugin::get_event_submission_url();
+               if ( \function_exists( '\wp_get_referer' ) ) {
+                       $target = \wp_get_referer();
+               } elseif ( \function_exists( __NAMESPACE__ . '\wp_get_referer' ) ) {
+                       $target = \ArtPulse\Frontend\wp_get_referer();
+               } else {
+                       $target = \ArtPulse\Core\Plugin::get_event_submission_url();
+               }
 
-               if ( function_exists( 'wp_safe_redirect' ) ) {
-                       wp_safe_redirect( $target );
+               if ( \function_exists( '\wp_safe_redirect' ) ) {
+                       \wp_safe_redirect( $target );
+                       exit;
+               }
+
+               if ( \function_exists( __NAMESPACE__ . '\wp_safe_redirect' ) ) {
+                       \ArtPulse\Frontend\wp_safe_redirect( $target );
                        exit;
                }
         }
