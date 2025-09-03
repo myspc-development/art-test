@@ -59,7 +59,7 @@ error_log('📦 content-artpulse_event.php loaded');
               <li><strong><?php esc_html_e('Organizer:', 'artpulse'); ?></strong> <?= esc_html($organizer); ?></li>
             <?php endif; ?>
             <?php if ($email): ?>
-              <li><strong><?php esc_html_e('Email:', 'artpulse'); ?></strong> <?= str_replace( '&#064;', '&#64;', esc_html( antispambot( $email ) ) ); ?></li>
+              <li><strong><?php esc_html_e('Email:', 'artpulse'); ?></strong> <?= \ArtPulse\Util\ap_obfuscate_email( $email ); ?></li>
             <?php endif; ?>
             <?php if ($contact): ?>
               <li><strong><?php esc_html_e('Contact:', 'artpulse'); ?></strong> <?= esc_html($contact); ?></li>
