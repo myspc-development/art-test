@@ -110,9 +110,12 @@ class OrganizationDashboardShortcode {
                 if ( ! is_user_logged_in() ) {
                         return '<p>' . esc_html__( 'You must be logged in to view this dashboard.', 'artpulse' ) . '</p>';
                 }
-               if ( ! current_user_can( 'organization' ) && ! current_user_can( 'administrator' ) ) {
-                       return '<p>' . esc_html__( 'Access denied.', 'artpulse' ) . '</p>';
-               }
+                if (
+                        ! \ArtPulse\Frontend\current_user_can( 'organization' ) &&
+                        ! \ArtPulse\Frontend\current_user_can( 'administrator' )
+                ) {
+                        return '<p>' . esc_html__( 'Access denied.', 'artpulse' ) . '</p>';
+                }
                 $mode = ap_get_ui_mode();
                 if ( $mode === 'react' ) {
                         return do_shortcode( '[ap_render_ui]' );
