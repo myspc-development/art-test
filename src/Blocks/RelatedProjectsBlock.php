@@ -1,22 +1,28 @@
 <?php
 namespace ArtPulse\Blocks;
 
-class RelatedProjectsBlock {
-	public static function register(): void {
-		add_action( 'init', array( self::class, 'register_block' ) );
-	}
+use WP_Block_Type_Registry;
 
-	public static function register_block(): void {
-		if ( ! function_exists( 'register_block_type_from_metadata' ) ) {
-			return;
-		}
-		register_block_type_from_metadata(
-			__DIR__ . '/../../blocks/related-projects',
-			array(
-				'render_callback' => array( self::class, 'render_callback' ),
-			)
-		);
-	}
+class RelatedProjectsBlock {
+        public static function register(): void {
+                add_action( 'init', array( self::class, 'register_block' ) );
+        }
+
+        public static function register_block(): void {
+                if ( ! function_exists( 'register_block_type_from_metadata' ) ) {
+                        return;
+                }
+                if ( WP_Block_Type_Registry::get_instance()->is_registered( 'artpulse/related-projects' ) ) {
+                        return;
+                }
+                register_block_type_from_metadata(
+                        __DIR__ . '/../../blocks/related-projects',
+                        array(
+                                'render_callback' => array( self::class, 'render_callback' ),
+                        )
+                );
+                remove_action( 'init', [ self::class, 'register_block' ] );
+        }
 
 	public static function render_callback( $attributes ) {
 		ob_start();
