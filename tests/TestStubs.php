@@ -276,10 +276,6 @@ namespace {
 		function get_users( $args = array() ) {
 			return array_keys( MockStorage::$users ); }
 	}
-	if ( ! function_exists( 'delete_user_meta' ) ) {
-		function delete_user_meta( $uid, $key ) {
-			unset( MockStorage::$user_meta[ $uid ][ $key ] ); }
-	}
 	if ( ! function_exists( 'absint' ) ) {
 		function absint( $n ) {
 			return (int) $n; }
