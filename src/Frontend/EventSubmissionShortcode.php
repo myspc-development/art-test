@@ -55,6 +55,10 @@ class EventSubmissionShortcode {
                $target = \ArtPulse\Core\Plugin::get_event_submission_url();
        }
 
+       if ( ! $target ) {
+               $target = \ArtPulse\Core\Plugin::get_event_submission_url();
+       }
+
        if ( null === $redirect ) {
                if ( function_exists( __NAMESPACE__ . '\wp_safe_redirect' ) ) {
                        $redirect = __NAMESPACE__ . '\wp_safe_redirect';
