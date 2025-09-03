@@ -172,11 +172,13 @@ class Plugin {
 		}
 
 		// Register CPTs and flush rewrite rules
-		\ArtPulse\Core\PostTypeRegistrar::register();
-		\ArtPulse\Integration\CalendarExport::add_rewrite_rules();
-		\ArtPulse\Frontend\EmbedRewrite::add_rules();
-		\ArtPulse\Frontend\DashboardRoleRewrite::add_rules();
-		flush_rewrite_rules();
+                \ArtPulse\Core\PostTypeRegistrar::register();
+                \ArtPulse\Integration\CalendarExport::add_rewrite_rules();
+                \ArtPulse\Frontend\EmbedRewrite::add_rules();
+                \ArtPulse\Frontend\DashboardRoleRewrite::add_rules();
+                \ArtPulse\Taxonomies\TaxonomiesRegistrar::register_event_types();
+                \ArtPulse\Taxonomies\TaxonomiesRegistrar::maybe_insert_default_event_types();
+                flush_rewrite_rules();
 
 		// ✅ Fix: ensure roles/caps are installed
 		require_once ARTPULSE_PLUGIN_DIR . 'src/Core/RoleSetup.php';
