@@ -134,7 +134,10 @@ class OrganizationDashboardShortcode {
 		check_ajax_referer( 'ap_org_dashboard_nonce', 'nonce' );
 
                $cap_fn    = __NAMESPACE__ . '\current_user_can';
-               $can_create = function_exists( $cap_fn ) ? $cap_fn( 'create_artpulse_events' ) : \current_user_can( 'create_artpulse_events' );
+               $can_create = true;
+               if ( function_exists( $cap_fn ) ) {
+                       $can_create = $cap_fn( 'create_artpulse_events' );
+               }
 
                if ( ! $can_create ) {
                        wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
