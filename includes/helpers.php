@@ -137,6 +137,14 @@ function ap_clear_portfolio_cache( string|array|null $keys = null ): void {
 
         if ( function_exists( 'wp_cache_delete_group' ) ) {
                 wp_cache_delete_group( $group );
+                return;
+        }
+
+        global $wp_object_cache;
+        if ( is_object( $wp_object_cache ) && isset( $wp_object_cache->cache[ $group ] ) ) {
+                foreach ( array_keys( $wp_object_cache->cache[ $group ] ) as $key ) {
+                        wp_cache_delete( $key, $group );
+                }
         }
 }
 
