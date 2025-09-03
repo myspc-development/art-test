@@ -38,9 +38,15 @@ class DashboardRoleTemplateTest extends WP_UnitTestCase {
 
 		set_query_var( 'ap_dashboard_role', 1 );
 
-		$this->expectOutputRegex( '/<section[^>]*class="[^"]*ap-role-layout[^"]*(?:ap-dashboard-grid[^"]*)?"[^>]*data-role="artist"[^>]*>/s' );
-		DashboardRoleRewrite::maybe_render();
-}
+                ob_start();
+                DashboardRoleRewrite::maybe_render();
+                $html = ob_get_clean();
+
+                $this->assertMatchesRegularExpression(
+                        '/<section[^>]*class="[^"]*ap-role-layout[^"]*(?:ap-dashboard-grid[^"]*)?"[^>]*data-role="artist"[^>]*>/s',
+                        $html
+                );
+        }
 
         /**
          * @runInSeparateProcess
@@ -55,7 +61,13 @@ class DashboardRoleTemplateTest extends WP_UnitTestCase {
 
 		set_query_var( 'ap_dashboard', 1 );
 
-		$this->expectOutputRegex( '/<section[^>]*class="[^"]*ap-role-layout[^"]*(?:ap-dashboard-grid[^"]*)?"[^>]*data-role="organization"[^>]*>/s' );
-		DashboardRoleRewrite::maybe_render();
-}
+                ob_start();
+                DashboardRoleRewrite::maybe_render();
+                $html = ob_get_clean();
+
+                $this->assertMatchesRegularExpression(
+                        '/<section[^>]*class="[^"]*ap-role-layout[^"]*(?:ap-dashboard-grid[^"]*)?"[^>]*data-role="organization"[^>]*>/s',
+                        $html
+                );
+        }
 }

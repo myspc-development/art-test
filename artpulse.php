@@ -28,6 +28,7 @@ require_once __DIR__ . '/includes/unhide-default-widgets.php';
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
         require_once __DIR__ . '/vendor/autoload.php';
 }
+require_once __DIR__ . '/src/Core/Debug.php';
 
 // Explicitly load core classes and helpers.
 trait_exists( \ArtPulse\Rest\RestResponder::class );

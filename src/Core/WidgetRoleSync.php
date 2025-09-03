@@ -96,9 +96,9 @@ class WidgetRoleSync {
 		$prop->setValue( null, $role_widgets );
 		$widgetsProp->setValue( null, $widgets );
 
-		if ( $updated && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( '[WidgetRoleSync] Added roles to widgets: ' . wp_json_encode( $updated ) );
-		}
+                if ( $updated && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                        ap_debug_log( '[WidgetRoleSync] Added roles to widgets: ' . wp_json_encode( $updated ) );
+                }
 
 		return $added;
 	}
