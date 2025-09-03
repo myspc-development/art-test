@@ -2,24 +2,34 @@
 namespace {
     require_once __DIR__ . '/../TestStubs.php';
 
-    function has_post_thumbnail(): bool {
-        return false;
+    if ( ! function_exists( 'has_post_thumbnail' ) ) {
+        function has_post_thumbnail(): bool {
+            return false;
+        }
     }
 
-    function wp_get_post_terms( $post_id, $taxonomy, $args = [] ) {
-        return [];
+    if ( ! function_exists( 'wp_get_post_terms' ) ) {
+        function wp_get_post_terms( $post_id, $taxonomy, $args = [] ) {
+            return [];
+        }
     }
 
-    function sanitize_email( $email ) {
-        return $email;
+    if ( ! function_exists( 'sanitize_email' ) ) {
+        function sanitize_email( $email ) {
+            return $email;
+        }
     }
 
-    function antispambot( $email ) {
-        return str_replace( '@', '&#064;', $email );
+    if ( ! function_exists( 'antispambot' ) ) {
+        function antispambot( $email ) {
+            return str_replace( '@', '&#064;', $email );
+        }
     }
 
-    function is_wp_error( $thing ) {
-        return false;
+    if ( ! function_exists( 'is_wp_error' ) ) {
+        function is_wp_error( $thing ) {
+            return false;
+        }
     }
 }
 
