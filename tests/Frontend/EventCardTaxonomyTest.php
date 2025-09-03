@@ -12,29 +12,40 @@ use ArtPulse\Taxonomies\TaxonomiesRegistrar;
 
 class EventCardTaxonomyTest extends WP_UnitTestCase {
 
-	private int $event_id;
+       private int $event_id;
+       private bool $removed_do_blocks = false;
 
-	public function set_up() {
+       public function set_up() {
                parent::set_up();
+
+               if ( has_filter( 'the_content', 'do_blocks' ) ) {
+                       remove_filter( 'the_content', 'do_blocks', 9 );
+                       $this->removed_do_blocks = true;
+               }
+
                TaxonomiesRegistrar::register_event_types();
                TaxonomiesRegistrar::insert_default_event_types();
 
-		$term           = get_term_by( 'slug', 'exhibition', 'event_type' );
-		$this->event_id = wp_insert_post(
-			array(
-				'post_title'  => 'Tax Event',
-				'post_type'   => 'artpulse_event',
-				'post_status' => 'publish',
-			)
-		);
-		if ( $term ) {
-			wp_set_post_terms( $this->event_id, array( $term->term_id ), 'event_type' );
-		}
-		update_post_meta( $this->event_id, 'event_organizer_name', 'Organizer' );
-                update_post_meta( $this->event_id, 'event_organizer_email', 'org@example.com' );
-        }
+               $term           = get_term_by( 'slug', 'exhibition', 'event_type' );
+               $this->event_id = wp_insert_post(
+                       array(
+                               'post_title'  => 'Tax Event',
+                               'post_type'   => 'artpulse_event',
+                               'post_status' => 'publish',
+                       )
+               );
+               if ( $term ) {
+                       wp_set_post_terms( $this->event_id, array( $term->term_id ), 'event_type' );
+               }
+               update_post_meta( $this->event_id, 'event_organizer_name', 'Organizer' );
+               update_post_meta( $this->event_id, 'event_organizer_email', 'org@example.com' );
+       }
 
        public function tear_down() {
+               if ( $this->removed_do_blocks ) {
+                       add_filter( 'the_content', 'do_blocks', 9 );
+               }
+
                unregister_taxonomy( 'event_type' );
                parent::tear_down();
        }
