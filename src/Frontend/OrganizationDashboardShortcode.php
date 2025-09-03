@@ -126,9 +126,10 @@ class OrganizationDashboardShortcode {
 	public static function handle_ajax_add_event() {
 		check_ajax_referer( 'ap_org_dashboard_nonce', 'nonce' );
 
-		if ( ! current_user_can( 'create_artpulse_events' ) ) {
-			wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-		}
+               if ( ! current_user_can( 'create_artpulse_events' ) ) {
+                       wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
+                       return;
+               }
 
 		$title              = sanitize_text_field( $_POST['ap_event_title'] );
 		$date               = sanitize_text_field( $_POST['ap_event_date'] );
@@ -180,10 +181,11 @@ class OrganizationDashboardShortcode {
 			'post_status'        => 'pending',
 		);
 
-		$event_id = EventService::create_event( $data, get_current_user_id() );
-		if ( is_wp_error( $event_id ) ) {
-			wp_send_json_error( array( 'message' => $event_id->get_error_message() ) );
-		}
+               $event_id = EventService::create_event( $data, get_current_user_id() );
+               if ( is_wp_error( $event_id ) ) {
+                       wp_send_json_error( array( 'message' => $event_id->get_error_message() ) );
+                       return;
+               }
 
 		if ( ! function_exists( 'media_handle_upload' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -193,24 +195,26 @@ class OrganizationDashboardShortcode {
 
 		$image_ids = array();
 
-		if ( ! empty( $_FILES['event_banner']['tmp_name'] ) ) {
-			$attachment_id = media_handle_upload( 'event_banner', $event_id );
-			if ( is_wp_error( $attachment_id ) ) {
-				wp_send_json_error( array( 'message' => $attachment_id->get_error_message() ) );
-			}
-			$image_ids[] = $attachment_id;
-		}
+               if ( ! empty( $_FILES['event_banner']['tmp_name'] ) ) {
+                       $attachment_id = media_handle_upload( 'event_banner', $event_id );
+                       if ( is_wp_error( $attachment_id ) ) {
+                               wp_send_json_error( array( 'message' => $attachment_id->get_error_message() ) );
+                               return;
+                       }
+                       $image_ids[] = $attachment_id;
+               }
 
-		for ( $i = 1; $i <= 5; $i++ ) {
-			$key = 'image_' . $i;
-			if ( ! empty( $_FILES[ $key ]['tmp_name'] ) ) {
-				$id = media_handle_upload( $key, $event_id );
-				if ( is_wp_error( $id ) ) {
-					wp_send_json_error( array( 'message' => $id->get_error_message() ) );
-				}
-				$image_ids[] = $id;
-			}
-		}
+               for ( $i = 1; $i <= 5; $i++ ) {
+                       $key = 'image_' . $i;
+                       if ( ! empty( $_FILES[ $key ]['tmp_name'] ) ) {
+                               $id = media_handle_upload( $key, $event_id );
+                               if ( is_wp_error( $id ) ) {
+                                       wp_send_json_error( array( 'message' => $id->get_error_message() ) );
+                                       return;
+                               }
+                               $image_ids[] = $id;
+                       }
+               }
 
 		if ( $image_ids ) {
 			update_post_meta( $event_id, '_ap_submission_images', $image_ids );
