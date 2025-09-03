@@ -10,7 +10,9 @@ class PortfolioPreviewBlock {
 		if ( ! function_exists( 'register_block_type_from_metadata' ) ) {
 			return;
 		}
-		register_block_type_from_metadata( __DIR__ . '/../../blocks/widgets/portfolio-preview' );
+		if ( ! \WP_Block_Type_Registry::get_instance()->is_registered( 'artpulse/portfolio-preview' ) ) {
+			register_block_type_from_metadata( __DIR__ . '/../../blocks/widgets/portfolio-preview' );
+		}
 	}
 
 	public static function render_callback( $attributes ) {
