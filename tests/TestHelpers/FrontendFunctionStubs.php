@@ -302,19 +302,24 @@ self::$post_authors         = array();
 
        if ( ! function_exists( __NAMESPACE__ . '\\function_exists' ) ) {
                function function_exists( $name ) {
-                       $orig = $name;
-
-                       $name = ltrim( $name, '\\' );
-                       if ( false !== strpos( $name, '\\' ) ) {
-                               $parts = explode( '\\', $name );
-                               $name  = end( $parts );
+                       if ( array_key_exists( $name, StubState::$function_exists_map ) ) {
+                               return StubState::$function_exists_map[ $name ];
                        }
 
-                       if ( in_array( $name, array( 'wp_safe_redirect', 'wp_get_referer' ), true ) ) {
-                               return StubState::$function_exists_map[ $name ] ?? false;
+                       $trimmed = ltrim( $name, '\\' );
+                       if ( array_key_exists( $trimmed, StubState::$function_exists_map ) ) {
+                               return StubState::$function_exists_map[ $trimmed ];
                        }
 
-                       return StubState::$function_exists_map[ $name ] ?? \function_exists( $orig );
+                       if ( false !== strpos( $trimmed, '\\' ) ) {
+                               $parts = explode( '\\', $trimmed );
+                               $base  = end( $parts );
+                               if ( array_key_exists( $base, StubState::$function_exists_map ) ) {
+                                       return StubState::$function_exists_map[ $base ];
+                               }
+                       }
+
+                       return \function_exists( $name );
                }
        }
 

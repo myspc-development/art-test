@@ -67,9 +67,11 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
 
         public function test_invalid_org_rejected(): void {
                 // Organization belongs to another user
-                \ArtPulse\Frontend\StubState::$post_authors[99] = 2;
-                \ArtPulse\Frontend\StubState::$function_exists_map['wp_safe_redirect'] = true;
-                \ArtPulse\Frontend\StubState::$function_exists_map['wp_get_referer']    = true;
+               \ArtPulse\Frontend\StubState::$post_authors[99] = 2;
+               \ArtPulse\Frontend\StubState::$function_exists_map['wp_safe_redirect'] = false;
+               \ArtPulse\Frontend\StubState::$function_exists_map['wp_get_referer']    = false;
+               \ArtPulse\Frontend\StubState::$function_exists_map['ArtPulse\\Frontend\\wp_safe_redirect'] = true;
+               \ArtPulse\Frontend\StubState::$function_exists_map['ArtPulse\\Frontend\\wp_get_referer']    = true;
 
                 try {
                         EventSubmissionShortcode::maybe_handle_form();
@@ -84,10 +86,12 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
         }
 
         public function test_start_date_after_end_date_rejected(): void {
-                $_POST['event_start_date'] = '2024-02-01';
-                $_POST['event_end_date']   = '2024-01-01';
-                \ArtPulse\Frontend\StubState::$function_exists_map['wp_safe_redirect'] = true;
-                \ArtPulse\Frontend\StubState::$function_exists_map['wp_get_referer']    = true;
+               $_POST['event_start_date'] = '2024-02-01';
+               $_POST['event_end_date']   = '2024-01-01';
+               \ArtPulse\Frontend\StubState::$function_exists_map['wp_safe_redirect'] = false;
+               \ArtPulse\Frontend\StubState::$function_exists_map['wp_get_referer']    = false;
+               \ArtPulse\Frontend\StubState::$function_exists_map['ArtPulse\\Frontend\\wp_safe_redirect'] = true;
+               \ArtPulse\Frontend\StubState::$function_exists_map['ArtPulse\\Frontend\\wp_get_referer']    = true;
 
                 try {
                         EventSubmissionShortcode::maybe_handle_form();
