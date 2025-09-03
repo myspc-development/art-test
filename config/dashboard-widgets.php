@@ -220,7 +220,7 @@ return array_filter(
 			'icon'        => 'share',
 			'lazy'        => true,
 		),
-		'org_event_overview'        => array(
+                'widget_org_event_overview' => array(
 			'callback'    => 'ap_widget_org_event_overview',
 			'label'       => 'Event Overview',
 			'description' => 'Overview of upcoming organization events.',
@@ -251,7 +251,7 @@ return array_filter(
 			'roles'       => array( 'organization' ),
 			'icon'        => 'chart-line',
 		),
-		'artpulse_analytics_widget' => array(
+                'widget_artpulse_analytics_widget' => array(
 			'class'       => OrgAnalyticsWidget::class,
 			'label'       => 'Organization Analytics',
 			'description' => 'Basic traffic and engagement metrics.',
