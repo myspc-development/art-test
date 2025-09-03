@@ -48,6 +48,21 @@ namespace ArtPulse\Frontend\Tests {
                         $this->assertStringContainsString( '09:00 - 17:00', $html );
                 }
 
+                public function test_address_and_website_displayed(): void {
+                        MockStorage::$post_meta = array(
+                                'ead_org_street_address' => '123 Main St',
+                                'ead_org_website_url'    => 'https://example.com',
+                        );
+                        ob_start();
+                        include __DIR__ . '/../../templates/salient/content-artpulse_org.php';
+                        $html = ob_get_clean();
+                        $this->assertFalse( MockStorage::$have_posts );
+                        $this->assertStringContainsString( 'Address:', $html );
+                        $this->assertStringContainsString( '123 Main St', $html );
+                        $this->assertStringContainsString( 'Website:', $html );
+                        $this->assertStringContainsString( 'https://example.com', $html );
+                }
+
                 public function test_output_unchanged_for_single_post(): void {
                         MockStorage::$have_posts = true;
                         ob_start();
