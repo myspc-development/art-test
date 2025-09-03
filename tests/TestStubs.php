@@ -12,7 +12,25 @@ namespace ArtPulse\Tests\Stubs {
 		public static array $notice        = array();
 		public static array $current_roles = array();
 		public static string $screen       = 'dashboard';
-	}
+        }
+}
+
+namespace ArtPulse\Frontend\Tests {
+        use ArtPulse\Tests\Stubs\MockStorage;
+
+        // Define loop helpers in the test namespace so that unqualified calls
+        // inside templates included during tests resolve here instead of to
+        // WordPress's global implementations. This ensures the stubbed loop
+        // behaviour is always used and lets tests observe state transitions
+        // via MockStorage::$have_posts regardless of whether WordPress has
+        // already defined these functions.
+        function have_posts(): bool {
+                return MockStorage::$have_posts;
+        }
+
+        function the_post(): void {
+                MockStorage::$have_posts = false;
+        }
 }
 
 namespace {
