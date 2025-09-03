@@ -5,6 +5,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Core\DashboardController;
 use ArtPulse\Core\DashboardPresets;
 use ArtPulse\Dashboard\WidgetGuard;
+use ArtPulse\Core\WidgetRegistry;
 
 /**
  * Manage dashboard widget layouts for users and roles.
@@ -261,10 +262,44 @@ class UserLayoutManager {
 	 * Determine a user's dashboard layout with fallbacks.
 	 */
         public static function get_layout_for_user( int $user_id ): array {
-                $layout = self::get_user_layout( $user_id );
-                if ( ! empty( $layout ) ) {
-                        return $layout;
-                }
+               $layout = self::get_user_layout( $user_id );
+               if ( ! empty( $layout ) ) {
+                       $sanitized = array();
+                       foreach ( $layout as $item ) {
+                               if ( is_array( $item ) && isset( $item['id'] ) ) {
+                                       $id  = WidgetRegistry::normalize_slug( (string) $item['id'] );
+                                       $vis = isset( $item['visible'] ) ? (bool) $item['visible'] : true;
+                               } else {
+                                       $id  = WidgetRegistry::normalize_slug( (string) $item );
+                                       $vis = true;
+                               }
+                               if ( $id === '' ) {
+                                       continue;
+                               }
+                               $sanitized[] = array(
+                                       'id'      => $id,
+                                       'visible' => $vis,
+                               );
+                       }
+
+                       $valid   = array_keys( DashboardWidgetRegistry::get_all() );
+                       $ordered = \ArtPulse\Core\LayoutUtils::normalize_layout( $sanitized, $valid );
+
+                       $final = array();
+                       $seen  = array();
+                       foreach ( $ordered as $item ) {
+                               $id = $item['id'];
+                               if ( ! in_array( $id, $valid, true ) || isset( $seen[ $id ] ) ) {
+                                       continue;
+                               }
+                               $seen[ $id ] = true;
+                               $final[]     = $item;
+                       }
+
+                       if ( ! empty( $final ) ) {
+                               return $final;
+                       }
+               }
 
                 $user  = get_userdata( $user_id );
                 $roles = $user && ! empty( $user->roles ) ? (array) $user->roles : array( 'subscriber' );
