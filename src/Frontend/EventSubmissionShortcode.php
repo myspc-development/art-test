@@ -397,7 +397,7 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
 		$rsvp_url           = esc_url_raw( $_POST['event_rsvp_url'] ?? '' );
 		$organizer_name     = sanitize_text_field( $_POST['event_organizer_name'] ?? '' );
 		$organizer_email    = sanitize_email( $_POST['event_organizer_email'] ?? '' );
-                $event_org          = intval( $_POST['event_org'] );
+		$event_org          = absint( $_POST['event_org'] ?? 0 );
                 $event_artists      = isset( $_POST['event_artists'] ) ? array_map( 'intval', (array) $_POST['event_artists'] ) : array();
                 $event_type         = intval( $_POST['event_type'] ?? 0 );
                 $featured           = isset( $_POST['event_featured'] ) ? '1' : '0';
@@ -408,9 +408,14 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
                         return;
                 }
 
-                // Ensure the selected organization belongs to the current user.
-                $org_post = get_post( $event_org );
-                if ( ! $org_post || $org_post->post_type !== 'artpulse_org' || (int) $org_post->post_author !== $user_id ) {
+                // Ensure a valid organization is selected and belongs to the current user.
+                if ( ! $event_org || ! ( $org_post = get_post( $event_org ) ) ) {
+                        self::add_notice( __( 'Please select an organization.', 'artpulse' ), 'error' );
+                        self::maybe_redirect();
+                        return;
+                }
+
+                if ( $org_post->post_type !== 'artpulse_org' || (int) $org_post->post_author !== $user_id ) {
                         self::add_notice( 'Invalid organization selected.', 'error' );
                         self::maybe_redirect();
                         return;
