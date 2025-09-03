@@ -80,24 +80,24 @@ final class Auth {
          * returns a 401 error. When running under AP_TEST_MODE the check is a
          * no-op so tests can skip nonce handling friction.
          */
-        public static function verify_nonce( \WP_REST_Request|string|null $request_or_nonce, string $action = 'wp_rest' ): bool|\WP_Error {
-                if ( self::is_test_mode() ) {
-                        return true;
-                }
-
-                $nonce = null;
-                if ( $request_or_nonce instanceof \WP_REST_Request ) {
-                        $nonce = $request_or_nonce->get_header( 'X-WP-Nonce' );
-                } else {
-                        $nonce = $request_or_nonce;
-                }
-
-               if ( ! $nonce || wp_verify_nonce( $nonce, $action ) === false ) {
-                       return new \WP_Error( 'rest_unauthorized', 'Invalid nonce.', array( 'status' => 401 ) );
+       public static function verify_nonce( \WP_REST_Request|string|null $request_or_nonce, string $action = 'wp_rest' ): bool|\WP_Error {
+               if ( self::is_test_mode() ) {
+                       return true;
                }
 
-                return true;
-        }
+               $nonce = null;
+               if ( $request_or_nonce instanceof \WP_REST_Request ) {
+                       $nonce = $request_or_nonce->get_header( 'X-WP-Nonce' );
+               } else {
+                       $nonce = $request_or_nonce;
+               }
+
+               if ( ! $nonce || wp_verify_nonce( $nonce, $action ) === false ) {
+                       return new \WP_Error( 'rest_forbidden', 'Invalid nonce.', array( 'status' => 403 ) );
+               }
+
+               return true;
+       }
 
         /**
          * Require a capability for the current user.
