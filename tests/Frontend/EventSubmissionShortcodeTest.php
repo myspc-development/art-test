@@ -59,13 +59,16 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                 // By default the selected organization is valid for the current user.
                 \ArtPulse\Frontend\StubState::$post_types[99]   = 'artpulse_org';
                 \ArtPulse\Frontend\StubState::$post_authors[99] = 1;
+
+               EventSubmissionShortcode::reset_notice_log();
         }
 
         public function tear_down(): void {
                 $_POST               = array();
                 $_FILES              = array();
                 $GLOBALS['__ap_test_user_meta'] = array();
-                \ArtPulse\Frontend\StubState::reset();
+               \ArtPulse\Frontend\StubState::reset();
+               EventSubmissionShortcode::reset_notice_log();
                 parent::tear_down();
         }
 
@@ -83,6 +86,8 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                try {
                        EventSubmissionShortcode::maybe_handle_form();
                } finally {
+                       $log = EventSubmissionShortcode::get_notice_log();
+                       $this->assertSame( 'Invalid organization selected.', $log[0]['message'] ?? null );
                        $this->assertSame( 'Invalid organization selected.', \ArtPulse\Frontend\StubState::$notice );
                        $this->assertEmpty( \ArtPulse\Frontend\StubState::$inserted_post );
                        $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
@@ -103,6 +108,8 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                try {
                        EventSubmissionShortcode::maybe_handle_form();
                } finally {
+                       $log = EventSubmissionShortcode::get_notice_log();
+                       $this->assertSame( 'Start date cannot be later than end date.', $log[0]['message'] ?? null );
                        $this->assertSame( 'Start date cannot be later than end date.', \ArtPulse\Frontend\StubState::$notice );
                        $this->assertEmpty( \ArtPulse\Frontend\StubState::$inserted_post );
                        $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
