@@ -158,6 +158,30 @@ self::$post_authors         = array();
                 }
         }
 
+        if ( ! function_exists( __NAMESPACE__ . '\\get_user_meta' ) ) {
+                function get_user_meta( $user_id, $key, $single = false ) {
+                        $value = $GLOBALS['__ap_test_user_meta'][ $user_id ][ $key ] ?? null;
+                        if ( $single ) {
+                                return $value ?? '';
+                        }
+                        return null === $value ? array() : (array) $value;
+                }
+        }
+
+        if ( ! function_exists( __NAMESPACE__ . '\\update_user_meta' ) ) {
+                function update_user_meta( $user_id, $key, $value ) {
+                        $GLOBALS['__ap_test_user_meta'][ $user_id ][ $key ] = $value;
+                        return true;
+                }
+        }
+
+        if ( ! function_exists( __NAMESPACE__ . '\\delete_user_meta' ) ) {
+                function delete_user_meta( $user_id, $key ) {
+                        unset( $GLOBALS['__ap_test_user_meta'][ $user_id ][ $key ] );
+                        return true;
+                }
+        }
+
         if ( ! function_exists( __NAMESPACE__ . '\\is_user_logged_in' ) ) {
                 function is_user_logged_in() {
                         return StubState::$current_user > 0;
