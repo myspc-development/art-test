@@ -149,6 +149,21 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                }
        }
 
+       public function test_submission_succeeds_with_valid_organization(): void {
+               $this->expectException( \RuntimeException::class );
+               $this->expectExceptionMessage( 'redirect' );
+
+               try {
+                       EventSubmissionShortcode::maybe_handle_form();
+               } finally {
+                       $log = EventSubmissionShortcode::get_notice_log();
+                       $this->assertSame( 'Event submitted successfully!', $log[0]['message'] ?? null );
+                       $this->assertSame( 'Event submitted successfully!', \ArtPulse\Frontend\StubState::$notice );
+                       $this->assertNotEmpty( \ArtPulse\Frontend\StubState::$inserted_post );
+                       $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
+               }
+       }
+
        public function test_redirect_occurs_after_successful_upload(): void {
                 // Pretend banner uploaded and media handler returns ID 55
                 // Also upload one additional image with ID 11 and place banner second in order
