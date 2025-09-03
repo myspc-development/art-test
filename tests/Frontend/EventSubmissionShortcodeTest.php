@@ -128,7 +128,14 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                 );
                 $_POST['image_order'] = '11,55';
 
-                EventSubmissionShortcode::maybe_handle_form();
+               try {
+                       EventSubmissionShortcode::maybe_handle_form();
+                       $this->fail( 'Expected redirect' );
+               } catch ( \RuntimeException $e ) {
+                       $this->assertSame( 'redirect', $e->getMessage() );
+               }
+
+               $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
 
                $gallery_calls = array_filter(
                        \ArtPulse\Frontend\StubState::$meta_log,
@@ -157,7 +164,14 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                         'size'     => 1,
                 );
 
-                EventSubmissionShortcode::maybe_handle_form();
+               try {
+                       EventSubmissionShortcode::maybe_handle_form();
+                       $this->fail( 'Expected redirect' );
+               } catch ( \RuntimeException $e ) {
+                       $this->assertSame( 'redirect', $e->getMessage() );
+               }
+
+               $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
 
                $gallery_calls = array_filter(
                        \ArtPulse\Frontend\StubState::$meta_log,
@@ -177,7 +191,14 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
         }
 
         public function test_meta_logged_when_no_images_uploaded(): void {
-                EventSubmissionShortcode::maybe_handle_form();
+               try {
+                       EventSubmissionShortcode::maybe_handle_form();
+                       $this->fail( 'Expected redirect' );
+               } catch ( \RuntimeException $e ) {
+                       $this->assertSame( 'redirect', $e->getMessage() );
+               }
+
+               $this->assertSame( '/referer', \ArtPulse\Frontend\StubState::$page );
 
                $gallery_calls = array_filter(
                        \ArtPulse\Frontend\StubState::$meta_log,
