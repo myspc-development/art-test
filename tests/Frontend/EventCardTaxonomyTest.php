@@ -14,6 +14,7 @@ class EventCardTaxonomyTest extends WP_UnitTestCase {
 
        private int $event_id;
        private bool $removed_do_blocks = false;
+       private bool $removed_insert_hooked_blocks = false;
 
        public function set_up() {
                parent::set_up();
@@ -21,6 +22,11 @@ class EventCardTaxonomyTest extends WP_UnitTestCase {
                if ( has_filter( 'the_content', 'do_blocks' ) ) {
                        remove_filter( 'the_content', 'do_blocks', 9 );
                        $this->removed_do_blocks = true;
+               }
+
+               if ( has_filter( 'render_block', 'insert_hooked_blocks' ) ) {
+                       remove_filter( 'render_block', 'insert_hooked_blocks', 10 );
+                       $this->removed_insert_hooked_blocks = true;
                }
 
                TaxonomiesRegistrar::register_event_types();
@@ -44,6 +50,10 @@ class EventCardTaxonomyTest extends WP_UnitTestCase {
        public function tear_down() {
                if ( $this->removed_do_blocks ) {
                        add_filter( 'the_content', 'do_blocks', 9 );
+               }
+
+               if ( ! empty( $this->removed_insert_hooked_blocks ) ) {
+                       add_filter( 'render_block', 'insert_hooked_blocks', 10, 2 );
                }
 
                unregister_taxonomy( 'event_type' );
