@@ -24,10 +24,13 @@ class EventCardTaxonomyTest extends WP_UnitTestCase {
                        $this->removed_do_blocks = true;
                }
 
-               if ( has_filter( 'render_block', 'insert_hooked_blocks' ) ) {
-                       remove_filter( 'render_block', 'insert_hooked_blocks', 10 );
-                       $this->removed_insert_hooked_blocks = true;
-               }
+                $has_insert_hooked_blocks = has_filter( 'render_block', 'insert_hooked_blocks' );
+                if ( $has_insert_hooked_blocks ) {
+                        remove_filter( 'render_block', 'insert_hooked_blocks', 10 );
+                }
+                remove_all_filters( 'render_block' );
+                remove_all_filters( 'pre_render_block' );
+                $this->removed_insert_hooked_blocks = $has_insert_hooked_blocks;
 
                add_filter( 'hooked_block_types', '__return_empty_array', 10, 0 );
 
@@ -54,9 +57,9 @@ class EventCardTaxonomyTest extends WP_UnitTestCase {
                        add_filter( 'the_content', 'do_blocks', 9 );
                }
 
-               if ( ! empty( $this->removed_insert_hooked_blocks ) ) {
-                       add_filter( 'render_block', 'insert_hooked_blocks', 10, 2 );
-               }
+                if ( $this->removed_insert_hooked_blocks && function_exists( 'insert_hooked_blocks' ) ) {
+                        add_filter( 'render_block', 'insert_hooked_blocks', 10, 4 );
+                }
 
                remove_filter( 'hooked_block_types', '__return_empty_array', 10 );
 
