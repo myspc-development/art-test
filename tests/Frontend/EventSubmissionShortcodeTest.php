@@ -23,9 +23,15 @@ class EventSubmissionShortcodeTest extends \WP_UnitTestCase {
                 \ArtPulse\Frontend\StubState::$function_exists_map = array( 'wc_add_notice' => true );
                 \ArtPulse\Frontend\StubState::$notice       = '';
                 \ArtPulse\Frontend\StubState::$inserted_post = array();
-                \ArtPulse\Frontend\StubState::$media_returns = array();
-                \ArtPulse\Frontend\StubState::$thumbnail     = 0;
-                \ArtPulse\Frontend\StubState::$get_posts_return = array();
+               \ArtPulse\Frontend\StubState::$media_returns = array();
+               \ArtPulse\Frontend\StubState::$thumbnail     = 0;
+               \ArtPulse\Frontend\StubState::$get_posts_return = array(
+                       (object) array(
+                               'ID'          => 99,
+                               'post_type'   => 'artpulse_org',
+                               'post_author' => 1,
+                       ),
+               );
                 $_FILES = array();
 
                 if ( ! is_dir( ABSPATH . '/wp-admin/includes' ) ) {
