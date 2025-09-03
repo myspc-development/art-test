@@ -5,11 +5,17 @@ use WP_Block_Type_Registry;
 
 class RelatedProjectsBlock {
         public static function register(): void {
-                add_action( 'init', array( self::class, 'register_block' ) );
-        }
+		if ( WP_Block_Type_Registry::get_instance()->is_registered( 'artpulse/related-projects' ) ) {
+			return;
+		}
+		add_action( 'init', array( self::class, 'register_block' ) );
+	}
 
         public static function register_block(): void {
                 if ( ! function_exists( 'register_block_type_from_metadata' ) ) {
+                        return;
+                }
+                if ( did_action( 'init' ) && ! doing_action( 'init' ) ) {
                         return;
                 }
                 if ( WP_Block_Type_Registry::get_instance()->is_registered( 'artpulse/related-projects' ) ) {
