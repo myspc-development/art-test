@@ -17,7 +17,7 @@ class PortfolioPermissionsTest extends WP_UnitTestCase {
 		$request  = new \WP_REST_Request( 'GET', '/ap/v1/portfolio' );
 		$response = rest_get_server()->dispatch( $request );
 		$status   = $response->get_status();
-                $this->assertSame( 401, $status );
+                $this->assertSame( 403, $status ); // 403: unauthenticated requests are forbidden
 	}
 
 	public function test_allows_authenticated_user() {
