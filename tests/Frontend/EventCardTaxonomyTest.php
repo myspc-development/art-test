@@ -15,9 +15,9 @@ class EventCardTaxonomyTest extends WP_UnitTestCase {
 	private int $event_id;
 
 	public function set_up() {
-		parent::set_up();
-		TaxonomiesRegistrar::register();
-		do_action( 'init' );
+               parent::set_up();
+               TaxonomiesRegistrar::register_event_types();
+               TaxonomiesRegistrar::insert_default_event_types();
 
 		$term           = get_term_by( 'slug', 'exhibition', 'event_type' );
 		$this->event_id = wp_insert_post(
@@ -31,8 +31,13 @@ class EventCardTaxonomyTest extends WP_UnitTestCase {
 			wp_set_post_terms( $this->event_id, array( $term->term_id ), 'event_type' );
 		}
 		update_post_meta( $this->event_id, 'event_organizer_name', 'Organizer' );
-		update_post_meta( $this->event_id, 'event_organizer_email', 'org@example.com' );
-	}
+                update_post_meta( $this->event_id, 'event_organizer_email', 'org@example.com' );
+        }
+
+       public function tear_down() {
+               unregister_taxonomy( 'event_type' );
+               parent::tear_down();
+       }
 
         public function test_event_card_outputs_meta(): void {
                 $html = ap_get_event_card( $this->event_id );
