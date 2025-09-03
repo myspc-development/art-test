@@ -3,7 +3,8 @@ namespace ArtPulse\Core;
 
 function ap_debug_log(string $message): void {
     if (defined('WP_CLI') && WP_CLI) {
-        \WP_CLI::log($message);
+        // Use WP-CLI's debug channel so output is hidden unless --debug is set.
+        \WP_CLI::debug($message, 'artpulse');
         return;
     }
     // Default: never pollute STDOUT; send to error log

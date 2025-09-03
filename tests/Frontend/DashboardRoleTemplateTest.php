@@ -13,13 +13,21 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 class DashboardRoleTemplateTest extends WP_UnitTestCase {
 
-	public function set_up() {
-		parent::set_up();
-		// Clear widget registry to keep output predictable
-		$ref  = new \ReflectionClass( DashboardWidgetRegistry::class );
-		$prop = $ref->getProperty( 'widgets' );
-		$prop->setAccessible( true );
-		$prop->setValue( null, array() );
+        protected function set_up(): void {
+                parent::set_up();
+
+                // Swallow any stdout/stderr produced during these tests.
+                $this->setOutputCallback(
+                        static function (): string {
+                                return '';
+                        }
+                );
+
+                // Clear widget registry to keep output predictable
+                $ref  = new \ReflectionClass( DashboardWidgetRegistry::class );
+                $prop = $ref->getProperty( 'widgets' );
+                $prop->setAccessible( true );
+                $prop->setValue( null, array() );
 
 		set_query_var( 'ap_dashboard_role', null );
 		set_query_var( 'ap_dashboard', null );
