@@ -74,39 +74,48 @@ class EventSubmissionShortcode {
          *
          * @param callable|null $redirect Optional redirect function.
          */
-        protected static function maybe_redirect( ?callable $redirect = null ): void {
-       if ( function_exists( __NAMESPACE__ . '\\wp_get_referer' ) ) {
-               $target = wp_get_referer();
-       } elseif ( function_exists( 'wp_get_referer' ) ) {
-               $target = \wp_get_referer();
-       } else {
-               $target = \ArtPulse\Core\Plugin::get_event_submission_url();
-       }
+protected static function maybe_redirect( ?callable $redirect = null ): void {
+    if ( function_exists( __NAMESPACE__ . '\wp_get_referer' ) ) {
+        $target = wp_get_referer();
+    } elseif ( function_exists( 'wp_get_referer' ) ) {
+        $target = \wp_get_referer();
+    } else {
+        $target = false;
+    }
 
-       if ( ! is_callable( $redirect ) ) {
-               $redirect = __NAMESPACE__ . '\\wp_safe_redirect';
+    if ( ! $target ) {
+        $target = \ArtPulse\Core\Plugin::get_event_submission_url();
+    }
 
-               if ( ! \function_exists( $redirect ) ) {
-                       if ( \function_exists( 'wp_safe_redirect' ) ) {
-                               $redirect = '\\wp_safe_redirect';
-                       } else {
-                               $redirect = null;
-                       }
-               }
-       }
+    if ( ! is_callable( $redirect ) ) {
+        $redirect = __NAMESPACE__ . '\wp_safe_redirect';
 
-       if ( is_callable( $redirect ) ) {
-               $redirect( $target );
-
-               // Only halt execution when using the global WordPress redirect.
-               if ( '\\wp_safe_redirect' === $redirect ) {
-                       exit;
-               }
-       } else {
-               // No redirect handler available; throw so tests can detect the attempt.
-               throw new \RuntimeException( 'redirect' );
-       }
+        if ( ! function_exists( $redirect ) ) {
+            if ( function_exists( 'wp_safe_redirect' ) ) {
+                $redirect = '\wp_safe_redirect';
+            } else {
+                $redirect = null;
+            }
         }
+    }
+
+    // Expose the intended target to tests when possible.
+    if ( class_exists( __NAMESPACE__ . '\StubState' ) ) {
+        StubState::$page = $target;
+    }
+
+    if ( is_callable( $redirect ) ) {
+        $redirect( $target );
+
+        // Only halt execution when using the global WordPress redirect.
+        if ( '\wp_safe_redirect' === $redirect ) {
+            exit;
+        }
+    } else {
+        // No redirect handler available; throw so tests can detect the attempt.
+        throw new \RuntimeException( 'redirect' );
+    }
+}
 
 	public static function register() {
 		\ArtPulse\Core\ShortcodeRegistry::register( 'ap_submit_event', 'Submit Event', array( self::class, 'render' ) );
