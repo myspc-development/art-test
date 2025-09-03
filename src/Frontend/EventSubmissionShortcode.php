@@ -409,10 +409,11 @@ class EventSubmissionShortcode {
 			return;
 		}
 
-                // Handle banner and additional image uploads
-                $image_ids   = array();
-                $image_order = array();
-                $banner_id   = 0;
+               // Handle banner and additional image uploads
+               $image_ids       = array();
+               $image_order     = array();
+               $banner_id       = 0;
+               $upload_had_error = false;
 
 		if ( isset( $_POST['image_order'] ) ) {
 			$image_order = array_map( 'intval', array_filter( explode( ',', (string) $_POST['image_order'] ) ) );
@@ -425,23 +426,22 @@ class EventSubmissionShortcode {
 		}
 
                 // Handle Banner Upload
-                if ( ! empty( $_FILES['event_banner']['name'] ) ) {
-                        $attachment_id = media_handle_upload( 'event_banner', $post_id );
+               if ( ! empty( $_FILES['event_banner']['name'] ) ) {
+                       $attachment_id = media_handle_upload( 'event_banner', $post_id );
 
-                        if ( ! is_wp_error( $attachment_id ) ) {
-                                $image_ids[] = $attachment_id;
-                                // Set the featured image
-                                set_post_thumbnail( $post_id, $attachment_id );
-                                $banner_id = $attachment_id;
-                        } else {
-                                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                                        error_log( 'Error uploading banner: ' . $attachment_id->get_error_message() );
-                                }
-                                self::add_notice( __( 'Error uploading banner. Please try again.', 'artpulse' ), 'error' );
-                                self::maybe_redirect();
-                                return;
-                        }
-                }
+                       if ( ! is_wp_error( $attachment_id ) ) {
+                               $image_ids[] = $attachment_id;
+                               // Set the featured image
+                               set_post_thumbnail( $post_id, $attachment_id );
+                               $banner_id = $attachment_id;
+                       } else {
+                               if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                                       error_log( 'Error uploading banner: ' . $attachment_id->get_error_message() );
+                               }
+                               self::add_notice( __( 'Error uploading banner. Please try again.', 'artpulse' ), 'error' );
+                               $upload_had_error = true;
+                       }
+               }
 
 		// Handle Additional Images Upload
 		$files   = array();
@@ -467,24 +467,23 @@ class EventSubmissionShortcode {
 			}
 		}
 
-		foreach ( $order as $idx ) {
-			if ( ! isset( $files[ $idx ] ) ) {
-				continue;
-			}
-			$_FILES['ap_image'] = $files[ $idx ];
-			$attachment_id      = media_handle_upload( 'ap_image', $post_id );
-			if ( ! is_wp_error( $attachment_id ) ) {
-				$image_ids[] = $attachment_id;
-			} else {
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					error_log( 'Error uploading additional image: ' . $attachment_id->get_error_message() );
-				}
-				self::add_notice( __( 'Error uploading additional image. Please try again.', 'artpulse' ), 'error' );
-				self::maybe_redirect();
-				return;
-			}
-		}
-		unset( $_FILES['ap_image'] );
+               foreach ( $order as $idx ) {
+                       if ( ! isset( $files[ $idx ] ) ) {
+                               continue;
+                       }
+                       $_FILES['ap_image'] = $files[ $idx ];
+                       $attachment_id      = media_handle_upload( 'ap_image', $post_id );
+                       if ( ! is_wp_error( $attachment_id ) ) {
+                               $image_ids[] = $attachment_id;
+                       } else {
+                               if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                                       error_log( 'Error uploading additional image: ' . $attachment_id->get_error_message() );
+                               }
+                               self::add_notice( __( 'Error uploading additional image. Please try again.', 'artpulse' ), 'error' );
+                               $upload_had_error = true;
+                       }
+               }
+               unset( $_FILES['ap_image'] );
 
                // Handle Image Order (reordering logic)
                $final_image_ids = $image_ids;
@@ -494,14 +493,14 @@ class EventSubmissionShortcode {
 
                        // Reorder images based on user-defined order
                        foreach ( $image_order as $image_id ) {
-                               if ( in_array( $image_id, $image_ids ) ) {
+                               if ( in_array( $image_id, $image_ids, true ) ) {
                                        $reordered[] = $image_id;
                                }
                        }
 
                        // Add any remaining images that weren't in the order (append them)
                        foreach ( $image_ids as $image_id ) {
-                               if ( ! in_array( $image_id, $reordered ) ) {
+                               if ( ! in_array( $image_id, $reordered, true ) ) {
                                        $reordered[] = $image_id;
                                }
                        }
@@ -519,9 +518,18 @@ class EventSubmissionShortcode {
                         $banner_id = $final_image_ids[0];
                 }
 
+               // Normalize types for meta updates.
+               $final_image_ids = array_values( array_map( 'intval', (array) $final_image_ids ) );
+               $banner_id       = (int) $banner_id;
+
                // Update Post Meta with Image IDs and banner ID
                update_post_meta( $post_id, '_ap_submission_images', $final_image_ids );
                update_post_meta( $post_id, 'event_banner_id', $banner_id );
+
+               if ( $upload_had_error ) {
+                       self::maybe_redirect();
+                       return;
+               }
 
 		// Success message and redirect
 		$message = $post_status === 'pending'
