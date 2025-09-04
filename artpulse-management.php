@@ -44,6 +44,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 use ArtPulse\Dashboard\WidgetVisibilityManager;
 use ArtPulse\Core\WidgetRoleSync;
 use ArtPulse\Admin\FrontendDashboardWidget;
+use ArtPulse\Helpers\GlobalHelpers;
 
 // Suppress deprecated notices if WP_DEBUG enabled
 if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -671,123 +672,56 @@ function artpulse_create_custom_table() {
  *
  * @return bool
  */
-function ap_page_has_artpulse_shortcode() {
-	if ( ! is_singular() ) {
-		return false;
-	}
-
-	global $post;
-
-	if ( ! $post || empty( $post->post_content ) ) {
-		return false;
-	}
-
-	return strpos( $post->post_content, '[ap_' ) !== false;
-}
-
-/**
- * Check if the current page contains a specific shortcode.
- */
-function ap_page_has_shortcode( string $tag ): bool {
-	if ( ! is_singular() ) {
-		return false;
-	}
-	global $post;
-	if ( ! $post || empty( $post->post_content ) ) {
-		return false;
-	}
-	return has_shortcode( $post->post_content, $tag );
-}
-
 add_action(
-	'wp_enqueue_scripts',
-	function () {
-		global $post;
-		if ( $post && has_shortcode( $post->post_content, 'ap_favorite_portfolio' ) ) {
-			wp_enqueue_style( 'ap-frontend', plugins_url( '/assets/css/frontend.css', __FILE__ ) );
-		}
-	}
+        'wp_enqueue_scripts',
+        function () {
+                global $post;
+                if ( $post && has_shortcode( $post->post_content, 'ap_favorite_portfolio' ) ) {
+                        wp_enqueue_style( 'ap-frontend', plugins_url( '/assets/css/frontend.css', __FILE__ ) );
+                }
+        }
 );
 
 /**
- * Get the active theme accent color.
- *
- * @return string Hex color string.
+ * @deprecated Use ArtPulse\Helpers\GlobalHelpers::pageHasArtpulseShortcode().
  */
-function ap_get_accent_color() {
-        $color = get_theme_mod( 'accent_color', '#0073aa' );
-        $color = sanitize_hex_color( $color );
-        return $color ? $color : '#0073aa';
+
 }
 
 /**
- * Adjust a hex color brightness by the given percentage.
- *
- * @param string $hex      Base color in hex format.
- * @param float  $percent  Percentage to lighten/darken (-1 to 1).
- * @return string Adjusted hex color.
+ * @deprecated Use ArtPulse\Helpers\GlobalHelpers::pageHasShortcode().
  */
-function ap_adjust_color_brightness( $hex, $percent ) {
-	$hex = ltrim( $hex, '#' );
-	if ( strlen( $hex ) === 3 ) {
-		$hex = str_repeat( substr( $hex, 0, 1 ), 2 ) .
-				str_repeat( substr( $hex, 1, 1 ), 2 ) .
-				str_repeat( substr( $hex, 2, 1 ), 2 );
-	}
-
-	$r = hexdec( substr( $hex, 0, 2 ) );
-	$g = hexdec( substr( $hex, 2, 2 ) );
-	$b = hexdec( substr( $hex, 4, 2 ) );
-
-	$r = max( 0, min( 255, (int) ( $r * ( 1 + $percent ) ) ) );
-	$g = max( 0, min( 255, (int) ( $g * ( 1 + $percent ) ) ) );
-	$b = max( 0, min( 255, (int) ( $b * ( 1 + $percent ) ) ) );
-
-	return sprintf( '#%02x%02x%02x', $r, $g, $b );
+function ap_page_has_shortcode( string $tag ): bool {
+        return GlobalHelpers::pageHasShortcode( $tag );
 }
 
 /**
- * Determine if ArtPulse frontend styles are disabled.
- *
- * @return bool
+ * @deprecated Use ArtPulse\Helpers\GlobalHelpers::stylesDisabled().
  */
 function ap_styles_disabled() {
-	$settings = get_option( 'artpulse_settings', array() );
-	return ! empty( $settings['disable_styles'] );
+        return GlobalHelpers::stylesDisabled();
 }
 
 /**
- * Check if non-admin users can access wp-admin.
+ * @deprecated Use ArtPulse\Helpers\GlobalHelpers::wpAdminAccessEnabled().
  */
 function ap_wp_admin_access_enabled() {
-	$settings = get_option( 'artpulse_settings', array() );
-	return ! empty( $settings['enable_wp_admin_access'] );
+        return GlobalHelpers::wpAdminAccessEnabled();
 }
 
 /**
  * Enqueue the global UI styles on the frontend.
  *
- * By default the styles are only loaded when a page contains an
- * ArtPulse shortcode. Themes or page builders can bypass this detection by
- * filtering {@see 'ap_bypass_shortcode_detection'} and returning true.
+ * @deprecated Use ArtPulse\Helpers\GlobalHelpers::enqueueGlobalStyles instead.
  */
-if ( ! function_exists( 'ap_enqueue_global_styles' ) ) {
-        function ap_enqueue_global_styles() {
-                if ( is_admin() ) {
-                        return;
-                }
 
-                $bypass = apply_filters( 'ap_bypass_shortcode_detection', false );
-
-
-        }
 }
 
 /**
  * Conditionally hook frontend assets.
  */
 function ap_register_frontend_assets() {
-        $needs = ap_page_has_artpulse_shortcode() ||
+        $needs = GlobalHelpers::pageHasArtpulseShortcode() ||
                 is_page( 'dashboard' ) ||
                 is_page( 'organization-dashboard' ) ||
                 is_page( 'events' ) ||
@@ -797,7 +731,7 @@ function ap_register_frontend_assets() {
                 return;
         }
 
-        add_action( 'wp_enqueue_scripts', 'ap_enqueue_global_styles' );
+        add_action( 'wp_enqueue_scripts', [ GlobalHelpers::class, 'enqueueGlobalStyles' ] );
         add_action( 'wp_enqueue_scripts', 'ap_enqueue_dashboard_styles' );
         add_action( 'wp_enqueue_scripts', 'ap_enqueue_main_style' );
         add_action( 'wp_enqueue_scripts', fn() => wp_enqueue_style( 'dashicons' ) );
@@ -817,7 +751,7 @@ function ap_register_frontend_assets() {
                 add_action( 'wp_enqueue_scripts', 'ap_enqueue_event_calendar_assets' );
         }
 
-        if ( function_exists( 'ap_page_has_shortcode' ) && ap_page_has_shortcode( 'react_form' ) ) {
+        if ( GlobalHelpers::pageHasShortcode( 'react_form' ) ) {
                 add_action( 'wp_enqueue_scripts', 'artpulse_enqueue_react_form' );
         }
 
@@ -862,7 +796,7 @@ add_action( 'wp', 'ap_register_frontend_assets' );
  * Enqueue dashboard styles only when a page uses an ArtPulse shortcode.
  */
 function ap_enqueue_dashboard_styles() {
-        if ( ! ap_page_has_artpulse_shortcode() ) {
+        if ( ! GlobalHelpers::pageHasArtpulseShortcode() ) {
                 return;
         }
 
@@ -1446,9 +1380,9 @@ add_filter(
 
 // === React Form Demo ===
 function artpulse_enqueue_react_form() {
-	if ( ! ap_page_has_shortcode( 'react_form' ) ) {
-		return;
-	}
+        if ( ! GlobalHelpers::pageHasShortcode( 'react_form' ) ) {
+                return;
+        }
 	wp_enqueue_script(
 		'artpulse-react-form',
 		plugin_dir_url( __FILE__ ) . 'dist/react-form.js',

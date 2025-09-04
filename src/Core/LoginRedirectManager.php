@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Core;
 
+use ArtPulse\Helpers\GlobalHelpers;
+
 class LoginRedirectManager {
 
         public static function register(): void {
@@ -12,7 +14,7 @@ class LoginRedirectManager {
                        return $redirect_to;
                }
 
-               if ( current_user_can( 'view_wp_admin' ) || ap_wp_admin_access_enabled() ) {
+               if ( current_user_can( 'view_wp_admin' ) || GlobalHelpers::wpAdminAccessEnabled() ) {
                        return $redirect_to;
                }
 

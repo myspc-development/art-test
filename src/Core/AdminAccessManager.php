@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Core;
 
+use ArtPulse\Helpers\GlobalHelpers;
+
 /**
  * Restrict access to wp-admin and hide the admin toolbar for non-admin users.
  */
@@ -20,8 +22,8 @@ class AdminAccessManager {
 	public static function maybe_hide_admin_bar( bool $show ): bool {
 		if (
 			current_user_can( 'manage_options' ) ||
-			current_user_can( 'view_wp_admin' ) ||
-			ap_wp_admin_access_enabled()
+                        current_user_can( 'view_wp_admin' ) ||
+                        GlobalHelpers::wpAdminAccessEnabled()
 		) {
 			return $show;
 		}
@@ -41,7 +43,7 @@ class AdminAccessManager {
                        ! is_user_logged_in() ||
                        current_user_can( 'manage_options' ) ||
                        current_user_can( 'view_wp_admin' ) ||
-                       ap_wp_admin_access_enabled()
+                       GlobalHelpers::wpAdminAccessEnabled()
                ) {
                        return;
                }
