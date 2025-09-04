@@ -6,10 +6,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * Logs into the site for each role defined by E2E_*_USER environment variables
- * and saves the storage state to the e2e directory.
+ * and saves the storage state to the tests/e2e directory.
  */
 export default async function globalSetup(config: FullConfig) {
-  const baseUrl = process.env.E2E_BASE_URL ?? 'http://127.0.0.1:8889';
+  const baseUrl = process.env.BASE_URL || 'http://localhost:8000';
   const browser = await chromium.launch();
 
   const roleKeys = Object.keys(process.env).filter(

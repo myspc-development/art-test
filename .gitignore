@@ -76,3 +76,6 @@ languages/*.mo
 /.wp-test.env
 tests/wp-tests-config.php
 out/test-summary.md
+
+# Playwright E2E outputs
+build/e2e/

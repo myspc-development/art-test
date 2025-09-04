@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 // Use stored auth state for member user
-test.use({ storageState: 'e2e/.state-member.json' });
+test.use({ storageState: 'tests/e2e/.state-member.json' });
 
 // Ensure member can interact with dashboard actions without leaving page
 // or triggering errors.
