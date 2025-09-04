@@ -60,9 +60,9 @@ class LeadCaptureWidget implements DashboardWidgetInterface {
 			<?php
 			return ob_get_clean();
 		}
-		$heading_id   = self::id() . '-heading';
-		$download_url = function_exists( 'admin_url' ) ? admin_url( 'admin-post.php?action=ap_export_leads' ) : '#';
-		$crm_url      = function_exists( 'admin_url' ) ? admin_url( 'admin.php?page=ap-crm-sync' ) : '#';
+               $heading_id   = self::id() . '-heading';
+               $download_url = ( function_exists( 'admin_url' ) && function_exists( 'wp_nonce_url' ) ) ? wp_nonce_url( admin_url( 'admin-post.php?action=ap_export_leads' ), 'ap_export_leads' ) : '#';
+               $crm_url      = function_exists( 'admin_url' ) ? admin_url( 'admin.php?page=ap-crm-sync' ) : '#';
 		ob_start();
 		?>
 		<section role="region" aria-labelledby="<?php echo esc_attr( $heading_id ); ?>"
