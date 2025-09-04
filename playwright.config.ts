@@ -4,8 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default defineConfig({
-  testDir: './e2e',
-  timeout: 30 * 1000,
+
   expect: {
     timeout: 5 * 1000,
     toHaveScreenshot: {
