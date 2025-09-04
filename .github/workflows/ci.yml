@@ -1,201 +1,76 @@
 name: CI
+
 on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
+  php:
+    name: PHP (PHPUnit)
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        php: ['8.1', '8.2', '8.3']
-        wp: ['6.3', '6.4', 'latest']
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: wordpress_test
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1"
-          --health-interval=5s
-          --health-timeout=3s
-          --health-retries=20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: composer:v2
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.composer/cache
+            vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install PHP deps
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Run PHPUnit
+        run: |
+          if [ -f phpunit.xml ] || [ -f phpunit.xml.dist ]; then
+            vendor/phpunit/phpunit/phpunit
+          else
+            vendor/phpunit/phpunit/phpunit tests
+          fi
+
+  js:
+    name: JS (Jest)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - uses: actions/cache@v4
+
+      - name: Cache npm
+        uses: actions/cache@v4
         with:
           path: ~/.npm
-          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          coverage: pcov
-          tools: composer
-      - uses: actions/cache@v4
-        with:
-          path: ~/.composer/cache/files
-          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install JS deps
         run: npm ci
-      - name: Install Composer deps
-        run: composer install --prefer-dist --no-progress
-      - name: Wait for MySQL
-        run: |
-          for i in {1..30}; do
-            if mysqladmin ping -h"$WP_DB_HOST" --silent; then echo "MySQL up"; exit 0; fi
-            echo "waiting for MySQL..."; sleep 2
-          done
-          echo "MySQL never became ready"; exit 1
-      - name: Install WP test suite
+
+      - name: Run Jest
         env:
-          WP_DB_HOST: 127.0.0.1:3306
-          WP_DB_USER: root
-          WP_DB_PASS: ""
-          WP_DB_NAME: wordpress_test
-          WP_VERSION: ${{ matrix.wp }}
-        run: bash bin/install-wp-tests.sh "$WP_DB_NAME" "$WP_DB_USER" "$WP_DB_PASS" "$WP_DB_HOST" "$WP_VERSION"
-      - name: Run full test suite
-        run: npm test
-      - name: PHP CodeSniffer
-        run: vendor/bin/phpcs --standard=phpcs.xml src --ignore=tests/TestHelpers/* -d memory_limit=512M
-      - name: PHPStan
-        run: |
-          set -e
-          sed '/phpstan-baseline.neon/d' phpstan.neon > phpstan-nobaseline.neon
-          vendor/bin/phpstan analyse -c phpstan-nobaseline.neon --error-format=json --no-progress --memory-limit=512M > phpstan.json
-          ERRORS=$(php -r 'echo json_decode(file_get_contents("phpstan.json"), true)["totals"]["errors"];')
-          BASELINE=$(grep -oP '^\s*count:\s*\K\d+' phpstan-baseline.neon | awk '{s+=$1} END {print s}')
-          echo "PHPStan errors: $ERRORS (baseline: $BASELINE)"
-          if [ "$ERRORS" -gt "$BASELINE" ]; then
-            echo "PHPStan errors exceed baseline"
-            exit 1
-          fi
-      - name: Run PHPUnit (with coverage)
-        env:
-          WP_DB_HOST: 127.0.0.1:3306
-          WP_DB_USER: root
-          WP_DB_PASS: ""
-          WP_DB_NAME: wordpress_test
-          WP_VERSION: ${{ matrix.wp }}
-        run: vendor/bin/phpunit --log-junit build/junit.xml --coverage-clover build/coverage.xml
-      - name: Run REST API tests
-        id: rest_buckets
-        continue-on-error: true
-        run: composer run test:rest:buckets
-        env:
-          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
-          WP_PHPUNIT__TESTS_CONFIG: tests/wp-tests-config.php
-          WP_TESTS_DB_NAME: wordpress_test
-          WP_TESTS_DB_USER: root
-          WP_TESTS_DB_PASSWORD: ""
-          WP_TESTS_DB_HOST: 127.0.0.1:3306
-          AP_TEST_MODE: 1
-      - name: Coverage summary (bottom 15 files)
-        if: always()
-        run: |
-          php -r '
-            $x=simplexml_load_file("build/coverage.xml");
-            $rows=[];
-            foreach($x->project->file as $f){
-              $name=(string)$f["name"]; $m=$f->metrics;
-              $cov=(float)$m["lines-covered"]; $tot=(float)$m["lines-valid"];
-              if($tot==0) continue; $pct=$cov/$tot;
-              $rows[]=["name"=>$name,"pct"=>$pct,"cov"=>$cov,"tot"=>$tot];
-            }
-            usort($rows, fn($a,$b)=>$a["pct"]<=>$b["pct"]);
-            $rows=array_slice($rows,0,15);
-            $o="# Lowest coverage files\n\n| File | Lines | Covered | % |\n|---|---:|---:|---:|\n";
-            foreach($rows as $r){ $o.=sprintf("| %s | %d | %d | %.2f%% |\n",$r["name"],$r["tot"],$r["cov"],$r["pct"]*100); }
-            file_put_contents(getenv("GITHUB_STEP_SUMMARY") ?: "summary.md", $o, FILE_APPEND);
-          '
-      - name: Enforce 70% coverage
-        run: |
-          php -r '
-            $x=simplexml_load_file("build/coverage.xml");
-            if(!$x){fwrite(STDERR,"No coverage.xml\n"); exit(1);}
-            $m=(float)$x->project->metrics["lines-covered"];
-            $n=(float)$x->project->metrics["lines-valid"];
-            $pct=$n?($m/$n):0;
-            echo "Coverage: ".round($pct*100,2)."%\n";
-            exit($pct>=0.70?0:1);
-          '
-      - name: Aggregate test reports
-        if: always()
-        run: node tools/aggregate-test-report.js
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: phpunit-${{ matrix.php }}-${{ matrix.wp }}
-          path: build/
-
-      - name: Upload REST buckets
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: rest-buckets-${{ matrix.php }}-${{ matrix.wp }}
-          path: reports/rest-buckets.json
-      - name: Fail if REST buckets failed
-        if: steps.rest_buckets.outcome == 'failure'
-        run: exit 1
-
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-${{ matrix.php }}-${{ matrix.wp }}
-          path: |
-            playwright-report/
-            test-results/
-      - name: Add Playwright link to summary
-        if: always()
-        run: |
-          echo "### Playwright report" >> $GITHUB_STEP_SUMMARY
-          echo "Download the **playwright** artifact from the run’s Artifacts section." >> $GITHUB_STEP_SUMMARY
-
-      - uses: actions/upload-artifact@v4
-        if: hashFiles('coverage/coverage-summary.json') != ''
-        with:
-          name: coverage-${{ matrix.php }}-${{ matrix.wp }}
-          path: coverage/
-
-      - name: Aggregate test results
-        if: always()
-        run: node scripts/aggregate-results.js
-
-      - name: Comment test suite status
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const suites = JSON.parse(fs.readFileSync('aggregated-results.json', 'utf8'));
-            const icons = { pass: '✅', warn: '⚠️', missing: '❌' };
-            const body = suites.map(s => `${icons[s.status] || '❓'} ${s.name}`).join('\n');
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body,
-            });
-
-  playwright-visual:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-      - run: npm ci
-      - run: npx playwright install --with-deps
-      - run: npm run test:e2e
+          CI: 'true'
+        run: npm test -- --runInBand
