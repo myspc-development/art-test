@@ -97,7 +97,8 @@ class LoginShortcodeTest extends \WP_UnitTestCase {
                 $_SERVER['REMOTE_ADDR'] = '8.8.8.8';
                 $_POST['username']      = 'user';
                 $_POST['password']      = 'bad';
-                $key                    = 'ap_login_fail_' . md5( '8.8.8.8|user' );
+                $ip                     = wp_privacy_anonymize_ip( '8.8.8.8' );
+                $key                    = 'ap_login_fail_' . md5( $ip . '|user' );
                 delete_transient( $key );
                 AjaxLoginTestStubs::$signon_return = new WP_Error( 'failed', 'Bad' );
 
@@ -120,7 +121,75 @@ class LoginShortcodeTest extends \WP_UnitTestCase {
                 } catch ( \RuntimeException $e ) {
                         $this->assertSame( 'json', $e->getMessage() );
                 }
-                $this->assertSame( 'TOO_MANY_ATTEMPTS', StubState::$json_error['code'] );
+                $this->assertSame( 'RATE_LIMIT', StubState::$json_error['code'] );
+                $this->assertFalse( AjaxLoginTestStubs::$signon_called );
+
+                delete_transient( $key );
+        }
+
+        public function test_ajax_login_rate_limiting_invalid_ip(): void {
+                $_SERVER['REMOTE_ADDR'] = 'bad ip';
+                $_POST['username']      = 'user';
+                $_POST['password']      = 'bad';
+                $ip                     = wp_privacy_anonymize_ip( '' );
+                $key                    = 'ap_login_fail_' . md5( $ip . '|user' );
+                delete_transient( $key );
+                AjaxLoginTestStubs::$signon_return = new WP_Error( 'failed', 'Bad' );
+
+                for ( $i = 0; $i < 5; $i++ ) {
+                        AjaxLoginTestStubs::$signon_called = false;
+                        StubState::$json_error             = null;
+                        try {
+                                LoginShortcode::ajax_login();
+                        } catch ( \RuntimeException $e ) {
+                                $this->assertSame( 'json', $e->getMessage() );
+                        }
+                        $this->assertSame( 'INVALID_CREDENTIALS', StubState::$json_error['code'] );
+                        $this->assertTrue( AjaxLoginTestStubs::$signon_called );
+                }
+
+                AjaxLoginTestStubs::$signon_called = false;
+                StubState::$json_error             = null;
+                try {
+                        LoginShortcode::ajax_login();
+                } catch ( \RuntimeException $e ) {
+                        $this->assertSame( 'json', $e->getMessage() );
+                }
+                $this->assertSame( 'RATE_LIMIT', StubState::$json_error['code'] );
+                $this->assertFalse( AjaxLoginTestStubs::$signon_called );
+
+                delete_transient( $key );
+        }
+
+        public function test_ajax_login_rate_limiting_spoofed_ip(): void {
+                $_SERVER['REMOTE_ADDR'] = '8.8.8.8, 1.2.3.4';
+                $_POST['username']      = 'user';
+                $_POST['password']      = 'bad';
+                $ip                     = wp_privacy_anonymize_ip( '8.8.8.8' );
+                $key                    = 'ap_login_fail_' . md5( $ip . '|user' );
+                delete_transient( $key );
+                AjaxLoginTestStubs::$signon_return = new WP_Error( 'failed', 'Bad' );
+
+                for ( $i = 0; $i < 5; $i++ ) {
+                        AjaxLoginTestStubs::$signon_called = false;
+                        StubState::$json_error             = null;
+                        try {
+                                LoginShortcode::ajax_login();
+                        } catch ( \RuntimeException $e ) {
+                                $this->assertSame( 'json', $e->getMessage() );
+                        }
+                        $this->assertSame( 'INVALID_CREDENTIALS', StubState::$json_error['code'] );
+                        $this->assertTrue( AjaxLoginTestStubs::$signon_called );
+                }
+
+                AjaxLoginTestStubs::$signon_called = false;
+                StubState::$json_error             = null;
+                try {
+                        LoginShortcode::ajax_login();
+                } catch ( \RuntimeException $e ) {
+                        $this->assertSame( 'json', $e->getMessage() );
+                }
+                $this->assertSame( 'RATE_LIMIT', StubState::$json_error['code'] );
                 $this->assertFalse( AjaxLoginTestStubs::$signon_called );
 
                 delete_transient( $key );

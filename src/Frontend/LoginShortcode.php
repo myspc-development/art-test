@@ -99,7 +99,14 @@ class LoginShortcode {
                $identifier = is_email( $username_raw ) ? sanitize_email( $username_raw ) : sanitize_user( $username_raw );
                $remember   = ! empty( $_POST['remember'] );
 
-               $ip       = $_SERVER['REMOTE_ADDR'] ?? '';
+               $raw_ip   = $_SERVER['REMOTE_ADDR'] ?? '';
+               $san_ip   = sanitize_text_field( $raw_ip );
+               $parts    = explode( ',', $san_ip );
+               $ip       = filter_var( trim( $parts[0] ?? '' ), FILTER_VALIDATE_IP );
+               if ( false === $ip ) {
+                       $ip = '';
+               }
+               $ip       = wp_privacy_anonymize_ip( $ip );
                $key      = 'ap_login_fail_' . md5( $ip . '|' . $identifier );
                $attempts = (int) get_transient( $key );
 
