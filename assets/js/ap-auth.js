@@ -36,28 +36,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         formData.set('address_components', comp);
       }
+    } else if (action === 'ap_do_login') {
+      const remember = form.querySelector('[name="remember"]');
+      if (remember && remember.checked) {
+        formData.set('remember', '1');
+      }
     }
 
     formData.append('action', action);
     formData.append('nonce', APLogin.nonce);
 
-    const res = await fetch(APLogin.ajaxUrl, {
-      method: 'POST',
-      body: formData
-    });
+    const submitBtn = form.querySelector('[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
 
-    const data = await res.json();
-    if (msgEl) msgEl.textContent = data.data && data.data.message ? data.data.message : data.message || '';
-    return {res, data};
+    try {
+      const res = await fetch(APLogin.ajaxUrl, {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        const invalidNames = data.data && data.data.invalid ? data.data.invalid : [];
+        let field = null;
+        if (invalidNames.length) {
+          field = form.querySelector(`[name="${invalidNames[0]}"]`);
+        }
+        if (!field) {
+          field = form.querySelector(':invalid');
+        }
+        if (field) field.focus();
+      }
+      if (msgEl) msgEl.textContent = data.data && data.data.message ? data.data.message : data.message || '';
+      return {res, data};
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
   }
 
   if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const result = await submitForm(loginForm, 'ap_do_login', loginMsg);
-      if (result.res.ok && result.data.success) {
-        const target = result.data.data && result.data.data.dashboardUrl ? result.data.data.dashboardUrl : APLogin.dashboardUrl;
-        window.location.href = target;
+      try {
+        const result = await submitForm(loginForm, 'ap_do_login', loginMsg);
+        if (result.res.ok && result.data.success && result.data.data && result.data.data.dashboardUrl) {
+          window.location.href = result.data.data.dashboardUrl;
+        }
+      } catch (err) {
+        // ignore, messages handled in submitForm
       }
     });
   }
@@ -66,11 +92,15 @@ document.addEventListener('DOMContentLoaded', () => {
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (regSuccess) regSuccess.textContent = 'Submitting...';
-      const result = await submitForm(registerForm, 'ap_do_register', regMsg);
-      if (result.res.ok && result.data.success) {
-        if (regSuccess) regSuccess.textContent = result.data.data && result.data.data.message ? result.data.data.message : result.data.message || 'Registration successful';
-        window.location.href = APLogin.dashboardUrl;
-      } else {
+      try {
+        const result = await submitForm(registerForm, 'ap_do_register', regMsg);
+        if (result.res.ok && result.data.success) {
+          if (regSuccess) regSuccess.textContent = result.data.data && result.data.data.message ? result.data.data.message : result.data.message || 'Registration successful';
+          window.location.href = APLogin.dashboardUrl;
+        } else if (regSuccess) {
+          regSuccess.textContent = '';
+        }
+      } catch (err) {
         if (regSuccess) regSuccess.textContent = '';
       }
     });
