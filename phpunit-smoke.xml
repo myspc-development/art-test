@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/bootstrap.php"
+         colors="true"
+         stopOnFailure="false"
+         cacheResult="false"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd">
+    <testsuites>
+        <testsuite name="smoke">
+            <file>tests/Admin/WidgetLayoutRestTest.php</file>
+            <file>tests/Cli/RestRouteAuditCliTest.php</file>
+            <file>tests/Integration/CalendarExportTest.php</file>
+            <file>tests/Reporting/BudgetExportControllerTest.php</file>
+            <file>tests/AvailableWidgetsTest.php</file>
+            <file>tests/Cli/CheckWidgetPresetsCommandTest.php</file>
+            <file>tests/Core/EventRsvpMetaMigrationTest.php</file>
+            <file>tests/Core/OrgRoleMetaMigrationTest.php</file>
+            <file>tests/Admin/ApprovalManagerTest.php</file>
+            <file>tests/Admin/ConfigBackupTabNonceTest.php</file>
+            <file>tests/Blocks/EventCardBlockTest.php</file>
+            <file>tests/Core/DashboardBuilderRegistryGetForRoleTest.php</file>
+            <file>tests/Smoke/ActivationTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>
