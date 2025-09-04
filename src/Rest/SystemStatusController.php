@@ -19,25 +19,29 @@ final class SystemStatusController {
         }
 
        public function routes(): void {
-                register_rest_route(
-                        'ap/v1',
-                        '/system/status',
-                        array(
-                                'methods'             => WP_REST_Server::READABLE,
-                                'permission_callback' => '__return_true',
-                                'callback'            => array( $this, 'get_status' ),
-                        )
-                );
-                register_rest_route(
-                        'ap/v1',
-                        '/status',
-                        array(
-                                'methods'             => WP_REST_Server::READABLE,
-                                'permission_callback' => '__return_true',
-                                'callback'            => array( $this, 'get_status' ),
-                        )
-                );
-        }
+                if ( ! ap_rest_route_registered( 'ap/v1', '/system/status' ) ) {
+                        register_rest_route(
+                                'ap/v1',
+                                '/system/status',
+                                array(
+                                        'methods'             => WP_REST_Server::READABLE,
+                                        'permission_callback' => '__return_true',
+                                        'callback'            => array( $this, 'get_status' ),
+                                )
+                        );
+                }
+                if ( ! ap_rest_route_registered( 'ap/v1', '/status' ) ) {
+                        register_rest_route(
+                                'ap/v1',
+                                '/status',
+                                array(
+                                        'methods'             => WP_REST_Server::READABLE,
+                                        'permission_callback' => '__return_true',
+                                        'callback'            => array( $this, 'get_status' ),
+                                )
+                        );
+                }
+       }
 
        public function get_status(): WP_REST_Response|WP_Error {
                 global $wp_version;

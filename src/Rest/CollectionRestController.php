@@ -17,52 +17,56 @@ class CollectionRestController {
 		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
 	}
 
-	public static function register_routes(): void {
-		register_rest_route(
-			self::NAMESPACE,
-			'/collections',
-			array(
-				array(
-					'methods'             => WP_REST_Server::READABLE,
-                                        'callback'            => array( self::class, 'get_collections' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
-				),
-				array(
-					'methods'             => WP_REST_Server::CREATABLE,
-                                        'callback'            => array( self::class, 'create_or_update' ),
-                                        'permission_callback' => Auth::require_login_and_cap( 'edit_ap_collections' ),
-					'args'                => array(
-						'id'    => array(
-							'type'     => 'integer',
-							'required' => false,
-						),
-						'title' => array(
-							'type'     => 'string',
-							'required' => true,
-						),
-						'items' => array(
-							'type'     => 'array',
-							'items'    => array( 'type' => 'integer' ),
-							'required' => false,
-						),
-					),
-				),
-			)
-		);
+        public static function register_routes(): void {
+                if ( ! ap_rest_route_registered( self::NAMESPACE, '/collections' ) ) {
+                        register_rest_route(
+                                self::NAMESPACE,
+                                '/collections',
+                                array(
+                                        array(
+                                                'methods'             => WP_REST_Server::READABLE,
+                                                'callback'            => array( self::class, 'get_collections' ),
+                                                'permission_callback' => array( Auth::class, 'guard_read' ),
+                                        ),
+                                        array(
+                                                'methods'             => WP_REST_Server::CREATABLE,
+                                                'callback'            => array( self::class, 'create_or_update' ),
+                                                'permission_callback' => Auth::require_login_and_cap( 'edit_ap_collections' ),
+                                                'args'                => array(
+                                                        'id'    => array(
+                                                                'type'     => 'integer',
+                                                                'required' => false,
+                                                        ),
+                                                        'title' => array(
+                                                                'type'     => 'string',
+                                                                'required' => true,
+                                                        ),
+                                                        'items' => array(
+                                                                'type'     => 'array',
+                                                                'items'    => array( 'type' => 'integer' ),
+                                                                'required' => false,
+                                                        ),
+                                                ),
+                                        ),
+                                )
+                        );
+                }
 
-		register_rest_route(
-			self::NAMESPACE,
-			'/collection/(?P<id>\d+)',
-			array(
-				'methods'             => WP_REST_Server::READABLE,
-                                'callback'            => array( self::class, 'get_collection' ),
-                                'permission_callback' => array( Auth::class, 'guard_read' ),
-				'args'                => array(
-					'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
-				),
-			)
-		);
-	}
+                if ( ! ap_rest_route_registered( self::NAMESPACE, '/collection/(?P<id>\d+)' ) ) {
+                        register_rest_route(
+                                self::NAMESPACE,
+                                '/collection/(?P<id>\d+)',
+                                array(
+                                        'methods'             => WP_REST_Server::READABLE,
+                                        'callback'            => array( self::class, 'get_collection' ),
+                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+                                        'args'                => array(
+                                                'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
+                                        ),
+                                )
+                        );
+                }
+        }
 
 	public static function get_collections( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$posts = get_posts(
