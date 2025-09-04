@@ -105,15 +105,16 @@ class UnifiedInboxController {
 			);
 		}
 
-		$table = $wpdb->prefix . 'ap_messages';
-		$rows  = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM $table WHERE sender_id = %d OR recipient_id = %d ORDER BY created_at DESC LIMIT %d",
-				$user_id,
-				$user_id,
-				$limit
-			)
-		);
+               $table  = $wpdb->prefix . 'ap_messages';
+               $columns = 'id, sender_id, recipient_id, content, is_read, created_at';
+               $rows   = $wpdb->get_results(
+                       $wpdb->prepare(
+                               "SELECT $columns FROM $table WHERE sender_id = %d OR recipient_id = %d ORDER BY created_at DESC LIMIT %d",
+                               $user_id,
+                               $user_id,
+                               $limit
+                       )
+               );
 		foreach ( $rows as $r ) {
 			$items[] = array(
 				'id'        => (int) $r->id,

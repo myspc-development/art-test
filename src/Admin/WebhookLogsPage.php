@@ -22,9 +22,10 @@ class WebhookLogsPage {
 	}
 
 	public static function render(): void {
-		global $wpdb;
-		$table = $wpdb->prefix . 'ap_webhook_logs';
-		$rows  = $wpdb->get_results( "SELECT * FROM $table ORDER BY id DESC LIMIT 200" );
+               global $wpdb;
+               $table   = $wpdb->prefix . 'ap_webhook_logs';
+               $columns = 'id, timestamp, subscription_id, status_code';
+               $rows    = $wpdb->get_results( "SELECT $columns FROM $table ORDER BY id DESC LIMIT 200" );
 		echo '<div class="wrap">';
 		echo '<h1>' . esc_html__( 'Webhook Delivery Logs', 'artpulse' ) . '</h1>';
 		echo '<table class="widefat fixed striped">';
