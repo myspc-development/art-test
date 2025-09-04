@@ -782,15 +782,89 @@ function ap_enqueue_global_styles() {
 		);
 	}
 }
-add_action( 'wp_enqueue_scripts', 'ap_enqueue_global_styles' );
+
+/**
+ * Conditionally hook frontend assets.
+ */
+function ap_register_frontend_assets() {
+        $needs = ap_page_has_artpulse_shortcode() ||
+                is_page( 'dashboard' ) ||
+                is_page( 'organization-dashboard' ) ||
+                is_page( 'events' ) ||
+                is_singular( 'artpulse_event' );
+
+        if ( ! $needs ) {
+                return;
+        }
+
+        add_action( 'wp_enqueue_scripts', 'ap_enqueue_global_styles' );
+        add_action( 'wp_enqueue_scripts', 'ap_enqueue_dashboard_styles' );
+        add_action( 'wp_enqueue_scripts', 'ap_enqueue_main_style' );
+        add_action( 'wp_enqueue_scripts', fn() => wp_enqueue_style( 'dashicons' ) );
+        add_action(
+                'wp_enqueue_scripts',
+                function () {
+                        wp_enqueue_style(
+                                'ap-frontend-styles',
+                                plugin_dir_url( __FILE__ ) . 'assets/css/ap-frontend-styles.css',
+                                array(),
+                                filemtime( plugin_dir_path( __FILE__ ) . 'assets/css/ap-frontend-styles.css' )
+                        );
+                }
+        );
+
+        if ( is_page( 'events' ) || is_singular( 'artpulse_event' ) ) {
+                add_action( 'wp_enqueue_scripts', 'ap_enqueue_event_calendar_assets' );
+        }
+
+        if ( function_exists( 'ap_page_has_shortcode' ) && ap_page_has_shortcode( 'react_form' ) ) {
+                add_action( 'wp_enqueue_scripts', 'artpulse_enqueue_react_form' );
+        }
+
+        $sortable_rel = 'assets/libs/sortablejs/Sortable.min.js';
+        add_action(
+                'wp_enqueue_scripts',
+                function () use ( $sortable_rel ) {
+                        if ( is_page( 'dashboard' ) || is_page( 'organization-dashboard' ) ) {
+                                $sortable_path = plugin_dir_path( __FILE__ ) . $sortable_rel;
+                                wp_enqueue_script(
+                                        'sortablejs',
+                                        plugins_url( $sortable_rel, __FILE__ ),
+                                        array(),
+                                        file_exists( $sortable_path ) ? (string) filemtime( $sortable_path ) : null,
+                                        true
+                                );
+
+                                $script_path = plugin_dir_path( __FILE__ ) . 'assets/js/organization-dashboard.js';
+                                wp_enqueue_script(
+                                        'organization-dashboard',
+                                        plugins_url( 'assets/js/organization-dashboard.js', __FILE__ ),
+                                        array( 'sortablejs' ),
+                                        file_exists( $script_path ) ? (string) filemtime( $script_path ) : null,
+                                        true
+                                );
+                                wp_localize_script(
+                                        'organization-dashboard',
+                                        'APWidgetOrder',
+                                        array(
+                                                'ajax_url'   => admin_url( 'admin-ajax.php' ),
+                                                'nonce'      => wp_create_nonce( 'ap_widget_order' ),
+                                                'identifier' => get_current_user_id(),
+                                        )
+                                );
+                        }
+                }
+        );
+}
+add_action( 'wp', 'ap_register_frontend_assets' );
 
 /**
  * Enqueue dashboard styles only when a page uses an ArtPulse shortcode.
  */
 function ap_enqueue_dashboard_styles() {
-	if ( ! ap_page_has_artpulse_shortcode() ) {
-		return;
-	}
+        if ( ! ap_page_has_artpulse_shortcode() ) {
+                return;
+        }
 
 	wp_enqueue_style(
 		'ap-complete-dashboard-style',
@@ -808,7 +882,6 @@ function ap_enqueue_dashboard_styles() {
 		);
 	}
 }
-add_action( 'wp_enqueue_scripts', 'ap_enqueue_dashboard_styles' );
 
 // Load modern frontend UI styles for Salient/WPBakery integration
 add_action(
@@ -839,10 +912,8 @@ function ap_enqueue_main_style() {
 		);
 	}
 }
-add_action( 'wp_enqueue_scripts', 'ap_enqueue_main_style' );
 add_action( 'admin_enqueue_scripts', 'ap_enqueue_main_style' );
 add_action( 'admin_enqueue_scripts', fn() => wp_enqueue_style( 'dashicons' ) );
-add_action( 'wp_enqueue_scripts', fn() => wp_enqueue_style( 'dashicons' ) );
 
 /**
  * Optionally enqueue styles for the admin area.
@@ -1196,7 +1267,6 @@ function ap_enqueue_event_calendar_assets() {
 		);
 	}
 }
-add_action( 'wp_enqueue_scripts', 'ap_enqueue_event_calendar_assets' );
 
 function ap_get_events_for_calendar() {
 	$lat = isset( $_GET['lat'] ) ? floatval( $_GET['lat'] ) : null;
@@ -1395,7 +1465,6 @@ function artpulse_enqueue_react_form() {
 		)
 	);
 }
-add_action( 'wp_enqueue_scripts', 'artpulse_enqueue_react_form' );
 
 function artpulse_render_react_form( $atts = array() ) {
 	$atts = shortcode_atts( array( 'type' => 'default' ), $atts, 'react_form' );

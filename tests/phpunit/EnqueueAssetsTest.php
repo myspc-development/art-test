@@ -116,12 +116,26 @@ final class EnqueueAssetsTest extends TestCase {
 	}
 
 	public function test_register_wires_hooks(): void {
-		Actions\expectAdded( 'enqueue_block_editor_assets' )->twice();
-		Actions\expectAdded( 'admin_enqueue_scripts' )->once();
-		Actions\expectAdded( 'wp_enqueue_scripts' )->once();
-		EnqueueAssets::register();
-		$this->assertTrue( true );
-	}
+                Actions\expectAdded( 'enqueue_block_editor_assets' )->twice();
+                Actions\expectAdded( 'admin_enqueue_scripts' )->once();
+                Actions\expectAdded( 'wp' )->once();
+                EnqueueAssets::register();
+                $this->assertTrue( true );
+        }
+
+        public function test_maybe_enqueue_frontend_adds_hook_when_shortcode_present(): void {
+                Functions\when( 'function_exists' )->alias( fn( $fn ) => $fn === 'ap_page_has_artpulse_shortcode' ? true : \function_exists( $fn ) );
+                Functions\when( 'ap_page_has_artpulse_shortcode' )->justReturn( true );
+                Actions\expectAdded( 'wp_enqueue_scripts' )->once();
+                EnqueueAssets::maybe_enqueue_frontend();
+        }
+
+        public function test_maybe_enqueue_frontend_skips_when_no_shortcode(): void {
+                Functions\when( 'function_exists' )->alias( fn( $fn ) => $fn === 'ap_page_has_artpulse_shortcode' ? true : \function_exists( $fn ) );
+                Functions\when( 'ap_page_has_artpulse_shortcode' )->justReturn( false );
+                Actions\expectAdded( 'wp_enqueue_scripts' )->never();
+                EnqueueAssets::maybe_enqueue_frontend();
+        }
 
 	public function test_dashboard_admin_enqueues_with_sortable(): void {
 		$this->touch( 'assets/css/dashboard.css' );

@@ -83,7 +83,13 @@ class EnqueueAssets {
 	 * Register Chart.js so it can be used as a dependency.
 	 */
         private static function register_chart_js(): void {
-                self::register_script( 'chart-js', 'assets/libs/chart.js/4.4.1/chart.min.js' );
+                self::register_script(
+                        'chart-js',
+                        'assets/libs/chart.js/4.4.1/chart.min.js',
+                        array(),
+                        true,
+                        array( 'strategy' => 'defer' )
+                );
         }
 
 	/**
@@ -93,9 +99,18 @@ class EnqueueAssets {
 		add_action( 'enqueue_block_editor_assets', array( self::class, 'enqueue_block_editor_assets' ) );
 		// There is no enqueue_block_editor_styles hook.
 		add_action( 'enqueue_block_editor_assets', array( self::class, 'enqueue_block_editor_styles' ) );
-		add_action( 'admin_enqueue_scripts', array( self::class, 'enqueue_admin' ) );
-		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_frontend' ) );
-	}
+                add_action( 'admin_enqueue_scripts', array( self::class, 'enqueue_admin' ) );
+                add_action( 'wp', array( self::class, 'maybe_enqueue_frontend' ) );
+        }
+
+        /**
+         * Conditionally hook frontend assets only when needed.
+         */
+        public static function maybe_enqueue_frontend(): void {
+                if ( function_exists( 'ap_page_has_artpulse_shortcode' ) && ap_page_has_artpulse_shortcode() ) {
+                        add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_frontend' ) );
+                }
+        }
 
 	/**
 	 * Editor scripts.
