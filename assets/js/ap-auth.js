@@ -83,7 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
           window.location.href = result.data.data.dashboardUrl;
         }
       } catch (err) {
-        // ignore, messages handled in submitForm
+        if (loginMsg) {
+          loginMsg.textContent = 'Unable to reach server. Please try again.';
+        }
+        // Optionally log the error for debugging
+        console.error(err);
       }
     });
   }
