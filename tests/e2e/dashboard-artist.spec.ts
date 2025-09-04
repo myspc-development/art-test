@@ -3,9 +3,9 @@ import { widgetLocator } from "./utils/selectors";
 
 const BASE_DASHBOARD_PATH = process.env.BASE_DASHBOARD_PATH || "/dashboard";
 
-test.use({ storageState: "e2e/.state-org.json" });
+test.use({ storageState: "tests/e2e/.state-artist.json" });
 
-test("org dashboard displays widgets", async ({ page }) => {
+test("artist dashboard displays widgets", async ({ page }) => {
     await page.goto(BASE_DASHBOARD_PATH);
 
     const widgets = page.locator(widgetLocator);
@@ -14,9 +14,8 @@ test("org dashboard displays widgets", async ({ page }) => {
 
     const content = await page.content();
     expect(
-        content.includes("widget_org_event_overview") ||
-            content.includes("widget_org_insights") ||
-            content.includes("widget_org_team_roster") ||
+        content.includes("widget_artist_artwork_manager") ||
+            content.includes("widget_artist_revenue_summary") ||
             content.includes("widget_my_events"),
     ).toBe(true);
 });
