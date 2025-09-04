@@ -15,24 +15,63 @@ class GrantAssistant {
 			register_rest_route(
 				ARTPULSE_API_NAMESPACE,
 				'/ai/generate-grant-copy',
-				array(
-					'methods'             => 'POST',
-					'callback'            => array( self::class, 'generate' ),
-					'permission_callback' => fn() => is_user_logged_in(),
-				)
-			);
+                                array(
+                                        'methods'             => 'POST',
+                                        'callback'            => array( self::class, 'generate' ),
+                                        'permission_callback' => fn() => is_user_logged_in(),
+                                        'args'                => array(
+                                                'type'   => array(
+                                                        'type'              => 'string',
+                                                        'sanitize_callback' => 'sanitize_key',
+                                                        'validate_callback' => 'rest_validate_request_arg',
+                                                ),
+                                                'tone'   => array(
+                                                        'type'              => 'string',
+                                                        'sanitize_callback' => 'sanitize_key',
+                                                        'validate_callback' => 'rest_validate_request_arg',
+                                                ),
+                                                'source' => array(
+                                                        'type'              => 'string',
+                                                        'sanitize_callback' => 'sanitize_textarea_field',
+                                                        'validate_callback' => 'rest_validate_request_arg',
+                                                ),
+                                                'save'   => array(
+                                                        'type'              => 'boolean',
+                                                        'sanitize_callback' => 'rest_sanitize_boolean',
+                                                        'validate_callback' => 'rest_validate_request_arg',
+                                                ),
+                                                'org_id' => array(
+                                                        'type'              => 'integer',
+                                                        'sanitize_callback' => 'absint',
+                                                        'validate_callback' => 'is_numeric',
+                                                ),
+                                        ),
+                                )
+                        );
 		}
 
 		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/ai/rewrite' ) ) {
 			register_rest_route(
 				ARTPULSE_API_NAMESPACE,
 				'/ai/rewrite',
-				array(
-					'methods'             => 'POST',
-					'callback'            => array( self::class, 'rewrite' ),
-					'permission_callback' => fn() => is_user_logged_in(),
-				)
-			);
+                                array(
+                                        'methods'             => 'POST',
+                                        'callback'            => array( self::class, 'rewrite' ),
+                                        'permission_callback' => fn() => is_user_logged_in(),
+                                        'args'                => array(
+                                                'text' => array(
+                                                        'type'              => 'string',
+                                                        'sanitize_callback' => 'sanitize_textarea_field',
+                                                        'validate_callback' => 'rest_validate_request_arg',
+                                                ),
+                                                'tone' => array(
+                                                        'type'              => 'string',
+                                                        'sanitize_callback' => 'sanitize_key',
+                                                        'validate_callback' => 'rest_validate_request_arg',
+                                                ),
+                                        ),
+                                )
+                        );
 		}
 	}
 
