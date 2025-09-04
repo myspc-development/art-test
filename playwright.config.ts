@@ -1,32 +1,31 @@
 import { defineConfig, devices } from '@playwright/test';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export default defineConfig({
-
-  expect: {
-    timeout: 5 * 1000,
-    toHaveScreenshot: {
-      maxDiffPixelRatio: 0.001,
-    },
-  },
+  testDir: 'e2e',
+  // Only run *.spec.ts or *.spec.js under e2e/
+  testMatch: /.*\.spec\.(ts|js)/,
+  // Explicitly ignore all other test dirs/patterns
+  // (Jest tests live elsewhere)
+  ignore: [
+    '**/__tests__/**',
+    '**/*.test.*',
+    'assets/**',
+    'src/**',
+    'vendor/**',
+    'node_modules/**'
+  ],
+  retries: 0,
   reporter: [
-    ['junit', { outputFile: 'build/e2e/junit.xml' }],
-    ['html', { open: 'never', outputFolder: 'build/e2e/html' }],
+    ['list'],
+    ['junit', { outputFile: 'build/playwright/junit.xml' }],
+    ['html', { outputFolder: 'build/playwright/html', open: 'never' }]
   ],
   use: {
+    baseURL: process.env.E2E_BASE_URL ?? 'http://127.0.0.1:8889',
     trace: 'retain-on-failure',
     video: 'retain-on-failure',
-    screenshot: 'only-on-failure',
+    screenshot: 'only-on-failure'
   },
-  outputDir: 'build/e2e/artifacts',
-  globalSetup: './e2e/global-setup.ts',
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-  ],
+  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  outputDir: 'build/playwright/out'
 });
-

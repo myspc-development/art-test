@@ -1,7 +1,7 @@
-const { test, expect } = require('@playwright/test');
-const { execSync } = require('child_process');
+import { test, expect } from '@playwright/test';
+import { execSync } from 'node:child_process';
 
-const baseUrl = process.env.BASE_URL || 'http://localhost:8000';
+const baseUrl = process.env.E2E_BASE_URL ?? 'http://127.0.0.1:8889';
 const username = process.env.WP_USER || 'admin';
 const password = process.env.WP_PASS || 'password';
 
