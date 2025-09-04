@@ -89,8 +89,8 @@ class Plugin {
 		register_deactivation_hook( ARTPULSE_PLUGIN_FILE, array( $this, 'deactivate' ) );
 
 		add_action( 'init', array( $this, 'register_core_modules' ) );
-		add_action( 'init', array( \ArtPulse\Frontend\SubmissionForms::class, 'register' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ) );
+                add_action( 'init', array( \ArtPulse\Frontend\SubmissionForms::class, 'register' ) );
+                add_action( 'wp', array( $this, 'maybe_enqueue_frontend_scripts' ) );
 
                 add_action( 'init', array( \ArtPulse\Rest\EventChatController::class, 'register' ) );
                 \ArtPulse\Frontend\EventChatAssets::register();
@@ -930,17 +930,29 @@ class Plugin {
 			true
 		);
 
-		wp_localize_script(
-			'ap-dashboard-analytics',
-			'APDashAnalytics',
-			array(
-				'root'  => esc_url_raw( rest_url() ),
-				'nonce' => wp_create_nonce( 'wp_rest' ),
-			)
-		);
-	}
+                wp_localize_script(
+                        'ap-dashboard-analytics',
+                        'APDashAnalytics',
+                        array(
+                                'root'  => esc_url_raw( rest_url() ),
+                                'nonce' => wp_create_nonce( 'wp_rest' ),
+                        )
+                );
+        }
 
-	private function get_org_submission_url(): string {
+        public function maybe_enqueue_frontend_scripts(): void {
+                if (
+                        function_exists( 'ap_page_has_shortcode' ) && (
+                                ap_page_has_shortcode( 'ap_membership_account' ) ||
+                                ap_page_has_shortcode( 'ap_payouts' ) ||
+                                ap_page_has_shortcode( 'ap_account_settings' )
+                        )
+                ) {
+                        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ) );
+                }
+        }
+
+        private function get_org_submission_url(): string {
 		$pages = get_posts(
 			array(
 				'post_type'   => 'page',
