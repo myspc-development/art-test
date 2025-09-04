@@ -14,12 +14,30 @@ if ( ! function_exists( __NAMESPACE__ . '\ap_wp_admin_access_enabled' ) ) {
 	}
 }
 if ( ! function_exists( __NAMESPACE__ . '\home_url' ) ) {
-	function home_url( $path = '' ) {
-		return 'https://site.test' . $path; }
+        function home_url( $path = '' ) {
+                return 'https://site.test' . $path; }
 }
 if ( ! function_exists( __NAMESPACE__ . '\is_wp_error' ) ) {
         function is_wp_error( $thing ) {
                 return $thing instanceof WP_Error; }
+}
+if ( ! function_exists( __NAMESPACE__ . '\wp_validate_redirect' ) ) {
+        function wp_validate_redirect( $location, $default = '' ) {
+                if ( empty( $location ) ) {
+                        return $default;
+                }
+                $site = home_url();
+                if ( strpos( $location, '/' ) === 0 || strpos( $location, $site ) === 0 ) {
+                        return $location;
+                }
+                return $default;
+        }
+}
+if ( ! function_exists( __NAMESPACE__ . '\esc_url_raw' ) ) {
+        function esc_url_raw( $url ) { return $url; }
+}
+if ( ! function_exists( __NAMESPACE__ . '\wp_safe_redirect' ) ) {
+        function wp_safe_redirect( $url ) {}
 }
 
 if ( ! class_exists( __NAMESPACE__ . '\WP_Error' ) ) {
@@ -47,38 +65,44 @@ class LoginRedirectManagerTest extends TestCase {
 		self::$admin_enabled = false;
 	}
 
-	private function runRedirect( object $user ): string {
-		return LoginRedirectManager::handle( '/default', '', $user );
-	}
+        private function runRedirect( object $user, string $requested = '' ): string {
+                return LoginRedirectManager::handle( '/default', $requested, $user );
+        }
 
-	public function test_member_redirects_to_dashboard(): void {
+        public function test_member_redirects_to_dashboard(): void {
                $user     = (object) array( 'roles' => array( 'member' ) );
-               $redirect = $this->runRedirect( $user );
+               $redirect = $this->runRedirect( $user, 'https://evil.test/phish' );
                $this->assertSame( 'https://site.test/dashboard/user', $redirect );
-	}
+        }
 
-	public function test_artist_redirects_to_dashboard(): void {
+        public function test_artist_redirects_to_dashboard(): void {
                $user     = (object) array( 'roles' => array( 'artist' ) );
-               $redirect = $this->runRedirect( $user );
+               $redirect = $this->runRedirect( $user, 'https://evil.test/phish' );
                $this->assertSame( 'https://site.test/dashboard/artist', $redirect );
-	}
+        }
 
-	public function test_org_redirects_to_dashboard(): void {
+        public function test_org_redirects_to_dashboard(): void {
                $user     = (object) array( 'roles' => array( 'organization' ) );
-               $redirect = $this->runRedirect( $user );
+               $redirect = $this->runRedirect( $user, 'https://evil.test/phish' );
                $this->assertSame( 'https://site.test/dashboard/org', $redirect );
-	}
+        }
+
+        public function test_safe_redirect_is_used(): void {
+               $user     = (object) array( 'roles' => array( 'member' ) );
+               $redirect = $this->runRedirect( $user, 'https://site.test/somewhere' );
+               $this->assertSame( 'https://site.test/somewhere', $redirect );
+        }
 
 	public function test_wp_admin_cap_returns_default(): void {
 		self::$caps = array( 'view_wp_admin' => true );
-		$user       = (object) array( 'roles' => array( 'member' ) );
-		$redirect   = $this->runRedirect( $user );
-		$this->assertSame( '/default', $redirect );
-	}
+                $user       = (object) array( 'roles' => array( 'member' ) );
+                $redirect   = $this->runRedirect( $user, 'https://evil.test/phish' );
+                $this->assertSame( '/default', $redirect );
+        }
 
 	public function test_error_user_returns_default(): void {
-		$err      = new WP_Error( 'failed', 'Bad' );
-		$redirect = LoginRedirectManager::handle( '/default', '', $err );
-		$this->assertSame( '/default', $redirect );
-	}
+                $err      = new WP_Error( 'failed', 'Bad' );
+                $redirect = LoginRedirectManager::handle( '/default', 'https://evil.test/phish', $err );
+                $this->assertSame( '/default', $redirect );
+        }
 }
