@@ -37,7 +37,7 @@ class LoginShortcode {
 		<div class="ap-login-forms">
 			<div id="ap-login-message" class="ap-form-messages" role="status" aria-live="polite"></div>
                        <form id="ap-login-form" class="ap-form-container">
-                               <?php wp_nonce_field( 'ap_login_nonce', 'ap_login_nonce_field' ); ?>
+                               <?php wp_nonce_field( 'ap_login_nonce', 'nonce' ); ?>
                                <p>
                                        <label class="ap-form-label" for="ap_login_username"><?php esc_html_e( 'Username or Email', 'artpulse' ); ?></label>
                                        <input class="ap-input" id="ap_login_username" type="text" name="username" required />
@@ -72,91 +72,92 @@ class LoginShortcode {
 		return ob_get_clean();
 	}
 
-	public static function ajax_login(): void {
-		check_ajax_referer( 'ap_login_nonce', 'nonce' );
+        public static function ajax_login(): void {
+               check_ajax_referer( 'ap_login_nonce', 'nonce' );
 
-		$username_raw = $_POST['username'] ?? '';
-		$password     = $_POST['password'] ?? '';
+               $username_raw = $_POST['username'] ?? '';
+               $password     = $_POST['password'] ?? '';
 
-		if ( '' === $username_raw || '' === $password ) {
-			wp_send_json(
-			       array(
-				       'ok'      => false,
-				       'code'    => 'INVALID_CREDENTIALS',
-				       'message' => __( 'Invalid credentials.', 'artpulse' ),
-			       )
-			);
-		}
+               $invalid = array();
+               if ( '' === $username_raw ) {
+                       $invalid[] = 'username';
+               }
+               if ( '' === $password ) {
+                       $invalid[] = 'password';
+               }
+               if ( $invalid ) {
+                       wp_send_json_error(
+                               array(
+                                       'code'    => 'VALIDATION',
+                                       'message' => __( 'Username or email and password are required.', 'artpulse' ),
+                                       'invalid' => $invalid,
+                               ),
+                               400
+                       );
+               }
 
-		$identifier = is_email( $username_raw ) ? sanitize_email( $username_raw ) : sanitize_user( $username_raw );
-		$remember   = ! empty( $_POST['remember'] );
+               $identifier = is_email( $username_raw ) ? sanitize_email( $username_raw ) : sanitize_user( $username_raw );
+               $remember   = ! empty( $_POST['remember'] );
 
-		$ip       = $_SERVER['REMOTE_ADDR'] ?? '';
-		$key      = 'ap_login_fail_' . md5( $ip . '|' . $identifier );
-		$attempts = (int) get_transient( $key );
+               $ip       = $_SERVER['REMOTE_ADDR'] ?? '';
+               $key      = 'ap_login_fail_' . md5( $ip . '|' . $identifier );
+               $attempts = (int) get_transient( $key );
 
-		$max_attempts    = 5;
-		$lockout_minutes = 5;
+               $max_attempts    = 5;
+               $lockout_minutes = 5;
 
-		if ( $attempts >= $max_attempts ) {
-			wp_send_json(
-			       array(
-				       'ok'      => false,
-				       'code'    => 'TOO_MANY_ATTEMPTS',
-				       'message' => __( 'Too many failed login attempts. Please try again later.', 'artpulse' ),
-			       )
-			);
-		}
+               if ( $attempts >= $max_attempts ) {
+                       wp_send_json_error(
+                               array(
+                                       'code'    => 'RATE_LIMIT',
+                                       'message' => __( 'Too many failed login attempts. Please try again later.', 'artpulse' ),
+                               ),
+                               429
+                       );
+               }
 
-		$creds = array(
-			'user_login'    => $identifier,
-			'user_password' => $password,
-			'remember'      => $remember,
-		);
+               $creds = array(
+                       'user_login'    => $identifier,
+                       'user_password' => $password,
+                       'remember'      => $remember,
+               );
 
-		$user = wp_signon( $creds, false );
+               $user = wp_signon( $creds, false );
 
-		if ( is_wp_error( $user ) ) {
-			set_transient( $key, $attempts + 1, MINUTE_IN_SECONDS * $lockout_minutes );
-			wp_send_json(
-			       array(
-				       'ok'      => false,
-				       'code'    => 'INVALID_CREDENTIALS',
-				       'message' => __( 'Invalid credentials.', 'artpulse' ),
-			       )
-			);
-		}
+               if ( is_wp_error( $user ) ) {
+                       set_transient( $key, $attempts + 1, MINUTE_IN_SECONDS * $lockout_minutes );
+                       wp_send_json_error(
+                               array(
+                                       'code'    => 'INVALID_CREDENTIALS',
+                                       'message' => __( 'Invalid username/email or password.', 'artpulse' ),
+                               ),
+                               403
+                       );
+               }
 
-		delete_transient( $key );
+               delete_transient( $key );
 
-		$opts = get_option( 'artpulse_settings', array() );
-		if ( ! empty( $opts['enforce_two_factor'] ) && ! get_user_meta( $user->ID, 'two_factor_enabled', true ) ) {
-			wp_clear_auth_cookie();
-			wp_send_json(
-			       array(
-				       'ok'      => false,
-				       'code'    => 'TWO_FACTOR_REQUIRED',
-				       'message' => __( 'Two-factor authentication is required.', 'artpulse' ),
-			       )
-			);
-		}
+               $opts = get_option( 'artpulse_settings', array() );
+               if ( ! empty( $opts['enforce_two_factor'] ) && ! get_user_meta( $user->ID, 'two_factor_enabled', true ) ) {
+                       wp_clear_auth_cookie();
+                       wp_send_json_error(
+                               array(
+                                       'code'    => 'TWO_FACTOR_REQUIRED',
+                                       'message' => __( 'Two-factor authentication is required.', 'artpulse' ),
+                               ),
+                               403
+                       );
+               }
 
-		$roles = (array) $user->roles;
-		if ( in_array( 'organization', $roles, true ) ) {
-			$target = \ArtPulse\Core\Plugin::get_org_dashboard_url();
-		} elseif ( in_array( 'artist', $roles, true ) ) {
-			$target = \ArtPulse\Core\Plugin::get_artist_dashboard_url();
-		} else {
-			$target = \ArtPulse\Core\Plugin::get_user_dashboard_url();
-		}
+               $target = \ArtPulse\Core\LoginRedirectManager::get_post_login_redirect_url( $user, '' );
 
-		wp_send_json(
-			array(
-			       'ok'           => true,
-			       'dashboardUrl' => $target,
-			)
-		);
-	}
+               wp_send_json_success(
+                       array(
+                               'message'      => __( 'Signed in successfully.', 'artpulse' ),
+                               'dashboardUrl' => $target,
+                       )
+               );
+        }
 
 	public static function ajax_register(): void {
 		check_ajax_referer( 'ap_login_nonce', 'nonce' );

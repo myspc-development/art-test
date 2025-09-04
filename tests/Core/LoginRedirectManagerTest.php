@@ -60,6 +60,7 @@ namespace ArtPulse\Core\Tests;
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\LoginRedirectManager;
 use ArtPulse\Core\WP_Error;
+use function ArtPulse\Core\apply_filters;
 
 /**
 

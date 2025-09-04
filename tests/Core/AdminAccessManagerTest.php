@@ -28,9 +28,14 @@ if ( ! function_exists( __NAMESPACE__ . '\\home_url' ) ) {
 	}
 }
 if ( ! function_exists( __NAMESPACE__ . '\\wp_safe_redirect' ) ) {
-	function wp_safe_redirect( $url ) {
-		throw new \Exception( 'redirect:' . $url );
-	}
+        function wp_safe_redirect( $url ) {
+                throw new \Exception( 'redirect:' . $url );
+        }
+}
+if ( ! function_exists( __NAMESPACE__ . '\\wp_get_current_user' ) ) {
+       function wp_get_current_user() {
+               return \ArtPulse\Core\Tests\AdminAccessManagerTest::$current_user;
+       }
 }
 
 namespace ArtPulse\Core\Tests;
@@ -49,14 +54,16 @@ class AdminAccessManagerTest extends TestCase {
 	public static array $caps         = array();
 	public static bool $admin_enabled = false;
 	public static bool $is_logged_in  = true;
-	public static bool $doing_ajax    = false;
+       public static bool $doing_ajax    = false;
+       public static $current_user;
 
 	protected function setUp(): void {
 		self::$caps          = array();
 		self::$admin_enabled = false;
 		self::$is_logged_in  = true;
-		self::$doing_ajax    = false;
-		$_GET                = array();
+               self::$doing_ajax    = false;
+               self::$current_user  = (object) array( 'roles' => array( 'member' ) );
+               $_GET                = array();
 	}
 
 	public function test_hide_admin_bar_for_non_admin(): void {
@@ -73,12 +80,32 @@ class AdminAccessManagerTest extends TestCase {
 		$this->assertTrue( AdminAccessManager::maybe_hide_admin_bar( true ) );
 	}
 
-	public function test_redirects_non_admin_users(): void {
+       public function test_redirects_non_admin_users(): void {
+              try {
+                      AdminAccessManager::maybe_redirect_admin();
+                      $this->fail( 'Expected redirect' );
+              } catch ( \Exception $e ) {
+                      $this->assertSame( 'redirect:https://site.test/dashboard/user', $e->getMessage() );
+              }
+       }
+
+       public function test_redirects_artist_users(): void {
+               self::$current_user = (object) array( 'roles' => array( 'artist' ) );
                try {
                        AdminAccessManager::maybe_redirect_admin();
                        $this->fail( 'Expected redirect' );
                } catch ( \Exception $e ) {
-                       $this->assertSame( 'redirect:https://site.test/dashboard/user', $e->getMessage() );
+                       $this->assertSame( 'redirect:https://site.test/dashboard/artist', $e->getMessage() );
+               }
+       }
+
+       public function test_redirects_org_users(): void {
+               self::$current_user = (object) array( 'roles' => array( 'organization' ) );
+               try {
+                       AdminAccessManager::maybe_redirect_admin();
+                       $this->fail( 'Expected redirect' );
+               } catch ( \Exception $e ) {
+                       $this->assertSame( 'redirect:https://site.test/dashboard/org', $e->getMessage() );
                }
        }
 

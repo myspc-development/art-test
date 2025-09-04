@@ -36,17 +36,18 @@ class AdminAccessManager {
 		if ( isset( $_GET['page'] ) && $_GET['page'] === 'dashboard-role' ) {
 			return;
 		}
-		if (
-			wp_doing_ajax() ||
-			! is_user_logged_in() ||
-			current_user_can( 'manage_options' ) ||
-			current_user_can( 'view_wp_admin' ) ||
-			ap_wp_admin_access_enabled()
-		) {
-			return;
-		}
+               if (
+                       wp_doing_ajax() ||
+                       ! is_user_logged_in() ||
+                       current_user_can( 'manage_options' ) ||
+                       current_user_can( 'view_wp_admin' ) ||
+                       ap_wp_admin_access_enabled()
+               ) {
+                       return;
+               }
 
-               $dashboard_url = Plugin::get_user_dashboard_url();
+               $user = wp_get_current_user();
+               $dashboard_url = LoginRedirectManager::get_post_login_redirect_url( $user, '' );
                wp_safe_redirect( $dashboard_url );
                exit;
        }

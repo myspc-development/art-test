@@ -32,21 +32,12 @@ add_filter(
 
 // Redirect members, artists, and organizations after first login as well
 add_filter(
-	'login_redirect',
-	function ( $redirect_to, $request, $user ) {
-               if ( $user instanceof \WP_User && ! ap_wp_admin_access_enabled() && ! user_can( $user, 'view_wp_admin' ) ) {
-                       $roles = (array) $user->roles;
-                       if ( in_array( 'member', $roles, true ) ) {
-                               return \ArtPulse\Core\Plugin::get_user_dashboard_url();
-                       }
-                       if ( in_array( 'artist', $roles, true ) ) {
-                               return \ArtPulse\Core\Plugin::get_artist_dashboard_url();
-                       }
-                       if ( in_array( 'organization', $roles, true ) ) {
-                               return \ArtPulse\Core\Plugin::get_org_dashboard_url();
-                       }
-               }
-               return $redirect_to;
+        'login_redirect',
+        function ( $redirect_to, $request, $user ) {
+              if ( $user instanceof \WP_User && ! ap_wp_admin_access_enabled() && ! user_can( $user, 'view_wp_admin' ) ) {
+                      return \ArtPulse\Core\LoginRedirectManager::get_post_login_redirect_url( $user, $request );
+              }
+              return $redirect_to;
        },
         10,
         3
