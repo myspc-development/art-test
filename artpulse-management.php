@@ -686,7 +686,6 @@ add_action(
  * @deprecated Use ArtPulse\Helpers\GlobalHelpers::pageHasArtpulseShortcode().
  */
 
-}
 
 /**
  * @deprecated Use ArtPulse\Helpers\GlobalHelpers::pageHasShortcode().
@@ -715,7 +714,6 @@ function ap_wp_admin_access_enabled() {
  * @deprecated Use ArtPulse\Helpers\GlobalHelpers::enqueueGlobalStyles instead.
  */
 
-}
 
 /**
  * Conditionally hook frontend assets.
