@@ -70,8 +70,8 @@ class CapabilitiesManager {
 			function_exists( 'is_user_logged_in' ) && is_user_logged_in()
 		) {
 			$roles = $user ? implode( ',', (array) $user->roles ) : 'none';
-			error_log( sprintf( 'ap map_meta_cap user=%d cap=%s roles=%s', $user_id, $cap, $roles ) );
-		}
+                        error_log( sprintf( 'ap map_meta_cap user=%1$d cap=%2$s roles=%3$s', $user_id, $cap, $roles ) );
+                }
 
 		if ( $user && in_array( 'administrator', (array) $user->roles, true ) ) {
 			// Never deny capabilities to administrators via this mapper.

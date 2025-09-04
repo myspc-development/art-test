@@ -272,12 +272,12 @@ class TicketManager {
 				)
 			);
 
-			$body    = sprintf( __( 'Your ticket code is %s', 'artpulse' ), $code );
-			$virtual = get_post_meta( $event_id, '_ap_virtual_event_url', true );
-			$enabled = get_post_meta( $event_id, '_ap_virtual_access_enabled', true );
-			if ( $enabled && $virtual ) {
-				$body .= '<br/><br/>' . sprintf( __( 'Join here: %s', 'artpulse' ), esc_url( $virtual ) );
-			}
+                        $body    = sprintf( esc_html__( 'Your ticket code is %1$s', 'artpulse' ), esc_html( $code ) );
+                        $virtual = get_post_meta( $event_id, '_ap_virtual_event_url', true );
+                        $enabled = get_post_meta( $event_id, '_ap_virtual_access_enabled', true );
+                        if ( $enabled && $virtual ) {
+                                $body .= '<br/><br/>' . sprintf( esc_html__( 'Join here: %1$s', 'artpulse' ), esc_url( $virtual ) );
+                        }
 			$message = \ArtPulse\Core\EmailTemplateManager::render(
 				$body,
 				array(
@@ -288,7 +288,7 @@ class TicketManager {
 			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 			\ArtPulse\Core\EmailService::send(
 				$user->user_email,
-				sprintf( __( 'Ticket for %s', 'artpulse' ), get_the_title( $event_id ) ),
+                                sprintf( esc_html__( 'Ticket for %1$s', 'artpulse' ), esc_html( get_the_title( $event_id ) ) ),
 				$message,
 				$headers,
 				$pdf ? array( $pdf ) : array()
@@ -330,7 +330,7 @@ class TicketManager {
 			return;
 		}
 
-		$body    = sprintf( __( 'Access your event here: %s', 'artpulse' ), esc_url( $virtual ) );
+                $body    = sprintf( esc_html__( 'Access your event here: %1$s', 'artpulse' ), esc_url( $virtual ) );
 		$message = \ArtPulse\Core\EmailTemplateManager::render(
 			$body,
 			array(
@@ -341,7 +341,7 @@ class TicketManager {
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 		\ArtPulse\Core\EmailService::send(
 			$user->user_email,
-			sprintf( __( 'Access link for %s', 'artpulse' ), get_the_title( $event_id ) ),
+                        sprintf( esc_html__( 'Access link for %1$s', 'artpulse' ), esc_html( get_the_title( $event_id ) ) ),
 			$message,
 			$headers
 		);

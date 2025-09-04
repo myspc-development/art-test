@@ -142,7 +142,7 @@ class UnifiedInboxController {
 			$items[] = array(
 				'id'        => (int) $row->id,
 				'type'      => 'rsvp',
-				'content'   => $event ? sprintf( __( 'New RSVP for "%s"', 'artpulse' ), $event->post_title ) : __( 'New RSVP', 'artpulse' ),
+                                'content'   => $event ? sprintf( esc_html__( 'New RSVP for "%1$s"', 'artpulse' ), esc_html( $event->post_title ) ) : esc_html__( 'New RSVP', 'artpulse' ),
 				'timestamp' => $row->logged_at,
 				'read'      => $row->logged_at <= $last_read,
 				'event_id'  => (int) $row->event_id,

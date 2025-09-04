@@ -54,6 +54,6 @@ class SpotlightBlock {
 			return '';
 		}
 
-		return sprintf( '<div class="ap-spotlight">%s</div>', esc_html( $attributes['title'] ?? '' ) );
+               return sprintf( '<div class="ap-spotlight">%1$s</div>', esc_html( $attributes['title'] ?? '' ) );
 	}
 }

@@ -3,16 +3,16 @@ namespace ArtPulse;
 
 class Widgets {
 	public static function render_welcome_box(): string {
-		$user = wp_get_current_user();
-		$name = $user->display_name ?: $user->user_login;
-		$text = sprintf( esc_html__( 'Welcome back, %s!', 'artpulse' ), $name );
-		return '<div data-widget-id="welcome_box"><p>' . esc_html( $text ) . '</p></div>';
+                $user = wp_get_current_user();
+                $name = $user->display_name ?: $user->user_login;
+                $text = sprintf( esc_html__( 'Welcome back, %1$s!', 'artpulse' ), esc_html( $name ) );
+                return '<div data-widget-id="welcome_box"><p>' . $text . '</p></div>';
 	}
 
 	public static function render_portfolio_box(): string {
-		$count = wp_count_posts( 'artpulse_artwork' )->publish ?? 0;
-		$text  = sprintf( esc_html__( 'You have %d published artworks.', 'artpulse' ), $count );
-		return '<div data-widget-id="portfolio_preview"><p>' . esc_html( $text ) . '</p></div>';
+                $count = wp_count_posts( 'artpulse_artwork' )->publish ?? 0;
+                $text  = sprintf( esc_html__( 'You have %1$d published artworks.', 'artpulse' ), $count );
+                return '<div data-widget-id="portfolio_preview"><p>' . $text . '</p></div>';
 	}
 
 	public static function render_org_insights_box(): string {

@@ -28,7 +28,7 @@ $curator   = get_the_author_meta('display_name', $collection->post_author);
     <div class="ap-collection-card-content">
         <?php if ($curator) : ?>
             <div class="ap-collection-curator">
-                <?php echo esc_html(sprintf(__('Curated by %s', 'artpulse'), $curator)); ?>
+                <?php printf( esc_html__( 'Curated by %1$s', 'artpulse' ), esc_html( $curator ) ); ?>
             </div>
         <?php endif; ?>
     </div>

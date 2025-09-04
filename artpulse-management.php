@@ -56,11 +56,11 @@ if ( version_compare( PHP_VERSION, '8.2', '<' ) ) {
 	if ( function_exists( 'deactivate_plugins' ) ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 	}
-	wp_die(
-		esc_html(
-			sprintf( 'ArtPulse requires PHP 8.2 or higher. You are running %s.', PHP_VERSION )
-		)
-	);
+        wp_die(
+                esc_html(
+                        sprintf( __( 'ArtPulse requires PHP 8.2 or higher. You are running %1$s.', 'artpulse' ), PHP_VERSION )
+                )
+        );
 }
 
 // Load Composer autoloader
@@ -388,12 +388,15 @@ function ap_copy_templates_to_child_theme() {
 			ap_log( "ArtPulse: failed to copy template $file" );
 			add_action(
 				'admin_notices',
-				static function () use ( $file ) {
-					printf( '<div class="notice notice-error"><p>%s</p></div>', esc_html( sprintf( __( 'ArtPulse template %s could not be copied.', 'artpulse' ), $file ) ) );
-				}
-			);
-		}
-	}
+                                static function () use ( $file ) {
+                                        printf(
+                                                '<div class="notice notice-error"><p>%s</p></div>',
+                                                sprintf( esc_html__( 'ArtPulse template %1$s could not be copied.', 'artpulse' ), esc_html( $file ) )
+                                        );
+                                }
+                        );
+                }
+        }
 }
 
 // Instantiate WooCommerce integration (if needed for runtime)
@@ -1425,7 +1428,7 @@ function artpulse_handle_react_form() {
 		array(
 			'user_id'     => get_current_user_id() ?: null,
 			'type'        => 'react_form',
-			'description' => sprintf( 'Name: %s', $name ),
+                        'description' => sprintf( 'Name: %1$s', $name ),
 			'email'       => $email,
 			'tags'        => '',
 			'context'     => '',
@@ -1434,8 +1437,12 @@ function artpulse_handle_react_form() {
 	);
 
 	$admin_email = get_option( 'admin_email' );
-	$subject     = sprintf( __( 'React form submission from %s', 'artpulse' ), $name );
-	$message     = sprintf( "Name: %s\nEmail: %s", $name, $email );
+        $subject     = sprintf( esc_html__( 'React form submission from %1$s', 'artpulse' ), esc_html( $name ) );
+        $message     = sprintf(
+                esc_html__( "Name: %1\$s\nEmail: %2\$s", 'artpulse' ),
+                esc_html( $name ),
+                esc_html( $email )
+        );
 	\ArtPulse\Core\EmailService::send( $admin_email, $subject, $message );
 
 	wp_send_json_success(

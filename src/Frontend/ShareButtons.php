@@ -17,11 +17,11 @@ function ap_share_buttons( string $url, string $title, string $object_type = '',
         }
 
 	$networks = array(
-		'facebook' => sprintf( 'https://www.facebook.com/sharer/sharer.php?u=%s', urlencode( $url ) ),
-		'twitter'  => sprintf( 'https://twitter.com/share?url=%s&text=%s', urlencode( $url ), rawurlencode( $title ) ),
-		'whatsapp' => sprintf( 'https://wa.me/?text=%s%%20%s', rawurlencode( $title ), urlencode( $url ) ),
-		'email'    => sprintf( 'mailto:?subject=%s&body=%s%%20%s', rawurlencode( $title ), rawurlencode( __( 'Check this out:', 'artpulse' ) ), urlencode( $url ) ),
-	);
+                'facebook' => sprintf( 'https://www.facebook.com/sharer/sharer.php?u=%1$s', urlencode( $url ) ),
+                'twitter'  => sprintf( 'https://twitter.com/share?url=%1$s&text=%2$s', urlencode( $url ), rawurlencode( $title ) ),
+                'whatsapp' => sprintf( 'https://wa.me/?text=%1$s%%20%2$s', rawurlencode( $title ), urlencode( $url ) ),
+                'email'    => sprintf( 'mailto:?subject=%1$s&body=%2$s%%20%3$s', rawurlencode( $title ), rawurlencode( esc_html__( 'Check this out:', 'artpulse' ) ), urlencode( $url ) ),
+        );
 
 	/**
 	 * Filter the share network links for all types.

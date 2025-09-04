@@ -29,7 +29,7 @@ class FavoritesManager {
 				'favorite',
 				$object_id,
 				$user_id,
-				sprintf( 'Your %s "%s" was favorited!', $object_type, $title )
+                                sprintf( esc_html__( 'Your %1$s "%2$s" was favorited!', 'artpulse' ), esc_html( $object_type ), esc_html( $title ) )
 			);
 		}
 
@@ -41,7 +41,7 @@ class FavoritesManager {
 				'favorite_added',
 				$object_id,
 				$owner_id,
-				sprintf( 'You favorited the %s "%s".', $object_type, $title )
+                                sprintf( esc_html__( 'You favorited the %1$s "%2$s".', 'artpulse' ), esc_html( $object_type ), esc_html( $title ) )
 			);
 		}
 

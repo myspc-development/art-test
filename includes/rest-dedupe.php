@@ -66,7 +66,7 @@ if ( ! function_exists( 'ap_rest_dedupe_endpoints' ) ) {
 
                                 // Track first seen id per method to detect conflicts.
                                 if ( isset( $by_method_id[ $method ] ) && $by_method_id[ $method ] !== $id ) {
-                                        $msg = sprintf( 'Conflicting REST route %s (%s)', $route, $method );
+                                        $msg = sprintf( 'Conflicting REST route %1$s (%2$s)', $route, $method );
                                         if ( defined( 'WP_RUNNING_TESTS' ) && WP_RUNNING_TESTS ) {
                                                 $GLOBALS['ap_rest_dedupe_notices'][] = $msg;
                                         } else {

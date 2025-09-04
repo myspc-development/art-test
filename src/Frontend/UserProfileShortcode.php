@@ -114,9 +114,9 @@ class UserProfileShortcode {
 
 				<?php if ( $show_completeness ) : ?>
 					<p class="ap-profile-completeness">
-						<?php printf( esc_html__( 'Profile completeness: %s%%', 'artpulse' ), intval( $percentage ) ); ?>
-					</p>
-				<?php endif; ?>
+                                                <?php printf( esc_html__( 'Profile completeness: %1$d%%', 'artpulse' ), intval( $percentage ) ); ?>
+                                                </p>
+                                        <?php endif; ?>
 			</div>
 		</div>
 		<?php

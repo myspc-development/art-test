@@ -141,7 +141,7 @@ class RelatedItemsSelectorBlock {
 				$title = get_the_title( $id );
 				if ( $title ) {
 					$url     = get_permalink( $id );
-					$items[] = sprintf( '<li><a href="%s">%s</a></li>', esc_url( $url ), esc_html( $title ) );
+                                   $items[] = sprintf( '<li><a href="%1$s">%2$s</a></li>', esc_url( $url ), esc_html( $title ) );
 				}
 			}
 			return '<ul class="ap-related-items-list">' . implode( '', $items ) . '</ul>';
@@ -149,7 +149,7 @@ class RelatedItemsSelectorBlock {
 			$title = get_the_title( $related );
 			$url   = get_permalink( $related );
 			if ( $title ) {
-				return sprintf( '<p><a href="%s">%s</a></p>', esc_url( $url ), esc_html( $title ) );
+                           return sprintf( '<p><a href="%1$s">%2$s</a></p>', esc_url( $url ), esc_html( $title ) );
 			}
 			return '';
 		}

@@ -24,7 +24,7 @@
 <?php foreach ($roles as $role => $label) : ?>
           <th scope="col" id="ap-col-<?php echo esc_attr($role); ?>">
             <span><?php echo esc_html($label); ?></span>
-            <button type="button" class="ap-col-toggle" data-col="<?php echo esc_attr($role); ?>" aria-label="<?php printf(esc_attr__('Toggle %s column', 'artpulse'), esc_attr($label)); ?>">&#x21C5;</button>
+            <button type="button" class="ap-col-toggle" data-col="<?php echo esc_attr($role); ?>" aria-label="<?php printf( esc_attr__( 'Toggle %1$s column', 'artpulse' ), esc_attr( $label ) ); ?>">&#x21C5;</button>
           </th>
 <?php endforeach; ?>
 <?php endif; ?>
@@ -36,7 +36,7 @@
         <tr data-user-id="<?php echo esc_attr($user['id']); ?>">
           <th scope="row" id="ap-row-<?php echo esc_attr($user['id']); ?>">
             <span><?php echo esc_html($user['name']); ?></span>
-            <button type="button" class="ap-row-toggle" data-row="<?php echo esc_attr($user['id']); ?>" aria-label="<?php printf(esc_attr__('Toggle %s row', 'artpulse'), esc_attr($user['name'])); ?>">&#x21C4;</button>
+            <button type="button" class="ap-row-toggle" data-row="<?php echo esc_attr($user['id']); ?>" aria-label="<?php printf( esc_attr__( 'Toggle %1$s row', 'artpulse' ), esc_attr( $user['name'] ) ); ?>">&#x21C4;</button>
           </th>
 <?php foreach ($roles as $role => $label) : ?>
           <td>

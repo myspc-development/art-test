@@ -579,10 +579,10 @@ class DirectMessages {
 
 		$recipient = get_user_by( 'id', $recipient_id );
 		$sender    = get_user_by( 'id', $sender_id );
-		if ( $recipient && $sender && is_email( $recipient->user_email ) ) {
-			$subject = sprintf( 'New message from %s', $sender->display_name );
-			EmailService::send( $recipient->user_email, $subject, $content );
-		}
+                if ( $recipient && $sender && is_email( $recipient->user_email ) ) {
+                        $subject = sprintf( esc_html__( 'New message from %1$s', 'artpulse' ), esc_html( $sender->display_name ) );
+                        EmailService::send( $recipient->user_email, $subject, $content );
+                }
 
 		return $id;
 	}

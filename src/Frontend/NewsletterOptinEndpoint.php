@@ -48,7 +48,7 @@ class NewsletterOptinEndpoint {
 			return new WP_Error( 'missing_config', 'Mailchimp not configured', array( 'status' => 500 ) );
 		}
 		$dc       = substr( $api_key, strpos( $api_key, '-' ) + 1 );
-		$url      = sprintf( 'https://%s.api.mailchimp.com/3.0/lists/%s/members', $dc, $list_id );
+            $url      = sprintf( 'https://%1$s.api.mailchimp.com/3.0/lists/%2$s/members', $dc, $list_id );
 		$response = wp_remote_post(
 			$url,
 			array(
