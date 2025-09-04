@@ -21,7 +21,12 @@
     "test:js": "jest --runInBand --reporters=default --reporters=jest-junit --coverage",
     "test:js:ci": "jest --runInBand --reporters=jest-junit --coverage --silent",
     "test:summary": "node tools/aggregate-test-report.js",
-    "ci": "bin/ap all"
+    "ci": "bin/ap all",
+    "e2e:install": "playwright install",
+    "e2e": "playwright test",
+    "e2e:headed": "playwright test --headed",
+    "e2e:ui": "playwright test --ui",
+    "e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
@@ -46,7 +51,7 @@
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
     "@fullhuman/postcss-purgecss": "^7.0.2",
-    "@playwright/test": "^1.55.0",
+    "@playwright/test": "^1.47.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-node-resolve": "^16.0.1",
@@ -64,6 +69,7 @@
     "cypress": "^14.5.4",
     "cypress-axe": "^1.6.0",
     "cypress-multi-reporters": "^2.0.5",
+    "dotenv": "^16.4.5",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
@@ -79,7 +85,7 @@
     "rollup-plugin-postcss": "^4.0.2",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.6.2"
   },
   "description": "[![CI](https://github.com/example/art-test/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/example/art-test/actions/workflows/tests.yml) [![Coverage](https://img.shields.io/codecov/c/github/example/art-test?label=coverage)](https://codecov.io/gh/example/art-test)",
   "main": "eslint.config.js",
