@@ -1,6 +1,8 @@
 <?php
 namespace ArtPulse\Admin;
 
+use ArtPulse\Helpers\GlobalHelpers;
+
 // Handles asset loading across admin, editor, and frontend
 class EnqueueAssets {
 
@@ -107,7 +109,7 @@ class EnqueueAssets {
          * Conditionally hook frontend assets only when needed.
          */
         public static function maybe_enqueue_frontend(): void {
-                if ( function_exists( 'ap_page_has_artpulse_shortcode' ) && ap_page_has_artpulse_shortcode() ) {
+                if ( GlobalHelpers::pageHasArtpulseShortcode() ) {
                         add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_frontend' ) );
                 }
         }
@@ -187,7 +189,7 @@ class EnqueueAssets {
 		self::register_chart_js();
 
                // Guard helper existence
-               if ( ! function_exists( 'ap_styles_disabled' ) || ! ap_styles_disabled() ) {
+               if ( ! GlobalHelpers::stylesDisabled() ) {
                        self::enqueue_style_if_exists( 'ap-style', 'assets/css/ap-style.css' );
                }
                if ( function_exists( 'ap_enqueue_frontend_styles' ) ) {

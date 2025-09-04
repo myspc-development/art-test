@@ -6,6 +6,8 @@ use Brain\Monkey;
 use Brain\Monkey\Functions;
 use Brain\Monkey\Actions;
 use ArtPulse\Admin\EnqueueAssets;
+use function Patchwork\redefine;
+use function Patchwork\restore;
 
 /**
 
@@ -124,17 +126,17 @@ final class EnqueueAssetsTest extends TestCase {
         }
 
         public function test_maybe_enqueue_frontend_adds_hook_when_shortcode_present(): void {
-                Functions\when( 'function_exists' )->alias( fn( $fn ) => $fn === 'ap_page_has_artpulse_shortcode' ? true : \function_exists( $fn ) );
-                Functions\when( 'ap_page_has_artpulse_shortcode' )->justReturn( true );
+                $handle = redefine( '\\ArtPulse\\Helpers\\GlobalHelpers::pageHasArtpulseShortcode', fn() => true );
                 Actions\expectAdded( 'wp_enqueue_scripts' )->once();
                 EnqueueAssets::maybe_enqueue_frontend();
+                restore( $handle );
         }
 
         public function test_maybe_enqueue_frontend_skips_when_no_shortcode(): void {
-                Functions\when( 'function_exists' )->alias( fn( $fn ) => $fn === 'ap_page_has_artpulse_shortcode' ? true : \function_exists( $fn ) );
-                Functions\when( 'ap_page_has_artpulse_shortcode' )->justReturn( false );
+                $handle = redefine( '\\ArtPulse\\Helpers\\GlobalHelpers::pageHasArtpulseShortcode', fn() => false );
                 Actions\expectAdded( 'wp_enqueue_scripts' )->never();
                 EnqueueAssets::maybe_enqueue_frontend();
+                restore( $handle );
         }
 
 	public function test_dashboard_admin_enqueues_with_sortable(): void {

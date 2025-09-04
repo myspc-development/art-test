@@ -7,11 +7,6 @@ if ( ! function_exists( __NAMESPACE__ . '\\current_user_can' ) ) {
 		return \ArtPulse\Core\Tests\AdminAccessManagerTest::$caps[ $cap ] ?? false;
 	}
 }
-if ( ! function_exists( __NAMESPACE__ . '\\ap_wp_admin_access_enabled' ) ) {
-	function ap_wp_admin_access_enabled() {
-		return \ArtPulse\Core\Tests\AdminAccessManagerTest::$admin_enabled;
-	}
-}
 if ( ! function_exists( __NAMESPACE__ . '\\is_user_logged_in' ) ) {
 	function is_user_logged_in() {
 		return \ArtPulse\Core\Tests\AdminAccessManagerTest::$is_logged_in;
@@ -42,6 +37,8 @@ namespace ArtPulse\Core\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\AdminAccessManager;
+use function Patchwork\redefine;
+use function Patchwork\restore;
 
 /**
 
@@ -52,19 +49,21 @@ use ArtPulse\Core\AdminAccessManager;
 class AdminAccessManagerTest extends TestCase {
 
 	public static array $caps         = array();
-	public static bool $admin_enabled = false;
+        public static bool $admin_enabled = false;
+       private $patchHandle;
 	public static bool $is_logged_in  = true;
        public static bool $doing_ajax    = false;
        public static $current_user;
 
 	protected function setUp(): void {
-		self::$caps          = array();
-		self::$admin_enabled = false;
-		self::$is_logged_in  = true;
+                self::$caps          = array();
+                self::$admin_enabled = false;
+                self::$is_logged_in  = true;
                self::$doing_ajax    = false;
                self::$current_user  = (object) array( 'roles' => array( 'member' ) );
                $_GET                = array();
-	}
+               $this->patchHandle   = redefine( '\\ArtPulse\\Helpers\\GlobalHelpers::wpAdminAccessEnabled', fn() => self::$admin_enabled );
+        }
 
 	public function test_hide_admin_bar_for_non_admin(): void {
 		$this->assertFalse( AdminAccessManager::maybe_hide_admin_bar( true ) );
@@ -127,5 +126,10 @@ class AdminAccessManagerTest extends TestCase {
                        $this->fail( 'Unexpected redirect: ' . $e->getMessage() );
                }
                $this->assertTrue( true ); // No redirect should occur for dashboard-role page
+       }
+
+       protected function tearDown(): void {
+               restore( $this->patchHandle );
+               parent::tearDown();
        }
 }

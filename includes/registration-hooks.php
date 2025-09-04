@@ -23,7 +23,7 @@ add_action(
 add_filter(
 	'wp_registration_redirect',
 	function ( $redirect_to ) {
-               if ( ! ap_wp_admin_access_enabled() ) {
+               if ( ! \ArtPulse\Helpers\GlobalHelpers::wpAdminAccessEnabled() ) {
                        return \ArtPulse\Core\Plugin::get_user_dashboard_url();
                }
                return $redirect_to;
@@ -34,7 +34,7 @@ add_filter(
 add_filter(
         'login_redirect',
         function ( $redirect_to, $request, $user ) {
-              if ( $user instanceof \WP_User && ! ap_wp_admin_access_enabled() && ! user_can( $user, 'view_wp_admin' ) ) {
+              if ( $user instanceof \WP_User && ! \ArtPulse\Helpers\GlobalHelpers::wpAdminAccessEnabled() && ! user_can( $user, 'view_wp_admin' ) ) {
                       return \ArtPulse\Core\LoginRedirectManager::get_post_login_redirect_url( $user, $request );
               }
               return $redirect_to;

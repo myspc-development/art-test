@@ -19,11 +19,6 @@ if ( ! function_exists( __NAMESPACE__ . '\\current_user_can' ) ) {
                 return \ArtPulse\Core\Tests\LoginRedirectManagerTest::$caps[ $cap ] ?? false;
         }
 }
-if ( ! function_exists( __NAMESPACE__ . '\\ap_wp_admin_access_enabled' ) ) {
-        function ap_wp_admin_access_enabled() {
-                return \ArtPulse\Core\Tests\LoginRedirectManagerTest::$admin_enabled;
-        }
-}
 if ( ! function_exists( __NAMESPACE__ . '\\home_url' ) ) {
         function home_url( $path = '' ) {
                 return 'https://site.test' . $path; }
@@ -63,6 +58,8 @@ use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\LoginRedirectManager;
 use ArtPulse\Core\WP_Error;
 use function ArtPulse\Core\apply_filters;
+use function Patchwork\redefine;
+use function Patchwork\restore;
 
 /**
  *
@@ -75,12 +72,14 @@ class LoginRedirectManagerTest extends TestCase {
         public static bool $admin_enabled = false;
         public static $filter             = null;
         public static ?string $safe_redirect_url = null;
+       private $patchHandle;
 
         protected function setUp(): void {
                 self::$caps          = array();
                 self::$admin_enabled = false;
                 self::$filter        = null;
                 self::$safe_redirect_url = null;
+               $this->patchHandle   = redefine( '\\ArtPulse\\Helpers\\GlobalHelpers::wpAdminAccessEnabled', fn() => self::$admin_enabled );
         }
 
         private function runRedirect( object $user, string $requested = '' ): string {
@@ -129,6 +128,11 @@ class LoginRedirectManagerTest extends TestCase {
                 $user = (object) array( 'roles' => array( 'member' ) );
                 $this->runRedirect( $user, 'https://site.test/somewhere' );
                 $this->assertNull( self::$safe_redirect_url );
+        }
+
+        protected function tearDown(): void {
+                restore( $this->patchHandle );
+                parent::tearDown();
         }
 }
 
