@@ -21,10 +21,12 @@ class ArtPulse_REST_Controller {
 						'callback'            => array( self::class, 'rsvp_event' ),
 						'permission_callback' => fn() => current_user_can( 'read' ),
 						'args'                => array(
-							'id' => array(
-								'type'     => 'integer',
-								'required' => true,
-							),
+                                                        'id' => array(
+                                                                'type'              => 'integer',
+                                                                'required'          => true,
+                                                                'sanitize_callback' => 'absint',
+                                                                'validate_callback' => 'is_numeric',
+                                                        ),
 						),
 					),
 					array(
@@ -32,10 +34,12 @@ class ArtPulse_REST_Controller {
 						'callback'            => array( self::class, 'unrsvp_event' ),
 						'permission_callback' => fn() => current_user_can( 'read' ),
 						'args'                => array(
-							'id' => array(
-								'type'     => 'integer',
-								'required' => true,
-							),
+                                                        'id' => array(
+                                                                'type'              => 'integer',
+                                                                'required'          => true,
+                                                                'sanitize_callback' => 'absint',
+                                                                'validate_callback' => 'is_numeric',
+                                                        ),
 						),
 					),
 				)
@@ -52,10 +56,12 @@ class ArtPulse_REST_Controller {
 						'callback'            => array( self::class, 'follow_user' ),
 						'permission_callback' => fn() => current_user_can( 'read' ),
 						'args'                => array(
-							'id' => array(
-								'type'     => 'integer',
-								'required' => true,
-							),
+                                                        'id' => array(
+                                                                'type'              => 'integer',
+                                                                'required'          => true,
+                                                                'sanitize_callback' => 'absint',
+                                                                'validate_callback' => 'is_numeric',
+                                                        ),
 						),
 					),
 					array(
@@ -63,10 +69,12 @@ class ArtPulse_REST_Controller {
 						'callback'            => array( self::class, 'unfollow_user' ),
 						'permission_callback' => fn() => current_user_can( 'read' ),
 						'args'                => array(
-							'id' => array(
-								'type'     => 'integer',
-								'required' => true,
-							),
+                                                        'id' => array(
+                                                                'type'              => 'integer',
+                                                                'required'          => true,
+                                                                'sanitize_callback' => 'absint',
+                                                                'validate_callback' => 'is_numeric',
+                                                        ),
 						),
 					),
 				)
