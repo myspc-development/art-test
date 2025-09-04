@@ -74,13 +74,13 @@ class AdminAccessManagerTest extends TestCase {
 	}
 
 	public function test_redirects_non_admin_users(): void {
-		try {
-			AdminAccessManager::maybe_redirect_admin();
-			$this->fail( 'Expected redirect' );
-		} catch ( \Exception $e ) {
-			$this->assertSame( 'redirect:https://site.test/dashboard', $e->getMessage() );
-		}
-	}
+               try {
+                       AdminAccessManager::maybe_redirect_admin();
+                       $this->fail( 'Expected redirect' );
+               } catch ( \Exception $e ) {
+                       $this->assertSame( 'redirect:https://site.test/dashboard/user', $e->getMessage() );
+               }
+       }
 
         public function test_allows_admin_users(): void {
                 self::$caps = array( 'manage_options' => true );

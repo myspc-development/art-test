@@ -46,8 +46,8 @@ class AdminAccessManager {
 			return;
 		}
 
-		$dashboard_url = home_url( '/dashboard' );
-		wp_safe_redirect( $dashboard_url );
-		exit;
-	}
+               $dashboard_url = Plugin::get_user_dashboard_url();
+               wp_safe_redirect( $dashboard_url );
+               exit;
+       }
 }

@@ -1544,18 +1544,24 @@ add_action(
 		if ( defined( 'AP_DEBUG' ) && ! AP_DEBUG ) {
 			return;
 		}
-		$roles = array( 'member', 'artist', 'organization' );
-		foreach ( $roles as $role ) {
-			$wp_admin_bar->add_node(
-				array(
-					'id'    => 'ap-switch-' . $role,
-					'title' => 'View as: ' . $role,
-					'href'  => add_query_arg( 'ap_preview_role', $role, home_url( '/dashboard' ) ),
-				)
-			);
-		}
-	},
-	100
+               $roles = array( 'member', 'artist', 'organization' );
+               foreach ( $roles as $role ) {
+                       $dashboard_url = \ArtPulse\Core\Plugin::get_user_dashboard_url();
+                       if ( 'artist' === $role ) {
+                               $dashboard_url = \ArtPulse\Core\Plugin::get_artist_dashboard_url();
+                       } elseif ( 'organization' === $role ) {
+                               $dashboard_url = \ArtPulse\Core\Plugin::get_org_dashboard_url();
+                       }
+                       $wp_admin_bar->add_node(
+                               array(
+                                       'id'    => 'ap-switch-' . $role,
+                                       'title' => 'View as: ' . $role,
+                                       'href'  => add_query_arg( 'ap_preview_role', $role, $dashboard_url ),
+                               )
+                       );
+               }
+       },
+       100
 );
 
 

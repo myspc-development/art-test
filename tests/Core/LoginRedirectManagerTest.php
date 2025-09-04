@@ -18,15 +18,19 @@ if ( ! function_exists( __NAMESPACE__ . '\home_url' ) ) {
 		return 'https://site.test' . $path; }
 }
 if ( ! function_exists( __NAMESPACE__ . '\is_wp_error' ) ) {
-	function is_wp_error( $thing ) {
-		return $thing instanceof WP_Error; }
+        function is_wp_error( $thing ) {
+                return $thing instanceof WP_Error; }
+}
+
+if ( ! class_exists( __NAMESPACE__ . '\WP_Error' ) ) {
+       class WP_Error {}
 }
 
 namespace ArtPulse\Core\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ArtPulse\Core\LoginRedirectManager;
-use WP_Error;
+use ArtPulse\Core\WP_Error;
 
 /**
 
@@ -48,21 +52,21 @@ class LoginRedirectManagerTest extends TestCase {
 	}
 
 	public function test_member_redirects_to_dashboard(): void {
-		$user     = (object) array( 'roles' => array( 'member' ) );
-		$redirect = $this->runRedirect( $user );
-		$this->assertSame( 'https://site.test/dashboard', $redirect );
+               $user     = (object) array( 'roles' => array( 'member' ) );
+               $redirect = $this->runRedirect( $user );
+               $this->assertSame( 'https://site.test/dashboard/user', $redirect );
 	}
 
 	public function test_artist_redirects_to_dashboard(): void {
-		$user     = (object) array( 'roles' => array( 'artist' ) );
-		$redirect = $this->runRedirect( $user );
-		$this->assertSame( 'https://site.test/dashboard', $redirect );
+               $user     = (object) array( 'roles' => array( 'artist' ) );
+               $redirect = $this->runRedirect( $user );
+               $this->assertSame( 'https://site.test/dashboard/artist', $redirect );
 	}
 
 	public function test_org_redirects_to_dashboard(): void {
-		$user     = (object) array( 'roles' => array( 'organization' ) );
-		$redirect = $this->runRedirect( $user );
-		$this->assertSame( 'https://site.test/dashboard', $redirect );
+               $user     = (object) array( 'roles' => array( 'organization' ) );
+               $redirect = $this->runRedirect( $user );
+               $this->assertSame( 'https://site.test/dashboard/org', $redirect );
 	}
 
 	public function test_wp_admin_cap_returns_default(): void {
