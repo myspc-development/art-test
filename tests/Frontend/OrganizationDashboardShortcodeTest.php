@@ -44,26 +44,38 @@ class OrganizationDashboardShortcodeTest extends TestCase {
 
         public function test_dashboard_renders_grid(): void {
                 $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 10;
-                $html = OrganizationDashboardShortcode::render( array() );
-                $this->assertStringContainsString( 'ap-dashboard-grid', $html );
-                $this->assertStringNotContainsString( 'Access denied', $html );
+               $this->setOutputCallback(static fn() => '');
+               ob_start();
+               $html   = OrganizationDashboardShortcode::render( array() );
+               $output = ob_get_clean();
+               $this->assertSame('', $output, 'Unexpected output buffer');
+               $this->assertStringContainsString( 'ap-dashboard-grid', $html );
+               $this->assertStringNotContainsString( 'Access denied', $html );
         }
 
         public function test_analytics_hidden_without_cap(): void {
                 $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 10;
                 \ArtPulse\Frontend\StubState::$current_user_caps['view_analytics'] = false;
 
-               \ArtPulse\Frontend\StubState::$shortcodes['[ap_user_dashboard]'] = '<div class="ap-dashboard-grid"></div>';
-               $html = OrganizationDashboardShortcode::render( array() );
-               $this->assertStringNotContainsString( 'Organization Analytics', $html );
+              \ArtPulse\Frontend\StubState::$shortcodes['[ap_user_dashboard]'] = '<div class="ap-dashboard-grid"></div>';
+              $this->setOutputCallback(static fn() => '');
+              ob_start();
+              $html   = OrganizationDashboardShortcode::render( array() );
+              $output = ob_get_clean();
+              $this->assertSame('', $output, 'Unexpected output buffer');
+              $this->assertStringNotContainsString( 'Organization Analytics', $html );
         }
 
         public function test_analytics_visible_with_cap(): void {
                 $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 10;
                 \ArtPulse\Frontend\StubState::$current_user_caps['view_analytics'] = true;
 
-               \ArtPulse\Frontend\StubState::$shortcodes['[ap_user_dashboard]'] = '<div class="ap-dashboard-grid"><div>Organization Analytics</div></div>';
-               $html = OrganizationDashboardShortcode::render( array() );
-               $this->assertStringContainsString( 'Organization Analytics', $html );
+              \ArtPulse\Frontend\StubState::$shortcodes['[ap_user_dashboard]'] = '<div class="ap-dashboard-grid"><div>Organization Analytics</div></div>';
+              $this->setOutputCallback(static fn() => '');
+              ob_start();
+              $html   = OrganizationDashboardShortcode::render( array() );
+              $output = ob_get_clean();
+              $this->assertSame('', $output, 'Unexpected output buffer');
+              $this->assertStringContainsString( 'Organization Analytics', $html );
         }
 }

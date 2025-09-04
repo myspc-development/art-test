@@ -38,9 +38,15 @@ class EventListingShortcodeTest extends WP_UnitTestCase {
                );
 
                $term = wp_insert_term( 'Music', 'event_category' );
-               $html = EventListingShortcode::render( array() );
+
+               $this->setOutputCallback(static fn() => '');
+               ob_start();
+               $html   = EventListingShortcode::render( array() );
+               $output = ob_get_clean();
+
                $slug = get_term( $term['term_id'] )->slug;
 
+               $this->assertSame('', $output, 'Unexpected output buffer');
                $this->assertContains( 'event_category', (array) $captured_taxonomies );
                $this->assertStringContainsString( '<select name="category"', $html );
                $this->assertStringContainsString( 'value="' . esc_attr( $slug ) . '"', $html );
