@@ -685,8 +685,7 @@ add_action(
 /**
  * @deprecated Use ArtPulse\Helpers\GlobalHelpers::pageHasArtpulseShortcode().
  */
-function ap_page_has_artpulse_shortcode() {
-        return GlobalHelpers::pageHasArtpulseShortcode();
+
 }
 
 /**
@@ -715,8 +714,7 @@ function ap_wp_admin_access_enabled() {
  *
  * @deprecated Use ArtPulse\Helpers\GlobalHelpers::enqueueGlobalStyles instead.
  */
-function ap_enqueue_global_styles() {
-        GlobalHelpers::enqueueGlobalStyles();
+
 }
 
 /**
