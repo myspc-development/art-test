@@ -785,7 +785,7 @@ class Plugin {
 				'endpoint'      => esc_url_raw( rest_url( 'artpulse/v1/submissions' ) ),
 				'mediaEndpoint' => esc_url_raw( rest_url( 'wp/v2/media' ) ),
 				'nonce'         => wp_create_nonce( 'wp_rest' ),
-				'dashboardUrl'  => self::get_user_dashboard_url(),
+                               'dashboardUrl'  => self::get_user_dashboard_url(),
 			)
 		);
 
@@ -804,7 +804,7 @@ class Plugin {
 				'endpoint'      => esc_url_raw( rest_url( 'artpulse/v1/submissions' ) ),
 				'mediaEndpoint' => esc_url_raw( rest_url( 'wp/v2/media' ) ),
 				'nonce'         => wp_create_nonce( 'wp_rest' ),
-				'dashboardUrl'  => self::get_user_dashboard_url(),
+                               'dashboardUrl'  => self::get_org_dashboard_url(),
 			)
 		);
 
@@ -823,7 +823,7 @@ class Plugin {
 				'endpoint'      => esc_url_raw( rest_url( 'artpulse/v1/submissions' ) ),
 				'mediaEndpoint' => esc_url_raw( rest_url( 'wp/v2/media' ) ),
 				'nonce'         => wp_create_nonce( 'wp_rest' ),
-				'dashboardUrl'  => self::get_user_dashboard_url(),
+                               'dashboardUrl'  => self::get_artist_dashboard_url(),
 			)
 		);
 
@@ -956,23 +956,23 @@ class Plugin {
 		return home_url( '/' );
 	}
 
-	public static function get_user_dashboard_url(): string {
-		return home_url( '/dashboard' );
-	}
+       public static function get_user_dashboard_url(): string {
+               return home_url( '/dashboard/user' );
+       }
 
 	/**
 	 * Locate the page containing the organization dashboard shortcode.
 	 */
-	public static function get_org_dashboard_url(): string {
-		return home_url( '/dashboard' );
-	}
+       public static function get_org_dashboard_url(): string {
+               return home_url( '/dashboard/org' );
+       }
 
 	/**
 	 * Locate the page containing the artist dashboard shortcode.
 	 */
-	public static function get_artist_dashboard_url(): string {
-		return home_url( '/dashboard' );
-	}
+       public static function get_artist_dashboard_url(): string {
+               return home_url( '/dashboard/artist' );
+       }
 
 	/**
 	 * Locate the page containing the login shortcode.

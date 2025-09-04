@@ -23,31 +23,31 @@ add_action(
 add_filter(
 	'wp_registration_redirect',
 	function ( $redirect_to ) {
-		if ( ! ap_wp_admin_access_enabled() ) {
-			return home_url( '/dashboard' );
-		}
-		return $redirect_to;
-	}
+               if ( ! ap_wp_admin_access_enabled() ) {
+                       return \ArtPulse\Core\Plugin::get_user_dashboard_url();
+               }
+               return $redirect_to;
+       }
 );
 
 // Redirect members, artists, and organizations after first login as well
 add_filter(
 	'login_redirect',
 	function ( $redirect_to, $request, $user ) {
-		if ( $user instanceof \WP_User && ! ap_wp_admin_access_enabled() && ! user_can( $user, 'view_wp_admin' ) ) {
-			$roles = (array) $user->roles;
-			if ( in_array( 'member', $roles, true ) ) {
-				return home_url( '/dashboard' );
-			}
-			if ( in_array( 'artist', $roles, true ) ) {
-				return home_url( '/artist-dashboard' );
-			}
-			if ( in_array( 'organization', $roles, true ) ) {
-				return home_url( '/organization-dashboard' );
-			}
-		}
-		return $redirect_to;
-	},
-	10,
-	3
+               if ( $user instanceof \WP_User && ! ap_wp_admin_access_enabled() && ! user_can( $user, 'view_wp_admin' ) ) {
+                       $roles = (array) $user->roles;
+                       if ( in_array( 'member', $roles, true ) ) {
+                               return \ArtPulse\Core\Plugin::get_user_dashboard_url();
+                       }
+                       if ( in_array( 'artist', $roles, true ) ) {
+                               return \ArtPulse\Core\Plugin::get_artist_dashboard_url();
+                       }
+                       if ( in_array( 'organization', $roles, true ) ) {
+                               return \ArtPulse\Core\Plugin::get_org_dashboard_url();
+                       }
+               }
+               return $redirect_to;
+       },
+        10,
+        3
 );

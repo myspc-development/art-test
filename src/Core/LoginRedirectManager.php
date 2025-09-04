@@ -16,7 +16,15 @@ class LoginRedirectManager {
 			return $redirect_to;
 		}
 
-		$dashboard_url = home_url( '/dashboard' );
-		return $dashboard_url;
-	}
+               $roles = (array) ( $user->roles ?? array() );
+               if ( in_array( 'organization', $roles, true ) ) {
+                       $dashboard_url = Plugin::get_org_dashboard_url();
+               } elseif ( in_array( 'artist', $roles, true ) ) {
+                       $dashboard_url = Plugin::get_artist_dashboard_url();
+               } else {
+                       $dashboard_url = Plugin::get_user_dashboard_url();
+               }
+
+               return $dashboard_url;
+       }
 }
