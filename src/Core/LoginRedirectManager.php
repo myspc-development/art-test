@@ -17,10 +17,8 @@ class LoginRedirectManager {
                }
 
                $target = self::get_post_login_redirect_url( $user, $requested_redirect_to );
+               $target = wp_validate_redirect( $target, $redirect_to );
                $target = esc_url_raw( $target );
-               if ( function_exists( 'wp_safe_redirect' ) ) {
-                       wp_safe_redirect( $target );
-               }
 
                return $target;
        }
