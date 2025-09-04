@@ -37,11 +37,15 @@ class ArtistDashboardShortcodeTest extends TestCase {
                 parent::tearDown();
         }
 
-	public function test_delete_button_rendered(): void {
-		$html = ArtistDashboardShortcode::render();
-		$this->assertStringContainsString( 'ap-delete-artwork', $html );
+        public function test_delete_button_rendered(): void {
+                $this->setOutputCallback(static fn() => '');
+                ob_start();
+                $html   = ArtistDashboardShortcode::render();
+                $output = ob_get_clean();
+                $this->assertSame('', $output, 'Unexpected output buffer');
+                $this->assertStringContainsString( 'ap-delete-artwork', $html );
                 $this->assertStringContainsString( 'ap-user-profile', $html );
-	}
+        }
 
         public function test_deletion_returns_ordered_html(): void {
                 \ArtPulse\Frontend\StubState::$get_posts_return = array(

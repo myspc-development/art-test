@@ -28,10 +28,14 @@ class OrgPublicProfileShortcodeTest extends TestCase {
                 \ArtPulse\Frontend\StubState::$page = null;
         }
 
-	public function test_render_outputs_tagline(): void {
-		$html = OrgPublicProfileShortcode::render( array( 'id' => 1 ) );
-		$this->assertStringContainsString( 'Best Org', $html );
-		$this->assertStringContainsString( 'img4.jpg', $html );
-		$this->assertStringContainsString( 'Event 2', $html );
-	}
+        public function test_render_outputs_tagline(): void {
+                $this->setOutputCallback(static fn() => '');
+                ob_start();
+                $html   = OrgPublicProfileShortcode::render( array( 'id' => 1 ) );
+                $output = ob_get_clean();
+                $this->assertSame('', $output, 'Unexpected output buffer');
+                $this->assertStringContainsString( 'Best Org', $html );
+                $this->assertStringContainsString( 'img4.jpg', $html );
+                $this->assertStringContainsString( 'Event 2', $html );
+        }
 }
