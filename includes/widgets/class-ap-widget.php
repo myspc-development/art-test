@@ -18,11 +18,12 @@ if ( ! class_exists( 'AP_Widget' ) && class_exists( 'WP_Widget' ) ) {
 			echo $args['before_widget'] ?? '';
 			$shortcode = $instance['shortcode'] ?? '';
 			$atts      = $instance['atts'] ?? '';
-			if ( $shortcode ) {
-				echo do_shortcode( $shortcode . ( $atts ? ' ' . $atts : '' ) );
-			}
-			echo $args['after_widget'] ?? '';
-		}
+                        if ( $shortcode ) {
+                                $out = do_shortcode( $shortcode . ( $atts ? ' ' . $atts : '' ) );
+                                echo wp_kses_post( $out );
+                        }
+                        echo $args['after_widget'] ?? '';
+                }
 
 		public function form( $instance ) {
 			$shortcode = esc_attr( $instance['shortcode'] ?? '' );
