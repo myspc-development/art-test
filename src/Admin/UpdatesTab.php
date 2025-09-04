@@ -8,7 +8,8 @@ class UpdatesTab {
 	public static function register(): void {
 		add_action( 'admin_post_ap_check_updates', array( self::class, 'check_updates' ) );
 		add_action( 'admin_post_ap_run_update', array( self::class, 'run_update' ) );
-		add_action( 'init', array( self::class, 'schedule_cron' ) );
+		\register_activation_hook( ARTPULSE_PLUGIN_FILE, array( self::class, 'schedule_cron' ) );
+		\register_deactivation_hook( ARTPULSE_PLUGIN_FILE, array( self::class, 'unschedule_cron' ) );
 		add_action( 'ap_daily_update_check', array( self::class, 'maybe_auto_update' ) );
 	}
 
@@ -16,6 +17,10 @@ class UpdatesTab {
 		if ( ! wp_next_scheduled( 'ap_daily_update_check' ) ) {
 			wp_schedule_event( time(), 'daily', 'ap_daily_update_check' );
 		}
+	}
+
+	public static function unschedule_cron(): void {
+		\wp_clear_scheduled_hook( 'ap_daily_update_check' );
 	}
 
 	public static function maybe_auto_update(): void {
@@ -64,14 +69,14 @@ class UpdatesTab {
 	}
 
 	private static function get_repo_info(): array {
-		$opts      = get_option( 'artpulse_settings', array() );
+		$opts	   = get_option( 'artpulse_settings', array() );
 		$legacyUrl = $opts['github_repo'] ?? ( $opts['update_repo_url'] ?? '' );
 		$legacyTok = $opts['update_access_token'] ?? '';
 
 		return array(
-			'url'    => get_option( 'ap_github_repo_url' ) ?: $legacyUrl,
+			'url'	 => get_option( 'ap_github_repo_url' ) ?: $legacyUrl,
 			'branch' => $opts['update_branch'] ?? 'main',
-			'token'  => get_option( 'ap_github_token' ) ?: $legacyTok,
+			'token'	 => get_option( 'ap_github_token' ) ?: $legacyTok,
 		);
 	}
 
@@ -224,7 +229,7 @@ class UpdatesTab {
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
-		$body     = json_decode( wp_remote_retrieve_body( $response ), true );
+		$body	  = json_decode( wp_remote_retrieve_body( $response ), true );
 		$download = $body['zipball_url'] ?? '';
 		if ( ! $download && ! empty( $body['assets'][0]['browser_download_url'] ) ) {
 			$download = $body['assets'][0]['browser_download_url'];
@@ -244,7 +249,7 @@ class UpdatesTab {
 		$temp_dir   = trailingslashit( get_temp_dir() ) . 'ap_update_' . wp_generate_password( 8, false );
 		wp_mkdir_p( $temp_dir );
 		$result = unzip_file( $tmp, $temp_dir );
-		$files  = array();
+		$files	= array();
 		if ( ! is_wp_error( $result ) ) {
 			$zip = new \ZipArchive();
 			if ( $zip->open( $tmp ) === true ) {
@@ -259,7 +264,7 @@ class UpdatesTab {
 		}
 		if ( ! is_wp_error( $result ) ) {
 			$entries = array_values( array_filter( scandir( $temp_dir ), fn( $e ) => $e !== '.' && $e !== '..' ) );
-			$src     = $temp_dir;
+			$src	 = $temp_dir;
 			if ( count( $entries ) === 1 && is_dir( $temp_dir . '/' . $entries[0] ) ) {
 				$src = $temp_dir . '/' . $entries[0];
 			}
