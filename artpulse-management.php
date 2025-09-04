@@ -769,21 +769,23 @@ function ap_wp_admin_access_enabled() {
  * ArtPulse shortcode. Themes or page builders can bypass this detection by
  * filtering {@see 'ap_bypass_shortcode_detection'} and returning true.
  */
-function ap_enqueue_global_styles() {
-	if ( is_admin() ) {
-		return;
-	}
+if ( ! function_exists( 'ap_enqueue_global_styles' ) ) {
+        function ap_enqueue_global_styles() {
+                if ( is_admin() ) {
+                        return;
+                }
 
-	$bypass = apply_filters( 'ap_bypass_shortcode_detection', false );
+                $bypass = apply_filters( 'ap_bypass_shortcode_detection', false );
 
-	if ( $bypass || ap_page_has_artpulse_shortcode() ) {
-		$accent = ap_get_accent_color();
-		$hover  = ap_adjust_color_brightness( $accent, -0.1 );
-		wp_add_inline_style(
-			'ap-complete-dashboard-style',
-			":root { --ap-primary: {$accent}; --ap-primary-hover: {$hover}; }"
-		);
-	}
+                if ( $bypass || ap_page_has_artpulse_shortcode() ) {
+                        $accent = ap_get_accent_color();
+                        $hover  = ap_adjust_color_brightness( $accent, -0.1 );
+                        wp_add_inline_style(
+                                'ap-complete-dashboard-style',
+                                ":root { --ap-primary: {$accent}; --ap-primary-hover: {$hover}; }"
+                        );
+                }
+        }
 }
 
 /**

@@ -1,10 +1,6 @@
 <?php
 declare(strict_types=1);
 
-namespace {
-    function ap_enqueue_global_styles() {}
-}
-
 namespace ArtPulse\Frontend\Tests {
 
 use PHPUnit\Framework\TestCase;
@@ -39,6 +35,7 @@ class EventFilterEnqueueTest extends TestCase {
         Functions\when( 'wp_localize_script' )->alias(function( $handle, $name, $data ) {
             $this->localized = array( 'handle' => $handle, 'name' => $name, 'data' => $data );
         });
+        Functions\when( 'ap_enqueue_global_styles' )->justReturn(null);
     }
 
     protected function tearDown(): void {
