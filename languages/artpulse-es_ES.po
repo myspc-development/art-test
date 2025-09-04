@@ -1,0 +1,11 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ArtPulse Management\n"
+"POT-Creation-Date: 2025-08-28T11:53:15+00:00\n"
+"Language: es_ES\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: artpulse\n"
+
+msgid "My Events"
+msgstr "Mis eventos"
