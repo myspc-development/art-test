@@ -7,12 +7,6 @@ class AjaxLoginTestStubs {
         public static bool $signon_called  = false;
 }
 
-function check_ajax_referer( $action, $name = false ) {
-        if ( ! AjaxLoginTestStubs::$nonce_valid ) {
-                wp_send_json( array( 'ok' => false, 'code' => 'INVALID_NONCE' ) );
-        }
-}
-
 function wp_signon( $creds, $secure = false ) {
         AjaxLoginTestStubs::$signon_called = true;
         return AjaxLoginTestStubs::$signon_return;

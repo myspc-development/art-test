@@ -207,7 +207,11 @@ self::$post_authors         = array();
 	}
 
         if ( ! function_exists( __NAMESPACE__ . '\\check_ajax_referer' ) ) {
-                function check_ajax_referer( $action, $name = false ) {}
+                function check_ajax_referer( $action, $name = false ) {
+                        if ( class_exists( __NAMESPACE__ . '\\AjaxLoginTestStubs' ) && ! AjaxLoginTestStubs::$nonce_valid ) {
+                                wp_send_json( array( 'ok' => false, 'code' => 'INVALID_NONCE' ) );
+                        }
+                }
         }
 
         if ( ! function_exists( __NAMESPACE__ . '\\current_user_can' ) ) {
