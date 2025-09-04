@@ -715,7 +715,9 @@ add_action(
  * @return string Hex color string.
  */
 function ap_get_accent_color() {
-	return get_theme_mod( 'accent_color', '#0073aa' );
+        $color = get_theme_mod( 'accent_color', '#0073aa' );
+        $color = sanitize_hex_color( $color );
+        return $color ? $color : '#0073aa';
 }
 
 /**
@@ -776,14 +778,16 @@ function ap_enqueue_global_styles() {
 
 	$bypass = apply_filters( 'ap_bypass_shortcode_detection', false );
 
-	if ( $bypass || ap_page_has_artpulse_shortcode() ) {
-		$accent = ap_get_accent_color();
-		$hover  = ap_adjust_color_brightness( $accent, -0.1 );
-		wp_add_inline_style(
-			'ap-complete-dashboard-style',
-			":root { --ap-primary: {$accent}; --ap-primary-hover: {$hover}; }"
-		);
-	}
+        if ( $bypass || ap_page_has_artpulse_shortcode() ) {
+                $accent = sanitize_hex_color( ap_get_accent_color() );
+                $accent = $accent ? $accent : '#0073aa';
+                $hover  = sanitize_hex_color( ap_adjust_color_brightness( $accent, -0.1 ) );
+                $hover  = $hover ? $hover : $accent;
+                wp_add_inline_style(
+                        'ap-complete-dashboard-style',
+                        sprintf( ':root { --ap-primary: %s; --ap-primary-hover: %s; }', $accent, $hover )
+                );
+        }
 }
 
 /**
