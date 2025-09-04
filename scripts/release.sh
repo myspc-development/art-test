@@ -18,10 +18,7 @@ echo "🔨 Building release package for version $VERSION …"
 rm -rf "$RELEASE_DIR"
 mkdir -p "$RELEASE_DIR"
 
-# 2. Install production dependencies
-composer install --no-dev --optimize-autoloader
-
-# 3. Build assets
+# 2. Build assets
 npm run build
 
 # Ensure CSS bundle exists for deployment
@@ -30,21 +27,29 @@ if [ ! -f dist/bundle.css ]; then
   exit 1
 fi
 
-# 4. Ensure optimized autoloader for packaging
-composer install --no-dev --optimize-autoloader
-
-# 5. Copy plugin files to temp directory
+# 3. Copy plugin files to temp directory
 TMPDIR=$(mktemp -d)
 echo "📂 Copying files to temp dir $TMPDIR"
-rsync -a --exclude 'scripts' --exclude 'tests' --exclude '.git' --exclude 'phpunit.unit.xml*' --exclude 'phpunit.wp.xml*' "$PLUGIN_DIR/" "$TMPDIR/"
-# 6. Create ZIP archive
+rsync -a \
+  --exclude 'scripts' \
+  --exclude 'tests' \
+  --exclude '.git' \
+  --exclude 'phpunit.unit.xml*' \
+  --exclude 'phpunit.wp.xml*' \
+  --exclude 'vendor' \
+  "$PLUGIN_DIR/" "$TMPDIR/"
+
+# 4. Install production dependencies in temp directory
+( cd "$TMPDIR" && composer install --no-dev --optimize-autoloader )
+
+# 5. Create ZIP archive
 cd "$TMPDIR"
 zip -r "$RELEASE_DIR/$ZIP_FILE" .
 cd -
 
 echo "✅ Release package created: $RELEASE_DIR/$ZIP_FILE"
 
-# 7. Cleanup
+# 6. Cleanup
 rm -rf "$TMPDIR"
 
 echo "🎉 Release script complete!"

@@ -19,6 +19,17 @@ Site administrators should consult the [Admin Guide](docs/guides/admin/README.md
 
 > Code coverage requires the [PCOV](https://github.com/krakjoe/pcov) extension or Xdebug 3 with `XDEBUG_MODE=coverage`.
 
+## Building for Release
+
+Generate a production ZIP that only contains runtime PHP dependencies:
+
+```bash
+npm run build
+bash scripts/release.sh
+```
+
+The release script installs Composer dependencies with `--no-dev` in a temporary directory and omits development directories so the packaged plugin ships without test libraries or tooling.
+
 ## Environment Variables
 
 The tooling can be configured via environment variables. Defaults support local development:
