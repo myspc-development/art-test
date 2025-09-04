@@ -68,23 +68,70 @@ class LoginShortcode {
 	public static function ajax_login(): void {
 		check_ajax_referer( 'ap_login_nonce', 'nonce' );
 
+		$username_raw = $_POST['username'] ?? '';
+		$password     = $_POST['password'] ?? '';
+
+		if ( '' === $username_raw || '' === $password ) {
+			wp_send_json(
+			       array(
+				       'ok'      => false,
+				       'code'    => 'INVALID_CREDENTIALS',
+				       'message' => __( 'Invalid credentials.', 'artpulse' ),
+			       )
+			);
+		}
+
+		$identifier = is_email( $username_raw ) ? sanitize_email( $username_raw ) : sanitize_user( $username_raw );
+		$remember   = ! empty( $_POST['remember'] );
+
+		$ip       = $_SERVER['REMOTE_ADDR'] ?? '';
+		$key      = 'ap_login_fail_' . md5( $ip . '|' . $identifier );
+		$attempts = (int) get_transient( $key );
+
+		$max_attempts    = 5;
+		$lockout_minutes = 5;
+
+		if ( $attempts >= $max_attempts ) {
+			wp_send_json(
+			       array(
+				       'ok'      => false,
+				       'code'    => 'TOO_MANY_ATTEMPTS',
+				       'message' => __( 'Too many failed login attempts. Please try again later.', 'artpulse' ),
+			       )
+			);
+		}
+
 		$creds = array(
-			'user_login'    => sanitize_user( $_POST['username'] ?? '' ),
-			'user_password' => $_POST['password'] ?? '',
-			'remember'      => true,
+			'user_login'    => $identifier,
+			'user_password' => $password,
+			'remember'      => $remember,
 		);
 
 		$user = wp_signon( $creds, false );
 
 		if ( is_wp_error( $user ) ) {
-			error_log( 'Login error: ' . $user->get_error_message() );
-			wp_send_json_error( array( 'message' => __( 'Invalid credentials.', 'artpulse' ) ) );
+			set_transient( $key, $attempts + 1, MINUTE_IN_SECONDS * $lockout_minutes );
+			wp_send_json(
+			       array(
+				       'ok'      => false,
+				       'code'    => 'INVALID_CREDENTIALS',
+				       'message' => __( 'Invalid credentials.', 'artpulse' ),
+			       )
+			);
 		}
+
+		delete_transient( $key );
 
 		$opts = get_option( 'artpulse_settings', array() );
 		if ( ! empty( $opts['enforce_two_factor'] ) && ! get_user_meta( $user->ID, 'two_factor_enabled', true ) ) {
 			wp_clear_auth_cookie();
-			wp_send_json_error( array( 'message' => __( 'Two-factor authentication is required.', 'artpulse' ) ) );
+			wp_send_json(
+			       array(
+				       'ok'      => false,
+				       'code'    => 'TWO_FACTOR_REQUIRED',
+				       'message' => __( 'Two-factor authentication is required.', 'artpulse' ),
+			       )
+			);
 		}
 
 		$roles = (array) $user->roles;
@@ -96,10 +143,10 @@ class LoginShortcode {
 			$target = \ArtPulse\Core\Plugin::get_user_dashboard_url();
 		}
 
-		wp_send_json_success(
+		wp_send_json(
 			array(
-				'message'      => __( 'Login successful', 'artpulse' ),
-				'dashboardUrl' => $target,
+			       'ok'           => true,
+			       'dashboardUrl' => $target,
 			)
 		);
 	}
