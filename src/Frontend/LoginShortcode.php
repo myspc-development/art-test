@@ -40,11 +40,11 @@ class LoginShortcode {
                                <?php wp_nonce_field( 'ap_login_nonce', 'nonce' ); ?>
                                <p>
                                        <label class="ap-form-label" for="ap_login_username"><?php esc_html_e( 'Username or Email', 'artpulse' ); ?></label>
-                                       <input class="ap-input" id="ap_login_username" type="text" name="username" required />
+                                       <input class="ap-input" id="ap_login_username" type="text" name="username" placeholder="<?php esc_attr_e( 'Username or Email', 'artpulse' ); ?>" autocomplete="username" required />
                                </p>
                                <p>
                                        <label class="ap-form-label" for="ap_login_password"><?php esc_html_e( 'Password', 'artpulse' ); ?></label>
-                                       <input class="ap-input" id="ap_login_password" type="password" name="password" required />
+                                       <input class="ap-input" id="ap_login_password" type="password" name="password" placeholder="<?php esc_attr_e( 'Password', 'artpulse' ); ?>" autocomplete="current-password" required />
                                </p>
                                <p>
                                        <label class="ap-form-label" for="ap_login_remember">
