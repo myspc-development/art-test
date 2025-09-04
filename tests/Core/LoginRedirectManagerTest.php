@@ -3,15 +3,26 @@ namespace ArtPulse\Core;
 
 // Simple stubs for WordPress functions used by LoginRedirectManager
 
+if ( ! function_exists( __NAMESPACE__ . '\add_filter' ) ) {
+        function add_filter( $hook, $callback, $priority = 10, $args = 1 ) {
+                \ArtPulse\Core\Tests\LoginRedirectManagerTest::$filter = $callback;
+        }
+}
+if ( ! function_exists( __NAMESPACE__ . '\apply_filters' ) ) {
+        function apply_filters( $hook, $value, ...$args ) {
+                $cb = \ArtPulse\Core\Tests\LoginRedirectManagerTest::$filter;
+                return $cb ? $cb( $value, ...$args ) : $value;
+        }
+}
 if ( ! function_exists( __NAMESPACE__ . '\current_user_can' ) ) {
-	function current_user_can( $cap ) {
-		return \ArtPulse\Core\Tests\LoginRedirectManagerTest::$caps[ $cap ] ?? false;
-	}
+        function current_user_can( $cap ) {
+                return \ArtPulse\Core\Tests\LoginRedirectManagerTest::$caps[ $cap ] ?? false;
+        }
 }
 if ( ! function_exists( __NAMESPACE__ . '\ap_wp_admin_access_enabled' ) ) {
-	function ap_wp_admin_access_enabled() {
-		return \ArtPulse\Core\Tests\LoginRedirectManagerTest::$admin_enabled;
-	}
+        function ap_wp_admin_access_enabled() {
+                return \ArtPulse\Core\Tests\LoginRedirectManagerTest::$admin_enabled;
+        }
 }
 if ( ! function_exists( __NAMESPACE__ . '\home_url' ) ) {
         function home_url( $path = '' ) {
@@ -57,16 +68,19 @@ use ArtPulse\Core\WP_Error;
  */
 
 class LoginRedirectManagerTest extends TestCase {
-	public static array $caps         = array();
-	public static bool $admin_enabled = false;
+        public static array $caps         = array();
+        public static bool $admin_enabled = false;
+        public static $filter             = null;
 
-	protected function setUp(): void {
-		self::$caps          = array();
-		self::$admin_enabled = false;
-	}
+        protected function setUp(): void {
+                self::$caps          = array();
+                self::$admin_enabled = false;
+                self::$filter        = null;
+        }
 
         private function runRedirect( object $user, string $requested = '' ): string {
-                return LoginRedirectManager::handle( '/default', $requested, $user );
+                LoginRedirectManager::register();
+                return apply_filters( 'login_redirect', '/default', $requested, $user );
         }
 
         public function test_member_redirects_to_dashboard(): void {

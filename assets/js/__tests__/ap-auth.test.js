@@ -49,6 +49,16 @@ describe('ap-auth', () => {
     expect(document.activeElement).toBe(document.getElementById('ap_login_username'));
   });
 
+  test('focuses first invalid field when server provides no invalid list', async () => {
+    fetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({ success: false, data: { message: 'Invalid' } }),
+    });
+    document.getElementById('ap-login-form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    await flushPromises();
+    expect(document.activeElement).toBe(document.getElementById('ap_login_username'));
+  });
+
   test('redirects to dashboard url on success', async () => {
     fetch.mockResolvedValue({
       ok: true,
