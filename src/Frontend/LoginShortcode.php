@@ -36,19 +36,26 @@ class LoginShortcode {
 		?>
 		<div class="ap-login-forms">
 			<div id="ap-login-message" class="ap-form-messages" role="status" aria-live="polite"></div>
-			<form id="ap-login-form" class="ap-form-container">
-				<p>
-					<label class="ap-form-label" for="ap_login_username"><?php esc_html_e( 'Username or Email', 'artpulse' ); ?></label>
-					<input class="ap-input" id="ap_login_username" type="text" name="username" required />
-				</p>
-				<p>
-					<label class="ap-form-label" for="ap_login_password"><?php esc_html_e( 'Password', 'artpulse' ); ?></label>
-					<input class="ap-input" id="ap_login_password" type="password" name="password" required />
-				</p>
-				<p>
-					<button class="ap-form-button nectar-button" type="submit"><?php esc_html_e( 'Login', 'artpulse' ); ?></button>
-				</p>
-			</form>
+                       <form id="ap-login-form" class="ap-form-container">
+                               <?php wp_nonce_field( 'ap_login_nonce', 'ap_login_nonce_field' ); ?>
+                               <p>
+                                       <label class="ap-form-label" for="ap_login_username"><?php esc_html_e( 'Username or Email', 'artpulse' ); ?></label>
+                                       <input class="ap-input" id="ap_login_username" type="text" name="username" required />
+                               </p>
+                               <p>
+                                       <label class="ap-form-label" for="ap_login_password"><?php esc_html_e( 'Password', 'artpulse' ); ?></label>
+                                       <input class="ap-input" id="ap_login_password" type="password" name="password" required />
+                               </p>
+                               <p>
+                                       <label class="ap-form-label" for="ap_login_remember">
+                                               <input class="ap-input" id="ap_login_remember" type="checkbox" name="remember" />
+                                               <?php esc_html_e( 'Remember me', 'artpulse' ); ?>
+                                       </label>
+                               </p>
+                               <p>
+                                       <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e( 'Login', 'artpulse' ); ?></button>
+                               </p>
+                       </form>
 
 			<?php echo \ArtPulse\Integration\OAuthManager::render_buttons(); ?>
 
