@@ -74,7 +74,7 @@ class EmailService {
 		}
 		$from = $from_address;
 		if ( $from_name ) {
-			$from = sprintf( '%s <%s>', $from_name, $from_address );
+                $from = sprintf( '%1$s <%2$s>', $from_name, $from_address );
 		}
 		$response = wp_remote_post(
 			"https://api.mailgun.net/v3/{$domain}/messages",

@@ -27,9 +27,9 @@ class NearbyEventsWidget {
 		if ( ! DashboardWidgetRegistry::exists( 'widget_widget_near_me' ) ) {
 			DashboardWidgetRegistry::register(
 				'widget_widget_near_me',
-				sprintf( esc_html__( '%s (Legacy)', 'artpulse' ), self::label() ),
-				self::icon(),
-				self::description(),
+                                sprintf( esc_html__( '%1$s (Legacy)', 'artpulse' ), self::label() ),
+                                self::icon(),
+                                self::description(),
 				array( self::class, 'render' ),
 				array( 'roles' => self::roles() )
 			);

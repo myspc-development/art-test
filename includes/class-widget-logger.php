@@ -26,11 +26,11 @@ class WidgetLogger {
 	}
 
 	public function logRendered( string $widget_id, int $user_id ): void {
-		$this->log( 'info', sprintf( 'Widget %s rendered for user %d', $widget_id, $user_id ) );
+                $this->log( 'info', sprintf( 'Widget %1$s rendered for user %2$d', $widget_id, $user_id ) );
 	}
 
 	public function logHidden( string $widget_id, int $user_id ): void {
-		$this->log( 'info', sprintf( 'Widget %s hidden for user %d', $widget_id, $user_id ) );
+                $this->log( 'info', sprintf( 'Widget %1$s hidden for user %2$d', $widget_id, $user_id ) );
 	}
 
 	private function log( string $level, string $message ): void {
@@ -43,7 +43,7 @@ class WidgetLogger {
 		}
 
 		$timestamp = gmdate( 'c' );
-		$line      = sprintf( '[%s] %s: %s', $timestamp, strtoupper( $level ), $message );
+                $line      = sprintf( '[%1$s] %2$s: %3$s', $timestamp, strtoupper( $level ), $message );
 		file_put_contents( $this->file, $line . PHP_EOL, FILE_APPEND );
 	}
 }

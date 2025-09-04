@@ -60,8 +60,8 @@ class DashboardFeedbackManager {
 		);
 		$admin = get_option( 'admin_email' );
                 if ( $admin && is_email( $admin ) ) {
-                        $subject = sprintf( __( 'Dashboard feedback from %s', 'artpulse' ), $role );
-                        $body    = sprintf( "%s\n\nUser ID: %d\nRole: %s\nTime: %s", $message, $user_id, $role, current_time( 'mysql' ) );
+                        $subject = sprintf( esc_html__( 'Dashboard feedback from %1$s', 'artpulse' ), esc_html( $role ) );
+                        $body    = sprintf( '%1$s\n\nUser ID: %2$d\nRole: %3$s\nTime: %4$s', $message, $user_id, $role, current_time( 'mysql' ) );
                         list( $admin, $subject, $body, $headers ) = apply_filters(
                                 'wp_mail',
                                 array( $admin, $subject, $body, array() )

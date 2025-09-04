@@ -90,9 +90,9 @@ class ArtworkWooSync {
 			$provider      = $order->get_meta( 'ap_tracking_provider' );
 			$tracking_info = $tracking ? "\n" . sprintf( __( 'Tracking: %1$s %2$s', 'artpulse' ), $provider, $tracking ) : '';
 			$title         = get_the_title( $artwork_id );
-			$message       = sprintf( __( 'Artwork %s purchased.', 'artpulse' ), $title ) . $tracking_info;
-			EmailService::send( $artist->user_email, __( 'Artwork Sold', 'artpulse' ), $message );
-			EmailService::send( $buyer_email, __( 'Purchase Complete', 'artpulse' ), $message );
-		}
-	}
+                        $message       = sprintf( esc_html__( 'Artwork %1$s purchased.', 'artpulse' ), esc_html( $title ) ) . $tracking_info;
+                        EmailService::send( $artist->user_email, __( 'Artwork Sold', 'artpulse' ), $message );
+                        EmailService::send( $buyer_email, __( 'Purchase Complete', 'artpulse' ), $message );
+                }
+        }
 }

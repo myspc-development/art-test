@@ -933,26 +933,26 @@ class DashboardWidgetRegistry {
 		$allowed = array();
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( sprintf( 'ap widget get_widgets roles=%s user=%d', implode( ',', $roles ), $user_id ) );
+                        error_log( sprintf( 'ap widget get_widgets roles=%1$s user=%2$d', implode( ',', $roles ), $user_id ) );
 		}
 
 		foreach ( self::get_all() as $id => $config ) {
 			$widget_roles = self::normalizeRoleList( $config['roles'] ?? array() );
 			if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
 				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					error_log( sprintf( 'ap widget %s excluded: role mismatch', $id ) );
+                                        error_log( sprintf( 'ap widget %1$s excluded: role mismatch', $id ) );
 				}
 				continue;
 			}
 			if ( ! self::user_can_see( $id, $user_id ) ) {
 				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					error_log( sprintf( 'ap widget %s excluded: capability', $id ) );
+                                        error_log( sprintf( 'ap widget %1$s excluded: capability', $id ) );
 				}
 				continue;
 			}
 			$allowed[ $id ] = $config['callback'];
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log( sprintf( 'ap widget %s included', $id ) );
+                                error_log( sprintf( 'ap widget %1$s included', $id ) );
 			}
 		}
 

@@ -16,7 +16,7 @@ $event    = $event_id ? get_post($event_id) : null;
             <?php
             $opts  = get_option('artpulse_settings', []);
             $price = $opts['feature_price_event'] ?? '10';
-            printf(esc_html__('Feature for $%s', 'artpulse'), esc_html($price));
+            printf( esc_html__( 'Feature for $%1$s', 'artpulse' ), esc_html( $price ) );
             ?>
         </button>
     </form>

@@ -87,7 +87,7 @@ class SnapshotExportController {
 		$org_id = absint( $req['org_id'] );
 		$period = sanitize_text_field( $req['period'] );
 		$data   = self::get_data( $org_id, $period );
-		$title  = sprintf( '%s Snapshot', $period );
+                $title  = sprintf( esc_html__( '%1$s Snapshot', 'artpulse' ), esc_html( $period ) );
 
 		$path = SnapshotBuilder::generate_csv(
 			array(
@@ -111,7 +111,7 @@ class SnapshotExportController {
 		$org_id = absint( $req['org_id'] );
 		$period = sanitize_text_field( $req['period'] );
 		$data   = self::get_data( $org_id, $period );
-		$title  = sprintf( '%s Snapshot', $period );
+                $title  = sprintf( esc_html__( '%1$s Snapshot', 'artpulse' ), esc_html( $period ) );
 
 		$path = SnapshotBuilder::generate_pdf(
 			array(

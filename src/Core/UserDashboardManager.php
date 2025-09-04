@@ -1257,10 +1257,10 @@ class UserDashboardManager {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				$u     = wp_get_current_user();
 				$roles = $u ? implode( ',', (array) $u->roles ) : 'guest';
-				error_log( sprintf( 'ap_user_dashboard denied uid=%d role=%s roles=%s', $uid, $role, $roles ) );
-			}
-			return '<p>' . __( 'Please log in to view your dashboard.', 'artpulse' ) . '</p>';
-		}
+                                error_log( sprintf( 'ap_user_dashboard denied uid=%1$d role=%2$s roles=%3$s', $uid, $role, $roles ) );
+                        }
+                        return '<p>' . __( 'Please log in to view your dashboard.', 'artpulse' ) . '</p>';
+                }
 
 		wp_enqueue_style( 'ap-react-dashboard' );
 		wp_enqueue_script( 'ap-react-vendor' );

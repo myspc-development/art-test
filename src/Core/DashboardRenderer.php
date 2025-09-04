@@ -134,7 +134,7 @@ class DashboardRenderer {
 
 				// Optionally wrap output in developer mode for easier debugging.
 		if ( defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ) {
-				$output = sprintf( '<!-- ap-widget:%s:start -->%s<!-- ap-widget:%s:end -->', $widget_id, $output, $widget_id );
+                                $output = sprintf( '<!-- ap-widget:%1$s:start -->%2$s<!-- ap-widget:%1$s:end -->', $widget_id, $output );
 		}
 
 				// Allow filters on the fully rendered widget markup.
@@ -144,7 +144,7 @@ class DashboardRenderer {
 				$output = wp_kses_post( $output );
 
 		$elapsed = microtime( true ) - $start;
-                ap_debug_log( sprintf( '⏱️ Widget %s rendered in %.4fs', $widget_id, $elapsed ) );
+                ap_debug_log( sprintf( '⏱️ Widget %1$s rendered in %2$.4fs', $widget_id, $elapsed ) );
 		AuditBus::on_rendered( $widget_id, $role, (int) ( $elapsed * 1000 ), $ok, $reason );
 
 		if ( self::shouldCache( $widget_id, $user_id, $widget ) ) {
@@ -217,7 +217,7 @@ class DashboardRenderer {
 				continue;
 			}
 
-			$html .= sprintf( '<div data-widget-id="%s">%s</div>', esc_attr( $id ), $out );
+                                $html .= sprintf( '<div data-widget-id="%1$s">%2$s</div>', esc_attr( $id ), $out );
 			do_action(
 				'artpulse/audit/widget_result',
 				array(

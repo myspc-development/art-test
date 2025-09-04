@@ -251,16 +251,16 @@ class RsvpRestController {
 		}
 
 		$user    = wp_get_current_user();
-		$subject = sprintf( __( 'RSVP Confirmation for "%s"', 'artpulse' ), get_the_title( $event_id ) );
-		$message = sprintf( __( 'Hi %1$s,\n\nYou have successfully RSVPed for "%2$s".', 'artpulse' ), $user->display_name, get_the_title( $event_id ) );
+                $subject = sprintf( esc_html__( 'RSVP Confirmation for "%1$s"', 'artpulse' ), esc_html( get_the_title( $event_id ) ) );
+                $message = sprintf( esc_html__( 'Hi %1$s,\n\nYou have successfully RSVPed for "%2$s".', 'artpulse' ), esc_html( $user->display_name ), esc_html( get_the_title( $event_id ) ) );
 		if ( $user && is_email( $user->user_email ) ) {
 			\ArtPulse\Core\EmailService::send( $user->user_email, $subject, $message );
 		}
 
 		$org_email = get_post_meta( $event_id, 'event_organizer_email', true );
 		if ( $org_email && is_email( $org_email ) ) {
-			$org_subject = sprintf( __( 'New RSVP for "%s"', 'artpulse' ), get_the_title( $event_id ) );
-			$org_message = sprintf( __( '%1$s (%2$s) just RSVPed.', 'artpulse' ), $user->display_name, $user->user_email );
+                        $org_subject = sprintf( esc_html__( 'New RSVP for "%1$s"', 'artpulse' ), esc_html( get_the_title( $event_id ) ) );
+                        $org_message = sprintf( esc_html__( '%1$s (%2$s) just RSVPed.', 'artpulse' ), esc_html( $user->display_name ), esc_html( $user->user_email ) );
 			\ArtPulse\Core\EmailService::send( $org_email, $org_subject, $org_message );
 		}
 
@@ -494,9 +494,9 @@ class RsvpRestController {
 		}
 
 		$subject = sanitize_text_field( $request->get_param( 'subject' ) );
-		if ( ! $subject ) {
-			$subject = sprintf( __( 'Reminder for "%s"', 'artpulse' ), get_the_title( $event_id ) );
-		}
+                if ( ! $subject ) {
+                        $subject = sprintf( esc_html__( 'Reminder for "%1$s"', 'artpulse' ), esc_html( get_the_title( $event_id ) ) );
+                }
 		$message = sanitize_textarea_field( $request->get_param( 'message' ) );
 		if ( ! $message ) {
 			$message = __( 'This is a reminder for your upcoming event.', 'artpulse' );
@@ -523,9 +523,9 @@ class RsvpRestController {
 		}
 
 		$subject = sanitize_text_field( $request->get_param( 'subject' ) );
-		if ( ! $subject ) {
-			$subject = sprintf( __( 'Message regarding "%s"', 'artpulse' ), get_the_title( $event_id ) );
-		}
+                if ( ! $subject ) {
+                        $subject = sprintf( esc_html__( 'Message regarding "%1$s"', 'artpulse' ), esc_html( get_the_title( $event_id ) ) );
+                }
 		$message = sanitize_textarea_field( $request->get_param( 'message' ) );
 		if ( ! $message ) {
 			$message = __( 'Hello from your event organizer.', 'artpulse' );

@@ -317,7 +317,7 @@ add_action(
 			if ( ! $admin->has_cap( $cap ) ) {
 				$admin->add_cap( $cap );
 				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					ap_log( sprintf( 'ap init restored %s capability for administrators', $cap ) );
+                                        ap_log( sprintf( 'ap init restored %1$s capability for administrators', $cap ) );
 				}
 			}
 		}
@@ -332,7 +332,7 @@ add_action(
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG && get_current_user_id() ) {
 			foreach ( array( 'user_has_cap', 'map_meta_cap' ) as $hook ) {
 				if ( has_filter( $hook ) ) {
-					ap_log( sprintf( 'ArtPulse: filter detected on %s', $hook ) );
+                                        ap_log( sprintf( 'ArtPulse: filter detected on %1$s', $hook ) );
 				}
 			}
 		}
@@ -358,8 +358,8 @@ add_filter(
 				if ( empty( $allcaps[ $cap ] ) ) {
 					$allcaps[ $cap ] = true;
 					if ( defined( 'WP_DEBUG' ) && WP_DEBUG && get_current_user_id() ) {
-						ap_log( sprintf( 'ap user_has_cap restored %s for admin %d', $cap, $user->ID ) );
-					}
+                                                ap_log( sprintf( 'ap user_has_cap restored %1$s for admin %2$d', $cap, $user->ID ) );
+                                        }
 				}
 			}
 		}

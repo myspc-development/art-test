@@ -88,9 +88,9 @@ class ArtistDashboardHome {
 		foreach ( $rows as $row ) {
 			$activity[] = array(
 				'icon'    => $row->type === 'favorite' ? '❤' : '📅',
-				'message' => $row->type === 'favorite'
-					? sprintf( __( 'New favorite on "%s"', 'artpulse' ), $row->post_title )
-					: sprintf( __( 'New RSVP for "%s"', 'artpulse' ), $row->post_title ),
+                                'message' => $row->type === 'favorite'
+                                        ? sprintf( esc_html__( 'New favorite on "%1$s"', 'artpulse' ), esc_html( $row->post_title ) )
+                                        : sprintf( esc_html__( 'New RSVP for "%1$s"', 'artpulse' ), esc_html( $row->post_title ) ),
 				'date'    => mysql2date( get_option( 'date_format' ), $row->logged_at ),
 			);
 		}
