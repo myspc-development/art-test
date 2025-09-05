@@ -44,7 +44,10 @@ jobs:
       - name: PHPUnit
         run: |
           mkdir -p build
-          vendor/bin/phpunit --log-junit build/junit.xml
+          vendor/bin/phpunit -c phpunit.unit.xml.dist --log-junit build/junit.xml
+        env:
+          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
+          AP_TEST_MODE: '1'
 
       - name: Upload JUnit report
         if: always()
