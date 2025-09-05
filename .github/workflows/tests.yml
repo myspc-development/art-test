@@ -1,95 +1,207 @@
-name: tests
+name: Tests
 
 on:
-  push:
   pull_request:
+  push:
+    branches: [main]
+    tags:
+      - '*'
+  schedule:
+    - cron: '0 2 * * *'
   workflow_dispatch:
-    inputs:
-      ref:
-        description: 'Git ref to run against'
-        required: false
-        default: ''
 
 jobs:
-  test:
+  prepare:
     runs-on: ubuntu-latest
-    env:
-      DB_NAME: wordpress_test
-      DB_USER: root
-      DB_PASSWORD: root
-      DB_HOST: 127.0.0.1
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.inputs.ref || github.ref }}
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          coverage: none
-
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.composer/cache
-            vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-
-      - run: composer install --no-interaction --no-progress
+          coverage: xdebug
 
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+      - run: composer install --no-interaction --no-progress --prefer-dist
 
       - run: npm ci
 
-      - name: WordPress tests
-        id: wp_tests
-        continue-on-error: true
-        run: composer run test:php:wp
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deps
+          path: |
+            vendor
+            node_modules
+
+  lint-and-types:
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: xdebug
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: deps
+          path: .
+
+      - run: composer lint:php
+
+      - run: npm run lint
+
+      - run: npm run typecheck
+
+  phpunit:
+    runs-on: ubuntu-latest
+    needs: prepare
+    services:
+      mysql:
+        image: mysql:5.7
         env:
-          WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    env:
+      DB_HOST: 127.0.0.1
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: wordpress_test
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: PHP unit tests
-        id: php_unit_tests
-        continue-on-error: true
-        run: composer run test:php:unit
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: xdebug
 
-      - name: Jest tests
-        id: jest_tests
-        continue-on-error: true
-        run: npm run test:js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-      - name: Start application
-        run: |
-          npm start &
-          echo $! > server.pid
-          npx wait-on http://localhost:3000 --timeout 60000
+      - uses: actions/download-artifact@v4
+        with:
+          name: deps
+          path: .
 
-      - name: Playwright tests
-        id: playwright_tests
-        continue-on-error: true
-        run: npm run test:e2e
-
-      - name: Stop application
-        run: kill $(cat server.pid) || true
-
-      - name: Aggregate results
-        run: npm run test:summary
+      - run: npm run test:php
 
       - uses: actions/upload-artifact@v4
         with:
-          name: test-artifacts
-          path: |
-            build/
-            coverage/
+          name: phpunit-coverage
+          path: build/coverage-phpunit*.xml
 
-      - name: Fail if tests failed
-        if: steps.wp_tests.outcome == 'failure' || steps.php_unit_tests.outcome == 'failure' || steps.jest_tests.outcome == 'failure' || steps.playwright_tests.outcome == 'failure'
-        run: exit 1
+  jest:
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: deps
+          path: .
+
+      - run: npm run test:js -- --coverage
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jest-coverage
+          path: coverage/lcov.info
+
+  cypress:
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: xdebug
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: deps
+          path: .
+
+      - uses: cypress-io/github-action@v6
+        with:
+          start: node scripts/spin-wp.js
+          command: npm run cypress:run
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cypress-junit
+          path: build/e2e/cypress.xml
+
+  codex-checks:
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: xdebug
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: deps
+          path: .
+
+      - run: npm run codex:checks
+
+  coverage-merge:
+    runs-on: ubuntu-latest
+    needs:
+      - phpunit
+      - jest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: phpunit-coverage
+          path: coverage
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: jest-coverage
+          path: coverage
+
+      - run: node scripts/merge-coverage.js
 
