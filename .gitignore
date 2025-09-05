@@ -21,6 +21,8 @@ composer-setup.php
 build/
 dist/
 release/
+!docs/release/
+!docs/release/**
 *.zip
 
 # Allow specific built assets
