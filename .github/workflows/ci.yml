@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.2']
+        php: ['8.4']
     steps:
       - uses: actions/checkout@v4
       - name: Setup PHP
@@ -42,7 +42,7 @@ jobs:
       - name: PHPStan
         run: vendor/bin/phpstan analyse --no-progress --error-format=sarif > build/phpstan.sarif
       - name: Psalm
-        run: vendor/bin/psalm --output-format=github --report=build/psalm.sarif
+        run: vendor/bin/psalm --output-format=compact --no-cache
       - name: PHPUnit
         if: ${{ hashFiles('**/phpunit.xml*') != '' }}
         run: vendor/bin/phpunit
@@ -50,10 +50,6 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: build/phpstan.sarif
-      - name: Upload Psalm report
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: build/psalm.sarif
 
   js:
     runs-on: ubuntu-latest
