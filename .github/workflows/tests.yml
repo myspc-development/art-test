@@ -34,8 +34,17 @@ jobs:
       - name: Jest tests
         run: npm run test:js || true
 
+      - name: Start application
+        run: |
+          npm start &
+          echo $! > server.pid
+          npx wait-on http://localhost:3000 --timeout 60000
+
       - name: Playwright tests
         run: npm run test:e2e || true
+
+      - name: Stop application
+        run: kill $(cat server.pid) || true
 
       - name: Aggregate results
         run: npm run test:summary
