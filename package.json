@@ -27,6 +27,7 @@
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
     "e2e:report": "playwright show-report build/e2e/html",
+    "codex:checks": "php codex/checks/widget-preview-guard.php && php codex/checks/rest-contracts.php && php codex/checks/migrations.php && php codex/checks/widgets-contracts.php",
     "ci:run-all": "bash scripts/ci/run-all-workflows.sh"
   },
   "dependencies": {
