@@ -27,6 +27,7 @@ const config: Config = {
     '<rootDir>/assets/js/components/__tests__/CommentThread.test.js',
     '<rootDir>/assets/js/components/__tests__/ReportDialog.test.js',
     '<rootDir>/assets/js/components/__tests__/WidgetSettingsForm.test.js',
+    '/assets/ts/.*\\.test\\.js$',
   ],
   collectCoverage: true,
   coverageDirectory: 'coverage',
