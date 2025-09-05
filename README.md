@@ -751,3 +751,20 @@ See NOTICE for licensing details of bundled libraries.
 ## Status
 
 ✅ Status: Completed (as of 2025-07-19)
+
+## Run Workflows Manually
+
+### From the GitHub UI
+- Actions → choose a workflow → “Run workflow” → pick a branch (ref)
+
+### From the CLI (gh)
+```bash
+gh workflow list
+gh workflow run ci.yml --ref main
+gh workflow run run-all.yml --ref main
+npm run ci:run-all # triggers a short list of workflows on current branch
+
+Run PHPUnit in CI with extra args
+# Example: filter a single test class in CI
+gh workflow run ci.yml --ref feature/branch -f phpunit_args="--filter LoginRedirectManagerTest"
+```

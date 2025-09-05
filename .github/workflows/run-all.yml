@@ -1,0 +1,28 @@
+name: Run All Workflows
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git ref to run'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  list:
+    name: List and suggest CLI trigger
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo instructions
+        run: |
+          echo "This workflow doesn’t fan-out (to avoid PAT requirements)."
+          echo "Use the gh CLI locally to dispatch each workflow:"
+          echo ""
+          echo "  gh workflow list"
+          echo "  gh workflow run CI --ref <branch>"
+          echo "  gh workflow run <other>.yml --ref <branch>"
+          echo ""
+          echo "See scripts/ci/run-all-workflows.sh for a helper."
