@@ -45,10 +45,19 @@ jobs:
         continue-on-error: true
         run: npm run test:js
 
+      - name: Start application
+        run: |
+          npm start &
+          echo $! > server.pid
+          npx wait-on http://localhost:3000 --timeout 60000
+
       - name: Playwright tests
         id: playwright_tests
         continue-on-error: true
         run: npm run test:e2e
+
+      - name: Stop application
+        run: kill $(cat server.pid) || true
 
       - name: Aggregate results
         run: npm run test:summary
