@@ -17,6 +17,11 @@ jobs:
         run: npx @wordpress/env start
       - name: Activate plugin
         run: npx @wordpress/env run php wp plugin activate artpulse-management
+      - name: Seed users
+        run: |
+          npx @wordpress/env run php wp user create member member@example.com --role=member --user_pass=password
+          npx @wordpress/env run php wp user create artist artist@example.com --role=artist --user_pass=password
+          npx @wordpress/env run php wp user create organization org@example.com --role=organization --user_pass=password
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:

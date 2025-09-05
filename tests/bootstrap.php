@@ -9,7 +9,7 @@ if (file_exists($autoload)) {
 require_once dirname(__DIR__) . '/vendor/antecedent/patchwork/Patchwork.php';
 
 // 2) Locate the WordPress PHPUnit bootstrap
-$wp_phpunit_dir = getenv('WP_PHPUNIT__DIR');
+$wp_phpunit_dir = getenv('WP_PHPUNIT__TESTS_DIR') ?: getenv('WP_PHPUNIT__DIR');
 
 if (!$wp_phpunit_dir) {
     // Prefer vendor-installed wp-phpunit

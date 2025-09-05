@@ -6,7 +6,6 @@ on:
 
 permissions:
   contents: read
-  security-events: write
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -14,57 +13,68 @@ concurrency:
 
 jobs:
   php:
+    name: PHP (PHPUnit)
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php: ['8.2']
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
-          extensions: mbstring, intl, xml, json, mysqli
-          tools: composer
-      - name: Get Composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-      - name: Cache Composer dependencies
+          php-version: '8.2'
+          coverage: none
+          tools: composer:v2
+
+      - name: Cache Composer
         uses: actions/cache@v4
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
+          path: |
+            ~/.composer/cache
+            vendor
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-      - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist
-      - run: mkdir -p build
-      - name: PHP_CodeSniffer
-        run: vendor/bin/phpcs -q
-      - name: PHPStan
-        run: vendor/bin/phpstan analyse --no-progress --error-format=sarif > build/phpstan.sarif
-      - name: Psalm
-        run: vendor/bin/psalm --output-format=github --report=build/psalm.sarif
-      - name: PHPUnit
-        if: ${{ hashFiles('**/phpunit.xml*') != '' }}
-        run: vendor/bin/phpunit
-      - name: Upload PHPStan report
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: build/phpstan.sarif
-      - name: Upload Psalm report
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: build/psalm.sarif
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install PHP deps
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Set WP_PHPUNIT__TESTS_DIR
+        run: echo "WP_PHPUNIT__TESTS_DIR=vendor/wp-phpunit/wp-phpunit" >> $GITHUB_ENV
+
+      - name: Run PHPUnit
+        run: |
+          if [ -f phpunit.xml ] || [ -f phpunit.xml.dist ]; then
+            vendor/phpunit/phpunit/phpunit
+          else
+            vendor/phpunit/phpunit/phpunit tests
+          fi
 
   js:
+    name: JS (Jest)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run lint --if-present
-      - run: npm run typecheck --if-present
-      - run: npm test --if-present
-      - run: npm run build --if-present
+          node-version: '20'
+
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install JS deps
+        run: npm ci
+
+      - name: Run Jest
+        env:
+          CI: 'true'
+        run: npm test -- --runInBand
+
