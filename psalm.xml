@@ -8,7 +8,6 @@
         <directory name="src" />
         <directory name="includes" />
         <directory name="widgets" />
-        <directory name="tests" />
         <ignoreFiles>
             <directory name="vendor" />
         </ignoreFiles>

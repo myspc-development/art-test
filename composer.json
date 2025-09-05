@@ -27,7 +27,9 @@
     "php-stubs/wordpress-stubs": "^6.8",
     "php-stubs/wordpress-tests-stubs": "^6.8",
     "antecedent/patchwork": "^2.1",
-    "vimeo/psalm": "^5"
+    "vimeo/psalm": "^6",
+    "humanmade/psalm-plugin-wordpress": "^3.1",
+    "psalm/plugin-phpunit": "^0.19"
   },
   "require": {
     "yahnis-elsts/plugin-update-checker": "^5.6",
