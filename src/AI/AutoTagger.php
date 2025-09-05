@@ -118,22 +118,31 @@ class AutoTagger {
 	 * Basic language detection.
 	 */
 	private static function detect_language( string $text ): string {
-		if ( preg_match( '/[áéíóúñ]/i', $text ) ) {
-			return 'es';
-		}
-		if ( preg_match( '/[а-яё]/iu', $text ) ) {
-			return 'ru';
-		}
-		if ( preg_match( '/[àâçéèêëîïôûùüÿœ]/i', $text ) ) {
-			return 'fr';
-		}
-		if ( preg_match( '/[äöüß]/i', $text ) ) {
-			return 'de';
-		}
-		if ( preg_match( '/[\x{4e00}-\x{9fff}]/u', $text ) ) {
-			return 'zh';
-		}
-		return 'en';
+            if (
+                    preg_match( '/[áíóúñ]/iu', $text ) ||
+                    preg_match( '/\b(el|la|es|una)\b/iu', $text )
+            ) {
+                    return 'es';
+            }
+            if ( preg_match( '/[а-яё]/iu', $text ) ) {
+                    return 'ru';
+            }
+            if (
+                    preg_match( '/[àâçéèêëîïôûùÿœ]/iu', $text ) ||
+                    preg_match( '/\b(ceci|est|une)\b/iu', $text )
+            ) {
+                    return 'fr';
+            }
+            if (
+                    preg_match( '/[äöüß]/iu', $text ) ||
+                    preg_match( '/\b(dies|ist|ein)\b/iu', $text )
+            ) {
+                    return 'de';
+            }
+            if ( preg_match( '/[\x{4e00}-\x{9fff}]/u', $text ) ) {
+                    return 'zh';
+            }
+            return 'en';
 	}
 
 	/**
