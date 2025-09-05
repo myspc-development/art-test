@@ -26,13 +26,17 @@
     "phpstan/phpstan-phpunit": "^1.3",
     "php-stubs/wordpress-stubs": "^6.8",
     "php-stubs/wordpress-tests-stubs": "^6.8",
-    "antecedent/patchwork": "^2.1"
+    "antecedent/patchwork": "^2.1",
+    "vimeo/psalm": "^5"
   },
   "require": {
     "yahnis-elsts/plugin-update-checker": "^5.6",
     "erusev/parsedown": "^1.7"
   },
   "scripts": {
+    "lint:php": "phpcs",
+    "analyse": "phpstan analyse",
+    "psalm": "psalm",
     "test": [
       "@test:php:local",
       "@test:unit",
@@ -50,7 +54,8 @@
       "@test:rest"
     ],
     "test:php:wp": "phpunit -c phpunit.wp.xml.dist --log-junit build/junit-phpunit.xml --coverage-clover build/coverage-phpunit.xml",
-    "test:php:unit": "phpunit -c phpunit.unit.xml.dist --log-junit build/junit-phpunit-unit.xml --coverage-clover build/coverage-phpunit-unit.xml"
+    "test:php:unit": "phpunit -c phpunit.unit.xml.dist --log-junit build/junit-phpunit-unit.xml --coverage-clover build/coverage-phpunit-unit.xml",
+    "test:phpunit": "phpunit"
   },
   "config": {
     "allow-plugins": {

@@ -6,6 +6,8 @@
   "scripts": {
     "build": "echo 'no-op build' && exit 0",
     "dev": "rollup -c -w",
+    "lint": "eslint .",
+    "typecheck": "tsc -p .",
     "test": "node tools/validate-widgets.js && node scripts/run-phpunit.js",
     "test:rest": "vendor/bin/phpunit -c phpunit.wp.xml.dist --group restapi --log-junit build/junit-phpunit-unit.xml --coverage-clover build/coverage-phpunit-unit.xml",
     "test:frontend": "vendor/bin/phpunit -c phpunit.wp.xml.dist --testsuite Frontend --log-junit build/junit-phpunit-unit.xml --coverage-clover build/coverage-phpunit-unit.xml || vendor/bin/phpunit -c phpunit.wp.xml.dist tests/Frontend --log-junit build/junit-phpunit-unit.xml --coverage-clover build/coverage-phpunit-unit.xml",
