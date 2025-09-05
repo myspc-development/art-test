@@ -20,11 +20,23 @@ jobs:
           php-version: '8.2'
           coverage: none
 
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.composer/cache
+            vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+
       - run: composer install --no-interaction --no-progress
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
 
       - run: npm ci || npm install
 
