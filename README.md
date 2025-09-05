@@ -653,10 +653,18 @@ Place a file under `your-theme/widgets/` with the same name as the plugin templa
 
 ### Running PHPUnit
 
-See the [Development Setup](docs/development-setup.md) guide for preparing the WordPress test library. Once configured, run:
+See the [Development Setup](docs/development-setup.md) guide for preparing the WordPress test library. To run the PHP test suite
+serially use:
 
 ```bash
-npm run test:php
+npm test
+```
+
+Additional CLI flags passed after `npm test` are ignored. To target specific tests or pass custom PHPUnit options, invoke PHPUnit
+directly:
+
+```bash
+vendor/bin/phpunit -c phpunit.wp.xml.dist --filter MyTest
 ```
 
 ## Widget Doctor
