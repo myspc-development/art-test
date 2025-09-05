@@ -3,6 +3,16 @@ name: CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git ref to run against'
+        required: false
+        default: ''
+      phpunit_args:
+        description: 'Extra PHPUnit args (e.g. --filter MyTest)'
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -18,6 +28,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -44,10 +56,11 @@ jobs:
 
       - name: Run PHPUnit
         run: |
+          ARGS="${{ github.event.inputs.phpunit_args }}"
           if [ -f phpunit.xml ] || [ -f phpunit.xml.dist ]; then
-            vendor/phpunit/phpunit/phpunit
+            vendor/phpunit/phpunit/phpunit $ARGS
           else
-            vendor/phpunit/phpunit/phpunit tests
+            vendor/phpunit/phpunit/phpunit tests $ARGS
           fi
 
   js:
@@ -56,6 +69,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
 
       - name: Setup Node
         uses: actions/setup-node@v4

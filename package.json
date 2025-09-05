@@ -26,7 +26,8 @@
     "ci": "bin/ap all",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
-    "e2e:report": "playwright show-report build/e2e/html"
+    "e2e:report": "playwright show-report build/e2e/html",
+    "ci:run-all": "bash scripts/ci/run-all-workflows.sh"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",

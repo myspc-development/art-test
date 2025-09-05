@@ -5,6 +5,12 @@ on:
   pull_request:
   schedule:
     - cron: '0 0 * * 0'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git ref to run against'
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -15,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
       - uses: github/codeql-action/init@v3
         with:
           languages: javascript

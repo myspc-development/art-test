@@ -10,12 +10,20 @@ on:
       - 'docs/**'
       - '.github/workflows/docs-lint.yml'
       - 'scripts/docs_validate.py'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git ref to run against'
+        required: false
+        default: ''
 
 jobs:
   docs-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
       - name: Set up Python
         uses: actions/setup-python@v4
         with:

@@ -3,6 +3,12 @@ name: tests
 on:
   push:
   pull_request:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git ref to run against'
+        required: false
+        default: ''
 
 jobs:
   test:
@@ -14,6 +20,8 @@ jobs:
       DB_HOST: 127.0.0.1
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
 
       - uses: shivammathur/setup-php@v2
         with:
