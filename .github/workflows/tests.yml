@@ -7,6 +7,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      DB_NAME: wordpress_test
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_HOST: 127.0.0.1
     steps:
       - uses: actions/checkout@v4
 
