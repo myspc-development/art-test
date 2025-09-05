@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/bootstrap.php" colors="true">
+<phpunit bootstrap="tests/bootstrap.php" colors="true" failOnLowCoverage="true" minCoverage="80">
   <php>
     <env name="WP_PHPUNIT__DIR" value="vendor/wp-phpunit/wp-phpunit"/>
   </php>
+
+  <coverage>
+    <report>
+      <clover outputFile="build/coverage-phpunit.xml"/>
+    </report>
+  </coverage>
+
   <testsuites>
     <testsuite name="AI">
       <directory suffix="Test.php">tests/AI</directory>
