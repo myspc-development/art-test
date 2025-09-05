@@ -34,6 +34,7 @@ Ensure the project is configured as described in [../development-setup.md](../de
 - Verify features in multiple browsers on desktop and mobile.
 - Confirm keyboard navigation and screen reader labels across the dashboard.
 - Perform user acceptance testing for major workflows such as creating events and managing RSVPs.
+- Follow [frontend-dashboard-testing.md](frontend-dashboard-testing.md) for role-specific dashboard verification.
 
 ## Continuous Integration
 
