@@ -25,5 +25,5 @@ jobs:
           ref: ${{ github.event.inputs.ref || github.ref }}
       - uses: github/codeql-action/init@v3
         with:
-          languages: javascript
+          languages: javascript,php
       - uses: github/codeql-action/analyze@v3
