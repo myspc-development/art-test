@@ -12,16 +12,16 @@ final class IdempotencyTest extends WP_UnitTestCase {
 			$rows = $wpdb->get_results("SELECT * FROM $t", ARRAY_A);
 			$hashes[$t] = md5(json_encode($rows));
 		}
-		return $hashes;
-	}
+                return $hashes;
+        }
 
-	public function test_add_missing_indexes_is_idempotent(): void {
-		run_migration('2025_08_24_add_missing_indexes');
-		$first = $this->snapshot_db();
-		run_migration('2025_08_24_add_missing_indexes');
-		$second = $this->snapshot_db();
-		$this->assertSame($first, $second);
-	}
+        public function test_unify_webhook_logs_is_idempotent(): void {
+                run_migration('2025_08_23_unify_webhook_logs');
+                $first = $this->snapshot_db();
+                run_migration('2025_08_23_unify_webhook_logs');
+                $second = $this->snapshot_db();
+                $this->assertSame($first, $second);
+        }
 }
 
 function run_migration(string $migration): void {
