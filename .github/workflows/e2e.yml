@@ -19,7 +19,7 @@ jobs:
           ref: ${{ github.event.inputs.ref || github.ref }}
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
       - run: npm ci
       - name: Start WordPress
         run: npx @wordpress/env start
