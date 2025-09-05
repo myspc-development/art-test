@@ -29,18 +29,26 @@ jobs:
       - run: npm ci || npm install
 
       - name: WordPress tests
-        run: composer run test:php:wp || true
+        id: wp_tests
+        continue-on-error: true
+        run: composer run test:php:wp
         env:
           WP_PHPUNIT__DIR: vendor/wp-phpunit/wp-phpunit
 
       - name: PHP unit tests
-        run: composer run test:php:unit || true
+        id: php_unit_tests
+        continue-on-error: true
+        run: composer run test:php:unit
 
       - name: Jest tests
-        run: npm run test:js || true
+        id: jest_tests
+        continue-on-error: true
+        run: npm run test:js
 
       - name: Playwright tests
-        run: npm run test:e2e || true
+        id: playwright_tests
+        continue-on-error: true
+        run: npm run test:e2e
 
       - name: Aggregate results
         run: npm run test:summary
@@ -51,4 +59,8 @@ jobs:
           path: |
             build/
             coverage/
+
+      - name: Fail if tests failed
+        if: steps.wp_tests.outcome == 'failure' || steps.php_unit_tests.outcome == 'failure' || steps.jest_tests.outcome == 'failure' || steps.playwright_tests.outcome == 'failure'
+        run: exit 1
 
