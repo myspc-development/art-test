@@ -1,7 +1,6 @@
 import type { Config } from 'jest';
 
 const config: Config = {
-  preset: 'ts-jest',
   testEnvironment: 'jsdom',
   roots: [
     '<rootDir>/assets/ts',
@@ -9,7 +8,7 @@ const config: Config = {
     '<rootDir>/src/js',
     '<rootDir>/src/components',
   ],
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'mjs', 'json'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
@@ -20,9 +19,11 @@ const config: Config = {
     '^@/components/ui/(.*)$': '<rootDir>/tests/js/__mocks__/shadcn-ui.tsx'
   },
   transform: {
-    '^.+\\.(ts|tsx|js|jsx)$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }],
+    '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: 'tsconfig.jest.json', isolatedModules: true }],
+    '^.+\\.[cm]?jsx?$': 'babel-jest',
   },
   testRegex: '.*\\.test\\.(ts|tsx|js|jsx)$',
+  transformIgnorePatterns: ['/node_modules/'],
   testPathIgnorePatterns: [
     '<rootDir>/assets/js/components/__tests__/CommentThread.test.js',
     '<rootDir>/assets/js/components/__tests__/ReportDialog.test.js',
