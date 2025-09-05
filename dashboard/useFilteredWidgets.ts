@@ -30,7 +30,12 @@ export default function useFilteredWidgets(widgets: WidgetDef[], currentUser: Cu
       headers: { 'X-WP-Nonce': nonce },
       signal: controller.signal,
     })
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) {
+          throw new Error(`Failed to load dashboard configuration: ${r.status}`);
+        }
+        return r.json();
+      })
       .then(data => {
         setWidgetRoles(data.widget_roles || {});
         setCaps(data.capabilities || {});
@@ -40,7 +45,7 @@ export default function useFilteredWidgets(widgets: WidgetDef[], currentUser: Cu
       .catch(err => {
         if (err.name !== 'AbortError') {
           console.error('Failed to load dashboard configuration', err);
-          setError('Failed to load dashboard configuration.');
+          setError(err.message || 'Failed to load dashboard configuration.');
         }
       })
       .finally(() => setLoading(false));
