@@ -1,8 +1,17 @@
+name: main
+
+on:
+  push:
+  pull_request:
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - run: npm install
-      - run: npm run lint || true
-      - run: ./vendor/bin/phpunit || true
+      - run: npm run lint
+      - run: ./vendor/bin/phpunit
