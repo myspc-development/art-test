@@ -129,7 +129,7 @@ class LoginShortcode {
                        'remember'      => $remember,
                );
 
-               $user = wp_signon( $creds, false );
+               $user = wp_signon( $creds );
 
                if ( is_wp_error( $user ) ) {
                        set_transient( $key, $attempts + 1, MINUTE_IN_SECONDS * $lockout_minutes );
