@@ -28,13 +28,17 @@ test('returns widgets matching any user role', async () => {
     { id: 'shared', roles: ['member', 'artist'] },
   ];
   const { result } = renderHook(() => useFilteredWidgets(widgets, { roles: ['member', 'artist'] }));
-  expect(result.current.widgets.map(w => w.id)).toEqual(['alpha', 'beta', 'shared']);
+  await waitFor(() =>
+    expect(result.current.widgets.map(w => w.id)).toEqual(['alpha', 'beta', 'shared'])
+  );
 });
 
-test('includes widgets with no allowed roles for any user', () => {
+test('includes widgets with no allowed roles for any user', async () => {
   const widgets = [{ id: 'alpha' }];
   const { result } = renderHook(() => useFilteredWidgets(widgets, { roles: ['member'] }));
-  expect(result.current.widgets.map(w => w.id)).toEqual(['alpha']);
+  await waitFor(() =>
+    expect(result.current.widgets.map(w => w.id)).toEqual(['alpha'])
+  );
 });
 
 test('includes REST-only widgets as stubs', async () => {
