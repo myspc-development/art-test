@@ -1,8 +1,8 @@
-import { beforeEach, expect, test, afterEach } from '@jest/globals';
+import { beforeEach, expect, test, afterEach, describe } from '@jest/globals';
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
 
-describe('ap-auth', () => {
+describe('ap-auth login', () => {
   let originalLocation;
   beforeEach(async () => {
     jest.resetModules();
@@ -67,6 +67,68 @@ describe('ap-auth', () => {
     document.getElementById('ap-login-form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
     await flushPromises();
     expect(window.location.href).toBe('/next');
+  });
+
+  afterEach(() => {
+    window.location = originalLocation;
+  });
+});
+
+describe('ap-auth register', () => {
+  let originalLocation;
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = `
+      <div id="ap-register-message"></div>
+      <div id="ap-register-success"></div>
+      <form id="ap-register-form">
+        <input id="ap_reg_display_name" name="display_name" required />
+        <input id="ap_reg_bio" name="description" required />
+        <input id="ap_reg_pass" name="password" required />
+        <input id="ap_reg_confirm" name="password_confirm" required />
+        <button type="submit">Register</button>
+      </form>
+    `;
+    global.APLogin = { ajaxUrl: '/register', nonce: '123', dashboardUrl: '/dash' };
+    global.fetch = jest.fn();
+    await import('../ap-auth.js');
+    document.dispatchEvent(new Event('DOMContentLoaded'));
+    originalLocation = window.location;
+    delete window.location;
+    window.location = { href: 'http://example.com' };
+  });
+
+  test('renders server error and focuses first invalid field', async () => {
+    fetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({ success: false, data: { message: 'Invalid', invalid: ['display_name'] } }),
+    });
+    document.getElementById('ap-register-form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    await flushPromises();
+    expect(document.getElementById('ap-register-message').textContent).toBe('Invalid');
+    expect(document.activeElement).toBe(document.getElementById('ap_reg_display_name'));
+    expect(document.getElementById('ap-register-success').textContent).toBe('');
+  });
+
+  test('focuses first invalid field when server provides no invalid list', async () => {
+    fetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({ success: false, data: { message: 'Invalid' } }),
+    });
+    document.getElementById('ap-register-form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    await flushPromises();
+    expect(document.activeElement).toBe(document.getElementById('ap_reg_display_name'));
+  });
+
+  test('redirects to dashboard url on success', async () => {
+    fetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({ success: true, data: { message: 'Registered' } }),
+    });
+    document.getElementById('ap-register-form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    await flushPromises();
+    expect(document.getElementById('ap-register-success').textContent).toBe('Registered');
+    expect(window.location.href).toBe('/dash');
   });
 
   afterEach(() => {
