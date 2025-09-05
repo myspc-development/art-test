@@ -28,6 +28,7 @@ test('returns widgets matching any user role', async () => {
     { id: 'shared', roles: ['member', 'artist'] },
   ];
   const { result } = renderHook(() => useFilteredWidgets(widgets, { roles: ['member', 'artist'] }));
+  await waitFor(() => expect(result.current.loading).toBe(false));
   await waitFor(() =>
     expect(result.current.widgets.map(w => w.id)).toEqual(['alpha', 'beta', 'shared'])
   );
@@ -36,6 +37,7 @@ test('returns widgets matching any user role', async () => {
 test('includes widgets with no allowed roles for any user', async () => {
   const widgets = [{ id: 'alpha' }];
   const { result } = renderHook(() => useFilteredWidgets(widgets, { roles: ['member'] }));
+  await waitFor(() => expect(result.current.loading).toBe(false));
   await waitFor(() =>
     expect(result.current.widgets.map(w => w.id)).toEqual(['alpha'])
   );
@@ -49,7 +51,9 @@ test('includes REST-only widgets as stubs', async () => {
   });
   const { result } = renderHook(() => useFilteredWidgets([{ id: 'alpha', roles: ['member'] }], { roles: ['member'] }));
   await waitFor(() => expect(result.current.widgets.some(w => w.id === 'gamma')).toBe(true));
-  expect(result.current.widgets.find(w => w.id === 'gamma')?.restOnly).toBe(true);
+  await waitFor(() =>
+    expect(result.current.widgets.find(w => w.id === 'gamma')?.restOnly).toBe(true)
+  );
 });
 
 test('includes REST-only widgets with no allowed roles for any user', async () => {
