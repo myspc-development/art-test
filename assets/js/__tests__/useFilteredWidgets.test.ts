@@ -106,6 +106,28 @@ test('reports loading state', async () => {
   await waitFor(() => expect(result.current.loading).toBe(false));
 });
 
+test('sets error when fetch rejects and keeps widgets unchanged', async () => {
+  mockFetch.mockRejectedValueOnce(new Error('Network error'));
+  const widgets = [{ id: 'alpha', roles: ['member'] }];
+  const { result } = renderHook(() =>
+    useFilteredWidgets(widgets, { roles: ['member'] })
+  );
+  await waitFor(() => expect(result.current.loading).toBe(false));
+  await waitFor(() => expect(result.current.error).not.toBeNull());
+  expect(result.current.widgets.map(w => w.id)).toEqual(['alpha']);
+});
+
+test('sets error when fetch returns non-ok response', async () => {
+  mockFetch.mockResolvedValueOnce({ ok: false, status: 500 });
+  const widgets = [{ id: 'alpha', roles: ['member'] }];
+  const { result } = renderHook(() =>
+    useFilteredWidgets(widgets, { roles: ['member'] })
+  );
+  await waitFor(() => expect(result.current.loading).toBe(false));
+  await waitFor(() => expect(result.current.error).toMatch(/500/));
+  expect(result.current.widgets.map(w => w.id)).toEqual(['alpha']);
+});
+
 test('aborts fetch on unmount', () => {
   let aborted = false;
   mockFetch.mockImplementationOnce((url: any, { signal }: any) => {
