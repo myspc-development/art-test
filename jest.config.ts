@@ -10,7 +10,7 @@ const config: Config = {
     '<rootDir>/src/components',
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  setupFilesAfterEnv: ['<rootDir>/tests/js/setupTests.ts'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
