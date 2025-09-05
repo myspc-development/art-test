@@ -35,9 +35,9 @@ class AdminAccessManager {
 	 * Redirect non-admin users away from wp-admin.
 	 */
 	public static function maybe_redirect_admin(): void {
-		if ( isset( $_GET['page'] ) && $_GET['page'] === 'dashboard-role' ) {
-			return;
-		}
+               if ( isset( $_GET['page'] ) && sanitize_key( $_GET['page'] ) === 'dashboard-role' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Sanitized via sanitize_key().
+                       return;
+               }
                if (
                        wp_doing_ajax() ||
                        ! is_user_logged_in() ||
