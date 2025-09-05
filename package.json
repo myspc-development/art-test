@@ -15,7 +15,7 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "lint:test-groups": "node tools/validate-test-groups.js",
-    "test:php": "npm run lint:test-groups && vendor/bin/phpunit -c phpunit.unit.xml.dist --log-junit build/junit-phpunit-unit.xml --coverage-clover build/coverage-phpunit-unit.xml && vendor/bin/phpunit -c phpunit.wp.xml.dist --log-junit build/junit-phpunit-unit.xml --coverage-clover build/coverage-phpunit-unit.xml",
+    "test:php": "npm run lint:test-groups && vendor/bin/phpunit -c phpunit.unit.xml.dist --log-junit build/junit-phpunit-unit.xml --coverage-clover build/coverage-phpunit.xml && vendor/bin/phpunit -c phpunit.wp.xml.dist --log-junit build/junit-phpunit-unit.xml --coverage-clover build/coverage-phpunit.xml",
     "test:php:up": "docker compose -f docker-compose.tests.yml up -d",
     "test:php:down": "docker compose -f docker-compose.tests.yml down -v",
     "test:php:local": "npm run test:php:up && composer test:php:local; npm run test:php:down",
