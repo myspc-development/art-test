@@ -48,8 +48,9 @@ class GrantAssistantTest extends TestCase {
                 $req->set_param( 'tone', 'grant' );
                 $req->set_param( 'source', 'Community arts event.' );
 
-                $res = GrantAssistant::generate( $req );
-                $this->assertStringContainsString( 'Community arts event.', $res['draft'] );
-                $this->assertStringContainsString( '<p>', $res['output'] );
+               $res  = GrantAssistant::generate( $req );
+               $data = $res->get_data();
+               $this->assertStringContainsString( 'Community arts event.', $data['draft'] );
+               $this->assertStringContainsString( '<p>', $data['output'] );
         }
 }
