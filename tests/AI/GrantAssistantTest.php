@@ -30,6 +30,9 @@ if ( ! function_exists( __NAMESPACE__ . '\add_action' ) ) {
 }
 
 use PHPUnit\Framework\TestCase;
+use ArtPulse\Tests\Rest\RequestStub as TestRequest;
+
+require_once __DIR__ . '/../Rest/RequestStub.php';
 
 /**
 
@@ -37,27 +40,16 @@ use PHPUnit\Framework\TestCase;
 
  */
 
-class DummyRequest {
-
-	private array $p;
-	public function __construct( array $p ) {
-		$this->p = $p; }
-	public function get_param( $k ) {
-		return $this->p[ $k ] ?? null; }
-}
-
 class GrantAssistantTest extends TestCase {
 
-	public function test_generate_returns_prompted_text(): void {
-		$req = new DummyRequest(
-			array(
-				'type'   => 'project_summary',
-				'tone'   => 'grant',
-				'source' => 'Community arts event.',
-			)
-		);
-		$res = GrantAssistant::generate( $req );
-		$this->assertStringContainsString( 'Community arts event.', $res['draft'] );
-		$this->assertStringContainsString( '<p>', $res['output'] );
-	}
+        public function test_generate_returns_prompted_text(): void {
+                $req = new TestRequest( 'POST', '/' );
+                $req->set_param( 'type', 'project_summary' );
+                $req->set_param( 'tone', 'grant' );
+                $req->set_param( 'source', 'Community arts event.' );
+
+                $res = GrantAssistant::generate( $req );
+                $this->assertStringContainsString( 'Community arts event.', $res['draft'] );
+                $this->assertStringContainsString( '<p>', $res['output'] );
+        }
 }
