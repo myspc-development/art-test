@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="18" failures="0" errors="0" time="4.316">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2025-09-05T17:25:58" time="2.946" tests="8">
+    <testcase classname=" returns widgets matching any user role" name=" returns widgets matching any user role" time="0.078">
+    </testcase>
+    <testcase classname=" includes widgets with no allowed roles for any user" name=" includes widgets with no allowed roles for any user" time="0.058">
+    </testcase>
+    <testcase classname=" includes REST-only widgets as stubs" name=" includes REST-only widgets as stubs" time="0.057">
+    </testcase>
+    <testcase classname=" includes REST-only widgets with no allowed roles for any user" name=" includes REST-only widgets with no allowed roles for any user" time="0.053">
+    </testcase>
+    <testcase classname=" omits widgets when preview role lacks capability" name=" omits widgets when preview role lacks capability" time="0.055">
+    </testcase>
+    <testcase classname=" omits widgets when preview role is excluded" name=" omits widgets when preview role is excluded" time="0.057">
+    </testcase>
+    <testcase classname=" reports loading state" name=" reports loading state" time="0.059">
+    </testcase>
+    <testcase classname=" aborts fetch on unmount" name=" aborts fetch on unmount" time="0.007">
+    </testcase>
+  </testsuite>
+  <testsuite name="RoleDashboard" errors="0" failures="0" skipped="0" timestamp="2025-09-05T17:26:01" time="0.299" tests="3">
+    <testcase classname="RoleDashboard renders title and toggles customize" name="RoleDashboard renders title and toggles customize" time="0.068">
+    </testcase>
+    <testcase classname="RoleDashboard See what&apos;s new link opens modal" name="RoleDashboard See what&apos;s new link opens modal" time="0.058">
+    </testcase>
+    <testcase classname="RoleDashboard Help button opens sheet" name="RoleDashboard Help button opens sheet" time="0.032">
+    </testcase>
+  </testsuite>
+  <testsuite name="ReactForm smoke test" errors="0" failures="0" skipped="0" timestamp="2025-09-05T17:26:01" time="0.156" tests="1">
+    <testcase classname="ReactForm smoke test posts form data and renders server response" name="ReactForm smoke test posts form data and renders server response" time="0.051">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2025-09-05T17:26:02" time="0.164" tests="2">
+    <testcase classname=" submits form and shows status with custom type" name=" submits form and shows status with custom type" time="0.015">
+    </testcase>
+    <testcase classname=" shows error message on failed submission" name=" shows error message on failed submission" time="0.018">
+    </testcase>
+  </testsuite>
+  <testsuite name="ap-auth" errors="0" failures="0" skipped="0" timestamp="2025-09-05T17:26:02" time="0.26" tests="4">
+    <testcase classname="ap-auth includes remember in payload when checked" name="ap-auth includes remember in payload when checked" time="0.023">
+    </testcase>
+    <testcase classname="ap-auth renders server error and focuses first invalid field" name="ap-auth renders server error and focuses first invalid field" time="0.012">
+    </testcase>
+    <testcase classname="ap-auth focuses first invalid field when server provides no invalid list" name="ap-auth focuses first invalid field when server provides no invalid list" time="0.007">
+    </testcase>
+    <testcase classname="ap-auth redirects to dashboard url on success" name="ap-auth redirects to dashboard url on success" time="0.006">
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -3,7 +3,7 @@
         'name' => 'yourorg/artpulse',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '0850a7eb10941633cdbc8326c9693ccc09157c76',
+        'reference' => '019fefc4f35051cc52f3eeb496000000b8922bac',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -928,7 +928,7 @@
         'yourorg/artpulse' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '0850a7eb10941633cdbc8326c9693ccc09157c76',
+            'reference' => '019fefc4f35051cc52f3eeb496000000b8922bac',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
