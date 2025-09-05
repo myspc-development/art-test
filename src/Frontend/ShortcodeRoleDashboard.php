@@ -63,8 +63,8 @@ class ShortcodeRoleDashboard {
 		$u = wp_get_current_user();
 		return array(
 			'user'            => array(
-				'id'          => (int) $u->ID,
-				'displayName' => (string) $u->display_name,
+                                'id'          => (int) $u->ID,
+                                'displayName' => sanitize_text_field( (string) $u->display_name ),
 			),
 			'role'            => $role,
 			'restBase'        => esc_url_raw( rest_url( \defined( 'ARTPULSE_API_NAMESPACE' ) ? \ARTPULSE_API_NAMESPACE : 'artpulse/v1' ) ),
