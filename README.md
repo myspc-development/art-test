@@ -1,6 +1,8 @@
 # ArtPulse Management Plugin
 
-[![CI](https://github.com/example/art-test/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/example/art-test/actions/workflows/tests.yml)
+[![CI](https://github.com/myspc-development/art-test/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/myspc-development/art-test/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/myspc-development/art-test/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/myspc-development/art-test/actions/workflows/codeql.yml)
+[![Code scanning](https://github.com/myspc-development/art-test/security/code-scanning)](https://github.com/myspc-development/art-test/security/code-scanning)
 [![Coverage](https://img.shields.io/codecov/c/github/example/art-test?label=coverage)](https://codecov.io/gh/example/art-test)
 
 For end‑user instructions see the [User Guide](docs/guides/user/README.md).
@@ -18,6 +20,22 @@ Site administrators should consult the [Admin Guide](docs/guides/admin/README.md
 7. `bin/test-rest-smoke`
 
 > Code coverage requires the [PCOV](https://github.com/krakjoe/pcov) extension or Xdebug 3 with `XDEBUG_MODE=coverage`.
+
+## Getting started with CI
+
+Run the same checks locally:
+
+```
+composer install
+npm ci
+composer lint:php
+composer analyse
+composer psalm
+npm run lint
+npm run typecheck
+npm test
+npm run build
+```
 
 ## Building for Release
 
