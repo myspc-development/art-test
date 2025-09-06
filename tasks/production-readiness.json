@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "generated_at": "2025-09-06T10:02:45Z",
+    "commit": "4377d8d868fe1449ccb63f94b6d65754fb9cd405"
+  },
+  "tasks": [
+    {"id":"AUTH-001","area":"auth","title":"Harden invalid login UX","why":"poor feedback","est":"2h","prio":"P3","accept":["E2E invalid login asserts message"],"owner":"codex"},
+    {"id":"AUTH-002","area":"auth","title":"Map WP roles to plugin roles","why":"redirects may misroute","est":"4h","prio":"P2","accept":["login redirects to correct dashboard"],"owner":"codex"},
+    {"id":"DASH-001","area":"dashboards","title":"Fix REST stub merge for widget_roles=[]","why":"restOnly missing","est":"3h","prio":"P1","accept":["unit test passes","member sees gamma"],"owner":"codex"},
+    {"id":"DASH-002","area":"dashboards","title":"Expand dashboard-config schema","why":"schema incomplete","est":"3h","prio":"P1","accept":["ajv passes with new fields"],"owner":"codex"},
+    {"id":"DASH-003","area":"dashboards","title":"Add RoleDashboard drag branch tests","why":"raise coverage","est":"4h","prio":"P1","accept":["coverage RoleDashboard branches>=70"],"owner":"codex"},
+    {"id":"DASH-004","area":"dashboards","title":"Test UpcomingEvents empty/error states","why":"edge cases uncovered","est":"2h","prio":"P2","accept":["widget renders empty text","error handled"],"owner":"codex"},
+    {"id":"CONTENT-001","area":"content","title":"Smoke test artist-events endpoint","why":"ensure events readable","est":"2h","prio":"P1","accept":["curl returns 200 with array"],"owner":"codex"},
+    {"id":"CONTENT-002","area":"content","title":"Add news listing REST check","why":"news endpoints untested","est":"2h","prio":"P2","accept":["news endpoint returns items or empty"],"owner":"codex"},
+    {"id":"CONTENT-003","area":"content","title":"Document gallery endpoints","why":"unclear coverage","est":"1h","prio":"P3","accept":["galleries endpoints listed"],"owner":"codex"},
+    {"id":"DX-001","area":"dx","title":"Resolve ESLint prop-type errors","why":"289 lint errors","est":"6h","prio":"P1","accept":["npm run lint:js exits 0"],"owner":"codex"},
+    {"id":"DX-002","area":"dx","title":"Fix TypeScript type errors","why":"tsc fails","est":"4h","prio":"P1","accept":["npm run typecheck exits 0"],"owner":"codex"},
+    {"id":"TEST-001","area":"testing","title":"Add tests for ReactForm","why":"0% coverage","est":"3h","prio":"P2","accept":["ReactForm coverage >70%"],"owner":"codex"},
+    {"id":"TEST-002","area":"testing","title":"Stabilize coverage thresholds","why":"global 0% bug","est":"2h","prio":"P1","accept":["jest run passes thresholds"],"owner":"codex"},
+    {"id":"A11Y-001","area":"a11y","title":"Add axe tests for dashboard","why":"no automated a11y","est":"3h","prio":"P2","accept":["axe report 0 serious"],"owner":"codex"},
+    {"id":"PERF-001","area":"perf","title":"Add Lighthouse budget","why":"no perf guard","est":"3h","prio":"P2","accept":["dashboard perf >=85"],"owner":"codex"},
+    {"id":"PACK-001","area":"packaging","title":"Build plugin zip in CI","why":"distribution missing","est":"2h","prio":"P2","accept":["artifact plugin.zip generated"],"owner":"codex"},
+    {"id":"CI-001","area":"ci","title":"Add bundlesize workflow","why":"bundle regression risk","est":"1h","prio":"P2","accept":["bundlesize CI passes"],"owner":"codex"},
+    {"id":"CI-002","area":"ci","title":"Integrate Lighthouse in CI","why":"perf visibility","est":"2h","prio":"P3","accept":["dashboard-lighthouse.yml runs"],"owner":"codex"}
+  ]
+}
