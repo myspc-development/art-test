@@ -40,7 +40,7 @@ class DashboardRenderer {
 		$widget    = $opts['gate_caps'] ? DashboardWidgetRegistry::get_widget( $widget_id, $user_id ) : DashboardWidgetRegistry::get( $widget_id );
 
 		if ( ! $widget ) {
-                        ap_debug_log( "\xF0\x9F\x9A\xAB Widget '{$widget_id}' not found or hidden." );
+						ap_debug_log( "\xF0\x9F\x9A\xAB Widget '{$widget_id}' not found or hidden." );
 			AuditBus::on_rendered( $widget_id, $role, 0, false, 'missing' );
 			return '';
 		}
@@ -68,7 +68,7 @@ class DashboardRenderer {
 		}
 
 		if ( $status !== 'active' && $opts['gate_flags'] && ! current_user_can( 'manage_options' ) ) {
-                        ap_debug_log( "\xF0\x9F\x9A\xAB Widget '{$widget_id}' inactive." );
+						ap_debug_log( "\xF0\x9F\x9A\xAB Widget '{$widget_id}' inactive." );
 			AuditBus::on_rendered( $widget_id, $role, 0, false, 'inactive' );
 			return '';
 		}
@@ -83,7 +83,7 @@ class DashboardRenderer {
 			}
 
 			if ( $allowed_roles && ! in_array( $role, $allowed_roles, true ) ) {
-                                ap_debug_log( "\xF0\x9F\x9A\xAB Widget '{$widget_id}' not allowed for role '{$role}'." );
+								ap_debug_log( "\xF0\x9F\x9A\xAB Widget '{$widget_id}' not allowed for role '{$role}'." );
 				AuditBus::on_rendered( $widget_id, $role, 0, false, 'forbidden' );
 				return '';
 			}
@@ -121,12 +121,12 @@ class DashboardRenderer {
 			} else {
 				$ok     = false;
 				$reason = 'no-callback';
-                                ap_debug_log( "\xF0\x9F\x9A\xAB Invalid callback for widget '{$widget_id}'." );
+								ap_debug_log( "\xF0\x9F\x9A\xAB Invalid callback for widget '{$widget_id}'." );
 			}
 		} catch ( \Throwable $e ) {
 			$ok     = false;
 			$reason = 'exception';
-                        ap_debug_log( 'widget ' . $widget_id . ' failed: ' . $e->getMessage() );
+						ap_debug_log( 'widget ' . $widget_id . ' failed: ' . $e->getMessage() );
 			$output = current_user_can( 'manage_options' ) ? "<div class='ap-widget-error'>This widget failed to load.</div>" : '';
 		}
 
@@ -134,7 +134,7 @@ class DashboardRenderer {
 
 				// Optionally wrap output in developer mode for easier debugging.
 		if ( defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ) {
-                                $output = sprintf( '<!-- ap-widget:%1$s:start -->%2$s<!-- ap-widget:%1$s:end -->', $widget_id, $output );
+								$output = sprintf( '<!-- ap-widget:%1$s:start -->%2$s<!-- ap-widget:%1$s:end -->', $widget_id, $output );
 		}
 
 				// Allow filters on the fully rendered widget markup.
@@ -144,7 +144,7 @@ class DashboardRenderer {
 				$output = wp_kses_post( $output );
 
 		$elapsed = microtime( true ) - $start;
-                ap_debug_log( sprintf( '⏱️ Widget %1$s rendered in %2$.4fs', $widget_id, $elapsed ) );
+				ap_debug_log( sprintf( '⏱️ Widget %1$s rendered in %2$.4fs', $widget_id, $elapsed ) );
 		AuditBus::on_rendered( $widget_id, $role, (int) ( $elapsed * 1000 ), $ok, $reason );
 
 		if ( self::shouldCache( $widget_id, $user_id, $widget ) ) {
@@ -217,7 +217,7 @@ class DashboardRenderer {
 				continue;
 			}
 
-                                $html .= sprintf( '<div data-widget-id="%1$s">%2$s</div>', esc_attr( $id ), $out );
+								$html .= sprintf( '<div data-widget-id="%1$s">%2$s</div>', esc_attr( $id ), $out );
 			do_action(
 				'artpulse/audit/widget_result',
 				array(

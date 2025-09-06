@@ -7,7 +7,6 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 /**
 
  * @group ADMIN
-
  */
 
 class ListWidgetsForRoleTest extends \WP_UnitTestCase {
@@ -26,14 +25,14 @@ class ListWidgetsForRoleTest extends \WP_UnitTestCase {
 	}
 
 	public function test_widget_without_callback_is_disabled(): void {
-               DashboardWidgetRegistry::register(
-                       'widget_foo',
-			array(
-				'title'           => 'Foo',
-				'render_callback' => '__return_null',
-				'roles'           => array( 'administrator' ),
-			)
-		);
+				DashboardWidgetRegistry::register(
+					'widget_foo',
+					array(
+						'title'           => 'Foo',
+						'render_callback' => '__return_null',
+						'roles'           => array( 'administrator' ),
+					)
+				);
 		DashboardWidgetRegistry::register(
 			'bar',
 			array(
@@ -51,6 +50,6 @@ class ListWidgetsForRoleTest extends \WP_UnitTestCase {
 		$this->assertArrayHasKey( 'bar', $map );
 		$this->assertTrue( $map['bar']['disabled'] );
 		$this->assertSame( 'no_renderer', $map['bar']['disabled_reason'] );
-               $this->assertFalse( $map['widget_foo']['disabled'] );
+				$this->assertFalse( $map['widget_foo']['disabled'] );
 	}
 }

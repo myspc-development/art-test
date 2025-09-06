@@ -13,65 +13,65 @@ use WP_CLI; // phpcs:ignore
  * WP-CLI interface for the Widget Audit Suite.
  */
 class WidgetAudit {
-        public function register(): void {
-                if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) ) {
-                        return;
-                }
-                \WP_CLI::add_command( 'artpulse audit:widgets', array( $this, 'widgets' ) );
-                \WP_CLI::add_command( 'artpulse audit:visibility', array( $this, 'visibility' ) );
-                \WP_CLI::add_command( 'artpulse audit:builder', array( $this, 'builder' ) );
-                \WP_CLI::add_command( 'artpulse audit:render', array( $this, 'render' ) );
-                \WP_CLI::add_command( 'artpulse audit:fix', array( $this, 'fix' ) );
-        }
+	public function register(): void {
+		if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+				return;
+		}
+			\WP_CLI::add_command( 'artpulse audit:widgets', array( $this, 'widgets' ) );
+			\WP_CLI::add_command( 'artpulse audit:visibility', array( $this, 'visibility' ) );
+			\WP_CLI::add_command( 'artpulse audit:builder', array( $this, 'builder' ) );
+			\WP_CLI::add_command( 'artpulse audit:render', array( $this, 'render' ) );
+			\WP_CLI::add_command( 'artpulse audit:fix', array( $this, 'fix' ) );
+	}
 
-        /**
-         * Last generated widget audit rows.
-         *
-         * @var array<int,array<string,string>>
-         */
-        public array $rows = array();
+		/**
+		 * Last generated widget audit rows.
+		 *
+		 * @var array<int,array<string,string>>
+		 */
+	public array $rows = array();
 
-        /**
-         * List widget audit data.
-         *
-         * @param array $args  Positional arguments (unused).
-         * @param array $assoc Associative arguments.
-         *
-         * @return array<int,array<string,string>> The unformatted widget data.
-         */
-        public function widgets( $args, $assoc ): array {
-                $registry = WidgetSources::get_registry();
-                $vis      = WidgetSources::get_visibility_roles();
-                $hidden   = WidgetSources::get_hidden_for_roles();
-                $problems = Parity::problems();
-                $rows     = array();
-                foreach ( $registry as $id => $info ) {
-                        $hidden_roles = array();
-                        foreach ( $hidden as $role => $ids ) {
-                                if ( in_array( $id, (array) $ids, true ) ) {
-                                        $hidden_roles[] = $role;
-                                }
-                        }
-                        $rows[] = array(
-                                'id'                      => $id,
-                                'status'                  => $info['status'],
-                                'has_callback'            => $info['callback_is_callable'] ? 'yes' : 'no',
-                                'roles_from_registry'     => implode( ',', $info['roles_from_registry'] ),
-                                'roles_from_visibility'   => implode( ',', $vis[ $id ] ?? array() ),
-                                'hidden_for_roles'        => implode( ',', $hidden_roles ),
-                                'registered_in_code_file' => $info['class'],
-                                'problem'                 => $problems[ $id ] ?? '',
-                        );
-                }
+		/**
+		 * List widget audit data.
+		 *
+		 * @param array $args  Positional arguments (unused).
+		 * @param array $assoc Associative arguments.
+		 *
+		 * @return array<int,array<string,string>> The unformatted widget data.
+		 */
+	public function widgets( $args, $assoc ): array {
+			$registry = WidgetSources::get_registry();
+			$vis      = WidgetSources::get_visibility_roles();
+			$hidden   = WidgetSources::get_hidden_for_roles();
+			$problems = Parity::problems();
+			$rows     = array();
+		foreach ( $registry as $id => $info ) {
+				$hidden_roles = array();
+			foreach ( $hidden as $role => $ids ) {
+				if ( in_array( $id, (array) $ids, true ) ) {
+						$hidden_roles[] = $role;
+				}
+			}
+				$rows[] = array(
+					'id'                      => $id,
+					'status'                  => $info['status'],
+					'has_callback'            => $info['callback_is_callable'] ? 'yes' : 'no',
+					'roles_from_registry'     => implode( ',', $info['roles_from_registry'] ),
+					'roles_from_visibility'   => implode( ',', $vis[ $id ] ?? array() ),
+					'hidden_for_roles'        => implode( ',', $hidden_roles ),
+					'registered_in_code_file' => $info['class'],
+					'problem'                 => $problems[ $id ] ?? '',
+				);
+		}
 
-                // Expose the raw rows for consumers before formatting.
-                $this->rows = $rows;
+			// Expose the raw rows for consumers before formatting.
+			$this->rows = $rows;
 
-                $format = $assoc['format'] ?? 'table';
-                \WP_CLI\Utils\format_items( $format, $rows, array( 'id', 'status', 'has_callback', 'roles_from_registry', 'roles_from_visibility', 'hidden_for_roles', 'registered_in_code_file', 'problem' ) );
+			$format = $assoc['format'] ?? 'table';
+			\WP_CLI\Utils\format_items( $format, $rows, array( 'id', 'status', 'has_callback', 'roles_from_registry', 'roles_from_visibility', 'hidden_for_roles', 'registered_in_code_file', 'problem' ) );
 
-                return $rows;
-        }
+			return $rows;
+	}
 
 	public function visibility( $args, $assoc ) {
 		$vis  = WidgetSources::get_visibility_roles();

@@ -155,10 +155,10 @@ class ShortcodeManager {
 			if ( file_exists( $template_path ) ) {
 				include $template_path;
 			} else {
-                                printf( '<a href="%1$s">%2$s</a>', esc_url( get_permalink( $post_id ) ), esc_html( get_the_title( $post_id ) ) );
-                        }
-                }
-                echo '</div>';
-                return ob_get_clean();
+								printf( '<a href="%1$s">%2$s</a>', esc_url( get_permalink( $post_id ) ), esc_html( get_the_title( $post_id ) ) );
+			}
+		}
+				echo '</div>';
+				return ob_get_clean();
 	}
 }

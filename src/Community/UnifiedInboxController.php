@@ -105,16 +105,16 @@ class UnifiedInboxController {
 			);
 		}
 
-               $table  = $wpdb->prefix . 'ap_messages';
-               $columns = 'id, sender_id, recipient_id, content, is_read, created_at';
-               $rows   = $wpdb->get_results(
-                       $wpdb->prepare(
-                               "SELECT $columns FROM $table WHERE sender_id = %d OR recipient_id = %d ORDER BY created_at DESC LIMIT %d",
-                               $user_id,
-                               $user_id,
-                               $limit
-                       )
-               );
+				$table   = $wpdb->prefix . 'ap_messages';
+				$columns = 'id, sender_id, recipient_id, content, is_read, created_at';
+				$rows    = $wpdb->get_results(
+					$wpdb->prepare(
+						"SELECT $columns FROM $table WHERE sender_id = %d OR recipient_id = %d ORDER BY created_at DESC LIMIT %d",
+						$user_id,
+						$user_id,
+						$limit
+					)
+				);
 		foreach ( $rows as $r ) {
 			$items[] = array(
 				'id'        => (int) $r->id,
@@ -142,7 +142,7 @@ class UnifiedInboxController {
 			$items[] = array(
 				'id'        => (int) $row->id,
 				'type'      => 'rsvp',
-                                'content'   => $event ? sprintf( esc_html__( 'New RSVP for "%1$s"', 'artpulse' ), esc_html( $event->post_title ) ) : esc_html__( 'New RSVP', 'artpulse' ),
+				'content'   => $event ? sprintf( esc_html__( 'New RSVP for "%1$s"', 'artpulse' ), esc_html( $event->post_title ) ) : esc_html__( 'New RSVP', 'artpulse' ),
 				'timestamp' => $row->logged_at,
 				'read'      => $row->logged_at <= $last_read,
 				'event_id'  => (int) $row->event_id,

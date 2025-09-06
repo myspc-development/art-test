@@ -11,18 +11,17 @@ use ArtPulse\Frontend\EventService;
 /**
 
  * @group FRONTEND
-
  */
 
 class EventServiceTest extends TestCase {
 
-        protected function setUp(): void {
-                \ArtPulse\Frontend\StubState::reset();
-                \ArtPulse\Frontend\StubState::$wp_insert_post_return = 123;
-                \ArtPulse\Frontend\StubState::$get_posts_return      = array( (object) array( 'ID' => 5 ) );
-                $GLOBALS['__ap_test_user_meta'] = array();
-                $GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 5;
-        }
+	protected function setUp(): void {
+			\ArtPulse\Frontend\StubState::reset();
+			\ArtPulse\Frontend\StubState::$wp_insert_post_return     = 123;
+			\ArtPulse\Frontend\StubState::$get_posts_return          = array( (object) array( 'ID' => 5 ) );
+			$GLOBALS['__ap_test_user_meta']                          = array();
+			$GLOBALS['__ap_test_user_meta'][1]['ap_organization_id'] = 5;
+	}
 
 	public function test_missing_title_returns_error(): void {
 		$result = EventService::create_event(
@@ -50,7 +49,7 @@ class EventServiceTest extends TestCase {
 				$found = true;
 			}
 		}
-                $this->assertTrue( $found );
-                $this->assertSame( array( 123, array( 7 ), 'event_type' ), \ArtPulse\Frontend\StubState::$wp_set_post_terms_args );
-        }
+				$this->assertTrue( $found );
+				$this->assertSame( array( 123, array( 7 ), 'event_type' ), \ArtPulse\Frontend\StubState::$wp_set_post_terms_args );
+	}
 }

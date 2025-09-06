@@ -22,7 +22,7 @@ class MultiOrgRoles {
 		$table   = $wpdb->prefix . 'ap_org_user_roles';
 		$charset = $wpdb->get_charset_collate();
 
-                $sql = "CREATE TABLE $table (
+				$sql = "CREATE TABLE $table (
             id INT NOT NULL AUTO_INCREMENT,
             org_id INT NOT NULL,
             user_id BIGINT NOT NULL,

@@ -7,28 +7,27 @@ use WP_UnitTestCase;
 /**
 
  * @group COMMUNITY
-
  */
 
 class PostStatusHooksTest extends WP_UnitTestCase {
 
-        private array $requests = array();
+	private array $requests = array();
 
-        public static function setUpBeforeClass(): void {
-                parent::setUpBeforeClass();
-                Email::install();
-        }
+	public static function setUpBeforeClass(): void {
+			parent::setUpBeforeClass();
+			Email::install();
+	}
 
-        public function set_up() {
-                parent::set_up();
-                add_filter( 'pre_http_request', array( $this, 'capture_request' ), 10, 3 );
-        }
+	public function set_up() {
+			parent::set_up();
+			add_filter( 'pre_http_request', array( $this, 'capture_request' ), 10, 3 );
+	}
 
-        public function tear_down() {
-                remove_filter( 'pre_http_request', array( $this, 'capture_request' ), 10 );
-                Email::clear();
-                parent::tear_down();
-        }
+	public function tear_down() {
+			remove_filter( 'pre_http_request', array( $this, 'capture_request' ), 10 );
+			Email::clear();
+			parent::tear_down();
+	}
 
 	public function capture_request( $pre, $args, $url ) {
 		$this->requests[] = array( $url, $args );
@@ -55,9 +54,9 @@ class PostStatusHooksTest extends WP_UnitTestCase {
 			)
 		);
 
-                \ap_notify_author_on_rejection( 'rejected', 'pending', $post );
-                $this->assertCount( 1, Email::messages() );
-                $this->assertEmpty( $this->requests );
+				\ap_notify_author_on_rejection( 'rejected', 'pending', $post );
+				$this->assertCount( 1, Email::messages() );
+				$this->assertEmpty( $this->requests );
 	}
 
 	public function test_notify_sends_via_sendgrid_when_configured(): void {
@@ -77,8 +76,8 @@ class PostStatusHooksTest extends WP_UnitTestCase {
 			)
 		);
 
-                \ap_notify_author_on_rejection( 'rejected', 'pending', $post );
-                $this->assertCount( 1, $this->requests );
-                $this->assertEmpty( Email::messages() );
-        }
+				\ap_notify_author_on_rejection( 'rejected', 'pending', $post );
+				$this->assertCount( 1, $this->requests );
+				$this->assertEmpty( Email::messages() );
+	}
 }

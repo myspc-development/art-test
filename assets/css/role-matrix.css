@@ -1,9 +1,9 @@
 table {
-  width: 100%;
-  border-collapse: collapse;
+	width: 100%;
+	border-collapse: collapse;
 }
 td,
 th {
-  padding: 8px;
-  border: 1px solid #ddd;
+	padding: 8px;
+	border: 1px solid #ddd;
 }

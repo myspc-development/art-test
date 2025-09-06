@@ -8,36 +8,35 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 /**
 
  * @group FRONTEND
-
  */
 
 class DashboardRoleTemplateTest extends WP_UnitTestCase {
 
 	public function set_up(): void {
-                parent::set_up();
+				parent::set_up();
 
-                // Swallow any stdout/stderr produced during these tests.
-                $this->setOutputCallback(
-                        static function (): string {
-                                return '';
-                        }
-                );
+				// Swallow any stdout/stderr produced during these tests.
+				$this->setOutputCallback(
+					static function (): string {
+								return '';
+					}
+				);
 
-                // Clear widget registry to keep output predictable
-                $ref  = new \ReflectionClass( DashboardWidgetRegistry::class );
-                $prop = $ref->getProperty( 'widgets' );
-                $prop->setAccessible( true );
-                $prop->setValue( null, array() );
+				// Clear widget registry to keep output predictable
+				$ref  = new \ReflectionClass( DashboardWidgetRegistry::class );
+				$prop = $ref->getProperty( 'widgets' );
+				$prop->setAccessible( true );
+				$prop->setValue( null, array() );
 
 		set_query_var( 'ap_dashboard_role', null );
 		set_query_var( 'ap_dashboard', null );
 	}
 
-        /**
-         * @runInSeparateProcess
-         * @preserveGlobalState disabled
-         */
-        public function test_renders_when_dashboard_role_query_var_present(): void {
+		/**
+		 * @runInSeparateProcess
+		 * @preserveGlobalState disabled
+		 */
+	public function test_renders_when_dashboard_role_query_var_present(): void {
 		if ( ! get_role( 'artist' ) ) {
 			add_role( 'artist', 'Artist' );
 		}
@@ -46,21 +45,21 @@ class DashboardRoleTemplateTest extends WP_UnitTestCase {
 
 		set_query_var( 'ap_dashboard_role', 1 );
 
-                ob_start();
-                DashboardRoleRewrite::maybe_render();
-                $html = ob_get_clean();
+			ob_start();
+			DashboardRoleRewrite::maybe_render();
+			$html = ob_get_clean();
 
-                $this->assertMatchesRegularExpression(
-                        '/<section[^>]*class="[^"]*ap-role-layout[^"]*(?:ap-dashboard-grid[^"]*)?"[^>]*data-role="artist"[^>]*>/s',
-                        $html
-                );
-        }
+			$this->assertMatchesRegularExpression(
+				'/<section[^>]*class="[^"]*ap-role-layout[^"]*(?:ap-dashboard-grid[^"]*)?"[^>]*data-role="artist"[^>]*>/s',
+				$html
+			);
+	}
 
-        /**
-         * @runInSeparateProcess
-         * @preserveGlobalState disabled
-         */
-        public function test_renders_when_dashboard_query_var_present(): void {
+		/**
+		 * @runInSeparateProcess
+		 * @preserveGlobalState disabled
+		 */
+	public function test_renders_when_dashboard_query_var_present(): void {
 		if ( ! get_role( 'organization' ) ) {
 			add_role( 'organization', 'Organization' );
 		}
@@ -69,13 +68,13 @@ class DashboardRoleTemplateTest extends WP_UnitTestCase {
 
 		set_query_var( 'ap_dashboard', 1 );
 
-                ob_start();
-                DashboardRoleRewrite::maybe_render();
-                $html = ob_get_clean();
+			ob_start();
+			DashboardRoleRewrite::maybe_render();
+			$html = ob_get_clean();
 
-                $this->assertMatchesRegularExpression(
-                        '/<section[^>]*class="[^"]*ap-role-layout[^"]*(?:ap-dashboard-grid[^"]*)?"[^>]*data-role="organization"[^>]*>/s',
-                        $html
-                );
-        }
+			$this->assertMatchesRegularExpression(
+				'/<section[^>]*class="[^"]*ap-role-layout[^"]*(?:ap-dashboard-grid[^"]*)?"[^>]*data-role="organization"[^>]*>/s',
+				$html
+			);
+	}
 }

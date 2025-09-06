@@ -8,7 +8,6 @@ use ArtPulse\Community\NotificationHooks;
 /**
 
  * @group COMMUNITY
-
  */
 
 class RsvpNotificationTest extends \WP_UnitTestCase {

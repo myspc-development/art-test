@@ -13,11 +13,11 @@ use ArtPulse\Rest\Util\Auth;
 // - Filter incoming layout to allowed widget IDs.
 // - update_user_meta(get_current_user_id(), "ap_layout_{$role}", $layout).
 class UserLayoutController {
-        use RestResponder;
+		use RestResponder;
 
-        private static function verify_nonce( WP_REST_Request $request, string $action ): bool|WP_Error {
-                return Auth::verify_nonce( $request->get_header( 'X-AP-Nonce' ), $action );
-        }
+	private static function verify_nonce( WP_REST_Request $request, string $action ): bool|WP_Error {
+			return Auth::verify_nonce( $request->get_header( 'X-AP-Nonce' ), $action );
+	}
 
 	public static function register(): void {
 		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
@@ -53,21 +53,21 @@ class UserLayoutController {
 		return \rest_ensure_response( array( 'layout' => $layout ) );
 	}
 
-        public static function save_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-                if ( ! current_user_can( 'edit_posts' ) ) {
-                        return new WP_Error( 'rest_forbidden', __( 'Insufficient permissions.', 'artpulse' ), array( 'status' => 403 ) );
-                }
-                $nonce = self::verify_nonce( $request, 'ap_save_layout' );
-                if ( is_wp_error( $nonce ) ) {
-                        return $nonce;
-                }
-                $role   = sanitize_key( $request['role'] ?? '' );
-                $layout = $request['layout'] ?? array();
-                if ( ! $role || ! is_array( $layout ) ) {
-                        return new WP_Error( 'invalid_params', 'Invalid parameters', array( 'status' => 400 ) );
-                }
-                $layout = array_values( array_filter( array_map( 'sanitize_key', $layout ) ) );
-                update_user_meta( get_current_user_id(), 'ap_layout_' . $role, $layout );
-                return \rest_ensure_response( array( 'saved' => true ) );
-        }
+	public static function save_layout( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+				return new WP_Error( 'rest_forbidden', __( 'Insufficient permissions.', 'artpulse' ), array( 'status' => 403 ) );
+		}
+			$nonce = self::verify_nonce( $request, 'ap_save_layout' );
+		if ( is_wp_error( $nonce ) ) {
+				return $nonce;
+		}
+			$role   = sanitize_key( $request['role'] ?? '' );
+			$layout = $request['layout'] ?? array();
+		if ( ! $role || ! is_array( $layout ) ) {
+				return new WP_Error( 'invalid_params', 'Invalid parameters', array( 'status' => 400 ) );
+		}
+			$layout = array_values( array_filter( array_map( 'sanitize_key', $layout ) ) );
+			update_user_meta( get_current_user_id(), 'ap_layout_' . $role, $layout );
+			return \rest_ensure_response( array( 'saved' => true ) );
+	}
 }

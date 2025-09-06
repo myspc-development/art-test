@@ -114,13 +114,13 @@ class WidgetRegistry {
 		self::$debugOverride = null;
 	}
 
-       /** Normalize a slug to its canonical form */
-       public static function normalize_slug( string $slug ): string {
-               if ( class_exists( DashboardWidgetRegistry::class ) ) {
-                       return DashboardWidgetRegistry::canon_slug( $slug );
-               }
-               return \ArtPulse\Support\WidgetIds::canonicalize( $slug );
-       }
+		/** Normalize a slug to its canonical form */
+	public static function normalize_slug( string $slug ): string {
+		if ( class_exists( DashboardWidgetRegistry::class ) ) {
+				return DashboardWidgetRegistry::canon_slug( $slug );
+		}
+			return \ArtPulse\Support\WidgetIds::canonicalize( $slug );
+	}
 
 	private static function should_debug(): bool {
 		if ( self::$debugOverride !== null ) {

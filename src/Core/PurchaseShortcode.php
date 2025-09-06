@@ -33,7 +33,7 @@ class PurchaseShortcode {
 			$url = add_query_arg( 'coupon', rawurlencode( $coupon ), $url );
 		}
 
-                $label = sprintf( esc_html__( 'Purchase %1$s membership', 'artpulse' ), esc_html( $level ) );
+				$label = sprintf( esc_html__( 'Purchase %1$s membership', 'artpulse' ), esc_html( $level ) );
 
 		if ( $show_coupon ) {
 			$placeholder = esc_attr__( 'Coupon code', 'artpulse' );
@@ -48,11 +48,11 @@ class PurchaseShortcode {
 HTML;
 		}
 
-                return sprintf(
-                        '<a href="%1$s" class="%2$s">%3$s</a>',
-                        esc_url( $url ),
-                        esc_attr( $atts['class'] ),
-                        esc_html( $label )
-                );
-        }
+				return sprintf(
+					'<a href="%1$s" class="%2$s">%3$s</a>',
+					esc_url( $url ),
+					esc_attr( $atts['class'] ),
+					esc_html( $label )
+				);
+	}
 }

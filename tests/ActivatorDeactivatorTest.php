@@ -6,7 +6,6 @@ use Brain\Monkey\Functions;
 /**
 
  * @group CORE
-
  */
 
 class ActivatorDeactivatorTest extends TestCase {
@@ -14,7 +13,6 @@ class ActivatorDeactivatorTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		Monkey\setUp();
-
 
 		Functions\when( '__' )->alias( fn( $t ) => $t );
 		Functions\when( 'add_filter' )->justReturn( true );
@@ -126,8 +124,8 @@ class ActivatorDeactivatorTest extends TestCase {
 		$defaults = array( 'theme' => 'default' );
 		Functions\when( 'artpulse_get_default_settings' )->justReturn( $defaults );
 
-                // Minimal stubs for plugin helpers.
-                Functions\when( 'plugin_basename' )->alias( fn( $file ) => basename( $file ) );
+				// Minimal stubs for plugin helpers.
+				Functions\when( 'plugin_basename' )->alias( fn( $file ) => basename( $file ) );
 		Functions\when( 'plugins_url' )->justReturn( '' );
 		Functions\when( 'current_time' )->justReturn( 'now' );
 

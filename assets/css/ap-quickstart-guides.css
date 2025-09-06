@@ -1,43 +1,43 @@
 .ap-quickstart-guide {
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  padding: 1.5em;
-  margin: 2em 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-  font-family: system-ui, sans-serif;
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	padding: 1.5em;
+	margin: 2em 0;
+	border-radius: 8px;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+	font-family: system-ui, sans-serif;
 }
 
 .ap-quickstart-guide h2 {
-  font-size: 1.5em;
-  margin-bottom: 0.5em;
-  color: #2c3e50;
+	font-size: 1.5em;
+	margin-bottom: 0.5em;
+	color: #2c3e50;
 }
 
 .ap-quickstart-guide section {
-  margin-top: 1.5em;
+	margin-top: 1.5em;
 }
 
 .ap-quickstart-guide h3 {
-  font-size: 1.2em;
-  margin-bottom: 0.3em;
-  color: #34495e;
+	font-size: 1.2em;
+	margin-bottom: 0.3em;
+	color: #34495e;
 }
 
 .ap-quickstart-guide ul {
-  list-style: disc;
-  padding-left: 1.4em;
-  margin-top: 0.5em;
+	list-style: disc;
+	padding-left: 1.4em;
+	margin-top: 0.5em;
 }
 
 .ap-quickstart-guide li {
-  margin-bottom: 0.5em;
+	margin-bottom: 0.5em;
 }
 
 .ap-quickstart-guide code {
-  background: #f4f4f4;
-  padding: 0.2em 0.4em;
-  border-radius: 4px;
-  font-size: 0.9em;
-  font-family: monospace;
+	background: #f4f4f4;
+	padding: 0.2em 0.4em;
+	border-radius: 4px;
+	font-size: 0.9em;
+	font-family: monospace;
 }

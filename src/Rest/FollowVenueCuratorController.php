@@ -22,8 +22,8 @@ class FollowVenueCuratorController {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( self::class, 'follow_venue' ),
-                                       'permission_callback' => Auth::require_login_and_cap(null),
-                                       'args'                => array(
+					'permission_callback' => Auth::require_login_and_cap( null ),
+					'args'                => array(
 						'venue_id' => array(
 							'type'     => 'integer',
 							'required' => true,
@@ -38,42 +38,42 @@ class FollowVenueCuratorController {
 				ARTPULSE_API_NAMESPACE,
 				'/followed/venues',
 				array(
-                                        'methods'             => 'GET',
-                                        'callback'            => array( self::class, 'get_followed_venues' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'methods'             => 'GET',
+					'callback'            => array( self::class, 'get_followed_venues' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 				)
 			);
 		}
 
-               if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/follow/curator' ) ) {
-                       register_rest_route(
-                               ARTPULSE_API_NAMESPACE,
-                               '/follow/curator',
-                               array(
-                                       'methods'             => 'POST',
-                                       'callback'            => array( self::class, 'follow_curator' ),
-                                       'permission_callback' => Auth::require_login_and_cap(null),
-                                       'args'                => array(
-                                               'curator_id' => array(
-                                                       'type'     => 'integer',
-                                                       'required' => true,
-                                               ),
-                                       ),
-                               )
-                       );
-               }
+		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/follow/curator' ) ) {
+				register_rest_route(
+					ARTPULSE_API_NAMESPACE,
+					'/follow/curator',
+					array(
+						'methods'             => 'POST',
+						'callback'            => array( self::class, 'follow_curator' ),
+						'permission_callback' => Auth::require_login_and_cap( null ),
+						'args'                => array(
+							'curator_id' => array(
+								'type'     => 'integer',
+								'required' => true,
+							),
+						),
+					)
+				);
+		}
 
-               if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/followed/curators' ) ) {
-                       register_rest_route(
-                               ARTPULSE_API_NAMESPACE,
-                               '/followed/curators',
-                               array(
-                                       'methods'             => 'GET',
-                                       'callback'            => array( self::class, 'get_followed_curators' ),
-                                       'permission_callback' => array( Auth::class, 'guard_read' ),
-                               )
-                       );
-               }
+		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/followed/curators' ) ) {
+				register_rest_route(
+					ARTPULSE_API_NAMESPACE,
+					'/followed/curators',
+					array(
+						'methods'             => 'GET',
+						'callback'            => array( self::class, 'get_followed_curators' ),
+						'permission_callback' => array( Auth::class, 'guard_read' ),
+					)
+				);
+		}
 	}
 
 	public static function follow_venue( WP_REST_Request $req ): WP_REST_Response|WP_Error {

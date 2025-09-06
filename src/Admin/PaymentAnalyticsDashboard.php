@@ -29,11 +29,11 @@ class PaymentAnalyticsDashboard {
 		$chart_ver  = file_exists( $chart_path ) ? filemtime( $chart_path ) : '4.4.1';
 
 		wp_enqueue_script(
-		        'chart-js',
-		        plugins_url( $chart_rel, ARTPULSE_PLUGIN_FILE ),
-		        array(),
-		        $chart_ver,
-		        true
+			'chart-js',
+			plugins_url( $chart_rel, ARTPULSE_PLUGIN_FILE ),
+			array(),
+			$chart_ver,
+			true
 		);
 
 		$script_path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'assets/js/payment-analytics-dashboard.js';

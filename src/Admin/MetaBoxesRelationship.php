@@ -237,37 +237,37 @@ class MetaBoxesRelationship {
 			return;
 		}
 
-                // Paths relative to the plugin base.
-                $select2_css_rel = 'assets/libs/select2/css/select2.min.css';
-                $select2_js_rel  = 'assets/libs/select2/js/select2.min.js';
-                $rel_path        = 'assets/js/admin-relationship.js';
+				// Paths relative to the plugin base.
+				$select2_css_rel = 'assets/libs/select2/css/select2.min.css';
+				$select2_js_rel  = 'assets/libs/select2/js/select2.min.js';
+				$rel_path        = 'assets/js/admin-relationship.js';
 
-                $plugin_file      = defined( 'ARTPULSE_PLUGIN_FILE' ) ? ARTPULSE_PLUGIN_FILE : dirname( __DIR__, 2 ) . '/artpulse-management.php';
-                $select2_css_path = plugin_dir_path( $plugin_file ) . $select2_css_rel;
-                $select2_js_path  = plugin_dir_path( $plugin_file ) . $select2_js_rel;
-                $rel_script_path  = plugin_dir_path( $plugin_file ) . $rel_path;
+				$plugin_file      = defined( 'ARTPULSE_PLUGIN_FILE' ) ? ARTPULSE_PLUGIN_FILE : dirname( __DIR__, 2 ) . '/artpulse-management.php';
+				$select2_css_path = plugin_dir_path( $plugin_file ) . $select2_css_rel;
+				$select2_js_path  = plugin_dir_path( $plugin_file ) . $select2_js_rel;
+				$rel_script_path  = plugin_dir_path( $plugin_file ) . $rel_path;
 
-                wp_enqueue_style(
-                        'select2-css',
-                        plugins_url( $select2_css_rel, $plugin_file ),
-                        array(),
-                        file_exists( $select2_css_path ) ? filemtime( $select2_css_path ) : null
-                );
-                wp_enqueue_script(
-                        'select2-js',
-                        plugins_url( $select2_js_rel, $plugin_file ),
-                        array( 'jquery' ),
-                        file_exists( $select2_js_path ) ? filemtime( $select2_js_path ) : null,
-                        true
-                );
+				wp_enqueue_style(
+					'select2-css',
+					plugins_url( $select2_css_rel, $plugin_file ),
+					array(),
+					file_exists( $select2_css_path ) ? filemtime( $select2_css_path ) : null
+				);
+				wp_enqueue_script(
+					'select2-js',
+					plugins_url( $select2_js_rel, $plugin_file ),
+					array( 'jquery' ),
+					file_exists( $select2_js_path ) ? filemtime( $select2_js_path ) : null,
+					true
+				);
 
-                wp_enqueue_script(
-                        'ap-admin-relationship',
-                        plugins_url( $rel_path, $plugin_file ),
-                        array( 'jquery', 'select2-js' ), // Ensure select2-js is a dependency
-                        file_exists( $rel_script_path ) ? filemtime( $rel_script_path ) : null,
-                        true
-                );
+				wp_enqueue_script(
+					'ap-admin-relationship',
+					plugins_url( $rel_path, $plugin_file ),
+					array( 'jquery', 'select2-js' ), // Ensure select2-js is a dependency
+					file_exists( $rel_script_path ) ? filemtime( $rel_script_path ) : null,
+					true
+				);
 
 		wp_localize_script(
 			'ap-admin-relationship',

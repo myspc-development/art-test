@@ -7,7 +7,6 @@ use WP_UnitTestCase;
 /**
 
  * @group PAYMENT
-
  */
 
 class StripeHelperTest extends WP_UnitTestCase {

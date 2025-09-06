@@ -23,7 +23,7 @@ class SpotlightAnalyticsController {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( self::class, 'log_view' ),
-                                'permission_callback' => Auth::require_login_and_cap(null),
+				'permission_callback' => Auth::require_login_and_cap( null ),
 				'args'                => array(
 					'id' => array(
 						'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),
@@ -34,15 +34,15 @@ class SpotlightAnalyticsController {
 		);
 	}
 
-        public static function log_view( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
-                $responder = new self();
+	public static function log_view( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+			$responder = new self();
 
-                $id = absint( $request['id'] );
-                if ( ! $id ) {
-                        return $responder->fail( 'invalid_id', 'Invalid spotlight ID', 400 );
-                }
-                $views = (int) get_post_meta( $id, 'spotlight_views', true );
-                update_post_meta( $id, 'spotlight_views', $views + 1 );
-                return $responder->ok( array( 'views' => $views + 1 ) );
-        }
+			$id = absint( $request['id'] );
+		if ( ! $id ) {
+				return $responder->fail( 'invalid_id', 'Invalid spotlight ID', 400 );
+		}
+			$views = (int) get_post_meta( $id, 'spotlight_views', true );
+			update_post_meta( $id, 'spotlight_views', $views + 1 );
+			return $responder->ok( array( 'views' => $views + 1 ) );
+	}
 }

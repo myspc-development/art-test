@@ -16,11 +16,11 @@ class DirectMessages {
 		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
 	}
 
-        public static function maybe_install_table(): void {
-                global $wpdb;
-                $table = $wpdb->prefix . 'ap_messages';
-                DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) );
-        }
+	public static function maybe_install_table(): void {
+			global $wpdb;
+			$table = $wpdb->prefix . 'ap_messages';
+			DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) );
+	}
 
 	public static function install_table(): void {
 		global $wpdb;
@@ -51,11 +51,11 @@ class DirectMessages {
 		dbDelta( $sql );
 	}
 
-        public static function maybe_install_flags_table(): void {
-                global $wpdb;
-                $table = $wpdb->prefix . 'ap_message_flags';
-                DbEnsure::table_exists_or_install( $table, array( self::class, 'install_flags_table' ) );
-        }
+	public static function maybe_install_flags_table(): void {
+			global $wpdb;
+			$table = $wpdb->prefix . 'ap_message_flags';
+			DbEnsure::table_exists_or_install( $table, array( self::class, 'install_flags_table' ) );
+	}
 
 	public static function install_flags_table(): void {
 		global $wpdb;
@@ -80,34 +80,34 @@ class DirectMessages {
 
 	public static function log_flag( int $message_id, int $user_id, string $action, string $note = '' ): void {
 		global $wpdb;
-                $table = $wpdb->prefix . 'ap_message_flags';
+				$table = $wpdb->prefix . 'ap_message_flags';
 
-                if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_flags_table' ) ) ) {
-                        return;
-                }
+		if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_flags_table' ) ) ) {
+				return;
+		}
 
-                $wpdb->insert(
-                        $table,
-			array(
-				'message_id' => $message_id,
-				'user_id'    => $user_id,
-				'action'     => $action,
-				'note'       => $note,
-				'logged_at'  => current_time( 'mysql' ),
-			)
-		);
+				$wpdb->insert(
+					$table,
+					array(
+						'message_id' => $message_id,
+						'user_id'    => $user_id,
+						'action'     => $action,
+						'note'       => $note,
+						'logged_at'  => current_time( 'mysql' ),
+					)
+				);
 	}
 
 	private static function ensure_messages_table(): ?WP_Error {
 		global $wpdb;
-                $table = $wpdb->prefix . 'ap_messages';
+				$table = $wpdb->prefix . 'ap_messages';
 
-                if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) ) ) {
-                        return new WP_Error( 'missing_table', 'Messages table missing.', array( 'status' => 500 ) );
-                }
+		if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) ) ) {
+				return new WP_Error( 'missing_table', 'Messages table missing.', array( 'status' => 500 ) );
+		}
 
-                return null;
-        }
+				return null;
+	}
 
 	public static function register_routes(): void {
 		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/messages/send' ) ) {
@@ -579,10 +579,10 @@ class DirectMessages {
 
 		$recipient = get_user_by( 'id', $recipient_id );
 		$sender    = get_user_by( 'id', $sender_id );
-                if ( $recipient && $sender && is_email( $recipient->user_email ) ) {
-                        $subject = sprintf( esc_html__( 'New message from %1$s', 'artpulse' ), esc_html( $sender->display_name ) );
-                        EmailService::send( $recipient->user_email, $subject, $content );
-                }
+		if ( $recipient && $sender && is_email( $recipient->user_email ) ) {
+				$subject = sprintf( esc_html__( 'New message from %1$s', 'artpulse' ), esc_html( $sender->display_name ) );
+				EmailService::send( $recipient->user_email, $subject, $content );
+		}
 
 		return $id;
 	}

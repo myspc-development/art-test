@@ -28,12 +28,12 @@ namespace ArtPulse\Tests\Stubs {
 			}
 
 			public static function canon_slug( string $slug ): string {
-				if ($slug === '') {
+				if ( $slug === '' ) {
 					return '';
 				}
-				$slug = strtolower($slug);
-				if (strpos($slug, 'widget_') !== 0) {
-					$slug = 'widget_' . preg_replace('/^widget_/', '', $slug);
+				$slug = strtolower( $slug );
+				if ( strpos( $slug, 'widget_' ) !== 0 ) {
+					$slug = 'widget_' . preg_replace( '/^widget_/', '', $slug );
 				}
 				return $slug;
 			}
@@ -57,9 +57,9 @@ namespace ArtPulse\Cli\Tests {
 
 	use ArtPulse\Core\DashboardController;
 	use ArtPulse\Core\DashboardWidgetRegistry;
-        use ArtPulse\Tests\Stubs\DashboardControllerStub;
-        use ArtPulse\Tests\Stubs\DashboardWidgetRegistryStub;
-        use ArtPulse\Tests\WpTeardownTrait;
+		use ArtPulse\Tests\Stubs\DashboardControllerStub;
+		use ArtPulse\Tests\Stubs\DashboardWidgetRegistryStub;
+		use ArtPulse\Tests\WpTeardownTrait;
 
 	/**
 	 * Run under the unit suite (phpunit.unit.xml.dist).
@@ -67,13 +67,13 @@ namespace ArtPulse\Cli\Tests {
 	 *
 	 * @runInSeparateProcess
 	 */
-        class CheckWidgetPresetsCommandTest extends TestCase {
-                use WpTeardownTrait;
+	class CheckWidgetPresetsCommandTest extends TestCase {
+			use WpTeardownTrait;
 
 		protected function setUp(): void {
 
 			// Use the unit WP-CLI stub (autoloaded by dev autoload); guard in case it isn't loaded yet.
-			if ( ! class_exists('\WP_CLI') && file_exists(__DIR__ . '/../../tests/Support/WpCliStub.php') ) {
+			if ( ! class_exists( '\WP_CLI' ) && file_exists( __DIR__ . '/../../tests/Support/WpCliStub.php' ) ) {
 				require_once __DIR__ . '/../../tests/Support/WpCliStub.php';
 			}
 
@@ -86,7 +86,7 @@ namespace ArtPulse\Cli\Tests {
 			}
 
 			// Pull in the command & any tiny validators it expects.
-			if ( file_exists(__DIR__ . '/../../src/Core/WidgetAccessValidator.php') ) {
+			if ( file_exists( __DIR__ . '/../../src/Core/WidgetAccessValidator.php' ) ) {
 				require_once __DIR__ . '/../../src/Core/WidgetAccessValidator.php';
 			}
 			require_once __DIR__ . '/../../includes/class-cli-check-widget-presets.php';
@@ -96,75 +96,75 @@ namespace ArtPulse\Cli\Tests {
 			WP_CLI::$last_output = '';
 		}
 
-                protected function tearDown(): void {
-                        $this->reset_wp_state();
-                        WP_CLI::$commands    = array();
-                        WP_CLI::$last_output = '';
-                }
+		protected function tearDown(): void {
+				$this->reset_wp_state();
+				WP_CLI::$commands    = array();
+				WP_CLI::$last_output = '';
+		}
 
-                public function test_reports_warnings_and_errors(): void {
-                        if ( ! class_exists( 'WP_CLI' ) ) {
-                                $this->markTestSkipped( 'WP_CLI is not available.' );
-                        }
-                        // 1) Registry: one valid, one restricted (capability), and intentionally leave one "missing".
-                        DashboardWidgetRegistry::set_widgets(
-                                array(
-					'widget_valid_widget' => array(
-						'label' => 'Valid',
-						'roles' => array( 'member' ),
-						'callback' => '__return_null',
-					),
-					'widget_cap_widget'   => array(
-						'label' => 'Needs Cap',
-						'roles' => array( 'member' ),
-						'capability' => 'manage_options',
-						'callback' => '__return_null',
-					),
-					// NOTE: do NOT register "widget_missing_widget"
-				)
-			);
-
-			// 2) Preset references: valid, missing, and restricted IDs (unprefixed; command should canonicalize).
-			DashboardController::set_presets(
-				array(
-					'member_preset' => array(
-						'role'   => 'member',
-						'layout' => array(
-							array( 'id' => 'valid_widget' ),
-							array( 'id' => 'missing_widget' ),
-							array( 'id' => 'cap_widget' ),
+		public function test_reports_warnings_and_errors(): void {
+			if ( ! class_exists( 'WP_CLI' ) ) {
+						$this->markTestSkipped( 'WP_CLI is not available.' );
+			}
+				// 1) Registry: one valid, one restricted (capability), and intentionally leave one "missing".
+				DashboardWidgetRegistry::set_widgets(
+					array(
+						'widget_valid_widget' => array(
+							'label'    => 'Valid',
+							'roles'    => array( 'member' ),
+							'callback' => '__return_null',
 						),
-					),
-				)
-			);
+						'widget_cap_widget'   => array(
+							'label'      => 'Needs Cap',
+							'roles'      => array( 'member' ),
+							'capability' => 'manage_options',
+							'callback'   => '__return_null',
+						),
+							// NOTE: do NOT register "widget_missing_widget"
+					)
+				);
 
-                        // 3) Register the command exactly as production code does.
-                        WP_CLI::add_command( 'artpulse check-widget-presets', \AP_CLI_Check_Widget_Presets::class );
+				// 2) Preset references: valid, missing, and restricted IDs (unprefixed; command should canonicalize).
+				DashboardController::set_presets(
+					array(
+						'member_preset' => array(
+							'role'   => 'member',
+							'layout' => array(
+								array( 'id' => 'valid_widget' ),
+								array( 'id' => 'missing_widget' ),
+								array( 'id' => 'cap_widget' ),
+							),
+						),
+					)
+				);
 
-                        // 4) Run & capture output.
-                        try {
-                                WP_CLI::runcommand( 'artpulse check-widget-presets' );
-                        } catch ( \WP_CLI\ExitException $e ) {
-                                // Command signals issues via ExitException; continue with captured output.
-                        }
-                        $out = WP_CLI::$last_output;
+					// 3) Register the command exactly as production code does.
+					WP_CLI::add_command( 'artpulse check-widget-presets', \AP_CLI_Check_Widget_Presets::class );
 
-                        // Header should mention widget/action columns.
-                        $this->assertNotEmpty( $out, 'CLI produced no output' );
-                        $this->assertStringContainsString( 'widget', $out );
-                        $this->assertStringContainsString( 'action', $out );
+					// 4) Run & capture output.
+			try {
+					WP_CLI::runcommand( 'artpulse check-widget-presets' );
+			} catch ( \WP_CLI\ExitException $e ) {
+					// Command signals issues via ExitException; continue with captured output.
+			}
+					$out = WP_CLI::$last_output;
 
-                        // Expected widget id and actions present.
-                        $this->assertStringContainsString( 'widget_missing_widget', $out );
-                        $this->assertStringContainsString( 'unhide', $out );
-                        $this->assertStringContainsString( 'activate', $out );
-                        $this->assertStringContainsString( 'bind', $out );
-                        $this->assertStringContainsString( 'ArtPulse\\Widgets\\TestWidget', $out );
+					// Header should mention widget/action columns.
+					$this->assertNotEmpty( $out, 'CLI produced no output' );
+					$this->assertStringContainsString( 'widget', $out );
+					$this->assertStringContainsString( 'action', $out );
 
-                        // Split on newlines and ensure at least header + three rows.
-                        $lines = array_values( array_filter( array_map( 'trim', explode( "\n", $out ) ) ) );
-                        $this->assertGreaterThanOrEqual( 4, count( $lines ), 'Expected header and three rows' );
-                        $this->assertStringContainsString( "\t", $lines[0], 'Header should be tab-separated' );
-                }
-        }
+					// Expected widget id and actions present.
+					$this->assertStringContainsString( 'widget_missing_widget', $out );
+					$this->assertStringContainsString( 'unhide', $out );
+					$this->assertStringContainsString( 'activate', $out );
+					$this->assertStringContainsString( 'bind', $out );
+					$this->assertStringContainsString( 'ArtPulse\\Widgets\\TestWidget', $out );
+
+					// Split on newlines and ensure at least header + three rows.
+					$lines = array_values( array_filter( array_map( 'trim', explode( "\n", $out ) ) ) );
+					$this->assertGreaterThanOrEqual( 4, count( $lines ), 'Expected header and three rows' );
+					$this->assertStringContainsString( "\t", $lines[0], 'Header should be tab-separated' );
+		}
+	}
 }

@@ -17,27 +17,27 @@ class EventCardController {
 	}
 
 	public static function register_routes(): void {
-                register_rest_route(
-                        'artpulse/v1',
-                        '/event-card/(?P<id>\\d+)',
-                        array(
-                                'methods'             => 'GET',
-                                'callback'            => array( self::class, 'get_card' ),
-                                'permission_callback' => array( Auth::class, 'guard_read' ),
-                                'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
-                        )
-                );
-        }
+				register_rest_route(
+					'artpulse/v1',
+					'/event-card/(?P<id>\\d+)',
+					array(
+						'methods'             => 'GET',
+						'callback'            => array( self::class, 'get_card' ),
+						'permission_callback' => array( Auth::class, 'guard_read' ),
+						'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
+					)
+				);
+	}
 
-        public static function get_card( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
-                $responder = new self();
+	public static function get_card( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+			$responder = new self();
 
-                $id = absint( $request->get_param( 'id' ) );
-                if ( ! $id || get_post_type( $id ) !== 'artpulse_event' ) {
-                        return $responder->fail( 'invalid_event', 'Invalid event.', 404 );
-                }
+			$id = absint( $request->get_param( 'id' ) );
+		if ( ! $id || get_post_type( $id ) !== 'artpulse_event' ) {
+				return $responder->fail( 'invalid_event', 'Invalid event.', 404 );
+		}
 
-                $html = ap_get_event_card( $id );
-                return \rest_ensure_response( $html );
-        }
+			$html = ap_get_event_card( $id );
+			return \rest_ensure_response( $html );
+	}
 }

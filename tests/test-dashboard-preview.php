@@ -20,11 +20,11 @@ final class DashboardPreviewTest extends TestCase {
 		update_option(
 			'artpulse_dashboard_layouts',
 			array(
-                                'member' => array(
-                                        'widget_news',
-                                        'widget_my_rsvps',
-                                        'widget_nearby_events_map',
-                                ),
+				'member' => array(
+					'widget_news',
+					'widget_my_rsvps',
+					'widget_nearby_events_map',
+				),
 			)
 		);
 
@@ -43,11 +43,11 @@ final class DashboardPreviewTest extends TestCase {
 		);
 
 		// Assert: exact order, wrapped with data-widget-id.
-                $this->assertStringContainsString( 'data-widget-id="widget_news"', $html );
-                $this->assertMatchesRegularExpression(
-                        '#widget_news.*widget_my_rsvps.*widget_nearby_events_map#s',
-                        $html
-                );
+				$this->assertStringContainsString( 'data-widget-id="widget_news"', $html );
+				$this->assertMatchesRegularExpression(
+					'#widget_news.*widget_my_rsvps.*widget_nearby_events_map#s',
+					$html
+				);
 	}
 
 	/**
@@ -57,7 +57,7 @@ final class DashboardPreviewTest extends TestCase {
 		update_option(
 			'artpulse_dashboard_layouts',
 			array(
-                                'member' => array( 'widget_news' ),
+				'member' => array( 'widget_news' ),
 			)
 		);
 

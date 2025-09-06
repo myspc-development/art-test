@@ -7,7 +7,6 @@ use ArtPulse\Tests\AjaxTestHelper;
 /**
 
  * @group ADMIN
-
  */
 
 class DiagnosticsPageTest extends WP_Ajax_UnitTestCase {

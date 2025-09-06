@@ -7,7 +7,6 @@ use ArtPulse\Taxonomies\TaxonomiesRegistrar;
 /**
 
  * @group FRONTEND
-
  */
 
 class EventCardTemplateTest extends WP_UnitTestCase {
@@ -15,9 +14,9 @@ class EventCardTemplateTest extends WP_UnitTestCase {
 	private int $event_id;
 
 	public function set_up() {
-               parent::set_up();
-               TaxonomiesRegistrar::register_event_types();
-               TaxonomiesRegistrar::insert_default_event_types();
+				parent::set_up();
+				TaxonomiesRegistrar::register_event_types();
+				TaxonomiesRegistrar::insert_default_event_types();
 
 		$term           = get_term_by( 'slug', 'exhibition', 'event_type' );
 		$this->event_id = wp_insert_post(
@@ -27,32 +26,32 @@ class EventCardTemplateTest extends WP_UnitTestCase {
 				'post_status' => 'publish',
 			)
 		);
-               if ( $term ) {
-                       wp_set_post_terms( $this->event_id, array( $term->term_id ), 'event_type' );
-               }
-       }
+		if ( $term ) {
+				wp_set_post_terms( $this->event_id, array( $term->term_id ), 'event_type' );
+		}
+	}
 
-       public function tear_down() {
-               unregister_taxonomy( 'event_type' );
-               parent::tear_down();
-       }
+	public function tear_down() {
+			unregister_taxonomy( 'event_type' );
+			parent::tear_down();
+	}
 
-        public function test_event_type_rendered_in_card(): void {
-                $html = ap_get_event_card( $this->event_id );
-                $this->assertStringContainsString( 'Exhibition', $html );
-        }
+	public function test_event_type_rendered_in_card(): void {
+			$html = ap_get_event_card( $this->event_id );
+			$this->assertStringContainsString( 'Exhibition', $html );
+	}
 
-    public function test_organizer_email_obfuscated(): void {
-        update_post_meta( $this->event_id, 'event_organizer_email', 'organizer@example.com' );
-        $html = ap_get_event_card( $this->event_id );
-        $this->assertStringContainsString( '&#64;', $html );
-        $this->assertStringNotContainsString( 'organizer@example.com', $html );
-        $this->assertStringNotContainsString( '@', $html );
-    }
+	public function test_organizer_email_obfuscated(): void {
+		update_post_meta( $this->event_id, 'event_organizer_email', 'organizer@example.com' );
+		$html = ap_get_event_card( $this->event_id );
+		$this->assertStringContainsString( '&#64;', $html );
+		$this->assertStringNotContainsString( 'organizer@example.com', $html );
+		$this->assertStringNotContainsString( '@', $html );
+	}
 
-    public function test_handles_missing_taxonomy_without_error(): void {
-        unregister_taxonomy( 'event_type' );
-        $html = ap_get_event_card( $this->event_id );
-        $this->assertStringNotContainsString( 'Type:', $html );
-    }
+	public function test_handles_missing_taxonomy_without_error(): void {
+		unregister_taxonomy( 'event_type' );
+		$html = ap_get_event_card( $this->event_id );
+		$this->assertStringNotContainsString( 'Type:', $html );
+	}
 }

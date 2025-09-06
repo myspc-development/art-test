@@ -53,9 +53,9 @@ class OrgUserRolesController {
 				ARTPULSE_API_NAMESPACE,
 				'/users/me/orgs',
 				array(
-                                        'methods'             => 'GET',
-                                        'callback'            => array( self::class, 'my_orgs' ),
-                                        'permission_callback' => Auth::require_login_and_cap( null ),
+					'methods'             => 'GET',
+					'callback'            => array( self::class, 'my_orgs' ),
+					'permission_callback' => Auth::require_login_and_cap( null ),
 				)
 			);
 		}
@@ -73,17 +73,17 @@ class OrgUserRolesController {
 		return ap_user_has_org_role( $user_id, $org_id ) || user_can( $user_id, 'manage_options' );
 	}
 
-        public static function list_roles( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-                global $wpdb;
-                $org_id = absint( $request['id'] );
-                $table  = $wpdb->prefix . 'ap_org_user_roles';
-                $exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-                if ( ! $exists ) {
-                        return ( new self() )->fail( 'ap_db_missing', 'Required table missing', 500 );
-                }
-                $rows = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, role, status FROM $table WHERE org_id = %d", $org_id ), ARRAY_A );
-                return \rest_ensure_response( $rows );
-        }
+	public static function list_roles( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+			global $wpdb;
+			$org_id = absint( $request['id'] );
+			$table  = $wpdb->prefix . 'ap_org_user_roles';
+			$exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+		if ( ! $exists ) {
+				return ( new self() )->fail( 'ap_db_missing', 'Required table missing', 500 );
+		}
+			$rows = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, role, status FROM $table WHERE org_id = %d", $org_id ), ARRAY_A );
+			return \rest_ensure_response( $rows );
+	}
 
 	public static function add_role( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$org_id  = absint( $request['id'] );

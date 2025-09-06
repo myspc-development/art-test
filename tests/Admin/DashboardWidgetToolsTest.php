@@ -5,7 +5,6 @@ use ArtPulse\Admin\DashboardWidgetTools;
 /**
 
  * @group ADMIN
-
  */
 
 class DashboardWidgetToolsTest extends TestCase {

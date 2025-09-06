@@ -25,9 +25,9 @@ class FavoriteRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/favorites',
 				array(
-                                        'methods'             => 'POST',
-                                        'callback'            => array( self::class, 'handle_request' ),
-                                        'permission_callback' => Auth::require_login_and_cap( null ),
+					'methods'             => 'POST',
+					'callback'            => array( self::class, 'handle_request' ),
+					'permission_callback' => Auth::require_login_and_cap( null ),
 					'args'                => self::get_schema(),
 				)
 			);
@@ -35,9 +35,9 @@ class FavoriteRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/favorites',
 				array(
-                                        'methods'             => 'GET',
-                                        'callback'            => array( self::class, 'list_favorites' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'methods'             => 'GET',
+					'callback'            => array( self::class, 'list_favorites' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 				)
 			);
 		}

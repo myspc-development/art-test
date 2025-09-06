@@ -83,38 +83,38 @@ class SubmissionRestControllerTest extends TestCase {
 
 	public function test_check_permissions_valid_nonce_and_capability(): void {
 		SubmissionStub::reset();
-               $req = new TestRequest( 'POST', '/' );
-               $req->set_header( 'X-WP-Nonce', 'good' );
-               $ref = new \ReflectionMethod( SubmissionRestController::class, 'check_permissions' );
-               $ref->setAccessible( true );
-               $result = $ref->invoke( null, $req );
-               $this->assertIsBool( $result );
-               $this->assertTrue( $result );
-       }
+				$req = new TestRequest( 'POST', '/' );
+				$req->set_header( 'X-WP-Nonce', 'good' );
+				$ref = new \ReflectionMethod( SubmissionRestController::class, 'check_permissions' );
+				$ref->setAccessible( true );
+				$result = $ref->invoke( null, $req );
+				$this->assertIsBool( $result );
+				$this->assertTrue( $result );
+	}
 
 	public function test_check_permissions_fails_with_invalid_nonce(): void {
 		SubmissionStub::reset();
 		SubmissionStub::$nonce_valid = false;
-               $req                         = new TestRequest( 'POST', '/' );
-               $req->set_header( 'X-WP-Nonce', 'bad' );
-               $ref = new \ReflectionMethod( SubmissionRestController::class, 'check_permissions' );
-               $ref->setAccessible( true );
-               $result = $ref->invoke( null, $req );
-               $this->assertIsBool( $result );
-               $this->assertFalse( $result );
-       }
+				$req                 = new TestRequest( 'POST', '/' );
+				$req->set_header( 'X-WP-Nonce', 'bad' );
+				$ref = new \ReflectionMethod( SubmissionRestController::class, 'check_permissions' );
+				$ref->setAccessible( true );
+				$result = $ref->invoke( null, $req );
+				$this->assertIsBool( $result );
+				$this->assertFalse( $result );
+	}
 
 	public function test_check_permissions_fails_without_capability(): void {
 		SubmissionStub::reset();
 		SubmissionStub::$can = false;
-               $req                 = new TestRequest( 'POST', '/' );
-               $req->set_header( 'X-WP-Nonce', 'good' );
-               $ref = new \ReflectionMethod( SubmissionRestController::class, 'check_permissions' );
-               $ref->setAccessible( true );
-               $result = $ref->invoke( null, $req );
-               $this->assertIsBool( $result );
-               $this->assertFalse( $result );
-       }
+				$req         = new TestRequest( 'POST', '/' );
+				$req->set_header( 'X-WP-Nonce', 'good' );
+				$ref = new \ReflectionMethod( SubmissionRestController::class, 'check_permissions' );
+				$ref->setAccessible( true );
+				$result = $ref->invoke( null, $req );
+				$this->assertIsBool( $result );
+				$this->assertFalse( $result );
+	}
 }
 
 class SubmissionStub {

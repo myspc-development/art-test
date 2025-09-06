@@ -22,7 +22,6 @@ use ArtPulse\Widgets\Placeholder\ApPlaceholderWidget;
 /**
 
  * @group UNIT
-
  */
 
 class ApPlaceholderWidgetTest extends TestCase {
@@ -35,15 +34,15 @@ class ApPlaceholderWidgetTest extends TestCase {
 
 	public function test_debug_encoded_when_non_empty(): void {
 		ob_start();
-               ApPlaceholderWidget::render( null, array( 'debug' => array( 'widget_foo' => 'bar' ) ) );
+				ApPlaceholderWidget::render( null, array( 'debug' => array( 'widget_foo' => 'bar' ) ) );
 		$html = ob_get_clean();
-               $this->assertStringContainsString( json_encode( array( 'widget_foo' => 'bar' ) ), $html );
+				$this->assertStringContainsString( json_encode( array( 'widget_foo' => 'bar' ) ), $html );
 		$this->assertStringContainsString( 'ap-widget__debug', $html );
 	}
 
 	public function test_debug_not_shown_when_empty(): void {
 		ob_start();
-                ApPlaceholderWidget::render( null, array( 'debug' => '' ) );
+				ApPlaceholderWidget::render( null, array( 'debug' => '' ) );
 		$html = ob_get_clean();
 		$this->assertStringNotContainsString( 'ap-widget__debug', $html );
 	}

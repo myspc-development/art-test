@@ -7,8 +7,8 @@ final class RestRoutes {
 	 */
 	public static function register_all(): void {
 		foreach ( array(
-                        AnalyticsPilotController::class,
-                        DashboardConfigController::class,
+			AnalyticsPilotController::class,
+			DashboardConfigController::class,
 			EventAnalyticsController::class,
 			PortfolioRestController::class,
 			RsvpDbController::class,

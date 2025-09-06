@@ -45,7 +45,6 @@ if ( ! function_exists( __NAMESPACE__ . '\\get_post_meta' ) ) {
 /**
 
  * @group ADMIN
-
  */
 
 class WP_Post {

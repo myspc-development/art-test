@@ -28,12 +28,12 @@ class FeedbackRestController {
 					array(
 						'methods'             => 'POST',
 						'callback'            => array( self::class, 'submit' ),
-                                                'permission_callback' => Auth::require_login_and_cap(null),
+						'permission_callback' => Auth::require_login_and_cap( null ),
 					),
 					array(
 						'methods'             => 'GET',
 						'callback'            => array( self::class, 'list' ),
-                                                'permission_callback' => Auth::require_login_and_cap(null),
+						'permission_callback' => Auth::require_login_and_cap( null ),
 					),
 				)
 			);
@@ -45,7 +45,7 @@ class FeedbackRestController {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( self::class, 'vote' ),
-                                        'permission_callback' => Auth::require_login_and_cap(null),
+					'permission_callback' => Auth::require_login_and_cap( null ),
 					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);
@@ -58,13 +58,13 @@ class FeedbackRestController {
 					array(
 						'methods'             => 'GET',
 						'callback'            => array( self::class, 'comments' ),
-                                                'permission_callback' => Auth::require_login_and_cap(null),
+						'permission_callback' => Auth::require_login_and_cap( null ),
 						'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 					),
 					array(
 						'methods'             => 'POST',
 						'callback'            => array( self::class, 'add_comment' ),
-                                                'permission_callback' => Auth::require_login_and_cap(null),
+						'permission_callback' => Auth::require_login_and_cap( null ),
 						'args'                => array(
 							'id'      => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 							'comment' => array(
@@ -87,37 +87,37 @@ class FeedbackRestController {
 		if ( $description === '' ) {
 			return new WP_Error( 'required', 'Description required.', array( 'status' => 400 ) );
 		}
-                $user_id = get_current_user_id() ?: null;
-                global $wpdb;
-                $table  = $wpdb->prefix . 'ap_feedback';
-                $exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-                if ( ! $exists ) {
-                        return ( new self() )->fail( 'ap_db_missing', 'Required table missing', 500 );
-                }
-                $wpdb->insert(
-                        $table,
-                        array(
-                                'user_id'     => $user_id,
-				'type'        => $type,
-				'description' => $description,
-				'email'       => $email,
-				'tags'        => $tags,
-				'context'     => $context,
-				'created_at'  => current_time( 'mysql' ),
-			)
-		);
+				$user_id = get_current_user_id() ?: null;
+				global $wpdb;
+				$table  = $wpdb->prefix . 'ap_feedback';
+				$exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+		if ( ! $exists ) {
+				return ( new self() )->fail( 'ap_db_missing', 'Required table missing', 500 );
+		}
+				$wpdb->insert(
+					$table,
+					array(
+						'user_id'     => $user_id,
+						'type'        => $type,
+						'description' => $description,
+						'email'       => $email,
+						'tags'        => $tags,
+						'context'     => $context,
+						'created_at'  => current_time( 'mysql' ),
+					)
+				);
 		return \rest_ensure_response( array( 'success' => true ) );
 	}
 
 	public static function list(): WP_REST_Response|WP_Error {
-                global $wpdb;
-                $table  = $wpdb->prefix . 'ap_feedback';
-                $exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-                if ( ! $exists ) {
-                        return ( new self() )->fail( 'ap_db_missing', 'Required table missing', 500 );
-                }
-                $rows  = $wpdb->get_results( "SELECT * FROM $table ORDER BY votes DESC, created_at DESC LIMIT 100", ARRAY_A );
-		$voted = array();
+				global $wpdb;
+				$table  = $wpdb->prefix . 'ap_feedback';
+				$exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+		if ( ! $exists ) {
+				return ( new self() )->fail( 'ap_db_missing', 'Required table missing', 500 );
+		}
+				$rows = $wpdb->get_results( "SELECT * FROM $table ORDER BY votes DESC, created_at DESC LIMIT 100", ARRAY_A );
+		$voted        = array();
 		if ( is_user_logged_in() ) {
 			$voted = get_user_meta( get_current_user_id(), 'ap_feedback_votes', true );
 			if ( ! is_array( $voted ) ) {

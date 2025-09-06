@@ -1,13 +1,13 @@
 /* Dashboard styles */
 :root {
-  color-scheme: light dark;
-  --ap-role-member: #2f6feb;
-  --ap-role-artist: #7a3ff0;
-  --ap-role-org: #0ea5a4;
-  --ap-accent: var(--ap-role-member);
-  --ap-border: #e5e7eb;
-  --ap-bg: #ffffff;
-  --ap-text: #111827;
+	color-scheme: light dark;
+	--ap-role-member: #2f6feb;
+	--ap-role-artist: #7a3ff0;
+	--ap-role-org: #0ea5a4;
+	--ap-accent: var(--ap-role-member);
+	--ap-border: #e5e7eb;
+	--ap-bg: #ffffff;
+	--ap-text: #111827;
 }
 [data-role-theme="member"] { --ap-accent: var(--ap-role-member); }
 [data-role-theme="artist"] { --ap-accent: var(--ap-role-artist); }

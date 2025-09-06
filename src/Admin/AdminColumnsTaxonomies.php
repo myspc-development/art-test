@@ -99,11 +99,11 @@ class AdminColumnsTaxonomies {
 		}
 		$term_links = array();
 		foreach ( $terms as $term ) {
-			$link         = get_edit_term_link( $term->term_id, $taxonomy );
-                        $term_links[] = sprintf( '<a href="%1$s">%2$s</a>', esc_url( $link ), esc_html( $term->name ) );
-                }
-                echo implode( ', ', $term_links );
-        }
+			$link                     = get_edit_term_link( $term->term_id, $taxonomy );
+						$term_links[] = sprintf( '<a href="%1$s">%2$s</a>', esc_url( $link ), esc_html( $term->name ) );
+		}
+				echo implode( ', ', $term_links );
+	}
 
 	// Modify query to enable sorting by taxonomy
 

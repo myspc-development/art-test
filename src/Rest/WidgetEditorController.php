@@ -16,84 +16,87 @@ class WidgetEditorController {
 	use RestResponder;
 
 	public static function register(): void {
-		add_action( 'rest_api_init', [ self::class, 'register_routes' ], 99 ); // late, so de-duper keeps ours
+		add_action( 'rest_api_init', array( self::class, 'register_routes' ), 99 ); // late, so de-duper keeps ours
 	}
 
 	public static function register_routes(): void {
-                register_rest_route(
-                        ARTPULSE_API_NAMESPACE,
-                        '/widgets',
-                        [
-                                'methods'             => 'GET',
-                                'callback'            => [ self::class, 'get_widgets' ],
-                                'permission_callback' => Auth::require_login_and_cap( 'read' ),
-                                'args'                => [
-                                        'role' => [
-                                                'sanitize_callback' => 'sanitize_key',
-                                                'type'              => 'string',
-                                        ],
-                                ],
-                        ]
-                );
+				register_rest_route(
+					ARTPULSE_API_NAMESPACE,
+					'/widgets',
+					array(
+						'methods'             => 'GET',
+						'callback'            => array( self::class, 'get_widgets' ),
+						'permission_callback' => Auth::require_login_and_cap( 'read' ),
+						'args'                => array(
+							'role' => array(
+								'sanitize_callback' => 'sanitize_key',
+								'type'              => 'string',
+							),
+						),
+					)
+				);
 
 		register_rest_route(
 			ARTPULSE_API_NAMESPACE,
 			'/roles',
-			[
+			array(
 				'methods'             => 'GET',
-				'callback'            => [ self::class, 'get_roles' ],
+				'callback'            => array( self::class, 'get_roles' ),
 				'permission_callback' => Auth::require_login_and_cap( 'read' ),
-			]
+			)
 		);
 
 		register_rest_route(
 			ARTPULSE_API_NAMESPACE,
 			'/layout',
-			[
-				'methods'             => [ 'GET', 'POST' ],
-				'callback'            => [ self::class, 'handle_layout' ],
+			array(
+				'methods'             => array( 'GET', 'POST' ),
+				'callback'            => array( self::class, 'handle_layout' ),
 				'permission_callback' => Auth::require_login_and_cap( 'manage_options' ),
-			]
+			)
 		);
 	}
 
-	
+
 	public static function get_widgets( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$role = sanitize_key( $req['role'] ?? '' );
 		if ( ! $role ) {
-			return \rest_ensure_response( [] );
+			return \rest_ensure_response( array() );
 		}
 
 		$defs = DashboardWidgetManager::getWidgetDefinitions();
-		$defs = array_values( array_filter( $defs, static function ( $def ) use ( $role ) {
-			$roles = $def['roles'] ?? [];
-			return empty( $roles ) || in_array( $role, (array) $roles, true );
-		} ) );
+		$defs = array_values(
+			array_filter(
+				$defs,
+				static function ( $def ) use ( $role ) {
+					$roles = $def['roles'] ?? array();
+					return empty( $roles ) || in_array( $role, (array) $roles, true );
+				}
+			)
+		);
 
 		return \rest_ensure_response( $defs );
 	}
 
 	public static function get_roles(): WP_REST_Response|WP_Error {
 		global $wp_roles;
-		$roles = $wp_roles ? array_keys( $wp_roles->roles ) : [];
-                return \rest_ensure_response( array_values( $roles ) );
-        }
+		$roles = $wp_roles ? array_keys( $wp_roles->roles ) : array();
+				return \rest_ensure_response( array_values( $roles ) );
+	}
 
-        public static function get_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
-                $role   = sanitize_key( $req['role'] );
-                $result = \ArtPulse\Core\DashboardWidgetManager::getRoleLayout( $role );
-                $layout = $result['layout'] ?? [];
+	public static function get_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
+			$role   = sanitize_key( $req['role'] );
+			$result = \ArtPulse\Core\DashboardWidgetManager::getRoleLayout( $role );
+			$layout = $result['layout'] ?? array();
 
-                return \rest_ensure_response( $layout );
-        }
+			return \rest_ensure_response( $layout );
+	}
 
-        public static function handle_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
-                return match ( $req->get_method() ) {
-                        'POST'  => self::save_layout( $req ),
-                        'GET'   => self::get_layout( $req ),
-                        default => new WP_Error( 'invalid_method', 'Method not allowed', [ 'status' => 405 ] ),
-                };
-
+	public static function handle_layout( WP_REST_Request $req ): WP_REST_Response|WP_Error {
+			return match ( $req->get_method() ) {
+					'POST'  => self::save_layout( $req ),
+					'GET'   => self::get_layout( $req ),
+					default => new WP_Error( 'invalid_method', 'Method not allowed', array( 'status' => 405 ) ),
+			};
+	}
 }
-}
-

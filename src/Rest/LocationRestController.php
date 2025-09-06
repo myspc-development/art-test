@@ -9,6 +9,7 @@ use ArtPulse\Rest\RestResponder;
 
 class LocationRestController {
 	use RestResponder;
+
 	public static function register(): void {
 		add_action(
 			'rest_api_init',
@@ -20,7 +21,7 @@ class LocationRestController {
 						array(
 							'methods'             => 'GET',
 							'callback'            => array( self::class, 'geonames' ),
-                                                        'permission_callback' => Auth::require_login_and_cap(null),
+							'permission_callback' => Auth::require_login_and_cap( null ),
 						)
 					);
 				}
@@ -31,7 +32,7 @@ class LocationRestController {
 						array(
 							'methods'             => 'GET',
 							'callback'            => array( self::class, 'google' ),
-                                                        'permission_callback' => Auth::require_login_and_cap(null),
+							'permission_callback' => Auth::require_login_and_cap( null ),
 						)
 					);
 				}

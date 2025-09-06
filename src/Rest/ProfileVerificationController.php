@@ -22,9 +22,9 @@ class ProfileVerificationController {
 				ARTPULSE_API_NAMESPACE,
 				'/profile/(?P<id>\d+)/verify',
 				array(
-                                        'methods'             => WP_REST_Server::CREATABLE,
-                                        'callback'            => array( self::class, 'verify_profile' ),
-                                        'permission_callback' => array( Auth::class, 'guard_manage' ),
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( self::class, 'verify_profile' ),
+					'permission_callback' => array( Auth::class, 'guard_manage' ),
 					'args'                => array(
 						'id' => array(
 							'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),

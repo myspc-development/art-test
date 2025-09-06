@@ -1,172 +1,171 @@
-
 /* ==========================================================
-   ART PULSE DESIGN SYSTEM — DASHBOARDS & SUBMISSION FORMS
-   Target: Member Users, Artists, Organizations (Frontend UI)
-   Compatible: Salient Theme, WPBakery, Vanilla CSS
-   ========================================================== */
+	ART PULSE DESIGN SYSTEM — DASHBOARDS & SUBMISSION FORMS
+	Target: Member Users, Artists, Organizations (Frontend UI)
+	Compatible: Salient Theme, WPBakery, Vanilla CSS
+	========================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
 /* === Base Reset & Variables === */
 :root {
-  --ap-primary: #0c75af;
-  --ap-primary-hover: #095e8f;
-  --ap-bg: #ffffff;
-  --ap-border: #dcdcdc;
-  --ap-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  --ap-radius: 12px;
-  --ap-gap: 2rem;
-  --ap-font: "Open Sans", sans-serif;
+	--ap-primary: #0c75af;
+	--ap-primary-hover: #095e8f;
+	--ap-bg: #ffffff;
+	--ap-border: #dcdcdc;
+	--ap-shadow: 0 2px 6px rgba(0,0,0,0.08);
+	--ap-radius: 12px;
+	--ap-gap: 2rem;
+	--ap-font: "Open Sans", sans-serif;
 }
 
 *, *::before, *::after {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 body {
-  font-family: var(--ap-font);
-  background-color: #f9fafc;
-  color: #333;
-  margin: 0;
-  padding: 0;
-  line-height: 1.6;
+	font-family: var(--ap-font);
+	background-color: #f9fafc;
+	color: #333;
+	margin: 0;
+	padding: 0;
+	line-height: 1.6;
 }
 
 /* === Dashboard Layout === */
 .dashboard-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--ap-gap);
-  margin-bottom: var(--ap-gap);
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--ap-gap);
+	margin-bottom: var(--ap-gap);
 }
 .dashboard-topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--ap-bg);
-  padding: 1rem 1.5rem;
-  border-radius: var(--ap-radius);
-  box-shadow: var(--ap-shadow);
-  margin-bottom: var(--ap-gap);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: var(--ap-bg);
+	padding: 1rem 1.5rem;
+	border-radius: var(--ap-radius);
+	box-shadow: var(--ap-shadow);
+	margin-bottom: var(--ap-gap);
 }
 .dashboard-topbar .welcome {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
 }
 .dashboard-topbar img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
 }
 .dashboard-sidebar {
-  flex: 1 1 250px;
-  background: var(--ap-bg);
-  border-radius: var(--ap-radius);
-  padding: 1.5rem;
-  box-shadow: var(--ap-shadow);
+	flex: 1 1 250px;
+	background: var(--ap-bg);
+	border-radius: var(--ap-radius);
+	padding: 1.5rem;
+	box-shadow: var(--ap-shadow);
 }
 .dashboard-sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+	list-style: none;
+	padding: 0;
+	margin: 0;
 }
 .dashboard-sidebar li {
-  margin-bottom: 1rem;
+	margin-bottom: 1rem;
 }
 .dashboard-sidebar a {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  text-decoration: none;
-  font-weight: 500;
-  color: #333;
-  transition: color 0.2s ease;
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	text-decoration: none;
+	font-weight: 500;
+	color: #333;
+	transition: color 0.2s ease;
 }
 .dashboard-sidebar a:hover {
-  color: var(--ap-primary);
+	color: var(--ap-primary);
 }
 .dashboard-main {
-  flex: 3 1 700px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--ap-gap);
+	flex: 3 1 700px;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: var(--ap-gap);
 }
 .ap-card {
-  background: var(--ap-bg);
-  border-radius: var(--ap-radius);
-  box-shadow: var(--ap-shadow);
-  padding: 1.5rem;
-  transition: transform 0.2s ease;
+	background: var(--ap-bg);
+	border-radius: var(--ap-radius);
+	box-shadow: var(--ap-shadow);
+	padding: 1.5rem;
+	transition: transform 0.2s ease;
 }
 .ap-card:hover {
-  transform: translateY(-4px);
+	transform: translateY(-4px);
 }
 
 /* === Submission Form Styles === */
 .submission-form {
-  max-width: 800px;
-  margin: 3rem auto;
-  background: var(--ap-bg);
-  padding: 2rem;
-  border-radius: var(--ap-radius);
-  box-shadow: var(--ap-shadow);
+	max-width: 800px;
+	margin: 3rem auto;
+	background: var(--ap-bg);
+	padding: 2rem;
+	border-radius: var(--ap-radius);
+	box-shadow: var(--ap-shadow);
 }
 .submission-form h2 {
-  margin-top: 0;
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
+	margin-top: 0;
+	font-size: 1.5rem;
+	margin-bottom: 1.5rem;
 }
 .form-section {
-  margin-bottom: 2.5rem;
+	margin-bottom: 2.5rem;
 }
 .form-section legend {
-  font-weight: 600;
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  display: block;
+	font-weight: 600;
+	font-size: 1.2rem;
+	margin-bottom: 1rem;
+	display: block;
 }
 .submission-form label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
+	display: block;
+	margin-bottom: 0.5rem;
+	font-weight: 500;
 }
 .submission-form input,
 .submission-form select,
 .submission-form textarea {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--ap-border);
-  border-radius: 8px;
-  margin-bottom: 1.2rem;
-  font-size: 1rem;
-  background-color: #fff;
+	width: 100%;
+	padding: 0.75rem 1rem;
+	border: 1px solid var(--ap-border);
+	border-radius: 8px;
+	margin-bottom: 1.2rem;
+	font-size: 1rem;
+	background-color: #fff;
 }
 .submission-form textarea {
-  resize: vertical;
-  min-height: 140px;
+	resize: vertical;
+	min-height: 140px;
 }
 .button-primary {
-  background-color: var(--ap-primary);
-  color: #fff;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+	background-color: var(--ap-primary);
+	color: #fff;
+	padding: 0.75rem 1.5rem;
+	border: none;
+	border-radius: 8px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
 }
 .button-primary:hover {
-  background-color: var(--ap-primary-hover);
+	background-color: var(--ap-primary-hover);
 }
 
 /* === Utilities === */
 .ap-icon {
-  font-size: 1.2em;
-  vertical-align: middle;
+	font-size: 1.2em;
+	vertical-align: middle;
 }
 .text-center {
-  text-align: center;
+	text-align: center;
 }
 .mt-2 { margin-top: 2rem; }
 .mb-2 { margin-bottom: 2rem; }

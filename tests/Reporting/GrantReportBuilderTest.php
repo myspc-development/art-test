@@ -26,7 +26,6 @@ use function ArtPulse\Tests\safe_unlink;
 /**
 
  * @group REPORTING
-
  */
 
 class GrantReportBuilderTest extends TestCase {

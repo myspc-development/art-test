@@ -9,7 +9,6 @@ use WP_UnitTestCase;
 /**
 
  * @group PAYMENT
-
  */
 
 class PaymentHandlerTest extends WP_UnitTestCase {

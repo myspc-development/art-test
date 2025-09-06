@@ -29,11 +29,11 @@ class CustomFieldsManagerTest extends \WP_UnitTestCase {
 	}
 
 	public function test_get_returns_saved_fields(): void {
-               update_post_meta( $this->event_id, 'ap_rsvp_custom_fields', array( 'widget_foo' => 'Foo' ) );
+				update_post_meta( $this->event_id, 'ap_rsvp_custom_fields', array( 'widget_foo' => 'Foo' ) );
 		$req = new \WP_REST_Request( 'GET', "/artpulse/v1/event/{$this->event_id}/rsvp/custom-fields" );
 		$res = rest_get_server()->dispatch( $req );
 		$this->assertSame( 200, $res->get_status() );
-               $this->assertSame( array( 'widget_foo' => 'Foo' ), $res->get_data() );
+				$this->assertSame( array( 'widget_foo' => 'Foo' ), $res->get_data() );
 	}
 
 	public function test_post_saves_fields(): void {

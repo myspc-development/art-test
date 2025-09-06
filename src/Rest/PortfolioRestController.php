@@ -25,82 +25,82 @@ class PortfolioRestController extends WP_REST_Controller {
 	public function register_routes(): void {
 		$permission = Auth::require_login_and_cap( 'read' );
 
-                if ( ! ap_rest_route_registered( $this->namespace, '/portfolio' ) ) {
-                        register_rest_route(
-                                $this->namespace,
-                                '/portfolio',
-                                array(
-                                        'methods'             => WP_REST_Server::READABLE,
-                                        'callback'            => array( $this, 'get_portfolio' ),
-                                        'permission_callback' => $permission,
-                                        'args'                => array(
-                                                'user' => array(
-                                                        'type'    => 'string',
-                                                        'default' => 'me',
-                                                ),
-                                        ),
-                                )
-                        );
-                }
+		if ( ! ap_rest_route_registered( $this->namespace, '/portfolio' ) ) {
+				register_rest_route(
+					$this->namespace,
+					'/portfolio',
+					array(
+						'methods'             => WP_REST_Server::READABLE,
+						'callback'            => array( $this, 'get_portfolio' ),
+						'permission_callback' => $permission,
+						'args'                => array(
+							'user' => array(
+								'type'    => 'string',
+								'default' => 'me',
+							),
+						),
+					)
+				);
+		}
 
-                if ( ! ap_rest_route_registered( $this->namespace, '/portfolio/items' ) ) {
-                        register_rest_route(
-                                $this->namespace,
-                                '/portfolio/items',
-                                array(
-                                        'methods'             => WP_REST_Server::CREATABLE,
-                                        'callback'            => array( $this, 'add_item' ),
-                                        'permission_callback' => $permission,
-                                        'args'                => array(
-                                                'media_id' => array(
-                                                        'type'     => 'integer',
-                                                        'required' => true,
-                                                ),
-                                                'meta'     => array(
-                                                        'type'     => 'object',
-                                                        'required' => true,
-                                                ),
-                                        ),
-                                )
-                        );
-                }
+		if ( ! ap_rest_route_registered( $this->namespace, '/portfolio/items' ) ) {
+				register_rest_route(
+					$this->namespace,
+					'/portfolio/items',
+					array(
+						'methods'             => WP_REST_Server::CREATABLE,
+						'callback'            => array( $this, 'add_item' ),
+						'permission_callback' => $permission,
+						'args'                => array(
+							'media_id' => array(
+								'type'     => 'integer',
+								'required' => true,
+							),
+							'meta'     => array(
+								'type'     => 'object',
+								'required' => true,
+							),
+						),
+					)
+				);
+		}
 
-                if ( ! ap_rest_route_registered( $this->namespace, '/portfolio/order' ) ) {
-                        register_rest_route(
-                                $this->namespace,
-                                '/portfolio/order',
-                                array(
-                                        'methods'             => WP_REST_Server::EDITABLE,
-                                        'callback'            => array( $this, 'save_order' ),
-                                        'permission_callback' => $permission,
-                                        'args'                => array(
-                                                'order' => array(
-                                                        'type'     => 'array',
-                                                        'required' => true,
-                                                ),
-                                        ),
-                                )
-                        );
-                }
+		if ( ! ap_rest_route_registered( $this->namespace, '/portfolio/order' ) ) {
+				register_rest_route(
+					$this->namespace,
+					'/portfolio/order',
+					array(
+						'methods'             => WP_REST_Server::EDITABLE,
+						'callback'            => array( $this, 'save_order' ),
+						'permission_callback' => $permission,
+						'args'                => array(
+							'order' => array(
+								'type'     => 'array',
+								'required' => true,
+							),
+						),
+					)
+				);
+		}
 
-                if ( ! ap_rest_route_registered( $this->namespace, '/portfolio/featured' ) ) {
-                        register_rest_route(
-                                $this->namespace,
-                                '/portfolio/featured',
-                                array(
-                                        'methods'             => WP_REST_Server::EDITABLE,
-                                        'callback'            => array( $this, 'set_featured' ),
-                                        'permission_callback' => $permission,
-                                        'args'                => array(
-                                                'attachment_id' => array(
-                                                        'type'     => 'integer',
-                                                        'required' => true,
-                                                ),
-                                        ),
-                                )
-                        );
-                }
-        }
+		if ( ! ap_rest_route_registered( $this->namespace, '/portfolio/featured' ) ) {
+				register_rest_route(
+					$this->namespace,
+					'/portfolio/featured',
+					array(
+						'methods'             => WP_REST_Server::EDITABLE,
+						'callback'            => array( $this, 'set_featured' ),
+						'permission_callback' => $permission,
+						'args'                => array(
+							'attachment_id' => array(
+								'type'     => 'integer',
+								'required' => true,
+							),
+						),
+					)
+				);
+		}
+	}
 
 	protected function get_profile_id( int $user_id ): int {
 		$profile = get_posts(

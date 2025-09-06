@@ -23,9 +23,9 @@ abstract class RestTestCase extends \WP_UnitTestCase {
 			define( 'ARTPULSE_API_NAMESPACE', 'artpulse/v1' );
 		}
 
-		$this->admin  = self::factory()->user->create( [ 'role' => 'administrator' ] );
-		$this->member = self::factory()->user->create( [ 'role' => 'member' ] );
-		$this->artist = self::factory()->user->create( [ 'role' => 'artist' ] );
+		$this->admin  = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		$this->member = self::factory()->user->create( array( 'role' => 'member' ) );
+		$this->artist = self::factory()->user->create( array( 'role' => 'artist' ) );
 
 		global $wp_rest_server;
 		$wp_rest_server = new \Spy_REST_Server();

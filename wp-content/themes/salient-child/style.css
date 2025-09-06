@@ -1,11 +1,11 @@
 .single-artpulse-event .event-meta {
-  margin: 1rem 0;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  background: #fafafa;
-  list-style: none;
+	margin: 1rem 0;
+	padding: 1rem;
+	border: 1px solid #ddd;
+	background: #fafafa;
+	list-style: none;
 }
 
 .single-artpulse-event .event-meta li {
-  margin: 0.5rem 0;
+	margin: 0.5rem 0;
 }

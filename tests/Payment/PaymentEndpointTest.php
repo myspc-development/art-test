@@ -7,7 +7,6 @@ use function Brain\Monkey\Functions\when;
 /**
 
  * @group PAYMENT
-
  */
 
 class PaymentEndpointTest extends \WP_UnitTestCase {

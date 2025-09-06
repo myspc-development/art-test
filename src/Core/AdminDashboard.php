@@ -55,8 +55,6 @@ class AdminDashboard {
 
 		// Legacy dashboard script removed.
 
-
-
 		wp_localize_script(
 			'role-dashboard',
 			'ArtPulseDashboard',

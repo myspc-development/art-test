@@ -44,7 +44,7 @@ class NotificationHooks {
 				'comment',
 				$post->ID,
 				$commenter_id,
-                                sprintf( esc_html__( 'New comment on your post "%1$s".', 'artpulse' ), esc_html( $post->post_title ) )
+				sprintf( esc_html__( 'New comment on your post "%1$s".', 'artpulse' ), esc_html( $post->post_title ) )
 			);
 		}
 
@@ -56,7 +56,7 @@ class NotificationHooks {
 					'mention',
 					$post->ID,
 					$commenter_id,
-                                        sprintf( esc_html__( '%1$s mentioned you in a comment.', 'artpulse' ), esc_html( $commentdata['comment_author'] ) )
+					sprintf( esc_html__( '%1$s mentioned you in a comment.', 'artpulse' ), esc_html( $commentdata['comment_author'] ) )
 				);
 			}
 		}
@@ -71,12 +71,12 @@ class NotificationHooks {
 			'membership_' . $change_type,
 			null,
 			null,
-                        sprintf(
-                                esc_html__( 'Your membership was %1$s: %2$s → %3$s.', 'artpulse' ),
-                                esc_html( $change_type ),
-                                esc_html( $old_level ),
-                                esc_html( $new_level )
-                        )
+			sprintf(
+				esc_html__( 'Your membership was %1$s: %2$s → %3$s.', 'artpulse' ),
+				esc_html( $change_type ),
+				esc_html( $old_level ),
+				esc_html( $new_level )
+			)
 		);
 	}
 
@@ -90,7 +90,7 @@ class NotificationHooks {
 			'payment_' . $event_type,
 			null,
 			null,
-                        sprintf( esc_html__( 'Payment %1$s: %2$s.', 'artpulse' ), esc_html( $event_type ), esc_html( $amount_display ) )
+			sprintf( esc_html__( 'Payment %1$s: %2$s.', 'artpulse' ), esc_html( $event_type ), esc_html( $amount_display ) )
 		);
 	}
 

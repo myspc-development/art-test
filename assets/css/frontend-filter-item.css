@@ -1,50 +1,50 @@
 @import url("ap-style.css");
 .ap-filter-item {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--ap-border-color);
-  padding-bottom: 1rem;
+	display: flex;
+	align-items: flex-start;
+	margin-bottom: 1.5rem;
+	border-bottom: 1px solid var(--ap-border-color);
+	padding-bottom: 1rem;
 }
 
 .ap-filter-item-thumbnail {
-  flex-shrink: 0;
-  margin-right: 1rem;
+	flex-shrink: 0;
+	margin-right: 1rem;
 }
 
 .ap-filter-item-thumbnail img {
-  max-width: 120px;
-  height: auto;
-  border-radius: var(--ap-border-radius);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	max-width: 120px;
+	height: auto;
+	border-radius: var(--ap-border-radius);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .ap-filter-item-content {
-  flex-grow: 1;
+	flex-grow: 1;
 }
 
 .ap-filter-item-title {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.25rem;
-  line-height: 1.3;
+	margin: 0 0 0.5rem 0;
+	font-size: 1.25rem;
+	line-height: 1.3;
 }
 
 .ap-filter-item-title a {
-  color: var(--ap-primary-color);
-  text-decoration: none;
-  transition: color 0.2s ease;
+	color: var(--ap-primary-color);
+	text-decoration: none;
+	transition: color 0.2s ease;
 }
 
 .ap-filter-item-title a:hover,
 .ap-filter-item-title a:focus {
-  color: var(--ap-primary-hover);
-  text-decoration: underline;
-  outline: 2px solid var(--ap-primary-color);
-  outline-offset: 2px;
+	color: var(--ap-primary-hover);
+	text-decoration: underline;
+	outline: 2px solid var(--ap-primary-color);
+	outline-offset: 2px;
 }
 
 .ap-filter-item-excerpt {
-  color: var(--ap-subtext-color);
-  font-size: 1rem;
-  line-height: 1.5;
+	color: var(--ap-subtext-color);
+	font-size: 1rem;
+	line-height: 1.5;
 }

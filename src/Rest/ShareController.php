@@ -20,9 +20,9 @@ class ShareController {
 				ARTPULSE_API_NAMESPACE,
 				'/share',
 				array(
-                                        'methods'             => 'POST',
-                                        'callback'            => array( self::class, 'log_share' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'methods'             => 'POST',
+					'callback'            => array( self::class, 'log_share' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'object_id'   => array(
 							'type'     => 'integer',

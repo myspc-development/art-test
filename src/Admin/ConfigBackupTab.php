@@ -63,48 +63,48 @@ class ConfigBackupTab {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( __( 'Insufficient permissions', 'artpulse' ) );
 		}
-                check_admin_referer( 'ap_import_config' );
+				check_admin_referer( 'ap_import_config' );
 
-                if ( ! isset( $_FILES['ap_config_file'] ) || empty( $_FILES['ap_config_file']['tmp_name'] ) ) {
-                        wp_safe_redirect( add_query_arg( 'import_error', '1', wp_get_referer() ?: admin_url( 'admin.php?page=artpulse-settings#config_backup' ) ) );
-                        exit;
-                }
+		if ( ! isset( $_FILES['ap_config_file'] ) || empty( $_FILES['ap_config_file']['tmp_name'] ) ) {
+				wp_safe_redirect( add_query_arg( 'import_error', '1', wp_get_referer() ?: admin_url( 'admin.php?page=artpulse-settings#config_backup' ) ) );
+				exit;
+		}
 
-                $file = $_FILES['ap_config_file'];
+				$file = $_FILES['ap_config_file'];
 
-                if ( $file['size'] > 1024 * 1024 ) {
-                        wp_safe_redirect( add_query_arg( 'import_error', '1', wp_get_referer() ?: admin_url( 'admin.php?page=artpulse-settings#config_backup' ) ) );
-                        exit;
-                }
+		if ( $file['size'] > 1024 * 1024 ) {
+				wp_safe_redirect( add_query_arg( 'import_error', '1', wp_get_referer() ?: admin_url( 'admin.php?page=artpulse-settings#config_backup' ) ) );
+				exit;
+		}
 
-                $check = wp_check_filetype_and_ext( $file['tmp_name'], $file['name'], array( 'json' => 'application/json' ) );
-                if ( 'json' !== ( $check['ext'] ?? '' ) || 'application/json' !== ( $check['type'] ?? '' ) ) {
-                        wp_safe_redirect( add_query_arg( 'import_error', '1', wp_get_referer() ?: admin_url( 'admin.php?page=artpulse-settings#config_backup' ) ) );
-                        exit;
-                }
+				$check = wp_check_filetype_and_ext( $file['tmp_name'], $file['name'], array( 'json' => 'application/json' ) );
+		if ( 'json' !== ( $check['ext'] ?? '' ) || 'application/json' !== ( $check['type'] ?? '' ) ) {
+				wp_safe_redirect( add_query_arg( 'import_error', '1', wp_get_referer() ?: admin_url( 'admin.php?page=artpulse-settings#config_backup' ) ) );
+				exit;
+		}
 
-                $json = file_get_contents( $file['tmp_name'] );
-                try {
-                        $data = json_decode( $json, true, 512, JSON_THROW_ON_ERROR );
-                } catch ( \JsonException $e ) {
-                        wp_safe_redirect( add_query_arg( 'import_error', '1', wp_get_referer() ?: admin_url( 'admin.php?page=artpulse-settings#config_backup' ) ) );
-                        exit;
-                }
+				$json = file_get_contents( $file['tmp_name'] );
+		try {
+				$data = json_decode( $json, true, 512, JSON_THROW_ON_ERROR );
+		} catch ( \JsonException $e ) {
+				wp_safe_redirect( add_query_arg( 'import_error', '1', wp_get_referer() ?: admin_url( 'admin.php?page=artpulse-settings#config_backup' ) ) );
+				exit;
+		}
 
-                if ( ! is_array( $data ) ) {
-                        wp_safe_redirect( add_query_arg( 'import_error', '1', wp_get_referer() ?: admin_url( 'admin.php?page=artpulse-settings#config_backup' ) ) );
-                        exit;
-                }
+		if ( ! is_array( $data ) ) {
+				wp_safe_redirect( add_query_arg( 'import_error', '1', wp_get_referer() ?: admin_url( 'admin.php?page=artpulse-settings#config_backup' ) ) );
+				exit;
+		}
 
-                $allowed_options = array_keys( self::get_options() );
+				$allowed_options = array_keys( self::get_options() );
 
-                foreach ( $data as $name => $value ) {
-                        if ( is_string( $name ) && in_array( $name, $allowed_options, true ) ) {
-                                update_option( $name, $value );
-                        }
-                }
+		foreach ( $data as $name => $value ) {
+			if ( is_string( $name ) && in_array( $name, $allowed_options, true ) ) {
+						update_option( $name, $value );
+			}
+		}
 
-                wp_safe_redirect( add_query_arg( 'import_success', '1', admin_url( 'admin.php?page=artpulse-settings#config_backup' ) ) );
-                exit;
-        }
+				wp_safe_redirect( add_query_arg( 'import_success', '1', admin_url( 'admin.php?page=artpulse-settings#config_backup' ) ) );
+				exit;
+	}
 }

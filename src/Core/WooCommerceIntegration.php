@@ -99,14 +99,14 @@ class WooCommerceIntegration {
 
 		\ArtPulse\Core\EmailService::send(
 			$user->user_email,
-                        sprintf( esc_html__( 'Your ArtPulse membership is now %1$s', 'artpulse' ), esc_html( $level ) ),
-                        sprintf(
-                                esc_html__( 'Thank you! Your membership level is set to %1$s and expires on %2$s.', 'artpulse' ),
-                                esc_html( $level ),
-                                esc_html( date_i18n( get_option( 'date_format' ), $expiry ) )
-                        )
-                );
-        }
+			sprintf( esc_html__( 'Your ArtPulse membership is now %1$s', 'artpulse' ), esc_html( $level ) ),
+			sprintf(
+				esc_html__( 'Thank you! Your membership level is set to %1$s and expires on %2$s.', 'artpulse' ),
+				esc_html( $level ),
+				esc_html( date_i18n( get_option( 'date_format' ), $expiry ) )
+			)
+		);
+	}
 
 	/**
 	 * Apply coupon code from the request to the cart if valid.

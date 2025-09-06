@@ -5,7 +5,6 @@ use ArtPulse\Admin\SettingsRegistry;
 /**
 
  * @group ADMIN
-
  */
 
 class SettingsRegistryTest extends TestCase {

@@ -3,4 +3,3 @@
 // by \ArtPulse\Rest\DashboardConfigController. This stub remains for
 // backward compatibility but performs no actions.
 return;
-

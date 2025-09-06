@@ -3,27 +3,27 @@ body { font-family: 'Open Sans', Arial, sans-serif; color: #222; background: #f8
 a { color: #0c75af; text-decoration: none; transition: .2s; }
 a:hover { color: #095e8f; text-decoration: underline; }
 button, .button, input[type=submit] {
-  background: #0c75af; color: #fff; padding: 12px 24px;
-  border: none; border-radius: 30px; font-weight: 600;
-  transition: .3s; cursor: pointer;
+	background: #0c75af; color: #fff; padding: 12px 24px;
+	border: none; border-radius: 30px; font-weight: 600;
+	transition: .3s; cursor: pointer;
 }
 button:hover, .button:hover, input[type=submit]:hover { background: #095e8f; }
 input, select, textarea {
-  padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 1em; width: 100%; margin-bottom: 1rem;
+	padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 1em; width: 100%; margin-bottom: 1rem;
 }
 input:focus, select:focus, textarea:focus { border-color: #0c75af; outline: none; }
 .card {
-  background: #fff; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,.06); padding: 2rem; margin-bottom: 2rem;
-  transition: transform .2s;
+	background: #fff; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,.06); padding: 2rem; margin-bottom: 2rem;
+	transition: transform .2s;
 }
 .card:hover { transform: translateY(-4px); }
 .notice {
-  padding: 1rem 1.5rem; background: #e7f4fd; border-left: 4px solid #0c75af; border-radius: 10px; color: #084c73; margin-bottom: 1rem;
+	padding: 1rem 1.5rem; background: #e7f4fd; border-left: 4px solid #0c75af; border-radius: 10px; color: #084c73; margin-bottom: 1rem;
 }
 .text-center { text-align: center; }
 .mt-2 { margin-top: 2rem; }
 .mb-2 { margin-bottom: 2rem; }
 @media (max-width: 700px) {
-  .card { padding: 1rem; }
-  input, select, textarea { font-size: 1em; }
+	.card { padding: 1rem; }
+	input, select, textarea { font-size: 1em; }
 }

@@ -6,7 +6,6 @@ use ArtPulse\Widgets\QAChecklistWidget;
 /**
 
  * @group WIDGETS
-
  */
 
 class QAChecklistWidgetTest extends WidgetTestCase {

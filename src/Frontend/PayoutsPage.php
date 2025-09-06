@@ -3,16 +3,16 @@ namespace ArtPulse\Frontend;
 
 class PayoutsPage {
 
-        public static function register(): void {
-                \ArtPulse\Core\ShortcodeRegistry::register( 'ap_payouts', 'Payouts', array( self::class, 'render' ) );
-                add_action( 'wp', array( self::class, 'maybe_enqueue' ) );
-        }
+	public static function register(): void {
+			\ArtPulse\Core\ShortcodeRegistry::register( 'ap_payouts', 'Payouts', array( self::class, 'render' ) );
+			add_action( 'wp', array( self::class, 'maybe_enqueue' ) );
+	}
 
-        public static function maybe_enqueue(): void {
-                if ( function_exists( 'ap_page_has_shortcode' ) && ap_page_has_shortcode( 'ap_payouts' ) ) {
-                        add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue' ) );
-                }
-        }
+	public static function maybe_enqueue(): void {
+		if ( function_exists( 'ap_page_has_shortcode' ) && ap_page_has_shortcode( 'ap_payouts' ) ) {
+				add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue' ) );
+		}
+	}
 
 	public static function enqueue(): void {
 		if ( function_exists( 'ap_enqueue_global_styles' ) ) {

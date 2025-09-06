@@ -8,6 +8,7 @@ use ArtPulse\Rest\RestResponder;
 
 class TrendingRestController {
 	use RestResponder;
+
 	public static function register(): void {
 		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
 	}
@@ -18,9 +19,9 @@ class TrendingRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/trending',
 				array(
-                                        'methods'             => 'GET',
-                                        'callback'            => array( self::class, 'get_trending' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'methods'             => 'GET',
+					'callback'            => array( self::class, 'get_trending' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'type'  => array(
 							'type'    => 'string',
@@ -36,12 +37,12 @@ class TrendingRestController {
 		}
 	}
 
-        public static function get_trending( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
-                $responder = new self();
+	public static function get_trending( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+			$responder = new self();
 
-                $type  = sanitize_key( $request['type'] );
-                $limit = max( 1, min( 50, (int) $request['limit'] ) );
-                $items = TrendingManager::get_trending( $limit, $type );
-                return $responder->ok( $items );
-        }
+			$type  = sanitize_key( $request['type'] );
+			$limit = max( 1, min( 50, (int) $request['limit'] ) );
+			$items = TrendingManager::get_trending( $limit, $type );
+			return $responder->ok( $items );
+	}
 }

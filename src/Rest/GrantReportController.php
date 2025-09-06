@@ -20,9 +20,9 @@ class GrantReportController {
 				ARTPULSE_API_NAMESPACE,
 				'/orgs/(?P<id>\\d+)/grant-report',
 				array(
-                                        'methods'             => 'GET',
-                                        'callback'            => array( self::class, 'export' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'methods'             => 'GET',
+					'callback'            => array( self::class, 'export' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'id'     => array( 'validate_callback' => 'absint' ),
 						'format' => array( 'default' => 'csv' ),
@@ -32,21 +32,21 @@ class GrantReportController {
 		}
 	}
 
-        public static function export( WP_REST_Request $req ): \WP_REST_Response|\WP_Error {
-                $org_id    = absint( $req['id'] );
-                $donations = DonationModel::get_by_org( $org_id );
-                $stream    = fopen( 'php://temp', 'w' );
-                fputcsv( $stream, array( 'email', 'amount', 'date' ) );
-                foreach ( $donations as $d ) {
-                        fputcsv( $stream, array( $d['user_id'], $d['amount'], $d['donated_at'] ) );
-                }
-                rewind( $stream );
-                $csv = stream_get_contents( $stream );
-                fclose( $stream );
+	public static function export( WP_REST_Request $req ): \WP_REST_Response|\WP_Error {
+			$org_id    = absint( $req['id'] );
+			$donations = DonationModel::get_by_org( $org_id );
+			$stream    = fopen( 'php://temp', 'w' );
+			fputcsv( $stream, array( 'email', 'amount', 'date' ) );
+		foreach ( $donations as $d ) {
+				fputcsv( $stream, array( $d['user_id'], $d['amount'], $d['donated_at'] ) );
+		}
+			rewind( $stream );
+			$csv = stream_get_contents( $stream );
+			fclose( $stream );
 
-                $response = rest_ensure_response( $csv );
-                $response->header( 'Content-Type', 'text/csv' );
-                $response->header( 'Content-Disposition', 'attachment; filename="grant-report.csv"' );
-                return $response;
-        }
+			$response = rest_ensure_response( $csv );
+			$response->header( 'Content-Type', 'text/csv' );
+			$response->header( 'Content-Disposition', 'attachment; filename="grant-report.csv"' );
+			return $response;
+	}
 }

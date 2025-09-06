@@ -10,7 +10,6 @@ require_once __DIR__ . '/../../includes/install.php';
 /**
 
  * @group DB
-
  */
 
 class WebhookLogsUiTest extends WP_UnitTestCase {

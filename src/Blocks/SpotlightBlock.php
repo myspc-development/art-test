@@ -10,33 +10,33 @@ class SpotlightBlock {
 	}
 
 	public static function register_block(): void {
-                if ( ! function_exists( 'register_block_type' ) ) {
-                        return;
-                }
+		if ( ! function_exists( 'register_block_type' ) ) {
+				return;
+		}
 
-               $registry = \WP_Block_Type_Registry::get_instance();
-               if ( $registry->is_registered( 'artpulse/spotlights' ) ) {
-                       return;
-               }
+				$registry = \WP_Block_Type_Registry::get_instance();
+		if ( $registry->is_registered( 'artpulse/spotlights' ) ) {
+				return;
+		}
 
-                register_block_type(
-                        'artpulse/spotlights',
-                        array(
-                                'editor_script'   => 'artpulse-spotlight-block',
-                                'render_callback' => array( self::class, 'render_callback' ),
-                                'attributes'      => array(
-                                        'title'     => array( 'type' => 'string' ),
-                                        'image'     => array( 'type' => 'string' ),
-                                        'visibleTo' => array(
-                                                'type'    => 'array',
-                                                'default' => array( 'member', 'artist' ),
-                                        ),
-                                ),
-                        )
-                );
+				register_block_type(
+					'artpulse/spotlights',
+					array(
+						'editor_script'   => 'artpulse-spotlight-block',
+						'render_callback' => array( self::class, 'render_callback' ),
+						'attributes'      => array(
+							'title'     => array( 'type' => 'string' ),
+							'image'     => array( 'type' => 'string' ),
+							'visibleTo' => array(
+								'type'    => 'array',
+								'default' => array( 'member', 'artist' ),
+							),
+						),
+					)
+				);
 
-               EnqueueAssets::register_script( 'artpulse-spotlight-block', 'assets/js/spotlight-block.js', array( 'wp-blocks', 'wp-element', 'wp-i18n' ), false );
-       }
+				EnqueueAssets::register_script( 'artpulse-spotlight-block', 'assets/js/spotlight-block.js', array( 'wp-blocks', 'wp-element', 'wp-i18n' ), false );
+	}
 
 	public static function render_callback( $attributes ): string {
 		if ( is_admin() ) {
@@ -54,6 +54,6 @@ class SpotlightBlock {
 			return '';
 		}
 
-               return sprintf( '<div class="ap-spotlight">%1$s</div>', esc_html( $attributes['title'] ?? '' ) );
+				return sprintf( '<div class="ap-spotlight">%1$s</div>', esc_html( $attributes['title'] ?? '' ) );
 	}
 }

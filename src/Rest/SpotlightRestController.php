@@ -22,9 +22,9 @@ class SpotlightRestController {
 			self::NAMESPACE,
 			'/spotlights',
 			array(
-                                'methods'             => WP_REST_Server::READABLE,
-                                'callback'            => array( self::class, 'get_current' ),
-                                'permission_callback' => array( Auth::class, 'guard_read' ),
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( self::class, 'get_current' ),
+				'permission_callback' => array( Auth::class, 'guard_read' ),
 			)
 		);
 	}

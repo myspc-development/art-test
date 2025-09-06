@@ -106,20 +106,20 @@ class OrganizationDashboardShortcode {
 		echo ' <button class="ap-delete-event" data-id="' . esc_attr( $event->ID ) . '">Delete</button></li>';
 		return ob_get_clean();
 	}
-        public static function render( $atts ) {
-                if ( ! is_user_logged_in() ) {
-                        return '<p>' . esc_html__( 'You must be logged in to view this dashboard.', 'artpulse' ) . '</p>';
-                }
-                $org_id = get_user_meta( get_current_user_id(), 'ap_organization_id', true );
-                if ( ! $org_id ) {
-                        return '<p>' . esc_html__( 'Access denied.', 'artpulse' ) . '</p>';
-                }
-                $mode = ap_get_ui_mode();
-                if ( $mode === 'react' ) {
-                        return do_shortcode( '[ap_render_ui]' );
-                }
-		$tag = apply_filters( 'ap_dashboard_shortcode_tag', 'ap_user_dashboard' );
-		return do_shortcode( '[' . $tag . ']' );
+	public static function render( $atts ) {
+		if ( ! is_user_logged_in() ) {
+				return '<p>' . esc_html__( 'You must be logged in to view this dashboard.', 'artpulse' ) . '</p>';
+		}
+			$org_id = get_user_meta( get_current_user_id(), 'ap_organization_id', true );
+		if ( ! $org_id ) {
+				return '<p>' . esc_html__( 'Access denied.', 'artpulse' ) . '</p>';
+		}
+			$mode = ap_get_ui_mode();
+		if ( $mode === 'react' ) {
+				return do_shortcode( '[ap_render_ui]' );
+		}
+			$tag = apply_filters( 'ap_dashboard_shortcode_tag', 'ap_user_dashboard' );
+			return do_shortcode( '[' . $tag . ']' );
 	}
 
 
@@ -148,9 +148,9 @@ class OrganizationDashboardShortcode {
 		$event_type         = intval( $_POST['ap_event_type'] ?? 0 );
 		$featured           = isset( $_POST['ap_event_featured'] ) ? '1' : '0';
 		$org_id             = intval( $_POST['ap_event_organization'] );
-		$user_org = get_user_meta( get_current_user_id(), 'ap_organization_id', true );
+		$user_org           = get_user_meta( get_current_user_id(), 'ap_organization_id', true );
 		if ( ! $user_org || (int) $user_org !== $org_id ) {
-			wp_send_json_error( [ 'message' => 'Invalid organization selected.' ] );
+			wp_send_json_error( array( 'message' => 'Invalid organization selected.' ) );
 			return;
 		}
 
@@ -180,11 +180,11 @@ class OrganizationDashboardShortcode {
 			'post_status'        => 'pending',
 		);
 
-               $event_id = EventService::create_event( $data, get_current_user_id() );
-               if ( is_wp_error( $event_id ) ) {
-                       wp_send_json_error( array( 'message' => $event_id->get_error_message() ) );
-                       return;
-               }
+				$event_id = EventService::create_event( $data, get_current_user_id() );
+		if ( is_wp_error( $event_id ) ) {
+				wp_send_json_error( array( 'message' => $event_id->get_error_message() ) );
+				return;
+		}
 
 		if ( ! function_exists( 'media_handle_upload' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -194,26 +194,26 @@ class OrganizationDashboardShortcode {
 
 		$image_ids = array();
 
-               if ( ! empty( $_FILES['event_banner']['tmp_name'] ) ) {
-                       $attachment_id = media_handle_upload( 'event_banner', $event_id );
-                       if ( is_wp_error( $attachment_id ) ) {
-                               wp_send_json_error( array( 'message' => $attachment_id->get_error_message() ) );
-                               return;
-                       }
-                       $image_ids[] = $attachment_id;
-               }
+		if ( ! empty( $_FILES['event_banner']['tmp_name'] ) ) {
+				$attachment_id = media_handle_upload( 'event_banner', $event_id );
+			if ( is_wp_error( $attachment_id ) ) {
+						wp_send_json_error( array( 'message' => $attachment_id->get_error_message() ) );
+						return;
+			}
+				$image_ids[] = $attachment_id;
+		}
 
-               for ( $i = 1; $i <= 5; $i++ ) {
-                       $key = 'image_' . $i;
-                       if ( ! empty( $_FILES[ $key ]['tmp_name'] ) ) {
-                               $id = media_handle_upload( $key, $event_id );
-                               if ( is_wp_error( $id ) ) {
-                                       wp_send_json_error( array( 'message' => $id->get_error_message() ) );
-                                       return;
-                               }
-                               $image_ids[] = $id;
-                       }
-               }
+		for ( $i = 1; $i <= 5; $i++ ) {
+				$key = 'image_' . $i;
+			if ( ! empty( $_FILES[ $key ]['tmp_name'] ) ) {
+						$id = media_handle_upload( $key, $event_id );
+				if ( is_wp_error( $id ) ) {
+					wp_send_json_error( array( 'message' => $id->get_error_message() ) );
+					return;
+				}
+						$image_ids[] = $id;
+			}
+		}
 
 		if ( $image_ids ) {
 			update_post_meta( $event_id, '_ap_submission_images', $image_ids );
@@ -392,23 +392,23 @@ class OrganizationDashboardShortcode {
 			update_post_meta( $event_id, '_ap_submission_images', $image_ids );
 		}
 
-               // Reload the event list for this organization
-               // Determine organization from event meta or fall back to current user's organization
-               $org_id = intval( get_post_meta( $event_id, '_ap_event_organization', true ) );
-               if ( ! $org_id ) {
-                       $org_id = intval( get_user_meta( get_current_user_id(), 'ap_organization_id', true ) );
-               }
+				// Reload the event list for this organization
+				// Determine organization from event meta or fall back to current user's organization
+				$org_id = intval( get_post_meta( $event_id, '_ap_event_organization', true ) );
+		if ( ! $org_id ) {
+				$org_id = intval( get_user_meta( get_current_user_id(), 'ap_organization_id', true ) );
+		}
 
-               ob_start();
-               $events = get_posts(
-                       array(
-                               'post_type'   => 'artpulse_event',
-                               'post_status' => array( 'publish', 'pending', 'draft' ),
-                               'meta_key'    => '_ap_event_organization',
-                                'meta_value'  => $org_id,
-                                'numberposts' => 50,
-                        )
-                );
+				ob_start();
+				$events = get_posts(
+					array(
+						'post_type'   => 'artpulse_event',
+						'post_status' => array( 'publish', 'pending', 'draft' ),
+						'meta_key'    => '_ap_event_organization',
+						'meta_value'  => $org_id,
+						'numberposts' => 50,
+					)
+				);
 		foreach ( $events as $event ) {
 			echo self::build_event_list_item( $event );
 		}

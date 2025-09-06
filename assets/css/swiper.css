@@ -1,23 +1,23 @@
 .event-gallery img,
 .ap-events-slider img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: var(--ap-border-radius);
+	width: 100%;
+	height: auto;
+	display: block;
+	border-radius: var(--ap-border-radius);
 }
 .event-gallery .swiper-slide,
 .ap-events-slider .swiper-slide {
-  text-align: center;
+	text-align: center;
 }
 .ap-events-slider .ap-event-info {
-  padding: 0.5rem;
+	padding: 0.5rem;
 }
 .ap-events-slider .ap-event-start,
 .ap-events-slider .ap-event-end,
 .ap-events-slider .ap-event-venue,
 .ap-events-slider .ap-event-address {
-  display: block;
-  font-size: 0.9em;
-  color: var(--ap-muted-text-color);
-  margin-top: 0.25em;
+	display: block;
+	font-size: 0.9em;
+	color: var(--ap-muted-text-color);
+	margin-top: 0.25em;
 }

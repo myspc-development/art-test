@@ -51,7 +51,6 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 /**
 
  * @group ADMIN
-
  */
 
 class WidgetLayoutAjaxTest extends TestCase {

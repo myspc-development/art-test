@@ -102,19 +102,19 @@ class ReportSubscriptionManager {
 					)
 				);
 			}
-                        if ( $path && file_exists( $path ) ) {
-                                $to      = $sub->email;
-                                $subject = __( 'Organization Report', 'artpulse' );
-                                $message = __( 'See attached report.', 'artpulse' );
-                                $headers = array();
-                                list( $to, $subject, $message, $headers ) = apply_filters(
-                                        'wp_mail',
-                                        array( $to, $subject, $message, $headers )
-                                );
-                                wp_mail( $to, $subject, $message, $headers, array( $path ) );
-                                FileSystem::safe_unlink( $path );
-                                $wpdb->update( $table, array( 'last_sent' => current_time( 'mysql' ) ), array( 'id' => $sub->id ) );
-                        }
+			if ( $path && file_exists( $path ) ) {
+					$to                                       = $sub->email;
+					$subject                                  = __( 'Organization Report', 'artpulse' );
+					$message                                  = __( 'See attached report.', 'artpulse' );
+					$headers                                  = array();
+					list( $to, $subject, $message, $headers ) = apply_filters(
+						'wp_mail',
+						array( $to, $subject, $message, $headers )
+					);
+					wp_mail( $to, $subject, $message, $headers, array( $path ) );
+					FileSystem::safe_unlink( $path );
+					$wpdb->update( $table, array( 'last_sent' => current_time( 'mysql' ) ), array( 'id' => $sub->id ) );
+			}
 		}
 	}
 }

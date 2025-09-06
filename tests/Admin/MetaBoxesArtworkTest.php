@@ -39,7 +39,6 @@ use ArtPulse\Admin\MetaBoxesArtwork;
 /**
 
  * @group ADMIN
-
  */
 
 class MetaBoxesArtworkTest extends TestCase {

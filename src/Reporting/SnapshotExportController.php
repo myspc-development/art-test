@@ -84,10 +84,10 @@ class SnapshotExportController {
 	}
 
 	public static function csv( WP_REST_Request $req ): WP_REST_Response|WP_Error {
-		$org_id = absint( $req['org_id'] );
-		$period = sanitize_text_field( $req['period'] );
-		$data   = self::get_data( $org_id, $period );
-                $title  = sprintf( esc_html__( '%1$s Snapshot', 'artpulse' ), esc_html( $period ) );
+		$org_id        = absint( $req['org_id'] );
+		$period        = sanitize_text_field( $req['period'] );
+		$data          = self::get_data( $org_id, $period );
+				$title = sprintf( esc_html__( '%1$s Snapshot', 'artpulse' ), esc_html( $period ) );
 
 		$path = SnapshotBuilder::generate_csv(
 			array(
@@ -108,10 +108,10 @@ class SnapshotExportController {
 	}
 
 	public static function pdf( WP_REST_Request $req ): WP_REST_Response|WP_Error {
-		$org_id = absint( $req['org_id'] );
-		$period = sanitize_text_field( $req['period'] );
-		$data   = self::get_data( $org_id, $period );
-                $title  = sprintf( esc_html__( '%1$s Snapshot', 'artpulse' ), esc_html( $period ) );
+		$org_id        = absint( $req['org_id'] );
+		$period        = sanitize_text_field( $req['period'] );
+		$data          = self::get_data( $org_id, $period );
+				$title = sprintf( esc_html__( '%1$s Snapshot', 'artpulse' ), esc_html( $period ) );
 
 		$path = SnapshotBuilder::generate_pdf(
 			array(

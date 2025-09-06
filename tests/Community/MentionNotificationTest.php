@@ -8,7 +8,6 @@ use WP_UnitTestCase;
 /**
 
  * @group COMMUNITY
-
  */
 
 class MentionNotificationTest extends WP_UnitTestCase {

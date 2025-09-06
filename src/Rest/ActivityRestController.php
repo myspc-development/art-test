@@ -21,9 +21,9 @@ class ActivityRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/activity',
 				array(
-                                        'methods'             => 'GET',
-                                        'callback'            => array( self::class, 'list' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'methods'             => 'GET',
+					'callback'            => array( self::class, 'list' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'limit' => array(
 							'type'    => 'integer',

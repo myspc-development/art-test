@@ -9,6 +9,7 @@ use ArtPulse\Rest\RestResponder;
 
 class OrgAnalyticsController {
 	use RestResponder;
+
 	public static function register(): void {
 		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
 	}
@@ -19,9 +20,9 @@ class OrgAnalyticsController {
 				ARTPULSE_API_NAMESPACE,
 				'/org-metrics',
 				array(
-                                        'methods'             => 'GET',
-                                        'callback'            => array( self::class, 'get_metrics' ),
-                                        'permission_callback' => Auth::require_login_and_cap( null ),
+					'methods'             => 'GET',
+					'callback'            => array( self::class, 'get_metrics' ),
+					'permission_callback' => Auth::require_login_and_cap( null ),
 				)
 			);
 		}

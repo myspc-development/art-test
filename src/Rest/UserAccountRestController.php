@@ -26,9 +26,9 @@ class UserAccountRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/user/export',
 				array(
-                                        'methods'             => 'GET',
-                                        'callback'            => array( self::class, 'export_user_data' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'methods'             => 'GET',
+					'callback'            => array( self::class, 'export_user_data' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'format' => array(
 							'type'    => 'string',
@@ -45,9 +45,9 @@ class UserAccountRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/user/delete',
 				array(
-                                        'methods'             => 'POST',
-                                        'callback'            => array( self::class, 'delete_user_data' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'methods'             => 'POST',
+					'callback'            => array( self::class, 'delete_user_data' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 				)
 			);
 		}

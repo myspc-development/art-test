@@ -12,23 +12,22 @@ use ArtPulse\Tests\WpTeardownTrait;
 /**
 
  * @group CLI
-
  */
 
 class RestRouteAuditCliTest extends TestCase {
-        use WpTeardownTrait;
+		use WpTeardownTrait;
 
-        protected function setUp(): void {
-                WP_CLI::$commands       = array();
-                WP_CLI::$last_output    = '';
-                $GLOBALS['rest_server'] = null;
-        }
+	protected function setUp(): void {
+			WP_CLI::$commands       = array();
+			WP_CLI::$last_output    = '';
+			$GLOBALS['rest_server'] = null;
+	}
 
-        protected function tearDown(): void {
-                $this->reset_wp_state();
-                WP_CLI::$commands    = array();
-                WP_CLI::$last_output = '';
-        }
+	protected function tearDown(): void {
+			$this->reset_wp_state();
+			WP_CLI::$commands    = array();
+			WP_CLI::$last_output = '';
+	}
 
 	private static function server( array $routes ) {
 		return new class($routes) {
@@ -45,21 +44,21 @@ class RestRouteAuditCliTest extends TestCase {
 	public static function return_false() {
 		return false; }
 
-        public function test_json_output_no_conflicts(): void {
-                if ( ! class_exists( 'WP_CLI' ) ) {
-                        $this->markTestSkipped( 'WP_CLI is not available.' );
-                }
-                global $rest_server;
-               $rest_server = self::server(
-                       array(
-                               '/ap/v1/widget_foo' => array(
-					array(
-						'methods'  => 'GET',
-						'callback' => array( self::class, 'return_true' ),
+	public function test_json_output_no_conflicts(): void {
+		if ( ! class_exists( 'WP_CLI' ) ) {
+				$this->markTestSkipped( 'WP_CLI is not available.' );
+		}
+			global $rest_server;
+			$rest_server = self::server(
+				array(
+					'/ap/v1/widget_foo' => array(
+						array(
+							'methods'  => 'GET',
+							'callback' => array( self::class, 'return_true' ),
+						),
 					),
-				),
-			)
-		);
+				)
+			);
 		WP_CLI::add_command( 'ap:audit-rest-routes', \AP_CLI_Rest_Route_Audit::class );
 		$out = WP_CLI::runcommand( 'ap:audit-rest-routes --json' );
 		$this->assertSame( '[]', $out );
@@ -67,25 +66,25 @@ class RestRouteAuditCliTest extends TestCase {
 		$this->assertStringContainsString( 'No REST route conflicts found.', $out2 );
 	}
 
-        public function test_conflict_detection(): void {
-                if ( ! class_exists( 'WP_CLI' ) ) {
-                        $this->markTestSkipped( 'WP_CLI is not available.' );
-                }
-                global $rest_server;
-                $rest_server = self::server(
-			array(
-				'/ap/v1/conflict' => array(
-					array(
-						'methods'  => 'GET',
-						'callback' => array( self::class, 'return_true' ),
+	public function test_conflict_detection(): void {
+		if ( ! class_exists( 'WP_CLI' ) ) {
+				$this->markTestSkipped( 'WP_CLI is not available.' );
+		}
+			global $rest_server;
+			$rest_server = self::server(
+				array(
+					'/ap/v1/conflict' => array(
+						array(
+							'methods'  => 'GET',
+							'callback' => array( self::class, 'return_true' ),
+						),
+						array(
+							'methods'  => 'GET',
+							'callback' => array( self::class, 'return_false' ),
+						),
 					),
-					array(
-						'methods'  => 'GET',
-						'callback' => array( self::class, 'return_false' ),
-					),
-				),
-			)
-		);
+				)
+			);
 		WP_CLI::add_command( 'ap:audit-rest-routes', \AP_CLI_Rest_Route_Audit::class );
 		$out = WP_CLI::runcommand( 'ap:audit-rest-routes' );
 		$this->assertStringContainsString( 'GET /ap/v1/conflict', $out );

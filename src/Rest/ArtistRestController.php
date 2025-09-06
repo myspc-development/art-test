@@ -43,8 +43,8 @@ class ArtistRestController extends WP_REST_Controller {
 			'/artists',
 			array(
 				'methods'             => WP_REST_Server::READABLE,
-                                'callback'            => array( $this, 'get_artists' ),
-                                'permission_callback' => array( Auth::class, 'guard_read' ),
+				'callback'            => array( $this, 'get_artists' ),
+				'permission_callback' => array( Auth::class, 'guard_read' ),
 			)
 		);
 
@@ -53,8 +53,8 @@ class ArtistRestController extends WP_REST_Controller {
 			'/artists/(?P<id>\d+)',
 			array(
 				'methods'             => WP_REST_Server::READABLE,
-                                'callback'            => array( $this, 'get_artist' ),
-                                'permission_callback' => array( Auth::class, 'guard_read' ),
+				'callback'            => array( $this, 'get_artist' ),
+				'permission_callback' => array( Auth::class, 'guard_read' ),
 				'args'                => array(
 					'id' => array(
 						'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),

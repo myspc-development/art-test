@@ -112,7 +112,7 @@ class ArtistUpgradeRestController {
 			update_user_meta( $user_id, 'ap_artist_profile_id', $profile_id );
 		}
 
-               $url = add_query_arg( 'onboarding', '1', Plugin::get_artist_dashboard_url() );
+				$url = add_query_arg( 'onboarding', '1', Plugin::get_artist_dashboard_url() );
 
 		return \rest_ensure_response(
 			array(

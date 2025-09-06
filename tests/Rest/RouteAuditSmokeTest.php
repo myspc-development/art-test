@@ -18,236 +18,235 @@ use WP_REST_Server;
  *
  * @group REST
  */
-class RouteAuditSmokeTest extends \WP_UnitTestCase
-{
-    private int $admin_id;
+class RouteAuditSmokeTest extends \WP_UnitTestCase {
 
-    public function set_up(): void
-    {
-        parent::set_up();
+	private int $admin_id;
 
-        if (!defined('AP_TEST_MODE')) {
-            // Let controllers relax guards under test, if they support it
-            define('AP_TEST_MODE', true);
-        }
+	public function set_up(): void {
+		parent::set_up();
 
-        // Admin context to bypass most caps
-        $this->admin_id = self::factory()->user->create(['role' => 'administrator']);
-        wp_set_current_user($this->admin_id);
+		if ( ! defined( 'AP_TEST_MODE' ) ) {
+			// Let controllers relax guards under test, if they support it
+			define( 'AP_TEST_MODE', true );
+		}
 
-        // Add any custom caps your routes might check
-        if ($role = get_role('administrator')) {
-            foreach (['view_analytics', 'read', 'edit_posts', 'manage_options'] as $cap) {
-                $role->add_cap($cap);
-            }
-        }
+		// Admin context to bypass most caps
+		$this->admin_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $this->admin_id );
 
-        // Ensure routes are (re)registered
-        do_action('rest_api_init');
-    }
+		// Add any custom caps your routes might check
+		if ( $role = get_role( 'administrator' ) ) {
+			foreach ( array( 'view_analytics', 'read', 'edit_posts', 'manage_options' ) as $cap ) {
+				$role->add_cap( $cap );
+			}
+		}
 
-    public function test_all_artpulse_routes_smoke(): void
-    {
-        $server = rest_get_server();
-        $this->assertNotNull($server, 'REST server not initialized.');
-        $routes = $server->get_routes();
+		// Ensure routes are (re)registered
+		do_action( 'rest_api_init' );
+	}
 
-        $namespacePrefix = '/artpulse/v1/';
-        $problems = [];
+	public function test_all_artpulse_routes_smoke(): void {
+		$server = rest_get_server();
+		$this->assertNotNull( $server, 'REST server not initialized.' );
+		$routes = $server->get_routes();
 
-        // Collect all artpulse routes
-        $targets = [];
-        foreach ($routes as $route => $handlers) {
-            if (strpos($route, $namespacePrefix) === 0) {
-                $targets[$route] = $handlers;
-            }
-        }
+		$namespacePrefix = '/artpulse/v1/';
+		$problems        = array();
 
-        $this->assertNotEmpty(
-            $targets,
-            'No /artpulse/v1 routes found. Verify controllers call register() and rest_api_init ran.'
-        );
+		// Collect all artpulse routes
+		$targets = array();
+		foreach ( $routes as $route => $handlers ) {
+			if ( strpos( $route, $namespacePrefix ) === 0 ) {
+				$targets[ $route ] = $handlers;
+			}
+		}
 
-        $wpNonce  = function_exists('wp_create_nonce') ? wp_create_nonce('wp_rest') : 'test';
-        $apNonce  = function_exists('wp_create_nonce') ? wp_create_nonce('ap_dashboard_config') : 'test';
-        $skipped  = [];
+		$this->assertNotEmpty(
+			$targets,
+			'No /artpulse/v1 routes found. Verify controllers call register() and rest_api_init ran.'
+		);
 
-        foreach ($targets as $route => $handlers) {
-            // Each "handler" is an endpoint variant (methods, args, permission_callback, etc.)
-            foreach ($handlers as $idx => $handler) {
-                $methods = $this->expand_methods($handler['methods'] ?? 'GET');
+		$wpNonce = function_exists( 'wp_create_nonce' ) ? wp_create_nonce( 'wp_rest' ) : 'test';
+		$apNonce = function_exists( 'wp_create_nonce' ) ? wp_create_nonce( 'ap_dashboard_config' ) : 'test';
+		$skipped = array();
 
-                foreach ($methods as $method) {
-                    $concreteRoute = $this->concretize_route($route);
-                    if ($concreteRoute === null) {
-                        $skipped[] = sprintf('%s [%s] (var #%d)', $route, $method, $idx);
-                        continue;
-                    }
+		foreach ( $targets as $route => $handlers ) {
+			// Each "handler" is an endpoint variant (methods, args, permission_callback, etc.)
+			foreach ( $handlers as $idx => $handler ) {
+				$methods = $this->expand_methods( $handler['methods'] ?? 'GET' );
 
-                    $req = new WP_REST_Request($method, $concreteRoute);
-                    $req->set_header('X-WP-Nonce', $wpNonce);
-                    $req->set_header('X-AP-Nonce', $apNonce);
-                    $req->set_param('context', 'view');
+				foreach ( $methods as $method ) {
+					$concreteRoute = $this->concretize_route( $route );
+					if ( $concreteRoute === null ) {
+						$skipped[] = sprintf( '%s [%s] (var #%d)', $route, $method, $idx );
+						continue;
+					}
 
-                    // Try to satisfy required args with innocuous defaults
-                    if (!empty($handler['args']) && is_array($handler['args'])) {
-                        foreach ($handler['args'] as $argName => $schema) {
-                            if (!empty($schema['required']) && !$req->get_param($argName)) {
-                                $req->set_param($argName, $this->default_for_schema($schema) );
-                            }
-                        }
-                    }
+					$req = new WP_REST_Request( $method, $concreteRoute );
+					$req->set_header( 'X-WP-Nonce', $wpNonce );
+					$req->set_header( 'X-AP-Nonce', $apNonce );
+					$req->set_param( 'context', 'view' );
 
-                    // Some POST/PUT/PATCH endpoints only read JSON body
-                    if (in_array($method, ['POST','PUT','PATCH'], true)) {
-                        $json = [];
-                        if (!empty($handler['args']) && is_array($handler['args'])) {
-                            foreach ($handler['args'] as $argName => $schema) {
-                                $json[$argName] = $this->default_for_schema($schema);
-                            }
-                        }
-                        if ($json) {
-                            $req->set_body( wp_json_encode($json) );
-                        }
-                    }
+					// Try to satisfy required args with innocuous defaults
+					if ( ! empty( $handler['args'] ) && is_array( $handler['args'] ) ) {
+						foreach ( $handler['args'] as $argName => $schema ) {
+							if ( ! empty( $schema['required'] ) && ! $req->get_param( $argName ) ) {
+								$req->set_param( $argName, $this->default_for_schema( $schema ) );
+							}
+						}
+					}
 
-                    $res = $server->dispatch($req);
+					// Some POST/PUT/PATCH endpoints only read JSON body
+					if ( in_array( $method, array( 'POST', 'PUT', 'PATCH' ), true ) ) {
+						$json = array();
+						if ( ! empty( $handler['args'] ) && is_array( $handler['args'] ) ) {
+							foreach ( $handler['args'] as $argName => $schema ) {
+								$json[ $argName ] = $this->default_for_schema( $schema );
+							}
+						}
+						if ( $json ) {
+							$req->set_body( wp_json_encode( $json ) );
+						}
+					}
 
-                    // Normalize status/type for comparison + diagnostics
-                    $status = null;
-                    $type   = null;
+					$res = $server->dispatch( $req );
 
-                    if ($res instanceof WP_REST_Response) {
-                        $status = $res->get_status();
-                        $type = 'WP_REST_Response';
-                    } elseif ($res instanceof WP_Error) {
-                        $data = $res->get_error_data();
-                        $status = is_array($data) && isset($data['status']) ? (int) $data['status'] : 500;
-                        $type = 'WP_Error';
-                    } elseif (is_array($res) || is_object($res)) {
-                        $status = 200; // may be treated as success but type is wrong
-                        $type = gettype($res);
-                    } else {
-                        $status = 500;
-                        $type = gettype($res);
-                    }
+					// Normalize status/type for comparison + diagnostics
+					$status = null;
+					$type   = null;
 
-                    // Flag anything not ideal
-                    $prefix = sprintf('%s [%s] (var #%d)', $route, $method, $idx);
+					if ( $res instanceof WP_REST_Response ) {
+						$status = $res->get_status();
+						$type   = 'WP_REST_Response';
+					} elseif ( $res instanceof WP_Error ) {
+						$data   = $res->get_error_data();
+						$status = is_array( $data ) && isset( $data['status'] ) ? (int) $data['status'] : 500;
+						$type   = 'WP_Error';
+					} elseif ( is_array( $res ) || is_object( $res ) ) {
+						$status = 200; // may be treated as success but type is wrong
+						$type   = gettype( $res );
+					} else {
+						$status = 500;
+						$type   = gettype( $res );
+					}
 
-                    // 1) Route missing
-                    if ($status === 404) {
-                        $problems[] = "$prefix → 404 Not Found";
-                        continue;
-                    }
+					// Flag anything not ideal
+					$prefix = sprintf( '%s [%s] (var #%d)', $route, $method, $idx );
 
-                    // 2) Permission/nonce problems (we’re admin + nonces; should pass unless intentionally locked)
-                    if (in_array($status, [401, 403], true)) {
-                        $problems[] = "$prefix → $status (auth/permission block)";
-                    }
+					// 1) Route missing
+					if ( $status === 404 ) {
+						$problems[] = "$prefix → 404 Not Found";
+						continue;
+					}
 
-                    // 3) Wrong return type (your controllers should return WP_REST_Response|WP_Error)
-                    if (!$res instanceof WP_REST_Response && !$res instanceof WP_Error) {
-                        $problems[] = "$prefix → bad return type: $type (expect WP_REST_Response or WP_Error)";
-                    }
+					// 2) Permission/nonce problems (we’re admin + nonces; should pass unless intentionally locked)
+					if ( in_array( $status, array( 401, 403 ), true ) ) {
+						$problems[] = "$prefix → $status (auth/permission block)";
+					}
 
-                    // 4) 5xx
-                    if ($status >= 500) {
-                        $problems[] = "$prefix → $status server error";
-                    }
-                }
-            }
-        }
+					// 3) Wrong return type (your controllers should return WP_REST_Response|WP_Error)
+					if ( ! $res instanceof WP_REST_Response && ! $res instanceof WP_Error ) {
+						$problems[] = "$prefix → bad return type: $type (expect WP_REST_Response or WP_Error)";
+					}
 
-        if ($skipped) {
-            fwrite(STDOUT, "Skipped dynamic routes (unresolved placeholders):\n- " . implode("\n- ", $skipped) . "\n");
-        }
+					// 4) 5xx
+					if ( $status >= 500 ) {
+						$problems[] = "$prefix → $status server error";
+					}
+				}
+			}
+		}
 
-        // Make the test fail with a readable inventory of issues
-        $this->assertEmpty(
-            $problems,
-            "REST route audit discovered problems:\n- " . implode("\n- ", $problems)
-        );
-    }
+		if ( $skipped ) {
+			fwrite( STDOUT, "Skipped dynamic routes (unresolved placeholders):\n- " . implode( "\n- ", $skipped ) . "\n" );
+		}
 
-    /** Expand WP REST method spec to a simple list: 'GET|POST' -> ['GET','POST'] */
-    private function expand_methods($spec): array
-    {
-        if (is_string($spec)) {
-            // WordPress accepts 'GET', 'POST', or bitmask constants; in routes it’s usually a string pipe list
-            if (strpos($spec, '|') !== false) {
-                return array_map('trim', explode('|', $spec));
-            }
-            if (strpos($spec, ',') !== false) {
-                return array_map('trim', explode(',', $spec));
-            }
-            return [$spec];
-        }
-        if (is_array($spec)) {
-            return array_values(array_unique(array_map('strval', $spec)));
-        }
-        if (is_int($spec)) {
-            $map = [
-                WP_REST_Server::READABLE => ['GET', 'HEAD'],
-                WP_REST_Server::CREATABLE => ['POST'],
-                WP_REST_Server::EDITABLE => ['PUT', 'PATCH'],
-                WP_REST_Server::DELETABLE => ['DELETE'],
-            ];
-            $verbs = [];
-            foreach ($map as $mask => $methods) {
-                if (($spec & $mask) === $mask) {
-                    $verbs = array_merge($verbs, $methods);
-                }
-            }
-            if ($verbs) {
-                return array_values(array_unique($verbs));
-            }
-        }
-        return ['GET'];
-    }
+		// Make the test fail with a readable inventory of issues
+		$this->assertEmpty(
+			$problems,
+			"REST route audit discovered problems:\n- " . implode( "\n- ", $problems )
+		);
+	}
 
-    /**
-     * Replace named regex groups in a route with safe sample values.
-     * Returns the concrete route or null if placeholders remain.
-     */
-    private function concretize_route(string $route): ?string
-    {
-        $concrete = preg_replace_callback('/\(\?P<[^>]+>[^)]+\)/', function (array $matches) {
-            $segment = $matches[0];
-            if (preg_match('/\(\?P<[^>]+>([^)]+)\)/', $segment, $m)) {
-                $pattern = $m[1];
-                if (preg_match('/\\d|\[0-9\]/', $pattern)) {
-                    return '1';
-                }
-            }
-            return 'test';
-        }, $route);
+	/** Expand WP REST method spec to a simple list: 'GET|POST' -> ['GET','POST'] */
+	private function expand_methods( $spec ): array {
+		if ( is_string( $spec ) ) {
+			// WordPress accepts 'GET', 'POST', or bitmask constants; in routes it’s usually a string pipe list
+			if ( strpos( $spec, '|' ) !== false ) {
+				return array_map( 'trim', explode( '|', $spec ) );
+			}
+			if ( strpos( $spec, ',' ) !== false ) {
+				return array_map( 'trim', explode( ',', $spec ) );
+			}
+			return array( $spec );
+		}
+		if ( is_array( $spec ) ) {
+			return array_values( array_unique( array_map( 'strval', $spec ) ) );
+		}
+		if ( is_int( $spec ) ) {
+			$map   = array(
+				WP_REST_Server::READABLE  => array( 'GET', 'HEAD' ),
+				WP_REST_Server::CREATABLE => array( 'POST' ),
+				WP_REST_Server::EDITABLE  => array( 'PUT', 'PATCH' ),
+				WP_REST_Server::DELETABLE => array( 'DELETE' ),
+			);
+			$verbs = array();
+			foreach ( $map as $mask => $methods ) {
+				if ( ( $spec & $mask ) === $mask ) {
+					$verbs = array_merge( $verbs, $methods );
+				}
+			}
+			if ( $verbs ) {
+				return array_values( array_unique( $verbs ) );
+			}
+		}
+		return array( 'GET' );
+	}
 
-        if (preg_match('/[\[\]\(\)\\?*+|^$]/', $concrete)) {
-            return null;
-        }
+	/**
+	 * Replace named regex groups in a route with safe sample values.
+	 * Returns the concrete route or null if placeholders remain.
+	 */
+	private function concretize_route( string $route ): ?string {
+		$concrete = preg_replace_callback(
+			'/\(\?P<[^>]+>[^)]+\)/',
+			function ( array $matches ) {
+				$segment = $matches[0];
+				if ( preg_match( '/\(\?P<[^>]+>([^)]+)\)/', $segment, $m ) ) {
+					$pattern = $m[1];
+					if ( preg_match( '/\\d|\[0-9\]/', $pattern ) ) {
+						return '1';
+					}
+				}
+				return 'test';
+			},
+			$route
+		);
 
-        return $concrete;
-    }
+		if ( preg_match( '/[\[\]\(\)\\?*+|^$]/', $concrete ) ) {
+			return null;
+		}
 
-    /** Provide a safe default for required arg schema to let routes execute */
-    private function default_for_schema(array $schema)
-    {
-        $type = $schema['type'] ?? null;
-        switch ($type) {
-            case 'integer':
-                return 1;
-            case 'number':
-                return 1;
-            case 'boolean':
-                return true;
-            case 'array':
-                return [];
-            case 'object':
-                return (object)[];
-            case 'string':
-            default:
-                return 'test';
-        }
-    }
+		return $concrete;
+	}
+
+	/** Provide a safe default for required arg schema to let routes execute */
+	private function default_for_schema( array $schema ) {
+		$type = $schema['type'] ?? null;
+		switch ( $type ) {
+			case 'integer':
+				return 1;
+			case 'number':
+				return 1;
+			case 'boolean':
+				return true;
+			case 'array':
+				return array();
+			case 'object':
+				return (object) array();
+			case 'string':
+			default:
+				return 'test';
+		}
+	}
 }

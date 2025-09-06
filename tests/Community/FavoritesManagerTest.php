@@ -8,7 +8,6 @@ use ArtPulse\Community\NotificationManager;
 /**
 
  * @group COMMUNITY
-
  */
 
 class FavoritesManagerTest extends WP_UnitTestCase {

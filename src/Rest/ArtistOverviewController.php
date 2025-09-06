@@ -25,8 +25,8 @@ class ArtistOverviewController {
 			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-                                        'callback'            => array( self::class, 'get_overview' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'callback'            => array( self::class, 'get_overview' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 				),
 			)
 		);

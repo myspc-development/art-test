@@ -3,7 +3,7 @@
 get_header();
 ?>
 <div class="ap-events-page">
-    <?php echo do_shortcode('[ap_events]'); ?>
+	<?php echo do_shortcode( '[ap_events]' ); ?>
 </div>
 <?php
 get_footer();

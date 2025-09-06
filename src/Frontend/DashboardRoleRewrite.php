@@ -23,30 +23,30 @@ class DashboardRoleRewrite {
 		return $vars;
 	}
 
-        public static function maybe_render(): void {
-                if ( get_query_var( 'ap_dashboard_role' ) || get_query_var( 'ap_dashboard' ) ) {
-                        $role  = null;
-                        $nonce = isset( $_GET['ap_preview_nonce'] ) ? sanitize_key( $_GET['ap_preview_nonce'] ) : '';
-                        if (
-                                isset( $_GET['ap_preview_role'] ) &&
-                                current_user_can( 'manage_options' ) &&
-                                wp_verify_nonce( $nonce, 'ap_preview' )
-                        ) {
-                                $role = sanitize_key( $_GET['ap_preview_role'] );
-                        }
-                        if ( $role ) {
-                                \ap_render_dashboard( array( $role ) );
-                        } else {
-                                \ap_render_dashboard();
-                        }
-                        $ap_test_mode = defined( 'AP_TEST_MODE' ) ? AP_TEST_MODE : (bool) getenv( 'AP_TEST_MODE' );
-                        if (
-                                $ap_test_mode ||
-                                ( defined( 'WP_RUNNING_TESTS' ) && WP_RUNNING_TESTS )
-                        ) {
-                                return;
-                        }
-                        exit;
-                }
-        }
+	public static function maybe_render(): void {
+		if ( get_query_var( 'ap_dashboard_role' ) || get_query_var( 'ap_dashboard' ) ) {
+				$role  = null;
+				$nonce = isset( $_GET['ap_preview_nonce'] ) ? sanitize_key( $_GET['ap_preview_nonce'] ) : '';
+			if (
+						isset( $_GET['ap_preview_role'] ) &&
+						current_user_can( 'manage_options' ) &&
+						wp_verify_nonce( $nonce, 'ap_preview' )
+				) {
+				$role = sanitize_key( $_GET['ap_preview_role'] );
+			}
+			if ( $role ) {
+					\ap_render_dashboard( array( $role ) );
+			} else {
+					\ap_render_dashboard();
+			}
+				$ap_test_mode = defined( 'AP_TEST_MODE' ) ? AP_TEST_MODE : (bool) getenv( 'AP_TEST_MODE' );
+			if (
+						$ap_test_mode ||
+						( defined( 'WP_RUNNING_TESTS' ) && WP_RUNNING_TESTS )
+				) {
+					return;
+			}
+				exit;
+		}
+	}
 }

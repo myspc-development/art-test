@@ -10,7 +10,7 @@ return array(
 	'event_chat'                => 'widget_event_chat',
 	'my_favorites'              => 'widget_my_favorites',
 	'nearby_events_map'         => 'widget_nearby_events_map',
-        'news_feed'                 => 'widget_news',
+	'news_feed'                 => 'widget_news',
 	'org_widget_sharing'        => 'widget_org_widget_sharing',
 	'revenue_summary'           => 'widget_revenue_summary',
 	'artist_artwork_manager'    => 'widget_artist_artwork_manager',

@@ -6,7 +6,6 @@ use ArtPulse\Search\MetaFullTextSearch;
 /**
 
  * @group SEARCH
-
  */
 
 class MetaFullTextSearchTest extends \WP_UnitTestCase {

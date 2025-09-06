@@ -12,40 +12,40 @@ class RelatedItemsSelectorBlock {
 
 	public static function register_block_and_meta() {
 		// Register block editor script (adjust the path accordingly)
-               EnqueueAssets::register_script(
-                       'artpulse-related-items-selector',
-                       'assets/js/blocks/related-items-selector.js',
-                       array(
-                               'wp-blocks',
-                               'wp-element',
-                               'wp-components',
-                               'wp-data',
-                               'wp-editor',
-                               'wp-api-fetch',
-                       ),
-                       false
-               );
+				EnqueueAssets::register_script(
+					'artpulse-related-items-selector',
+					'assets/js/blocks/related-items-selector.js',
+					array(
+						'wp-blocks',
+						'wp-element',
+						'wp-components',
+						'wp-data',
+						'wp-editor',
+						'wp-api-fetch',
+					),
+					false
+				);
 
 		// Example: Register post meta fields with REST API enabled
 
 		// Meta for multiple related artworks for artists (array)
-                register_post_meta(
-                        'artpulse_artist',
-                        '_ap_artist_artworks',
-                        array(
-                                'show_in_rest'  => array(
-                                        'schema' => array(
-                                                'type'  => 'array',
-                                                'items' => array( 'type' => 'integer' ),
-                                        ),
-                                ),
-                                'single'        => false,
-                                'type'          => 'array',
-                                'auth_callback' => function () {
-                                        return current_user_can( 'edit_posts' );
-                                },
-                        )
-                );
+				register_post_meta(
+					'artpulse_artist',
+					'_ap_artist_artworks',
+					array(
+						'show_in_rest'  => array(
+							'schema' => array(
+								'type'  => 'array',
+								'items' => array( 'type' => 'integer' ),
+							),
+						),
+						'single'        => false,
+						'type'          => 'array',
+						'auth_callback' => function () {
+								return current_user_can( 'edit_posts' );
+						},
+					)
+				);
 
 		// Meta for single related artist for artwork (integer)
 		register_post_meta(
@@ -140,8 +140,8 @@ class RelatedItemsSelectorBlock {
 			foreach ( $related as $id ) {
 				$title = get_the_title( $id );
 				if ( $title ) {
-					$url     = get_permalink( $id );
-                                   $items[] = sprintf( '<li><a href="%1$s">%2$s</a></li>', esc_url( $url ), esc_html( $title ) );
+					$url                     = get_permalink( $id );
+									$items[] = sprintf( '<li><a href="%1$s">%2$s</a></li>', esc_url( $url ), esc_html( $title ) );
 				}
 			}
 			return '<ul class="ap-related-items-list">' . implode( '', $items ) . '</ul>';
@@ -149,7 +149,7 @@ class RelatedItemsSelectorBlock {
 			$title = get_the_title( $related );
 			$url   = get_permalink( $related );
 			if ( $title ) {
-                           return sprintf( '<p><a href="%1$s">%2$s</a></p>', esc_url( $url ), esc_html( $title ) );
+							return sprintf( '<p><a href="%1$s">%2$s</a></p>', esc_url( $url ), esc_html( $title ) );
 			}
 			return '';
 		}

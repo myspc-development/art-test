@@ -37,8 +37,8 @@ class AdvancedTaxonomyFilterBlock {
 			)
 		);
 
-               EnqueueAssets::register_script( 'artpulse-advanced-taxonomy-filter-block', 'assets/js/advanced-taxonomy-filter-block.js', array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-api-fetch' ), false );
-       }
+				EnqueueAssets::register_script( 'artpulse-advanced-taxonomy-filter-block', 'assets/js/advanced-taxonomy-filter-block.js', array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-api-fetch' ), false );
+	}
 
 	public static function render_callback( $attributes ) {
 		// Render fallback content (frontend rendering is handled by JS)

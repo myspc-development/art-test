@@ -9,6 +9,7 @@ use ArtPulse\Rest\RestResponder;
 
 class OrgDashboardController {
 	use RestResponder;
+
 	public static function register(): void {
 		add_action( 'rest_api_init', array( self::class, 'routes' ) );
 	}
@@ -106,23 +107,23 @@ class OrgDashboardController {
 		return UserInvitationController::invite( $req );
 	}
 
-        public static function ticket_metrics( WP_REST_Request $req ): WP_REST_Response|WP_Error {
-                global $wpdb;
-                $org_id = absint( $req['id'] );
-                $table  = $wpdb->prefix . 'ap_tickets';
-                $exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-                if ( ! $exists ) {
-                        return ( new self() )->fail( 'ap_db_missing', 'Required table missing', 500 );
-                }
-                $sales   = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $table WHERE org_id = %d AND status = 'active'", $org_id ) );
-                $revenue = (float) $wpdb->get_var( $wpdb->prepare( "SELECT SUM(total) FROM $table WHERE org_id = %d AND status = 'active'", $org_id ) );
-                return \rest_ensure_response(
-                        array(
-                                'sales'   => $sales,
-                                'revenue' => $revenue,
-                        )
-                );
-        }
+	public static function ticket_metrics( WP_REST_Request $req ): WP_REST_Response|WP_Error {
+			global $wpdb;
+			$org_id = absint( $req['id'] );
+			$table  = $wpdb->prefix . 'ap_tickets';
+			$exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+		if ( ! $exists ) {
+				return ( new self() )->fail( 'ap_db_missing', 'Required table missing', 500 );
+		}
+			$sales   = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $table WHERE org_id = %d AND status = 'active'", $org_id ) );
+			$revenue = (float) $wpdb->get_var( $wpdb->prepare( "SELECT SUM(total) FROM $table WHERE org_id = %d AND status = 'active'", $org_id ) );
+			return \rest_ensure_response(
+				array(
+					'sales'   => $sales,
+					'revenue' => $revenue,
+				)
+			);
+	}
 
 	public static function broadcast( WP_REST_Request $req ): WP_REST_Response|WP_Error {
 		$org_id = absint( $req['id'] );

@@ -3,24 +3,24 @@ namespace ArtPulse\Frontend;
 
 class EventListingShortcode {
 
-        public static function register(): void {
-                \ArtPulse\Core\ShortcodeRegistry::register( 'ap_event_listing', 'Event Listing', array( self::class, 'render' ) );
-                add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue' ) );
-                add_action( 'init', array( self::class, 'maybe_register_event_category' ) );
-        }
+	public static function register(): void {
+			\ArtPulse\Core\ShortcodeRegistry::register( 'ap_event_listing', 'Event Listing', array( self::class, 'render' ) );
+			add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue' ) );
+			add_action( 'init', array( self::class, 'maybe_register_event_category' ) );
+	}
 
-       public static function maybe_register_event_category(): void {
-               if ( ! \taxonomy_exists( 'event_category' ) ) {
-                       \register_taxonomy(
-                               'event_category',
-                               'artpulse_event',
-                               array(
-                                       'label'  => 'Event Categories',
-                                       'public' => true,
-                               )
-                       );
-               }
-       }
+	public static function maybe_register_event_category(): void {
+		if ( ! \taxonomy_exists( 'event_category' ) ) {
+				\register_taxonomy(
+					'event_category',
+					'artpulse_event',
+					array(
+						'label'  => 'Event Categories',
+						'public' => true,
+					)
+				);
+		}
+	}
 
 	public static function enqueue(): void {
 		if ( function_exists( 'ap_enqueue_global_styles' ) ) {
@@ -55,38 +55,38 @@ class EventListingShortcode {
 		);
 	}
 
-       public static function render( $atts ): string {
-               self::maybe_register_event_category();
-               $atts = shortcode_atts(
-			array(
-				'posts_per_page' => 12,
-			),
-			$atts,
-			'ap_event_listing'
-		);
+	public static function render( $atts ): string {
+			self::maybe_register_event_category();
+			$atts = shortcode_atts(
+				array(
+					'posts_per_page' => 12,
+				),
+				$atts,
+				'ap_event_listing'
+			);
 
-               $event_types = \get_terms(
-                       'event_type',
-                       array(
-                               'hide_empty' => false,
-                       )
-               );
+			$event_types = \get_terms(
+				'event_type',
+				array(
+					'hide_empty' => false,
+				)
+			);
 		if ( is_wp_error( $event_types ) ) {
 			$event_types = array();
 		}
 
-               $categories = \get_terms(
-                       'event_category',
-                       array(
-                               'hide_empty' => false,
-                       )
-               );
+			$categories = \get_terms(
+				'event_category',
+				array(
+					'hide_empty' => false,
+				)
+			);
 
-               if ( is_wp_error( $categories ) ) {
-                       $categories = array();
-               }
+		if ( is_wp_error( $categories ) ) {
+				$categories = array();
+		}
 
-               ob_start();
+			ob_start();
 		?>
 		<div class="ap-event-listing-wrapper" data-per-page="<?php echo intval( $atts['posts_per_page'] ); ?>">
 			<nav class="ap-alpha-bar" aria-label="<?php esc_attr_e( 'Filter by alphabet', 'artpulse' ); ?>"></nav>
@@ -96,13 +96,13 @@ class EventListingShortcode {
 				<input type="date" name="before">
 				<select name="category">
 					<option value=""><?php esc_html_e( 'All Categories', 'artpulse' ); ?></option>
-					<?php foreach ( $categories as $cat ) : ?>
+				<?php foreach ( $categories as $cat ) : ?>
 						<option value="<?php echo esc_attr( $cat->slug ); ?>"><?php echo esc_html( $cat->name ); ?></option>
 					<?php endforeach; ?>
 				</select>
 				<select name="event_type">
 					<option value=""><?php esc_html_e( 'All Types', 'artpulse' ); ?></option>
-					<?php foreach ( $event_types as $type ) : ?>
+				<?php foreach ( $event_types as $type ) : ?>
 						<option value="<?php echo esc_attr( $type->slug ); ?>"><?php echo esc_html( $type->name ); ?></option>
 					<?php endforeach; ?>
 				</select>

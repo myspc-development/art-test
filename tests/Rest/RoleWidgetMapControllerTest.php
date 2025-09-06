@@ -25,29 +25,29 @@ class RoleWidgetMapControllerTest extends \WP_UnitTestCase {
 			}
 		}
 
-               DashboardWidgetRegistry::register(
-                       'widget_alpha',
-                       'Alpha',
-                       '',
-                       '',
-                       '__return_null',
-                       array( 'roles' => array( 'member' ) )
-               );
-               DashboardWidgetRegistry::register(
-                       'widget_beta',
-                       'Beta',
-                       '',
-                       '',
-                       '__return_null',
-                       array( 'roles' => array( 'artist' ) )
-               );
-               DashboardWidgetRegistry::register(
-                       'widget_gamma',
-                       'Gamma',
-                       '',
-                       '',
-                       '__return_null'
-               );
+				DashboardWidgetRegistry::register(
+					'widget_alpha',
+					'Alpha',
+					'',
+					'',
+					'__return_null',
+					array( 'roles' => array( 'member' ) )
+				);
+				DashboardWidgetRegistry::register(
+					'widget_beta',
+					'Beta',
+					'',
+					'',
+					'__return_null',
+					array( 'roles' => array( 'artist' ) )
+				);
+				DashboardWidgetRegistry::register(
+					'widget_gamma',
+					'Gamma',
+					'',
+					'',
+					'__return_null'
+				);
 
 		RoleWidgetMapController::register();
 		do_action( 'rest_api_init' );
@@ -56,18 +56,18 @@ class RoleWidgetMapControllerTest extends \WP_UnitTestCase {
 	}
 
 	public function test_get_role_widget_map(): void {
-               $req = new \WP_REST_Request( 'GET', '/artpulse/v1/role-widget-map' );
-               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-               $res = rest_get_server()->dispatch( $req );
-               $this->assertSame( 200, $res->get_status() );
+				$req = new \WP_REST_Request( 'GET', '/artpulse/v1/role-widget-map' );
+				$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+				$res = rest_get_server()->dispatch( $req );
+				$this->assertSame( 200, $res->get_status() );
 
-               $this->assertSame(
-                       array(
-                               'member'       => array( 'widget_alpha', 'widget_gamma' ),
-                               'artist'       => array( 'widget_beta', 'widget_gamma' ),
-                               'organization' => array( 'widget_gamma' ),
-                       ),
-                       $res->get_data()
-               );
-       }
+				$this->assertSame(
+					array(
+						'member'       => array( 'widget_alpha', 'widget_gamma' ),
+						'artist'       => array( 'widget_beta', 'widget_gamma' ),
+						'organization' => array( 'widget_gamma' ),
+					),
+					$res->get_data()
+				);
+	}
 }

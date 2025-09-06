@@ -21,8 +21,8 @@ class ReferralManager {
 		$table  = $wpdb->prefix . 'ap_referrals';
 		$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
 		if ( $exists !== $table ) {
-			$charset = $wpdb->get_charset_collate();
-                        $sql     = "CREATE TABLE $table (
+			$charset         = $wpdb->get_charset_collate();
+						$sql = "CREATE TABLE $table (
                 id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
                 PRIMARY KEY (id),
                 referrer_id BIGINT NOT NULL,

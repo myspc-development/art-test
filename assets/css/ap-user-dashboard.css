@@ -2,45 +2,45 @@
 /* User dashboard styles */
 /* General user dashboard styling */
 .ap-user-dashboard {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1.5rem;
-  font-family: var(--ap-font-family-base);
-  background-color: var(--ap-alt-bg-color);
-  color: var(--ap-text-color);
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 1.5rem;
+	font-family: var(--ap-font-family-base);
+	background-color: var(--ap-alt-bg-color);
+	color: var(--ap-text-color);
 }
 .dashboard-topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--ap-bg-color);
-  padding: 1rem 1.5rem;
-  border-radius: var(--ap-border-radius);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  margin-bottom: var(--ap-space-medium);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: var(--ap-bg-color);
+	padding: 1rem 1.5rem;
+	border-radius: var(--ap-border-radius);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	margin-bottom: var(--ap-space-medium);
 }
 .dashboard-topbar .welcome {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
 }
 .dashboard-topbar img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
 }
 
 .dashboard-widget {
-  width: 100%;
-  max-width: 500px;
-  margin: var(--ap-space-medium) auto;
+	width: 100%;
+	max-width: 500px;
+	margin: var(--ap-space-medium) auto;
 }
 
 @media (max-width: 600px) {
-  .dashboard-widget {
-    max-width: 100%;
-    font-size: 1rem;
-  }
+	.dashboard-widget {
+	max-width: 100%;
+	font-size: 1rem;
+	}
 }
 #ap-membership-info,
 #ap-next-payment,
@@ -54,281 +54,281 @@
 #ap-rsvp-events,
 #ap-my-events,
 #ap-next-event {
-  background: var(--ap-bg-color);
-  padding: 1rem;
-  border-radius: var(--ap-border-radius);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  margin-bottom: var(--ap-space-medium);
+	background: var(--ap-bg-color);
+	padding: 1rem;
+	border-radius: var(--ap-border-radius);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	margin-bottom: var(--ap-space-medium);
 }
 
 #ap-dashboard-stats {
-  font-size: 0.9rem;
-  margin-bottom: var(--ap-space-medium);
-  color: var(--ap-muted-text-color);
+	font-size: 0.9rem;
+	margin-bottom: var(--ap-space-medium);
+	color: var(--ap-muted-text-color);
 }
 
 #ap-events-feed,
 #ap-dashboard-notifications {
-  background: var(--ap-bg-color);
-  padding: 1rem;
-  border-radius: var(--ap-border-radius);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  margin-bottom: var(--ap-space-medium);
+	background: var(--ap-bg-color);
+	padding: 1rem;
+	border-radius: var(--ap-border-radius);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	margin-bottom: var(--ap-space-medium);
 }
 
 #ap-dashboard-notifications .mark-all-read {
-  margin-bottom: 0.5rem;
+	margin-bottom: 0.5rem;
 }
 
 #ap-upgrade-options .upgrade-artist-btn {
-  margin-right: 0.5rem;
+	margin-right: 0.5rem;
 }
 
 #ap-upgrade-options .upgrade-org-btn {
-  margin-left: 0.5rem;
+	margin-left: 0.5rem;
 }
 
 #ap-events-feed ul,
 #ap-dashboard-notifications ul {
-  list-style: disc;
-  margin-left: 1.25rem;
-  padding-left: 0;
+	list-style: disc;
+	margin-left: 1.25rem;
+	padding-left: 0;
 }
 
 #ap-events-feed li,
 #ap-dashboard-notifications li {
-  margin-bottom: 0.5rem;
+	margin-bottom: 0.5rem;
 }
 
 #ap-events-feed a,
 #ap-dashboard-notifications a {
-  color: var(--ap-primary-color);
-  text-decoration: none;
+	color: var(--ap-primary-color);
+	text-decoration: none;
 }
 
 #ap-events-feed a:hover,
 #ap-dashboard-notifications a:hover {
-  color: var(--ap-primary-hover);
-  text-decoration: underline;
+	color: var(--ap-primary-hover);
+	text-decoration: underline;
 }
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
-  .ap-user-dashboard {
-    padding: 1rem;
-  }
-  .ap-user-dashboard .dashboard-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  #ap-events-feed,
-  #ap-dashboard-notifications {
-    padding: 0.75rem;
-  }
+	.ap-user-dashboard {
+	padding: 1rem;
+	}
+	.ap-user-dashboard .dashboard-header {
+	flex-direction: column;
+	align-items: flex-start;
+	}
+	#ap-events-feed,
+	#ap-dashboard-notifications {
+	padding: 0.75rem;
+	}
 }
 .ap-user-dashboard h1,
 .ap-user-dashboard h2,
 .ap-user-dashboard h3 {
-  margin-bottom: 0.75rem;
-  color: var(--ap-heading-color);
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
+	margin-bottom: 0.75rem;
+	color: var(--ap-heading-color);
+	font-size: clamp(1.5rem, 2.5vw, 2rem);
 }
 
 .ap-user-dashboard .dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1.5rem;
 }
 
 .ap-user-dashboard .user-info {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .ap-user-dashboard .user-info img {
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  margin-right: 1rem;
+	border-radius: 50%;
+	width: 60px;
+	height: 60px;
+	margin-right: 1rem;
 }
 
 .ap-user-dashboard .user-info .name {
-  font-size: 1.25rem;
-  font-weight: 600;
+	font-size: 1.25rem;
+	font-weight: 600;
 }
 
 .ap-user-dashboard .dashboard-content {
-  background-color: var(--ap-bg-color);
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+	background-color: var(--ap-bg-color);
+	padding: 1.5rem;
+	border-radius: 8px;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
 }
 
 /* Profile shortcode styles */
 .ap-user-profile {
-  border: 1px solid var(--ap-border-color);
-  border-radius: 12px;
-  padding: 1.5rem;
-  max-width: 500px;
-  margin: 1.5rem auto;
-  background: var(--ap-bg-color);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+	border: 1px solid var(--ap-border-color);
+	border-radius: 12px;
+	padding: 1.5rem;
+	max-width: 500px;
+	margin: 1.5rem auto;
+	background: var(--ap-bg-color);
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .ap-user-profile-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin-bottom: 1rem;
 }
 
 .ap-user-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--ap-soft-border-color);
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 2px solid var(--ap-soft-border-color);
 }
 
 .ap-user-name {
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
-  font-weight: 600;
-  margin: 0;
+	font-size: clamp(1.5rem, 2.5vw, 2rem);
+	font-weight: 600;
+	margin: 0;
 }
 
 .ap-user-profile-body {
-  font-size: 1rem;
-  color: var(--ap-dark-text-color);
+	font-size: 1rem;
+	color: var(--ap-dark-text-color);
 }
 
 .ap-user-bio {
-  font-style: italic;
-  margin-bottom: 1rem;
+	font-style: italic;
+	margin-bottom: 1rem;
 }
 
 .ap-user-social-links a {
-  display: inline-block;
-  margin-right: 1rem;
-  color: var(--ap-primary-color);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s;
+	display: inline-block;
+	margin-right: 1rem;
+	color: var(--ap-primary-color);
+	text-decoration: none;
+	font-weight: 500;
+	transition: color 0.3s;
 }
 
 .ap-user-social-links a:hover {
-  color: var(--ap-primary-hover);
+	color: var(--ap-primary-hover);
 }
 
 .ap-user-membership {
-  font-weight: 500;
-  margin-bottom: 1rem;
+	font-weight: 500;
+	margin-bottom: 1rem;
 }
 
 .ap-profile-completeness {
-  font-size: 0.9rem;
-  color: var(--ap-muted-text-color);
-  margin-top: 1rem;
+	font-size: 0.9rem;
+	color: var(--ap-muted-text-color);
+	margin-top: 1rem;
 }
 
 /* Simple calendar styles */
 .ap-cal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.5rem;
 }
 
 .ap-cal-header button:focus {
-  outline: 2px solid var(--ap-primary-color);
-  outline-offset: 2px;
+	outline: 2px solid var(--ap-primary-color);
+	outline-offset: 2px;
 }
 
 .ap-calendar {
-  width: 100%;
-  border-collapse: collapse;
+	width: 100%;
+	border-collapse: collapse;
 }
 
 .ap-calendar th,
 .ap-calendar td {
-  border: 1px solid var(--ap-border-color);
-  width: 14%;
-  vertical-align: top;
-  padding: 4px;
-  font-size: 0.85rem;
+	border: 1px solid var(--ap-border-color);
+	width: 14%;
+	vertical-align: top;
+	padding: 4px;
+	font-size: 0.85rem;
 }
 
 .ap-calendar ul {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
+	list-style: none;
+	padding-left: 0;
+	margin: 0;
 }
 
 /* Calendar date styling */
 .ap-date {
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 0.25rem;
-  display: block;
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 0.25rem;
+	display: block;
 }
 
 /* Highlight days containing events */
 .ap-calendar td.has-events {
-  background-color: rgba(0, 115, 170, 0.1);
+	background-color: rgba(0, 115, 170, 0.1);
 }
 
 .ap-edit-profile-link {
-  background-color: var(--ap-primary-color);
-  border: none;
-  color: var(--ap-bg-color);
-  padding: var(--ap-button-padding);
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin-top: 0.5rem;
-  cursor: pointer;
-  border-radius: var(--ap-border-radius);
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+	background-color: var(--ap-primary-color);
+	border: none;
+	color: var(--ap-bg-color);
+	padding: var(--ap-button-padding);
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin-top: 0.5rem;
+	cursor: pointer;
+	border-radius: var(--ap-border-radius);
+	transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .ap-edit-profile-link:hover,
 .ap-edit-profile-link:focus {
-  background-color: var(--ap-primary-hover);
-  box-shadow: 0 0 0 2px var(--ap-primary-color);
+	background-color: var(--ap-primary-hover);
+	box-shadow: 0 0 0 2px var(--ap-primary-color);
 }
 
 /* Favorites list styles */
 .favorites-list {
-  list-style: none;
-  padding-left: 0;
-  margin-bottom: var(--ap-space-medium);
+	list-style: none;
+	padding-left: 0;
+	margin-bottom: var(--ap-space-medium);
 }
 
 .favorites-list li {
-  padding: 0.25rem 0;
+	padding: 0.25rem 0;
 }
 
 .favorite-group {
-  margin-bottom: var(--ap-space-medium);
+	margin-bottom: var(--ap-space-medium);
 }
 
 .ap-empty-state {
-  text-align: center;
-  padding: 2em;
-  color: #777;
-  font-style: italic;
+	text-align: center;
+	padding: 2em;
+	color: #777;
+	font-style: italic;
 }
 
 .ap-toast {
-  position: fixed;
-  bottom: 1em;
-  right: 1em;
-  background: #333;
-  color: #fff;
-  padding: 0.75em 1em;
-  border-radius: 3px;
-  z-index: 1000;
+	position: fixed;
+	bottom: 1em;
+	right: 1em;
+	background: #333;
+	color: #fff;
+	padding: 0.75em 1em;
+	border-radius: 3px;
+	z-index: 1000;
 }
 
 .ap-seg { display:flex; gap:.25rem; padding:.25rem; border:1px solid var(--ap-border-color); border-radius:999px; margin:0 0 1rem; }

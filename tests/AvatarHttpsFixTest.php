@@ -4,7 +4,6 @@ use PHPUnit\Framework\TestCase;
 /**
 
  * @group CORE
-
  */
 
 class AvatarHttpsFixTest extends TestCase {
@@ -37,7 +36,6 @@ class AvatarHttpsFixTest extends TestCase {
 				return preg_replace( '#^https?:#', $scheme . ':', $url );
 			}
 		}
-
 
 		require __DIR__ . '/../includes/avatar-https-fix.php';
 	}

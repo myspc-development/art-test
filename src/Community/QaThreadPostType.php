@@ -46,19 +46,19 @@ class QaThreadPostType {
 				'type'         => 'string',
 			)
 		);
-                register_post_meta(
-                        'qa_thread',
-                        'participants',
-                        array(
-                                'show_in_rest' => array(
-                                        'schema' => array(
-                                                'type'  => 'array',
-                                                'items' => array( 'type' => 'integer' ),
-                                        ),
-                                ),
-                                'single'       => true,
-                                'type'         => 'array',
-                        )
-                );
+				register_post_meta(
+					'qa_thread',
+					'participants',
+					array(
+						'show_in_rest' => array(
+							'schema' => array(
+								'type'  => 'array',
+								'items' => array( 'type' => 'integer' ),
+							),
+						),
+						'single'       => true,
+						'type'         => 'array',
+					)
+				);
 	}
 }

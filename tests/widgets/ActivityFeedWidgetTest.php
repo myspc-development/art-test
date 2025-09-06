@@ -6,7 +6,6 @@ use ArtPulse\Widgets\Member\ActivityFeedWidget;
 /**
 
  * @group WIDGETS
-
  */
 
 class ActivityFeedWidgetTest extends WidgetTestCase {

@@ -52,7 +52,6 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 /**
 
  * @group ADMIN
-
  */
 
 class DashboardWidgetToolsRenderTest extends TestCase {
@@ -70,29 +69,29 @@ class DashboardWidgetToolsRenderTest extends TestCase {
 	}
 
 	public function test_role_layout_renders_in_order(): void {
-               DashboardWidgetRegistry::register(
-                       'widget_alpha',
-                       'Alpha',
-                       '',
-                       '',
-                       function () {
-                               return 'alpha';
-                       }
-               );
-               DashboardWidgetRegistry::register(
-                       'widget_beta',
-                       'Beta',
-                       '',
-                       '',
-                       function () {
-                               return 'beta';
-                       }
-               );
+				DashboardWidgetRegistry::register(
+					'widget_alpha',
+					'Alpha',
+					'',
+					'',
+					function () {
+							return 'alpha';
+					}
+				);
+				DashboardWidgetRegistry::register(
+					'widget_beta',
+					'Beta',
+					'',
+					'',
+					function () {
+							return 'beta';
+					}
+				);
 
 		self::$options['ap_dashboard_widget_config'] = array(
 			'subscriber' => array(
-                               array( 'id' => 'widget_beta' ),
-                               array( 'id' => 'widget_alpha' ),
+				array( 'id' => 'widget_beta' ),
+				array( 'id' => 'widget_alpha' ),
 			),
 		);
 
@@ -106,62 +105,62 @@ class DashboardWidgetToolsRenderTest extends TestCase {
 	}
 
 	public function test_widget_controls_have_accessibility_attributes(): void {
-               DashboardWidgetRegistry::register(
-                       'widget_alpha',
-                       'Alpha',
-                       '',
-                       '',
-                       function () {
-                               return 'alpha';
-                       }
-               );
+				DashboardWidgetRegistry::register(
+					'widget_alpha',
+					'Alpha',
+					'',
+					'',
+					function () {
+							return 'alpha';
+					}
+				);
 
-                self::$options['ap_dashboard_widget_config'] = array(
-                        'subscriber' => array( array( 'id' => 'widget_alpha' ) ),
-                );
+				self::$options['ap_dashboard_widget_config'] = array(
+					'subscriber' => array( array( 'id' => 'widget_alpha' ) ),
+				);
 
-		ob_start();
-		DashboardWidgetTools::render_role_dashboard_preview( 'subscriber' );
-		$html = ob_get_clean();
+				ob_start();
+				DashboardWidgetTools::render_role_dashboard_preview( 'subscriber' );
+				$html = ob_get_clean();
 
-		$this->assertStringContainsString( 'role="button"', $html );
-		$this->assertStringContainsString( 'aria-label="Drag to reorder"', $html );
+				$this->assertStringContainsString( 'role="button"', $html );
+				$this->assertStringContainsString( 'aria-label="Drag to reorder"', $html );
 	}
 
 	public function test_render_dashboard_widgets_uses_role_layout_when_provided(): void {
-               DashboardWidgetRegistry::register(
-                       'widget_alpha',
-                       'Alpha',
-                       '',
-                       '',
-                       function () {
-                               echo 'alpha';
-                       }
-               );
+				DashboardWidgetRegistry::register(
+					'widget_alpha',
+					'Alpha',
+					'',
+					'',
+					function () {
+							echo 'alpha';
+					}
+				);
 
-                self::$options['ap_dashboard_widget_config'] = array(
-                        'subscriber' => array( array( 'id' => 'widget_alpha' ) ),
-                );
+				self::$options['ap_dashboard_widget_config'] = array(
+					'subscriber' => array( array( 'id' => 'widget_alpha' ) ),
+				);
 
-		ob_start();
-		DashboardWidgetTools::render_dashboard_widgets( 'subscriber' );
-		$html = ob_get_clean();
+				ob_start();
+				DashboardWidgetTools::render_dashboard_widgets( 'subscriber' );
+				$html = ob_get_clean();
 
-		$this->assertStringContainsString( 'alpha', $html );
+				$this->assertStringContainsString( 'alpha', $html );
 	}
 
 	public function test_render_dashboard_widgets_falls_back_to_user_layout(): void {
-               DashboardWidgetRegistry::register(
-                       'widget_alpha',
-                       'Alpha',
-                       '',
-                       '',
-                       function () {
-                               echo 'alpha';
-                       }
-               );
+				DashboardWidgetRegistry::register(
+					'widget_alpha',
+					'Alpha',
+					'',
+					'',
+					function () {
+							echo 'alpha';
+					}
+				);
 
-                self::$meta[1]['ap_dashboard_layout'] = array( array( 'id' => 'widget_alpha' ) );
+				self::$meta[1]['ap_dashboard_layout'] = array( array( 'id' => 'widget_alpha' ) );
 
 		ob_start();
 		DashboardWidgetTools::render_dashboard_widgets( '' );

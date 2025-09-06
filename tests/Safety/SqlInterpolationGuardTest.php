@@ -3,7 +3,6 @@
 /**
 
  * @group SAFETY
-
  */
 
 final class SqlInterpolationGuardTest extends \PHPUnit\Framework\TestCase {

@@ -1,17 +1,17 @@
 #dashboard-widgets-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
 }
 
 #postbox-container-1,
 #postbox-container-2 {
-  width: 48%;
+	width: 48%;
 }
 
 @media (max-width: 782px) {
-  #postbox-container-1,
-  #postbox-container-2 {
-    width: 100%;
-  }
+	#postbox-container-1,
+	#postbox-container-2 {
+	width: 100%;
+	}
 }

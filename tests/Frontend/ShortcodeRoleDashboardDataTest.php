@@ -8,14 +8,14 @@ use ArtPulse\Frontend\ShortcodeRoleDashboard;
  */
 class ShortcodeRoleDashboardDataTest extends \WP_UnitTestCase {
 	public function test_display_name_sanitized_and_encoded(): void {
-		$raw = 'Bad <script>alert(1)</script> "quote" & more';
+		$raw     = 'Bad <script>alert(1)</script> "quote" & more';
 		$user_id = self::factory()->user->create( array( 'display_name' => $raw ) );
 		wp_set_current_user( $user_id );
 
 		$ref    = new \ReflectionClass( ShortcodeRoleDashboard::class );
 		$method = $ref->getMethod( 'script_data' );
 		$method->setAccessible( true );
-		$data   = $method->invoke( null, 'member' );
+		$data = $method->invoke( null, 'member' );
 
 		$expected_display = sanitize_text_field( $raw );
 		$this->assertSame( $expected_display, $data['user']['displayName'] );

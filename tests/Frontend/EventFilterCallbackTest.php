@@ -7,7 +7,6 @@ use function ArtPulse\Frontend\ap_filter_events_callback;
 /**
 
  * @group FRONTEND
-
  */
 
 class EventFilterCallbackTest extends WP_UnitTestCase {
@@ -136,23 +135,23 @@ class EventFilterCallbackTest extends WP_UnitTestCase {
 		$this->assertStringNotContainsString( 'Second Event', $html );
 	}
 
-       public function test_filter_by_location_radius(): void {
-               $html = $this->run_callback(
-                       array(
-                               'location' => '34.05,-118.25',
-                               'radius'   => 100,
-                       )
-               );
-               $this->assertStringContainsString( 'First Event', $html );
-               $this->assertStringNotContainsString( 'Second Event', $html );
+	public function test_filter_by_location_radius(): void {
+			$html = $this->run_callback(
+				array(
+					'location' => '34.05,-118.25',
+					'radius'   => 100,
+				)
+			);
+			$this->assertStringContainsString( 'First Event', $html );
+			$this->assertStringNotContainsString( 'Second Event', $html );
 
-               $html = $this->run_callback(
-                       array(
-                               'location' => '34.05,-118.25',
-                               'radius'   => 5000,
-                       )
-               );
-               $this->assertStringContainsString( 'First Event', $html );
-               $this->assertStringContainsString( 'Second Event', $html );
-       }
+			$html = $this->run_callback(
+				array(
+					'location' => '34.05,-118.25',
+					'radius'   => 5000,
+				)
+			);
+			$this->assertStringContainsString( 'First Event', $html );
+			$this->assertStringContainsString( 'Second Event', $html );
+	}
 }

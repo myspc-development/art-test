@@ -3,53 +3,53 @@
 namespace ArtPulse\Frontend;
 
 class EventSubmissionShortcode {
-        /**
-         * Transient key used when WooCommerce is unavailable.
-         */
-        private const NOTICE_KEY = 'ap_event_notices';
+		/**
+		 * Transient key used when WooCommerce is unavailable.
+		 */
+	private const NOTICE_KEY = 'ap_event_notices';
 
-       /**
-        * Internal log of notices for testing.
-        *
-        * @var array<int, array{message:string, type:string}>
-        */
-       private static array $notice_log = array();
+		/**
+		 * Internal log of notices for testing.
+		 *
+		 * @var array<int, array{message:string, type:string}>
+		 */
+	private static array $notice_log = array();
 
-       /**
-        * Retrieve any logged notices.
-        */
-       public static function get_notice_log(): array {
-               return self::$notice_log;
-       }
+		/**
+		 * Retrieve any logged notices.
+		 */
+	public static function get_notice_log(): array {
+			return self::$notice_log;
+	}
 
-       /**
-        * Reset the internal notice log.
-        */
-       public static function reset_notice_log(): void {
-               self::$notice_log = array();
-       }
+		/**
+		 * Reset the internal notice log.
+		 */
+	public static function reset_notice_log(): void {
+			self::$notice_log = array();
+	}
 
-       /**
-        * Store a notice for later display.
-        */
-       protected static function add_notice( string $message, string $type = 'error' ): void {
-               $entry = array(
-                       'message' => $message,
-                       'type'    => $type,
-               );
+		/**
+		 * Store a notice for later display.
+		 */
+	protected static function add_notice( string $message, string $type = 'error' ): void {
+			$entry = array(
+				'message' => $message,
+				'type'    => $type,
+			);
 
-               // Always record the notice internally before invoking any external handlers.
-               self::$notice_log[] = $entry;
+			// Always record the notice internally before invoking any external handlers.
+			self::$notice_log[] = $entry;
 
-               if ( function_exists( 'wc_add_notice' ) ) {
-                       wc_add_notice( $message, $type );
-                       return;
-               }
+			if ( function_exists( 'wc_add_notice' ) ) {
+					wc_add_notice( $message, $type );
+					return;
+			}
 
-               $notices   = get_transient( self::NOTICE_KEY ) ?: array();
-               $notices[] = $entry;
-               set_transient( self::NOTICE_KEY, $notices, defined( 'MINUTE_IN_SECONDS' ) ? MINUTE_IN_SECONDS : 60 );
-       }
+			$notices   = get_transient( self::NOTICE_KEY ) ?: array();
+			$notices[] = $entry;
+			set_transient( self::NOTICE_KEY, $notices, defined( 'MINUTE_IN_SECONDS' ) ? MINUTE_IN_SECONDS : 60 );
+	}
 
 	/**
 	 * Output any stored notices.
@@ -70,55 +70,55 @@ class EventSubmissionShortcode {
 		}
 	}
 
-        /**
-         * Redirect back to the form when possible.
-         *
-         * @param callable|null $redirect Optional redirect function.
-         */
-protected static function maybe_redirect( ?callable $redirect = null ): void {
-    $referer_fn = __NAMESPACE__ . '\wp_get_referer';
+		/**
+		 * Redirect back to the form when possible.
+		 *
+		 * @param callable|null $redirect Optional redirect function.
+		 */
+	protected static function maybe_redirect( ?callable $redirect = null ): void {
+		$referer_fn = __NAMESPACE__ . '\wp_get_referer';
 
-    if ( function_exists( $referer_fn ) ) {
-        $target = $referer_fn();
-    } elseif ( function_exists( '\wp_get_referer' ) ) {
-        $target = \wp_get_referer();
-    } else {
-        $target = false;
-    }
+		if ( function_exists( $referer_fn ) ) {
+			$target = $referer_fn();
+		} elseif ( function_exists( '\wp_get_referer' ) ) {
+			$target = \wp_get_referer();
+		} else {
+			$target = false;
+		}
 
-    if ( ! $target ) {
-        $target = \ArtPulse\Core\Plugin::get_event_submission_url();
-    }
+		if ( ! $target ) {
+			$target = \ArtPulse\Core\Plugin::get_event_submission_url();
+		}
 
-    // Always expose the intended target to tests when possible.
-    if ( class_exists( __NAMESPACE__ . '\StubState' ) ) {
-        StubState::$page = $target;
-    }
+		// Always expose the intended target to tests when possible.
+		if ( class_exists( __NAMESPACE__ . '\StubState' ) ) {
+			StubState::$page = $target;
+		}
 
-    if ( ! $redirect ) {
-        $redirect = __NAMESPACE__ . '\wp_safe_redirect';
+		if ( ! $redirect ) {
+			$redirect = __NAMESPACE__ . '\wp_safe_redirect';
 
-        if ( ! function_exists( $redirect ) ) {
-            if ( function_exists( '\wp_safe_redirect' ) ) {
-                $redirect = '\wp_safe_redirect';
-            } else {
-                $redirect = null;
-            }
-        }
-    }
+			if ( ! function_exists( $redirect ) ) {
+				if ( function_exists( '\wp_safe_redirect' ) ) {
+					$redirect = '\wp_safe_redirect';
+				} else {
+					$redirect = null;
+				}
+			}
+		}
 
-    if ( is_callable( $redirect ) ) {
-        $redirect( $target );
+		if ( is_callable( $redirect ) ) {
+			$redirect( $target );
 
-        // Only halt execution when using the global WordPress redirect.
-        if ( '\wp_safe_redirect' === $redirect ) {
-            exit;
-        }
-    } else {
-        // No redirect handler available; throw so tests can detect the attempt.
-        throw new \RuntimeException( 'redirect' );
-    }
-}
+			// Only halt execution when using the global WordPress redirect.
+			if ( '\wp_safe_redirect' === $redirect ) {
+				exit;
+			}
+		} else {
+			// No redirect handler available; throw so tests can detect the attempt.
+			throw new \RuntimeException( 'redirect' );
+		}
+	}
 
 	public static function register() {
 		\ArtPulse\Core\ShortcodeRegistry::register( 'ap_submit_event', 'Submit Event', array( self::class, 'render' ) );
@@ -347,104 +347,104 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
 		return ob_get_clean();
 	}
 
-       public static function maybe_handle_form() {
-               $is_logged_in_fn = __NAMESPACE__ . '\is_user_logged_in';
-               $get_user_fn     = __NAMESPACE__ . '\get_current_user_id';
-               $can_fn          = __NAMESPACE__ . '\current_user_can';
+	public static function maybe_handle_form() {
+			$is_logged_in_fn = __NAMESPACE__ . '\is_user_logged_in';
+			$get_user_fn     = __NAMESPACE__ . '\get_current_user_id';
+			$can_fn          = __NAMESPACE__ . '\current_user_can';
 
-               $is_logged_in = function_exists( $is_logged_in_fn )
-                       ? $is_logged_in_fn()
-                       : \is_user_logged_in();
-               if ( ! $is_logged_in || ! isset( $_POST['ap_submit_event'] ) ) {
-                       return;
-               }
+			$is_logged_in = function_exists( $is_logged_in_fn )
+					? $is_logged_in_fn()
+					: \is_user_logged_in();
+		if ( ! $is_logged_in || ! isset( $_POST['ap_submit_event'] ) ) {
+				return;
+		}
 
-               if ( class_exists( __NAMESPACE__ . '\\StubState' ) ) {
-                       $user_id = StubState::$current_user;
-               } elseif ( function_exists( $get_user_fn ) ) {
-                       $user_id = $get_user_fn();
-               } else {
-                       $user_id = \get_current_user_id();
-               }
+		if ( class_exists( __NAMESPACE__ . '\\StubState' ) ) {
+					$user_id = StubState::$current_user;
+		} elseif ( function_exists( $get_user_fn ) ) {
+				$user_id = $get_user_fn();
+		} else {
+				$user_id = \get_current_user_id();
+		}
 
-               $can_publish = function_exists( $can_fn )
-                       ? $can_fn( 'publish_events' )
-                       : \current_user_can( 'publish_events' );
+			$can_publish = function_exists( $can_fn )
+					? $can_fn( 'publish_events' )
+					: \current_user_can( 'publish_events' );
 
-               // Verify nonce
-               if ( ! isset( $_POST['ap_event_nonce'] ) || ! wp_verify_nonce( $_POST['ap_event_nonce'], 'ap_submit_event' ) ) {
-                       self::add_notice( __( 'Security check failed.', 'artpulse' ), 'error' );
-                       self::maybe_redirect();
-                       return;
-               }
+			// Verify nonce
+		if ( ! isset( $_POST['ap_event_nonce'] ) || ! wp_verify_nonce( $_POST['ap_event_nonce'], 'ap_submit_event' ) ) {
+					self::add_notice( __( 'Security check failed.', 'artpulse' ), 'error' );
+					self::maybe_redirect();
+					return;
+		}
 
-		// Validate event data
-		$event_title        = sanitize_text_field( $_POST['event_title'] );
-		$event_description  = wp_kses_post( $_POST['event_description'] );
-		$event_date         = sanitize_text_field( $_POST['event_date'] );
-		$start_date         = sanitize_text_field( $_POST['event_start_date'] ?? '' );
-		$end_date           = sanitize_text_field( $_POST['event_end_date'] ?? '' );
-		$recurrence         = sanitize_text_field( $_POST['event_recurrence_rule'] ?? '' );
-		$event_location     = sanitize_text_field( $_POST['event_location'] );
-		$venue_name         = sanitize_text_field( $_POST['venue_name'] ?? '' );
-		$street             = sanitize_text_field( $_POST['event_street_address'] ?? '' );
-		$country            = sanitize_text_field( $_POST['event_country'] ?? '' );
-		$state              = sanitize_text_field( $_POST['event_state'] ?? '' );
-		$city               = sanitize_text_field( $_POST['event_city'] ?? '' );
-		$postcode           = sanitize_text_field( $_POST['event_postcode'] ?? '' );
-		$address_json       = wp_unslash( $_POST['address_components'] ?? '' );
-		$address_components = json_decode( $address_json, true );
-		$address_full       = sanitize_text_field( $_POST['event_address'] ?? '' );
-		$start_time         = sanitize_text_field( $_POST['event_start_time'] ?? '' );
-		$end_time           = sanitize_text_field( $_POST['event_end_time'] ?? '' );
-		$contact_info       = sanitize_text_field( $_POST['event_contact'] ?? '' );
-		$rsvp_url           = esc_url_raw( $_POST['event_rsvp_url'] ?? '' );
-		$organizer_name     = sanitize_text_field( $_POST['event_organizer_name'] ?? '' );
-		$organizer_email    = sanitize_email( $_POST['event_organizer_email'] ?? '' );
-               $event_org    = absint( $_POST['event_org'] ?? 0 );
-               $get_post_fn  = __NAMESPACE__ . '\get_post';
-               $org_post     = $event_org
-                       ? ( function_exists( $get_post_fn ) ? $get_post_fn( $event_org ) : \get_post( $event_org ) )
-                       : null;
-                $event_artists      = isset( $_POST['event_artists'] ) ? array_map( 'intval', (array) $_POST['event_artists'] ) : array();
-                $event_type         = intval( $_POST['event_type'] ?? 0 );
-                $featured           = isset( $_POST['event_featured'] ) ? '1' : '0';
+				// Validate event data
+				$event_title        = sanitize_text_field( $_POST['event_title'] );
+				$event_description  = wp_kses_post( $_POST['event_description'] );
+				$event_date         = sanitize_text_field( $_POST['event_date'] );
+				$start_date         = sanitize_text_field( $_POST['event_start_date'] ?? '' );
+				$end_date           = sanitize_text_field( $_POST['event_end_date'] ?? '' );
+				$recurrence         = sanitize_text_field( $_POST['event_recurrence_rule'] ?? '' );
+				$event_location     = sanitize_text_field( $_POST['event_location'] );
+				$venue_name         = sanitize_text_field( $_POST['venue_name'] ?? '' );
+				$street             = sanitize_text_field( $_POST['event_street_address'] ?? '' );
+				$country            = sanitize_text_field( $_POST['event_country'] ?? '' );
+				$state              = sanitize_text_field( $_POST['event_state'] ?? '' );
+				$city               = sanitize_text_field( $_POST['event_city'] ?? '' );
+				$postcode           = sanitize_text_field( $_POST['event_postcode'] ?? '' );
+				$address_json       = wp_unslash( $_POST['address_components'] ?? '' );
+				$address_components = json_decode( $address_json, true );
+				$address_full       = sanitize_text_field( $_POST['event_address'] ?? '' );
+				$start_time         = sanitize_text_field( $_POST['event_start_time'] ?? '' );
+				$end_time           = sanitize_text_field( $_POST['event_end_time'] ?? '' );
+				$contact_info       = sanitize_text_field( $_POST['event_contact'] ?? '' );
+				$rsvp_url           = esc_url_raw( $_POST['event_rsvp_url'] ?? '' );
+				$organizer_name     = sanitize_text_field( $_POST['event_organizer_name'] ?? '' );
+				$organizer_email    = sanitize_email( $_POST['event_organizer_email'] ?? '' );
+				$event_org          = absint( $_POST['event_org'] ?? 0 );
+				$get_post_fn        = __NAMESPACE__ . '\get_post';
+				$org_post           = $event_org
+					? ( function_exists( $get_post_fn ) ? $get_post_fn( $event_org ) : \get_post( $event_org ) )
+					: null;
+				$event_artists      = isset( $_POST['event_artists'] ) ? array_map( 'intval', (array) $_POST['event_artists'] ) : array();
+				$event_type         = intval( $_POST['event_type'] ?? 0 );
+				$featured           = isset( $_POST['event_featured'] ) ? '1' : '0';
 
-                if ( empty( $event_description ) ) {
-                        self::add_notice( __( 'Please enter an event description.', 'artpulse' ), 'error' );
-                        self::maybe_redirect();
-                        return;
-                }
+		if ( empty( $event_description ) ) {
+				self::add_notice( __( 'Please enter an event description.', 'artpulse' ), 'error' );
+				self::maybe_redirect();
+				return;
+		}
 
-               // Ensure a valid organization is selected.
-               if ( ! $event_org || ! $org_post ) {
-                       self::add_notice( __( 'Please select an organization.', 'artpulse' ), 'error' );
-                       self::maybe_redirect();
-                       return;
-               }
+				// Ensure a valid organization is selected.
+		if ( ! $event_org || ! $org_post ) {
+				self::add_notice( __( 'Please select an organization.', 'artpulse' ), 'error' );
+				self::maybe_redirect();
+				return;
+		}
 
-               // Only perform additional checks when the post object is valid.
-               if (
-                       ! is_object( $org_post ) ||
-                       $org_post->post_type !== 'artpulse_org' ||
-                       (int) ( $org_post->post_author ?? 0 ) !== $user_id
-               ) {
-                       self::add_notice( 'Invalid organization selected.', 'error' );
-                       self::maybe_redirect();
-                       return;
-               }
+				// Only perform additional checks when the post object is valid.
+		if (
+					! is_object( $org_post ) ||
+					$org_post->post_type !== 'artpulse_org' ||
+					(int) ( $org_post->post_author ?? 0 ) !== $user_id
+				) {
+				self::add_notice( 'Invalid organization selected.', 'error' );
+				self::maybe_redirect();
+				return;
+		}
 
-                // Validate start and end dates when both provided.
-                if ( $start_date && $end_date && strtotime( $start_date ) > strtotime( $end_date ) ) {
-                        self::add_notice( 'Start date cannot be later than end date.', 'error' );
-                        self::maybe_redirect();
-                        return;
-                }
+				// Validate start and end dates when both provided.
+		if ( $start_date && $end_date && strtotime( $start_date ) > strtotime( $end_date ) ) {
+				self::add_notice( 'Start date cannot be later than end date.', 'error' );
+				self::maybe_redirect();
+				return;
+		}
 
-               $status_choice = sanitize_text_field( $_POST['event_status'] ?? 'publish' );
-               $publish_date  = sanitize_text_field( $_POST['event_publish_date'] ?? '' );
-               $post_status   = $can_publish ? 'publish' : 'pending';
-               $post_date     = null;
+				$status_choice = sanitize_text_field( $_POST['event_status'] ?? 'publish' );
+				$publish_date  = sanitize_text_field( $_POST['event_publish_date'] ?? '' );
+				$post_status   = $can_publish ? 'publish' : 'pending';
+				$post_date     = null;
 
 		if ( $can_publish ) {
 			if ( $status_choice === 'draft' ) {
@@ -461,184 +461,184 @@ protected static function maybe_redirect( ?callable $redirect = null ): void {
 			}
 		}
 
-		$data = array(
-			'title'              => $event_title,
-			'description'        => $event_description,
-			'date'               => $event_date,
-			'start_date'         => $start_date,
-			'end_date'           => $end_date,
-			'recurrence'         => $recurrence,
-			'location'           => $event_location,
-			'venue_name'         => $venue_name,
-			'street'             => $street,
-			'country'            => $country,
-			'state'              => $state,
-			'city'               => $city,
-			'postcode'           => $postcode,
-			'address_components' => $address_components ?: $address_json,
-			'address_full'       => $address_full,
-			'start_time'         => $start_time,
-			'end_time'           => $end_time,
-			'contact_info'       => $contact_info,
-			'rsvp_url'           => $rsvp_url,
-			'organizer_name'     => $organizer_name,
-			'organizer_email'    => $organizer_email,
-			'org_id'             => $event_org,
-			'artists'            => $event_artists,
-			'event_type'         => $event_type,
-			'featured'           => $featured,
-			'post_status'        => $post_status,
-			'post_date'          => $post_date,
-		);
-
-		$post_id = EventService::create_event( $data, $user_id );
-
-		if ( is_wp_error( $post_id ) ) {
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log( 'Error creating event post: ' . $post_id->get_error_message() );
-			}
-			self::add_notice( $post_id->get_error_message(), 'error' );
-			self::maybe_redirect();
-			return;
-		}
-
-               // Handle banner and additional image uploads
-               $image_ids       = array();
-               $image_order     = array();
-               $banner_id       = 0;
-               $upload_had_error = false;
-
-		if ( isset( $_POST['image_order'] ) ) {
-			$image_order = array_map( 'intval', array_filter( explode( ',', (string) $_POST['image_order'] ) ) );
-		}
-
-		if ( ! function_exists( 'media_handle_upload' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/image.php';
-			require_once ABSPATH . 'wp-admin/includes/file.php';
-			require_once ABSPATH . 'wp-admin/includes/media.php';
-		}
-
-                // Handle Banner Upload
-               if ( ! empty( $_FILES['event_banner']['name'] ) ) {
-                       $attachment_id = media_handle_upload( 'event_banner', $post_id );
-
-                       if ( ! is_wp_error( $attachment_id ) ) {
-                               $image_ids[] = $attachment_id;
-                               // Set the featured image
-                               set_post_thumbnail( $post_id, $attachment_id );
-                               $banner_id = $attachment_id;
-                       } else {
-                               if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                                       error_log( 'Error uploading banner: ' . $attachment_id->get_error_message() );
-                               }
-                               self::add_notice( __( 'Error uploading banner. Please try again.', 'artpulse' ), 'error' );
-                               $upload_had_error = true;
-                       }
-               }
-
-		// Handle Additional Images Upload
-		$files   = array();
-		$indices = array();
-		for ( $i = 1; $i <= 5; $i++ ) {
-			$key = 'image_' . $i;
-			if ( ! empty( $_FILES[ $key ]['tmp_name'] ) ) {
-				$files[ $i - 1 ] = array(
-					'name'     => $_FILES[ $key ]['name'],
-					'type'     => $_FILES[ $key ]['type'],
-					'tmp_name' => $_FILES[ $key ]['tmp_name'],
-					'error'    => $_FILES[ $key ]['error'],
-					'size'     => $_FILES[ $key ]['size'],
+				$data = array(
+					'title'              => $event_title,
+					'description'        => $event_description,
+					'date'               => $event_date,
+					'start_date'         => $start_date,
+					'end_date'           => $end_date,
+					'recurrence'         => $recurrence,
+					'location'           => $event_location,
+					'venue_name'         => $venue_name,
+					'street'             => $street,
+					'country'            => $country,
+					'state'              => $state,
+					'city'               => $city,
+					'postcode'           => $postcode,
+					'address_components' => $address_components ?: $address_json,
+					'address_full'       => $address_full,
+					'start_time'         => $start_time,
+					'end_time'           => $end_time,
+					'contact_info'       => $contact_info,
+					'rsvp_url'           => $rsvp_url,
+					'organizer_name'     => $organizer_name,
+					'organizer_email'    => $organizer_email,
+					'org_id'             => $event_org,
+					'artists'            => $event_artists,
+					'event_type'         => $event_type,
+					'featured'           => $featured,
+					'post_status'        => $post_status,
+					'post_date'          => $post_date,
 				);
-				$indices[]       = $i - 1;
-			}
+
+				$post_id = EventService::create_event( $data, $user_id );
+
+				if ( is_wp_error( $post_id ) ) {
+					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+						error_log( 'Error creating event post: ' . $post_id->get_error_message() );
+					}
+					self::add_notice( $post_id->get_error_message(), 'error' );
+					self::maybe_redirect();
+					return;
+				}
+
+				// Handle banner and additional image uploads
+				$image_ids        = array();
+				$image_order      = array();
+				$banner_id        = 0;
+				$upload_had_error = false;
+
+				if ( isset( $_POST['image_order'] ) ) {
+					$image_order = array_map( 'intval', array_filter( explode( ',', (string) $_POST['image_order'] ) ) );
+				}
+
+				if ( ! function_exists( 'media_handle_upload' ) ) {
+					require_once ABSPATH . 'wp-admin/includes/image.php';
+					require_once ABSPATH . 'wp-admin/includes/file.php';
+					require_once ABSPATH . 'wp-admin/includes/media.php';
+				}
+
+				// Handle Banner Upload
+				if ( ! empty( $_FILES['event_banner']['name'] ) ) {
+						$attachment_id = media_handle_upload( 'event_banner', $post_id );
+
+					if ( ! is_wp_error( $attachment_id ) ) {
+							$image_ids[] = $attachment_id;
+							// Set the featured image
+							set_post_thumbnail( $post_id, $attachment_id );
+							$banner_id = $attachment_id;
+					} else {
+						if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+									error_log( 'Error uploading banner: ' . $attachment_id->get_error_message() );
+						}
+							self::add_notice( __( 'Error uploading banner. Please try again.', 'artpulse' ), 'error' );
+							$upload_had_error = true;
+					}
+				}
+
+				// Handle Additional Images Upload
+				$files   = array();
+				$indices = array();
+				for ( $i = 1; $i <= 5; $i++ ) {
+					$key = 'image_' . $i;
+					if ( ! empty( $_FILES[ $key ]['tmp_name'] ) ) {
+						$files[ $i - 1 ] = array(
+							'name'     => $_FILES[ $key ]['name'],
+							'type'     => $_FILES[ $key ]['type'],
+							'tmp_name' => $_FILES[ $key ]['tmp_name'],
+							'error'    => $_FILES[ $key ]['error'],
+							'size'     => $_FILES[ $key ]['size'],
+						);
+						$indices[]       = $i - 1;
+					}
+				}
+
+				$order = array_values( array_unique( array_intersect( $image_order, $indices ) ) );
+				foreach ( $indices as $idx ) {
+					if ( ! in_array( $idx, $order, true ) ) {
+						$order[] = $idx;
+					}
+				}
+
+				foreach ( $order as $idx ) {
+					if ( ! isset( $files[ $idx ] ) ) {
+							continue;
+					}
+						$_FILES['ap_image'] = $files[ $idx ];
+						$attachment_id      = media_handle_upload( 'ap_image', $post_id );
+					if ( ! is_wp_error( $attachment_id ) ) {
+							$image_ids[] = $attachment_id;
+					} else {
+						if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+									error_log( 'Error uploading additional image: ' . $attachment_id->get_error_message() );
+						}
+							self::add_notice( __( 'Error uploading additional image. Please try again.', 'artpulse' ), 'error' );
+							$upload_had_error = true;
+					}
+				}
+				unset( $_FILES['ap_image'] );
+
+				// Handle Image Order (reordering logic)
+				$final_image_ids = $image_ids;
+
+				if ( ! empty( $image_order ) ) {
+						$reordered = array();
+
+						// Reorder images based on user-defined order
+					foreach ( $image_order as $image_id ) {
+						if ( in_array( $image_id, $image_ids, true ) ) {
+								$reordered[] = $image_id;
+						}
+					}
+
+						// Add any remaining images that weren't in the order (append them)
+					foreach ( $image_ids as $image_id ) {
+						if ( ! in_array( $image_id, $reordered, true ) ) {
+								$reordered[] = $image_id;
+						}
+					}
+
+						$final_image_ids = $reordered;
+				}
+
+				// Ensure the banner is included in the submission images and handle fallbacks
+				// before persisting any metadata. This guarantees the meta is stored even if a
+				// subsequent validation triggers a redirect.
+				if ( $banner_id ) {
+						// Remove any existing occurrences so the banner can be prepended.
+						$final_image_ids = array_values( array_diff( $final_image_ids, array( $banner_id ) ) );
+						array_unshift( $final_image_ids, $banner_id );
+				} elseif ( ! empty( $final_image_ids ) ) {
+						// No banner was explicitly uploaded; treat the first image as the banner.
+						$banner_id = $final_image_ids[0];
+				}
+
+				// Persist gallery and banner meta as soon as the final IDs are determined.
+				// Doing this before setting thumbnails or further validation ensures StubState::$meta_log
+				// captures entries for both keys even if the request redirects. Cast to the expected types
+				// inline to guarantee consistent storage.
+				update_post_meta(
+					$post_id,
+					'_ap_submission_images',
+					array_values( array_map( 'intval', (array) $final_image_ids ) )
+				);
+			update_post_meta( $post_id, 'event_banner_id', (int) $banner_id );
+
+			// Set the featured image after persisting meta to ensure the meta is logged before any
+			// unexpected early exit from set_post_thumbnail or later validation checks.
+		if ( $banner_id ) {
+				set_post_thumbnail( $post_id, $banner_id );
 		}
 
-		$order = array_values( array_unique( array_intersect( $image_order, $indices ) ) );
-		foreach ( $indices as $idx ) {
-			if ( ! in_array( $idx, $order, true ) ) {
-				$order[] = $idx;
-			}
+			// Redirect immediately when an upload error occurred. The metadata above has already
+			// been saved, so the redirect happens regardless of success or failure.
+		if ( $upload_had_error ) {
+					self::maybe_redirect();
+					return;
 		}
 
-               foreach ( $order as $idx ) {
-                       if ( ! isset( $files[ $idx ] ) ) {
-                               continue;
-                       }
-                       $_FILES['ap_image'] = $files[ $idx ];
-                       $attachment_id      = media_handle_upload( 'ap_image', $post_id );
-                       if ( ! is_wp_error( $attachment_id ) ) {
-                               $image_ids[] = $attachment_id;
-                       } else {
-                               if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                                       error_log( 'Error uploading additional image: ' . $attachment_id->get_error_message() );
-                               }
-                               self::add_notice( __( 'Error uploading additional image. Please try again.', 'artpulse' ), 'error' );
-                               $upload_had_error = true;
-                       }
-               }
-               unset( $_FILES['ap_image'] );
-
-               // Handle Image Order (reordering logic)
-               $final_image_ids = $image_ids;
-
-               if ( ! empty( $image_order ) ) {
-                       $reordered = array();
-
-                       // Reorder images based on user-defined order
-                       foreach ( $image_order as $image_id ) {
-                               if ( in_array( $image_id, $image_ids, true ) ) {
-                                       $reordered[] = $image_id;
-                               }
-                       }
-
-                       // Add any remaining images that weren't in the order (append them)
-                       foreach ( $image_ids as $image_id ) {
-                               if ( ! in_array( $image_id, $reordered, true ) ) {
-                                       $reordered[] = $image_id;
-                               }
-                       }
-
-                       $final_image_ids = $reordered;
-               }
-
-               // Ensure the banner is included in the submission images and handle fallbacks
-               // before persisting any metadata. This guarantees the meta is stored even if a
-               // subsequent validation triggers a redirect.
-               if ( $banner_id ) {
-                       // Remove any existing occurrences so the banner can be prepended.
-                       $final_image_ids = array_values( array_diff( $final_image_ids, array( $banner_id ) ) );
-                       array_unshift( $final_image_ids, $banner_id );
-               } elseif ( ! empty( $final_image_ids ) ) {
-                       // No banner was explicitly uploaded; treat the first image as the banner.
-                       $banner_id = $final_image_ids[0];
-               }
-
-               // Persist gallery and banner meta as soon as the final IDs are determined.
-               // Doing this before setting thumbnails or further validation ensures StubState::$meta_log
-               // captures entries for both keys even if the request redirects. Cast to the expected types
-               // inline to guarantee consistent storage.
-               update_post_meta(
-                       $post_id,
-                       '_ap_submission_images',
-                       array_values( array_map( 'intval', (array) $final_image_ids ) )
-               );
-               update_post_meta( $post_id, 'event_banner_id', (int) $banner_id );
-
-               // Set the featured image after persisting meta to ensure the meta is logged before any
-               // unexpected early exit from set_post_thumbnail or later validation checks.
-               if ( $banner_id ) {
-                       set_post_thumbnail( $post_id, $banner_id );
-               }
-
-               // Redirect immediately when an upload error occurred. The metadata above has already
-               // been saved, so the redirect happens regardless of success or failure.
-               if ( $upload_had_error ) {
-                       self::maybe_redirect();
-                       return;
-               }
-
-               // On success, add a confirmation notice before redirecting.
-               self::add_notice( __( 'Event submitted successfully!', 'artpulse' ), 'success' );
-               self::maybe_redirect();
-       }
+			// On success, add a confirmation notice before redirecting.
+			self::add_notice( __( 'Event submitted successfully!', 'artpulse' ), 'success' );
+			self::maybe_redirect();
+	}
 }

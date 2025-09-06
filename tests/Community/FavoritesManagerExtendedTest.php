@@ -9,7 +9,6 @@ use WP_UnitTestCase;
 /**
 
  * @group COMMUNITY
-
  */
 
 class FavoritesManagerExtendedTest extends WP_UnitTestCase {

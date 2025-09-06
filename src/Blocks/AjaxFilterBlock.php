@@ -10,35 +10,35 @@ class AjaxFilterBlock {
 		add_action( 'rest_api_init', array( self::class, 'register_rest_routes' ) );
 	}
 
-       public static function register_block() {
-               if ( ! function_exists( 'register_block_type' ) ) {
-                       return;
-               }
+	public static function register_block() {
+		if ( ! function_exists( 'register_block_type' ) ) {
+				return;
+		}
 
-               if ( \WP_Block_Type_Registry::get_instance()->is_registered( 'artpulse/ajax-filter' ) ) {
-                       return;
-               }
+		if ( \WP_Block_Type_Registry::get_instance()->is_registered( 'artpulse/ajax-filter' ) ) {
+					return;
+		}
 
-               register_block_type(
-			'artpulse/ajax-filter',
-			array(
-				'editor_script'   => 'artpulse-ajax-filter-block',
-				'render_callback' => array( self::class, 'render_callback' ),
-				'attributes'      => array(
-					'postType' => array(
-						'type'    => 'string',
-						'default' => 'artpulse_artist',
+			register_block_type(
+				'artpulse/ajax-filter',
+				array(
+					'editor_script'   => 'artpulse-ajax-filter-block',
+					'render_callback' => array( self::class, 'render_callback' ),
+					'attributes'      => array(
+						'postType' => array(
+							'type'    => 'string',
+							'default' => 'artpulse_artist',
+						),
+						'taxonomy' => array(
+							'type'    => 'string',
+							'default' => 'artist_specialty',
+						),
 					),
-					'taxonomy' => array(
-						'type'    => 'string',
-						'default' => 'artist_specialty',
-					),
-				),
-			)
-		);
+				)
+			);
 
-               EnqueueAssets::register_script( 'artpulse-ajax-filter-block', 'assets/js/ajax-filter-block.js', array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor', 'wp-api-fetch' ), false );
-       }
+			EnqueueAssets::register_script( 'artpulse-ajax-filter-block', 'assets/js/ajax-filter-block.js', array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor', 'wp-api-fetch' ), false );
+	}
 
 	public static function register_rest_routes() {
 		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/filtered-posts' ) ) {

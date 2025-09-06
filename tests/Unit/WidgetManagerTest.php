@@ -32,7 +32,6 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 /**
 
  * @group UNIT
-
  */
 
 class WidgetManagerTest extends TestCase {
@@ -43,28 +42,28 @@ class WidgetManagerTest extends TestCase {
 	protected function setUp(): void {
 		self::$meta  = array();
 		self::$users = array();
-                DashboardWidgetRegistry::register( 'one', 'One', '', '', '__return_null' );
-                DashboardWidgetRegistry::register( 'two', 'Two', '', '', '__return_null' );
+				DashboardWidgetRegistry::register( 'one', 'One', '', '', '__return_null' );
+				DashboardWidgetRegistry::register( 'two', 'Two', '', '', '__return_null' );
 	}
 
 	public function test_save_user_layout_alias(): void {
-                UserLayoutManager::save_user_layout( 1, array( array( 'id' => 'two' ), array( 'id' => 'one' ), array( 'id' => 'two' ) ) );
-                $expected = array(
-                        array(
-                                'id'      => 'widget_two',
-                                'visible' => true,
-                        ),
-                        array(
-                                'id'      => 'widget_one',
-                                'visible' => true,
-                        ),
-                );
-		$this->assertSame( $expected, self::$meta[1][ UserLayoutManager::META_KEY ] );
+				UserLayoutManager::save_user_layout( 1, array( array( 'id' => 'two' ), array( 'id' => 'one' ), array( 'id' => 'two' ) ) );
+				$expected = array(
+					array(
+						'id'      => 'widget_two',
+						'visible' => true,
+					),
+					array(
+						'id'      => 'widget_one',
+						'visible' => true,
+					),
+				);
+				$this->assertSame( $expected, self::$meta[1][ UserLayoutManager::META_KEY ] );
 	}
 
 	public function test_reset_user_layout_removes_meta(): void {
-                self::$meta[1][ UserLayoutManager::META_KEY ]     = array( array( 'id' => 'widget_one' ) );
-                self::$meta[1][ UserLayoutManager::VIS_META_KEY ] = array( 'widget_one' => true );
+				self::$meta[1][ UserLayoutManager::META_KEY ]     = array( array( 'id' => 'widget_one' ) );
+				self::$meta[1][ UserLayoutManager::VIS_META_KEY ] = array( 'widget_one' => true );
 		UserLayoutManager::reset_user_layout( 1 );
 		$this->assertArrayNotHasKey( UserLayoutManager::META_KEY, self::$meta[1] ?? array() );
 		$this->assertArrayNotHasKey( UserLayoutManager::VIS_META_KEY, self::$meta[1] ?? array() );

@@ -34,35 +34,35 @@ class ActivityLogger {
 		dbDelta( $sql );
 	}
 
-        public static function maybe_install_table(): void {
-                global $wpdb;
-                $table = $wpdb->prefix . 'ap_activity_logs';
-                DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) );
-        }
+	public static function maybe_install_table(): void {
+			global $wpdb;
+			$table = $wpdb->prefix . 'ap_activity_logs';
+			DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) );
+	}
 
 	public static function log( ?int $org_id, ?int $user_id, string $action_type, string $description, array $metadata = array() ): void {
 		global $wpdb;
 		if ( ! isset( $wpdb ) ) {
 			return;
 		}
-                $table = $wpdb->prefix . 'ap_activity_logs';
+				$table = $wpdb->prefix . 'ap_activity_logs';
 
-                if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) ) ) {
-                        return;
-                }
+		if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) ) ) {
+				return;
+		}
 
-                $wpdb->insert(
-                        $table,
-                        array(
-                                'org_id'      => $org_id,
-				'user_id'     => $user_id,
-				'action_type' => $action_type,
-				'description' => $description,
-				'ip_address'  => $_SERVER['REMOTE_ADDR'] ?? '',
-				'metadata'    => wp_json_encode( $metadata ),
-				'logged_at'   => current_time( 'mysql' ),
-			)
-		);
+				$wpdb->insert(
+					$table,
+					array(
+						'org_id'      => $org_id,
+						'user_id'     => $user_id,
+						'action_type' => $action_type,
+						'description' => $description,
+						'ip_address'  => $_SERVER['REMOTE_ADDR'] ?? '',
+						'metadata'    => wp_json_encode( $metadata ),
+						'logged_at'   => current_time( 'mysql' ),
+					)
+				);
 	}
 
 	/**
@@ -70,11 +70,11 @@ class ActivityLogger {
 	 */
 	public static function get_logs( ?int $org_id, ?int $user_id, int $limit = 25 ): array {
 		global $wpdb;
-                $table = $wpdb->prefix . 'ap_activity_logs';
+				$table = $wpdb->prefix . 'ap_activity_logs';
 
-                if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) ) ) {
-                        return array();
-                }
+		if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) ) ) {
+				return array();
+		}
 
 		$where = array();
 		$args  = array();

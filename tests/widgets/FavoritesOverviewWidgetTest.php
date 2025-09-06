@@ -5,7 +5,6 @@ use ArtPulse\Community\FavoritesManager;
 /**
 
  * @group WIDGETS
-
  */
 
 class FavoritesOverviewWidgetTest extends \WP_UnitTestCase {

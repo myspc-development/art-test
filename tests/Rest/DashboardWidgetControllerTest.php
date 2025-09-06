@@ -29,14 +29,14 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$this->uid = self::factory()->user->create( array( 'role' => 'administrator' ) );
 		wp_set_current_user( $this->uid );
 
-               DashboardWidgetRegistry::register(
-                       'widget_foo',
-                       array(
-                               'title'           => 'Foo',
-                               'render_callback' => '__return_null',
-                               'roles'           => array( 'administrator' ),
-                       )
-               );
+				DashboardWidgetRegistry::register(
+					'widget_foo',
+					array(
+						'title'           => 'Foo',
+						'render_callback' => '__return_null',
+						'roles'           => array( 'administrator' ),
+					)
+				);
 		DashboardWidgetRegistry::register(
 			'bar',
 			array(
@@ -45,37 +45,37 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 				'roles'           => array( 'editor' ),
 			)
 		);
-                DashboardWidgetRegistry::register(
-                        'baz',
-                        array(
-                                'title'           => 'Baz',
-                                'render_callback' => '__return_null',
-                        )
-                );
+				DashboardWidgetRegistry::register(
+					'baz',
+					array(
+						'title'           => 'Baz',
+						'render_callback' => '__return_null',
+					)
+				);
 
-               DashboardWidgetRegistry::register_widget(
-                       'widget_foo',
-                       array(
-                               'label'    => 'Foo',
-                               'callback' => '__return_null',
-                               'roles'    => array( 'administrator' ),
-                       )
-               );
-               DashboardWidgetRegistry::register_widget(
-                       'widget_bar',
-                       array(
-                               'label'    => 'Bar',
-                               'callback' => '__return_null',
-                               'roles'    => array( 'editor' ),
-                       )
-               );
-               DashboardWidgetRegistry::register_widget(
-                       'widget_baz',
-                       array(
-                               'label'    => 'Baz',
-                               'callback' => '__return_null',
-                       )
-               );
+				DashboardWidgetRegistry::register_widget(
+					'widget_foo',
+					array(
+						'label'    => 'Foo',
+						'callback' => '__return_null',
+						'roles'    => array( 'administrator' ),
+					)
+				);
+				DashboardWidgetRegistry::register_widget(
+					'widget_bar',
+					array(
+						'label'    => 'Bar',
+						'callback' => '__return_null',
+						'roles'    => array( 'editor' ),
+					)
+				);
+				DashboardWidgetRegistry::register_widget(
+					'widget_baz',
+					array(
+						'label'    => 'Baz',
+						'callback' => '__return_null',
+					)
+				);
 
 		DashboardWidgetController::register();
 		do_action( 'rest_api_init' );
@@ -90,169 +90,171 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$this->assertSame( 200, $res->get_status() );
 		$data = $res->get_data();
 		$ids  = array_column( $data['available'], 'id' );
-                sort( $ids );
-                $this->assertSame( array( 'widget_baz', 'widget_foo' ), $ids );
+				sort( $ids );
+				$this->assertSame( array( 'widget_baz', 'widget_foo' ), $ids );
 		$this->assertArrayNotHasKey( 'all', $data );
 	}
 
-       public function test_get_widgets_with_all_list(): void {
-               $req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets' );
-               $req->set_param( 'role', 'administrator' );
-               $req->set_param( 'include_all', 'true' );
-               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-               $res = rest_get_server()->dispatch( $req );
+	public function test_get_widgets_with_all_list(): void {
+			$req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets' );
+			$req->set_param( 'role', 'administrator' );
+			$req->set_param( 'include_all', 'true' );
+			$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+			$res = rest_get_server()->dispatch( $req );
 
-               $this->assertSame( 200, $res->get_status() );
-               $data = $res->get_data();
-               $this->assertArrayHasKey( 'all', $data );
-               $all_ids = array_map( array( WidgetIds::class, 'canonicalize' ), array_column( $data['all'], 'id' ) );
-               sort( $all_ids );
-               $this->assertSame( array( 'widget_bar', 'widget_baz', 'widget_foo' ), $all_ids );
-       }
+			$this->assertSame( 200, $res->get_status() );
+			$data = $res->get_data();
+			$this->assertArrayHasKey( 'all', $data );
+			$all_ids = array_map( array( WidgetIds::class, 'canonicalize' ), array_column( $data['all'], 'id' ) );
+			sort( $all_ids );
+			$this->assertSame( array( 'widget_bar', 'widget_baz', 'widget_foo' ), $all_ids );
+	}
 
-       public function test_logged_in_user_can_list_all_widgets(): void {
-               $sub = self::factory()->user->create( array( 'role' => 'subscriber' ) );
-               wp_set_current_user( $sub );
-               $req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets' );
-               $req->set_param( 'role', 'subscriber' );
-               $req->set_param( 'include_all', 'true' );
-               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-               $res = rest_get_server()->dispatch( $req );
+	public function test_logged_in_user_can_list_all_widgets(): void {
+			$sub = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+			wp_set_current_user( $sub );
+			$req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets' );
+			$req->set_param( 'role', 'subscriber' );
+			$req->set_param( 'include_all', 'true' );
+			$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+			$res = rest_get_server()->dispatch( $req );
 
-               $this->assertSame( 200, $res->get_status() );
-               $this->assertArrayHasKey( 'all', $res->get_data() );
-       }
+			$this->assertSame( 200, $res->get_status() );
+			$this->assertArrayHasKey( 'all', $res->get_data() );
+	}
 
-       public function test_get_widgets_requires_logged_in_user(): void {
-               wp_set_current_user( 0 );
-               $this->assertFalse( is_user_logged_in() ); // verify logged out
-               $req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets' );
-               $req->set_param( 'role', 'administrator' );
-               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-               $res = rest_get_server()->dispatch( $req );
+	public function test_get_widgets_requires_logged_in_user(): void {
+			wp_set_current_user( 0 );
+			$this->assertFalse( is_user_logged_in() ); // verify logged out
+			$req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets' );
+			$req->set_param( 'role', 'administrator' );
+			$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+			$res = rest_get_server()->dispatch( $req );
 
-               $this->assertSame( 403, $res->get_status() ); // 403: unauthenticated requests are forbidden
-       }
+			$this->assertSame( 403, $res->get_status() ); // 403: unauthenticated requests are forbidden
+	}
 
-        public function test_save_layout_with_extra_widgets(): void {
-                $req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
-                $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-                $req->set_body_params(
-                        array(
-                                'role'   => 'administrator',
-                                'layout' => array(
-                                        array(
-                                                'id'      => 'widget_foo',
-                                                'visible' => true,
-                                        ),
-                                        array(
-                                                'id'      => 'widget_bar',
-                                                'visible' => false,
-                                        ),
-                                ),
-                        )
-                );
-                $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 200, $res->get_status() );
+	public function test_save_layout_with_extra_widgets(): void {
+			$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
+			$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+			$req->set_body_params(
+				array(
+					'role'   => 'administrator',
+					'layout' => array(
+						array(
+							'id'      => 'widget_foo',
+							'visible' => true,
+						),
+						array(
+							'id'      => 'widget_bar',
+							'visible' => false,
+						),
+					),
+				)
+			);
+			$res = rest_get_server()->dispatch( $req );
+			$this->assertSame( 200, $res->get_status() );
 
-                $saved = UserLayoutManager::get_role_layout( 'administrator' );
-                $this->assertSame(
-                        array(
-                                array(
-                                        'id'      => 'widget_foo',
-                                        'visible' => true,
-                                ),
-                        ),
-                        $saved['layout']
-                );
-        }
+			$saved = UserLayoutManager::get_role_layout( 'administrator' );
+			$this->assertSame(
+				array(
+					array(
+						'id'      => 'widget_foo',
+						'visible' => true,
+					),
+				),
+				$saved['layout']
+			);
+	}
 
-       public function test_save_layout_accepts_json_request(): void {
-               $req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
-               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-               $req->set_header( 'Content-Type', 'application/json' );
-               $req->set_body( wp_json_encode(
-                       array(
-                               'role'   => 'administrator',
-                               'layout' => array(
-                                       array(
-                                               'id'      => 'widget_foo',
-                                               'visible' => true,
-                                       ),
-                               ),
-                       )
-               ) );
-               $res = rest_get_server()->dispatch( $req );
-               $this->assertSame( 200, $res->get_status() );
-               $saved = UserLayoutManager::get_role_layout( 'administrator' );
-               $this->assertSame(
-                       array(
-                               array(
-                                       'id'      => 'widget_foo',
-                                       'visible' => true,
-                               ),
-                       ),
-                       $saved['layout']
-               );
-       }
+	public function test_save_layout_accepts_json_request(): void {
+			$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
+			$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+			$req->set_header( 'Content-Type', 'application/json' );
+			$req->set_body(
+				wp_json_encode(
+					array(
+						'role'   => 'administrator',
+						'layout' => array(
+							array(
+								'id'      => 'widget_foo',
+								'visible' => true,
+							),
+						),
+					)
+				)
+			);
+			$res = rest_get_server()->dispatch( $req );
+			$this->assertSame( 200, $res->get_status() );
+			$saved = UserLayoutManager::get_role_layout( 'administrator' );
+			$this->assertSame(
+				array(
+					array(
+						'id'      => 'widget_foo',
+						'visible' => true,
+					),
+				),
+				$saved['layout']
+			);
+	}
 
-        public function test_save_layout_requires_nonce(): void {
-                UserLayoutManager::save_role_layout(
-                        'administrator',
-                        array(
-                                array(
-                                        'id'      => 'widget_foo',
-                                        'visible' => true,
-                                ),
-                        )
-                );
+	public function test_save_layout_requires_nonce(): void {
+			UserLayoutManager::save_role_layout(
+				'administrator',
+				array(
+					array(
+						'id'      => 'widget_foo',
+						'visible' => true,
+					),
+				)
+			);
 
-                $req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
-                // Intentionally omit nonce header.
-                $req->set_body_params(
-                        array(
-                                'role'   => 'administrator',
-                                'layout' => array(
-                                        array(
-                                                'id'      => 'baz',
-                                                'visible' => true,
-                                        ),
-                                ),
-                        )
-                );
-                $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 403, $res->get_status() );
-        }
+			$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
+			// Intentionally omit nonce header.
+			$req->set_body_params(
+				array(
+					'role'   => 'administrator',
+					'layout' => array(
+						array(
+							'id'      => 'baz',
+							'visible' => true,
+						),
+					),
+				)
+			);
+			$res = rest_get_server()->dispatch( $req );
+			$this->assertSame( 403, $res->get_status() );
+	}
 
-        public function test_save_layout_rejects_invalid_nonce(): void {
-                UserLayoutManager::save_role_layout(
-                        'administrator',
-                        array(
-                                array(
-                                        'id'      => 'widget_foo',
-                                        'visible' => true,
-                                ),
-                        )
-                );
+	public function test_save_layout_rejects_invalid_nonce(): void {
+			UserLayoutManager::save_role_layout(
+				'administrator',
+				array(
+					array(
+						'id'      => 'widget_foo',
+						'visible' => true,
+					),
+				)
+			);
 
-                $req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
-                $req->set_header( 'X-WP-Nonce', 'badnonce' );
-                $req->set_body_params(
-                        array(
-                                'role'   => 'administrator',
-                                'layout' => array(
-                                        array(
-                                                'id'      => 'baz',
-                                                'visible' => true,
-                                        ),
-                                ),
-                        )
-                );
-                $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 403, $res->get_status() );
-        }
+			$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/save' );
+			$req->set_header( 'X-WP-Nonce', 'badnonce' );
+			$req->set_body_params(
+				array(
+					'role'   => 'administrator',
+					'layout' => array(
+						array(
+							'id'      => 'baz',
+							'visible' => true,
+						),
+					),
+				)
+			);
+			$res = rest_get_server()->dispatch( $req );
+			$this->assertSame( 403, $res->get_status() );
+	}
 
-       public function test_save_layout_requires_edit_posts_cap(): void {
+	public function test_save_layout_requires_edit_posts_cap(): void {
 		UserLayoutManager::save_role_layout(
 			'administrator',
 			array(
@@ -277,9 +279,8 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 				),
 			)
 		);
-                $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 403, $res->get_status() );
-
+			$res = rest_get_server()->dispatch( $req );
+			$this->assertSame( 403, $res->get_status() );
 	}
 
 	public function test_export_layout_endpoint(): void {
@@ -297,16 +298,16 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
 		$res = rest_get_server()->dispatch( $req );
 		$this->assertSame( 200, $res->get_status() );
-                $data = $res->get_data();
-                $this->assertSame(
-                        array(
-                                array(
-                                        'id'      => 'widget_foo',
-                                        'visible' => true,
-                                ),
-                        ),
-                        $data['layout']
-                );
+				$data = $res->get_data();
+				$this->assertSame(
+					array(
+						array(
+							'id'      => 'widget_foo',
+							'visible' => true,
+						),
+					),
+					$data['layout']
+				);
 	}
 
 	public function test_export_layout_requires_nonce(): void {
@@ -321,8 +322,8 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		);
 		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets/export' );
 		$req->set_param( 'role', 'administrator' );
-                $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 403, $res->get_status() );
+				$res = rest_get_server()->dispatch( $req );
+				$this->assertSame( 403, $res->get_status() );
 	}
 
 	public function test_export_layout_rejects_invalid_nonce(): void {
@@ -338,11 +339,11 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets/export' );
 		$req->set_param( 'role', 'administrator' );
 		$req->set_header( 'X-WP-Nonce', 'badnonce' );
-                $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 403, $res->get_status() );
+				$res = rest_get_server()->dispatch( $req );
+				$this->assertSame( 403, $res->get_status() );
 	}
 
-       public function test_export_layout_requires_edit_posts_cap(): void {
+	public function test_export_layout_requires_edit_posts_cap(): void {
 		UserLayoutManager::save_role_layout(
 			'administrator',
 			array(
@@ -355,13 +356,13 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		$subscriber = self::factory()->user->create( array( 'role' => 'subscriber' ) );
 		wp_set_current_user( $subscriber );
 		$req = new \WP_REST_Request( 'GET', '/artpulse/v1/dashboard-widgets/export' );
-                $req->set_param( 'role', 'administrator' );
-                $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-                $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 403, $res->get_status() );
-        }
+			$req->set_param( 'role', 'administrator' );
+			$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+			$res = rest_get_server()->dispatch( $req );
+			$this->assertSame( 403, $res->get_status() );
+	}
 
-        public function test_import_layout_endpoint(): void {
+	public function test_import_layout_endpoint(): void {
 		$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/import' );
 		$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
 		$req->set_body_params(
@@ -377,47 +378,49 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		);
 		$res = rest_get_server()->dispatch( $req );
 		$this->assertSame( 200, $res->get_status() );
-                $saved = UserLayoutManager::get_role_layout( 'administrator' );
-                $this->assertSame(
-                        array(
-                                array(
-                                        'id'      => 'widget_baz',
-                                        'visible' => true,
-                                ),
-                        ),
-                        $saved['layout']
-                );
-                $this->assertSame( array(), $saved['logs'] );
-        }
+			$saved = UserLayoutManager::get_role_layout( 'administrator' );
+			$this->assertSame(
+				array(
+					array(
+						'id'      => 'widget_baz',
+						'visible' => true,
+					),
+				),
+				$saved['layout']
+			);
+			$this->assertSame( array(), $saved['logs'] );
+	}
 
-       public function test_import_layout_accepts_json_request(): void {
-               $req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/import' );
-               $req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
-               $req->set_header( 'Content-Type', 'application/json' );
-               $req->set_body( wp_json_encode(
-                       array(
-                               'role'   => 'administrator',
-                               'layout' => array(
-                                       array(
-                                               'id'      => 'Widget-BaZ',
-                                               'visible' => true,
-                                       ),
-                               ),
-                       )
-               ) );
-               $res = rest_get_server()->dispatch( $req );
-               $this->assertSame( 200, $res->get_status() );
-               $saved = UserLayoutManager::get_role_layout( 'administrator' );
-               $this->assertSame(
-                       array(
-                               array(
-                                       'id'      => 'widget_baz',
-                                       'visible' => true,
-                               ),
-                       ),
-                       $saved['layout']
-               );
-       }
+	public function test_import_layout_accepts_json_request(): void {
+			$req = new \WP_REST_Request( 'POST', '/artpulse/v1/dashboard-widgets/import' );
+			$req->set_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+			$req->set_header( 'Content-Type', 'application/json' );
+			$req->set_body(
+				wp_json_encode(
+					array(
+						'role'   => 'administrator',
+						'layout' => array(
+							array(
+								'id'      => 'Widget-BaZ',
+								'visible' => true,
+							),
+						),
+					)
+				)
+			);
+			$res = rest_get_server()->dispatch( $req );
+			$this->assertSame( 200, $res->get_status() );
+			$saved = UserLayoutManager::get_role_layout( 'administrator' );
+			$this->assertSame(
+				array(
+					array(
+						'id'      => 'widget_baz',
+						'visible' => true,
+					),
+				),
+				$saved['layout']
+			);
+	}
 
 	public function test_import_layout_requires_nonce(): void {
 		UserLayoutManager::save_role_layout(
@@ -441,9 +444,8 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 				),
 			)
 		);
-                $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 403, $res->get_status() );
-
+				$res = rest_get_server()->dispatch( $req );
+				$this->assertSame( 403, $res->get_status() );
 	}
 
 	public function test_import_layout_rejects_invalid_nonce(): void {
@@ -469,12 +471,11 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 				),
 			)
 		);
-                $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 403, $res->get_status() );
-
+				$res = rest_get_server()->dispatch( $req );
+				$this->assertSame( 403, $res->get_status() );
 	}
 
-       public function test_import_layout_requires_edit_posts_cap(): void {
+	public function test_import_layout_requires_edit_posts_cap(): void {
 		UserLayoutManager::save_role_layout(
 			'administrator',
 			array(
@@ -501,6 +502,5 @@ class DashboardWidgetControllerTest extends \WP_UnitTestCase {
 		);
 		$res = rest_get_server()->dispatch( $req );
 		$this->assertSame( 403, $res->get_status() );
-
 	}
 }

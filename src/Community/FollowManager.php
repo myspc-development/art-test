@@ -80,12 +80,12 @@ class FollowManager {
 						'follower',
 						$object_id,
 						$user_id,
-                                                sprintf( esc_html__( 'You have a new follower on your %1$s "%2$s".', 'artpulse' ), esc_html( $object_type ), esc_html( $title ) )
-                                        );
-                                }
-                        }
-                }
-        }
+						sprintf( esc_html__( 'You have a new follower on your %1$s "%2$s".', 'artpulse' ), esc_html( $object_type ), esc_html( $title ) )
+					);
+				}
+			}
+		}
+	}
 
 	/**
 	 * Remove a follow.

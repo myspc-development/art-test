@@ -15,7 +15,6 @@ use ArtPulse\Blocks\FilteredListShortcodeBlock;
 /**
 
  * @group BLOCKS
-
  */
 
 class FilteredListShortcodeBlockTest extends TestCase {

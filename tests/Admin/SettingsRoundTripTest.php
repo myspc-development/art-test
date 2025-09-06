@@ -4,7 +4,6 @@ namespace ArtPulse\Admin\Tests;
 /**
 
  * @group ADMIN
-
  */
 
 final class SettingsRoundTripTest extends \WP_UnitTestCase {

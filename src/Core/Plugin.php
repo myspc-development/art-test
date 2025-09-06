@@ -89,16 +89,16 @@ class Plugin {
 		register_deactivation_hook( ARTPULSE_PLUGIN_FILE, array( $this, 'deactivate' ) );
 
 		add_action( 'init', array( $this, 'register_core_modules' ) );
-                add_action( 'init', array( \ArtPulse\Frontend\SubmissionForms::class, 'register' ) );
-                add_action( 'wp', array( $this, 'maybe_enqueue_frontend_scripts' ) );
+				add_action( 'init', array( \ArtPulse\Frontend\SubmissionForms::class, 'register' ) );
+				add_action( 'wp', array( $this, 'maybe_enqueue_frontend_scripts' ) );
 
-                add_action( 'init', array( \ArtPulse\Rest\EventChatController::class, 'register' ) );
-                \ArtPulse\Frontend\EventChatAssets::register();
-                add_action( 'rest_api_init', array( \ArtPulse\Rest\RestRoutes::class, 'register_all' ) );
-                SystemStatusEndpoint::register();
-                OrgDirectoryController::register();
-                add_action( 'init', array( \ArtPulse\Core\EventRsvpMetaMigration::class, 'maybe_migrate' ) );
-                add_action( 'init', array( OrgRoleMetaMigration::class, 'maybe_migrate' ) );
+				add_action( 'init', array( \ArtPulse\Rest\EventChatController::class, 'register' ) );
+				\ArtPulse\Frontend\EventChatAssets::register();
+				add_action( 'rest_api_init', array( \ArtPulse\Rest\RestRoutes::class, 'register_all' ) );
+				SystemStatusEndpoint::register();
+				OrgDirectoryController::register();
+				add_action( 'init', array( \ArtPulse\Core\EventRsvpMetaMigration::class, 'maybe_migrate' ) );
+				add_action( 'init', array( OrgRoleMetaMigration::class, 'maybe_migrate' ) );
 		add_action( 'init', array( $this, 'maybe_migrate_org_meta' ) );
 		add_action( 'init', array( $this, 'maybe_migrate_profile_link_request_slug' ) );
 		add_action( 'init', array( $this, 'maybe_add_upload_cap' ) );
@@ -172,13 +172,13 @@ class Plugin {
 		}
 
 		// Register CPTs and flush rewrite rules
-                \ArtPulse\Core\PostTypeRegistrar::register();
-                \ArtPulse\Integration\CalendarExport::add_rewrite_rules();
-                \ArtPulse\Frontend\EmbedRewrite::add_rules();
-                \ArtPulse\Frontend\DashboardRoleRewrite::add_rules();
-                \ArtPulse\Taxonomies\TaxonomiesRegistrar::register_event_types();
-                \ArtPulse\Taxonomies\TaxonomiesRegistrar::maybe_insert_default_event_types();
-                flush_rewrite_rules();
+				\ArtPulse\Core\PostTypeRegistrar::register();
+				\ArtPulse\Integration\CalendarExport::add_rewrite_rules();
+				\ArtPulse\Frontend\EmbedRewrite::add_rules();
+				\ArtPulse\Frontend\DashboardRoleRewrite::add_rules();
+				\ArtPulse\Taxonomies\TaxonomiesRegistrar::register_event_types();
+				\ArtPulse\Taxonomies\TaxonomiesRegistrar::maybe_insert_default_event_types();
+				flush_rewrite_rules();
 
 		// ✅ Fix: ensure roles/caps are installed
 		require_once ARTPULSE_PLUGIN_DIR . 'src/Core/RoleSetup.php';
@@ -316,11 +316,11 @@ class Plugin {
 		\ArtPulse\Admin\SpotlightPostType::register();
 		\ArtPulse\Admin\CustomDashboardWidgetPostType::register();
 		\ArtPulse\Admin\LoginEventsPage::register();
-                \ArtPulse\Admin\OrgUserManager::register();
-                \ArtPulse\Admin\OrgCommunicationsCenter::register();
-                \ArtPulse\Admin\LeadExport::register();
-                \ArtPulse\Admin\ScheduledMessageManager::register();
-                \ArtPulse\Admin\PostStatusRejected::register();
+				\ArtPulse\Admin\OrgUserManager::register();
+				\ArtPulse\Admin\OrgCommunicationsCenter::register();
+				\ArtPulse\Admin\LeadExport::register();
+				\ArtPulse\Admin\ScheduledMessageManager::register();
+				\ArtPulse\Admin\PostStatusRejected::register();
 		\ArtPulse\Rest\OrgUserRolesController::register();
 		OrgRoleInviteController::register();
 		\ArtPulse\Rest\LocationRestController::register();
@@ -515,9 +515,9 @@ class Plugin {
 			)
 		);
 
-               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-favorites-js', 'assets/js/ap-favorites.js', array(), true, array( 'type' => 'module' ) );
+				\ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-favorites-js', 'assets/js/ap-favorites.js', array(), true, array( 'type' => 'module' ) );
 
-               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-follow-feed-js', 'assets/js/favorites.js', array( 'wp-api-fetch' ) );
+				\ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-follow-feed-js', 'assets/js/favorites.js', array( 'wp-api-fetch' ) );
 
 		wp_localize_script(
 			'ap-follow-feed-js',
@@ -786,7 +786,7 @@ class Plugin {
 				'endpoint'      => esc_url_raw( rest_url( 'artpulse/v1/submissions' ) ),
 				'mediaEndpoint' => esc_url_raw( rest_url( 'wp/v2/media' ) ),
 				'nonce'         => wp_create_nonce( 'wp_rest' ),
-                               'dashboardUrl'  => self::get_user_dashboard_url(),
+				'dashboardUrl'  => self::get_user_dashboard_url(),
 			)
 		);
 
@@ -805,7 +805,7 @@ class Plugin {
 				'endpoint'      => esc_url_raw( rest_url( 'artpulse/v1/submissions' ) ),
 				'mediaEndpoint' => esc_url_raw( rest_url( 'wp/v2/media' ) ),
 				'nonce'         => wp_create_nonce( 'wp_rest' ),
-                               'dashboardUrl'  => self::get_org_dashboard_url(),
+				'dashboardUrl'  => self::get_org_dashboard_url(),
 			)
 		);
 
@@ -824,7 +824,7 @@ class Plugin {
 				'endpoint'      => esc_url_raw( rest_url( 'artpulse/v1/submissions' ) ),
 				'mediaEndpoint' => esc_url_raw( rest_url( 'wp/v2/media' ) ),
 				'nonce'         => wp_create_nonce( 'wp_rest' ),
-                               'dashboardUrl'  => self::get_artist_dashboard_url(),
+				'dashboardUrl'  => self::get_artist_dashboard_url(),
 			)
 		);
 
@@ -930,29 +930,29 @@ class Plugin {
 			true
 		);
 
-                wp_localize_script(
-                        'ap-dashboard-analytics',
-                        'APDashAnalytics',
-                        array(
-                                'root'  => esc_url_raw( rest_url() ),
-                                'nonce' => wp_create_nonce( 'wp_rest' ),
-                        )
-                );
-        }
+				wp_localize_script(
+					'ap-dashboard-analytics',
+					'APDashAnalytics',
+					array(
+						'root'  => esc_url_raw( rest_url() ),
+						'nonce' => wp_create_nonce( 'wp_rest' ),
+					)
+				);
+	}
 
-        public function maybe_enqueue_frontend_scripts(): void {
-                if (
-                        function_exists( 'ap_page_has_shortcode' ) && (
-                                ap_page_has_shortcode( 'ap_membership_account' ) ||
-                                ap_page_has_shortcode( 'ap_payouts' ) ||
-                                ap_page_has_shortcode( 'ap_account_settings' )
-                        )
-                ) {
-                        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ) );
-                }
-        }
+	public function maybe_enqueue_frontend_scripts(): void {
+		if (
+					function_exists( 'ap_page_has_shortcode' ) && (
+							ap_page_has_shortcode( 'ap_membership_account' ) ||
+							ap_page_has_shortcode( 'ap_payouts' ) ||
+							ap_page_has_shortcode( 'ap_account_settings' )
+					)
+			) {
+				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ) );
+		}
+	}
 
-        private function get_org_submission_url(): string {
+	private function get_org_submission_url(): string {
 		$pages = get_posts(
 			array(
 				'post_type'   => 'page',
@@ -969,23 +969,23 @@ class Plugin {
 		return home_url( '/' );
 	}
 
-       public static function get_user_dashboard_url(): string {
-               return home_url( '/dashboard/user' );
-       }
+	public static function get_user_dashboard_url(): string {
+			return home_url( '/dashboard/user' );
+	}
 
 	/**
 	 * Locate the page containing the organization dashboard shortcode.
 	 */
-       public static function get_org_dashboard_url(): string {
-               return home_url( '/dashboard/org' );
-       }
+	public static function get_org_dashboard_url(): string {
+			return home_url( '/dashboard/org' );
+	}
 
 	/**
 	 * Locate the page containing the artist dashboard shortcode.
 	 */
-       public static function get_artist_dashboard_url(): string {
-               return home_url( '/dashboard/artist' );
-       }
+	public static function get_artist_dashboard_url(): string {
+			return home_url( '/dashboard/artist' );
+	}
 
 	/**
 	 * Locate the page containing the login shortcode.

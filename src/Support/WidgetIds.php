@@ -13,15 +13,15 @@ final class WidgetIds {
 		'favorites'                    => 'widget_favorites',
 		'local_events'                 => 'widget_local_events',
 		'upcoming_events_by_location'  => 'widget_local_events',
-                'my_events'                    => 'widget_my_events',
-                'myevents'                     => 'widget_my_events',
+		'my_events'                    => 'widget_my_events',
+		'myevents'                     => 'widget_my_events',
 		'site_stats'                   => 'widget_site_stats',
 		'my_follows'                   => 'widget_my_follows',
 		'notifications'                => 'widget_notifications',
 		'messages'                     => 'widget_messages',
 		'dashboard_feedback'           => 'widget_dashboard_feedback',
 		'cat_fact'                     => 'widget_cat_fact',
-                'news'                         => 'widget_news',
+		'news'                         => 'widget_news',
 
 		// Organization widgets
 		'lead_capture'                 => 'widget_audience_crm',
@@ -31,7 +31,7 @@ final class WidgetIds {
 		'webhooks'                     => 'widget_webhooks',
 
 		// Duplicates / legacy slugs → canonical
-                'widget_news_feed'             => 'widget_news',
+				'widget_news_feed'     => 'widget_news',
 		'widget_widget_events'         => 'widget_events',
 		'widget_widget_favorites'      => 'widget_favorites',
 		'widget_widget_near_me_events' => 'widget_near_me_events',
@@ -46,17 +46,17 @@ final class WidgetIds {
 		if ( ! is_string( $id ) ) {
 			return '';
 		}
-                $id = strtolower( $id );
-                $id = str_replace( '-', '_', $id );
-                $id = preg_replace( '/[^a-z0-9_]/', '', $id );
-                $id = trim( $id, '_' );
-                if ( $id === '' ) {
-                        return '';
-                }
-                // Ensure "widget_" prefix for canonical space
-                if ( strpos( $id, 'widget_' ) !== 0 && ! isset( self::$aliases[ $id ] ) ) {
-                        $id = 'widget_' . $id;
-                }
-                return self::$aliases[ $id ] ?? $id;
-        }
+				$id = strtolower( $id );
+				$id = str_replace( '-', '_', $id );
+				$id = preg_replace( '/[^a-z0-9_]/', '', $id );
+				$id = trim( $id, '_' );
+		if ( $id === '' ) {
+				return '';
+		}
+				// Ensure "widget_" prefix for canonical space
+		if ( strpos( $id, 'widget_' ) !== 0 && ! isset( self::$aliases[ $id ] ) ) {
+				$id = 'widget_' . $id;
+		}
+				return self::$aliases[ $id ] ?? $id;
+	}
 }

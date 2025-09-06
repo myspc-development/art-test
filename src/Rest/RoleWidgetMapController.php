@@ -19,9 +19,9 @@ class RoleWidgetMapController {
 			'artpulse/v1',
 			'/role-widget-map',
 			array(
-                                'methods'             => 'GET',
-                                'callback'            => array( self::class, 'get_map' ),
-                                'permission_callback' => array( Auth::class, 'guard_read' ),
+				'methods'             => 'GET',
+				'callback'            => array( self::class, 'get_map' ),
+				'permission_callback' => array( Auth::class, 'guard_read' ),
 			)
 		);
 	}

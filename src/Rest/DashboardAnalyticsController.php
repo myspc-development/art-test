@@ -28,14 +28,14 @@ class DashboardAnalyticsController {
 		}
 	}
 
-        public static function check_permissions( WP_REST_Request $request ) {
-                $nonce = $request->get_header( 'X-WP-Nonce' );
-                $check = \ArtPulse\Rest\Util\Auth::verify_nonce( $nonce );
-                if ( is_wp_error( $check ) ) {
-                        return $check;
-                }
-                return current_user_can( 'read' ) ? true : new WP_Error( 'rest_forbidden', 'Forbidden.', array( 'status' => 403 ) );
-        }
+	public static function check_permissions( WP_REST_Request $request ) {
+			$nonce = $request->get_header( 'X-WP-Nonce' );
+			$check = \ArtPulse\Rest\Util\Auth::verify_nonce( $nonce );
+		if ( is_wp_error( $check ) ) {
+				return $check;
+		}
+			return current_user_can( 'read' ) ? true : new WP_Error( 'rest_forbidden', 'Forbidden.', array( 'status' => 403 ) );
+	}
 
 	public static function log_event( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$event   = sanitize_text_field( $request['event'] ?? '' );

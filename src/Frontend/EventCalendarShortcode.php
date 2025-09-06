@@ -23,7 +23,7 @@ class EventCalendarShortcode {
 			null,
 			true
 		);
-               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-event-calendar', 'assets/js/ap-event-calendar.js', array( 'fullcalendar-js' ), true, array( 'type' => 'module' ) );
+				\ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-event-calendar', 'assets/js/ap-event-calendar.js', array( 'fullcalendar-js' ), true, array( 'type' => 'module' ) );
 
 		wp_localize_script(
 			'ap-event-calendar',

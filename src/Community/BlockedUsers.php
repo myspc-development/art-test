@@ -5,11 +5,11 @@ use ArtPulse\DB\DbEnsure;
 
 class BlockedUsers {
 
-        public static function maybe_install_table(): void {
-                global $wpdb;
-                $table = $wpdb->prefix . 'ap_blocked_users';
-                DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) );
-        }
+	public static function maybe_install_table(): void {
+			global $wpdb;
+			$table = $wpdb->prefix . 'ap_blocked_users';
+			DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) );
+	}
 
 	public static function install_table(): void {
 		global $wpdb;
@@ -29,52 +29,52 @@ class BlockedUsers {
 
 	public static function add( int $user_id, int $blocked_id ): void {
 		global $wpdb;
-                $table = $wpdb->prefix . 'ap_blocked_users';
+				$table = $wpdb->prefix . 'ap_blocked_users';
 
-                if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) ) ) {
-                        return;
-                }
+		if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) ) ) {
+				return;
+		}
 
-                $wpdb->replace(
-                        $table,
-			array(
-				'user_id'         => $user_id,
-				'blocked_user_id' => $blocked_id,
-			)
-		);
+				$wpdb->replace(
+					$table,
+					array(
+						'user_id'         => $user_id,
+						'blocked_user_id' => $blocked_id,
+					)
+				);
 	}
 
 	public static function remove( int $user_id, int $blocked_id ): void {
 		global $wpdb;
-                $table = $wpdb->prefix . 'ap_blocked_users';
+				$table = $wpdb->prefix . 'ap_blocked_users';
 
-                if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) ) ) {
-                        return;
-                }
+		if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) ) ) {
+				return;
+		}
 
-                $wpdb->delete(
-                        $table,
-			array(
-				'user_id'         => $user_id,
-				'blocked_user_id' => $blocked_id,
-			)
-		);
+				$wpdb->delete(
+					$table,
+					array(
+						'user_id'         => $user_id,
+						'blocked_user_id' => $blocked_id,
+					)
+				);
 	}
 
 	public static function is_blocked( int $user_id, int $other_id ): bool {
 		global $wpdb;
-                $table = $wpdb->prefix . 'ap_blocked_users';
+				$table = $wpdb->prefix . 'ap_blocked_users';
 
-                if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) ) ) {
-                        return false;
-                }
+		if ( ! DbEnsure::table_exists_or_install( $table, array( self::class, 'install_table' ) ) ) {
+				return false;
+		}
 
-                return (bool) $wpdb->get_var(
-                        $wpdb->prepare(
-                                "SELECT 1 FROM $table WHERE user_id = %d AND blocked_user_id = %d",
-                                $user_id,
-                                $other_id
-                        )
-                );
+				return (bool) $wpdb->get_var(
+					$wpdb->prepare(
+						"SELECT 1 FROM $table WHERE user_id = %d AND blocked_user_id = %d",
+						$user_id,
+						$other_id
+					)
+				);
 	}
 }

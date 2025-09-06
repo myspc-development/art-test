@@ -12,14 +12,14 @@ class OrgUserManager {
 	}
 
 	public static function addMenu(): void {
-                add_submenu_page(
-                        'artpulse-settings',
-                        __( 'Org User Manager', 'artpulse' ),
-                        __( 'Org Users', 'artpulse' ),
-                        'manage_options',
-                        'ap-org-user-manager',
-                        array( self::class, 'render' )
-                );
+				add_submenu_page(
+					'artpulse-settings',
+					__( 'Org User Manager', 'artpulse' ),
+					__( 'Org Users', 'artpulse' ),
+					'manage_options',
+					'ap-org-user-manager',
+					array( self::class, 'render' )
+				);
 	}
 
 	public static function enqueue( string $hook ): void {
@@ -53,9 +53,9 @@ class OrgUserManager {
 	}
 
 	public static function render(): void {
-                if ( ! current_user_can( 'manage_options' ) ) {
-                        wp_die( __( 'Insufficient permissions', 'artpulse' ) );
-                }
+		if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( __( 'Insufficient permissions', 'artpulse' ) );
+		}
 		$org_id = self::get_current_org_id();
 		echo '<div class="wrap">';
 		echo '<h1>' . esc_html__( 'Organization Users', 'artpulse' ) . '</h1>';

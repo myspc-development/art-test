@@ -113,11 +113,11 @@ class UserDashboardDataTest extends \WP_UnitTestCase {
 		$this->assertSame( 'dark', $data['dashboard_theme'] );
 	}
 
-        public function test_dashboard_lists_favorites_for_all_types(): void {
-                $request  = new \WP_REST_Request( 'GET', '/artpulse/v1/user/dashboard' );
-                $response = rest_get_server()->dispatch( $request );
-                $this->assertSame( 200, $response->get_status() );
-                $data = $response->get_data();
+	public function test_dashboard_lists_favorites_for_all_types(): void {
+			$request  = new \WP_REST_Request( 'GET', '/artpulse/v1/user/dashboard' );
+			$response = rest_get_server()->dispatch( $request );
+			$this->assertSame( 200, $response->get_status() );
+			$data = $response->get_data();
 
 		$map = array(
 			'favorite_events'   => $this->event_id,
@@ -138,36 +138,36 @@ class UserDashboardDataTest extends \WP_UnitTestCase {
 			}
 		}
 
-                $this->assertSame( 4, $data['favorite_count'] );
-        }
+			$this->assertSame( 4, $data['favorite_count'] );
+	}
 
-        public function test_dashboard_lists_current_users_draft_and_published_events_only(): void {
-                $draft_id = wp_insert_post(
-                        array(
-                                'post_title'  => 'Draft Event',
-                                'post_type'   => 'artpulse_event',
-                                'post_status' => 'draft',
-                                'post_author' => $this->user_id,
-                        )
-                );
-                $other_user = self::factory()->user->create();
-                wp_insert_post(
-                        array(
-                                'post_title'  => 'Other Event',
-                                'post_type'   => 'artpulse_event',
-                                'post_status' => 'publish',
-                                'post_author' => $other_user,
-                        )
-                );
+	public function test_dashboard_lists_current_users_draft_and_published_events_only(): void {
+			$draft_id   = wp_insert_post(
+				array(
+					'post_title'  => 'Draft Event',
+					'post_type'   => 'artpulse_event',
+					'post_status' => 'draft',
+					'post_author' => $this->user_id,
+				)
+			);
+			$other_user = self::factory()->user->create();
+			wp_insert_post(
+				array(
+					'post_title'  => 'Other Event',
+					'post_type'   => 'artpulse_event',
+					'post_status' => 'publish',
+					'post_author' => $other_user,
+				)
+			);
 
-                $request  = new \WP_REST_Request( 'GET', '/artpulse/v1/user/dashboard' );
-                $response = rest_get_server()->dispatch( $request );
-                $this->assertSame( 200, $response->get_status() );
-                $data      = $response->get_data();
-                $event_ids = wp_list_pluck( $data['events'], 'id' );
-                sort( $event_ids );
-                $expected = array( $this->event_id, $draft_id );
-                sort( $expected );
-                $this->assertSame( $expected, $event_ids );
-        }
+			$request  = new \WP_REST_Request( 'GET', '/artpulse/v1/user/dashboard' );
+			$response = rest_get_server()->dispatch( $request );
+			$this->assertSame( 200, $response->get_status() );
+			$data      = $response->get_data();
+			$event_ids = wp_list_pluck( $data['events'], 'id' );
+			sort( $event_ids );
+			$expected = array( $this->event_id, $draft_id );
+			sort( $expected );
+			$this->assertSame( $expected, $event_ids );
+	}
 }

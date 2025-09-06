@@ -29,7 +29,6 @@ use ArtPulse\Search\ExternalSearch;
 /**
 
  * @group SEARCH
-
  */
 
 class ExternalSearchTest extends TestCase {

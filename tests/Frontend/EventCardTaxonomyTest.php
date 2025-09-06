@@ -7,101 +7,100 @@ use ArtPulse\Taxonomies\TaxonomiesRegistrar;
 /**
 
  * @group FRONTEND
-
  */
 
 class EventCardTaxonomyTest extends WP_UnitTestCase {
 
-       private int $event_id;
-       private bool $removed_do_blocks = false;
-       private bool $removed_insert_hooked_blocks = false;
-       private $the_content_filter = null;
-       private $the_content_merged_filter = null;
+	private int $event_id;
+	private bool $removed_do_blocks            = false;
+	private bool $removed_insert_hooked_blocks = false;
+		private $the_content_filter            = null;
+		private $the_content_merged_filter     = null;
 
-       public function set_up() {
-               parent::set_up();
+	public function set_up() {
+			parent::set_up();
 
-               if ( has_filter( 'the_content', 'do_blocks' ) ) {
-                       remove_filter( 'the_content', 'do_blocks', 9 );
-                       $this->removed_do_blocks = true;
-               }
+		if ( has_filter( 'the_content', 'do_blocks' ) ) {
+				remove_filter( 'the_content', 'do_blocks', 9 );
+				$this->removed_do_blocks = true;
+		}
 
-               $has_insert_hooked_blocks = has_filter( 'render_block', 'insert_hooked_blocks' );
-               if ( $has_insert_hooked_blocks ) {
-                       remove_filter( 'render_block', 'insert_hooked_blocks', 10 );
-               }
-               remove_all_filters( 'render_block' );
-               remove_all_filters( 'pre_render_block' );
-               $this->removed_insert_hooked_blocks = $has_insert_hooked_blocks;
+			$has_insert_hooked_blocks = has_filter( 'render_block', 'insert_hooked_blocks' );
+		if ( $has_insert_hooked_blocks ) {
+					remove_filter( 'render_block', 'insert_hooked_blocks', 10 );
+		}
+			remove_all_filters( 'render_block' );
+			remove_all_filters( 'pre_render_block' );
+			$this->removed_insert_hooked_blocks = $has_insert_hooked_blocks;
 
-               add_filter( 'hooked_block_types', '__return_empty_array', 10, 0 );
+			add_filter( 'hooked_block_types', '__return_empty_array', 10, 0 );
 
-               TaxonomiesRegistrar::register_event_types();
-               TaxonomiesRegistrar::insert_default_event_types();
+			TaxonomiesRegistrar::register_event_types();
+			TaxonomiesRegistrar::insert_default_event_types();
 
-               $term           = get_term_by( 'slug', 'exhibition', 'event_type' );
-               $this->event_id = wp_insert_post(
-                       array(
-                               'post_title'  => 'Tax Event',
-                               'post_type'   => 'artpulse_event',
-                               'post_status' => 'publish',
-                       )
-               );
-               if ( $term ) {
-                       wp_set_post_terms( $this->event_id, array( $term->term_id ), 'event_type' );
-               }
-               update_post_meta( $this->event_id, 'event_organizer_name', 'Organizer' );
-               update_post_meta( $this->event_id, 'event_organizer_email', 'org@example.com' );
+			$term           = get_term_by( 'slug', 'exhibition', 'event_type' );
+			$this->event_id = wp_insert_post(
+				array(
+					'post_title'  => 'Tax Event',
+					'post_type'   => 'artpulse_event',
+					'post_status' => 'publish',
+				)
+			);
+		if ( $term ) {
+				wp_set_post_terms( $this->event_id, array( $term->term_id ), 'event_type' );
+		}
+			update_post_meta( $this->event_id, 'event_organizer_name', 'Organizer' );
+			update_post_meta( $this->event_id, 'event_organizer_email', 'org@example.com' );
 
-               $this->go_to( get_permalink( $this->event_id ) );
-               $this->the_content_filter        = $GLOBALS['wp_filter']['the_content'] ?? null;
-               $this->the_content_merged_filter = $GLOBALS['merged_filters']['the_content'] ?? null;
-               remove_all_filters( 'the_content' );
-       }
+			$this->go_to( get_permalink( $this->event_id ) );
+			$this->the_content_filter        = $GLOBALS['wp_filter']['the_content'] ?? null;
+			$this->the_content_merged_filter = $GLOBALS['merged_filters']['the_content'] ?? null;
+			remove_all_filters( 'the_content' );
+	}
 
-       public function tear_down() {
-               if ( $this->removed_do_blocks ) {
-                       add_filter( 'the_content', 'do_blocks', 9 );
-               }
+	public function tear_down() {
+		if ( $this->removed_do_blocks ) {
+				add_filter( 'the_content', 'do_blocks', 9 );
+		}
 
-               if ( $this->the_content_filter ) {
-                       $GLOBALS['wp_filter']['the_content'] = $this->the_content_filter;
-               }
+		if ( $this->the_content_filter ) {
+					$GLOBALS['wp_filter']['the_content'] = $this->the_content_filter;
+		}
 
-               if ( null !== $this->the_content_merged_filter ) {
-                       $GLOBALS['merged_filters']['the_content'] = $this->the_content_merged_filter;
-               } else {
-                       unset( $GLOBALS['merged_filters']['the_content'] );
-               }
+		if ( null !== $this->the_content_merged_filter ) {
+					$GLOBALS['merged_filters']['the_content'] = $this->the_content_merged_filter;
+		} else {
+				unset( $GLOBALS['merged_filters']['the_content'] );
+		}
 
-               if ( $this->removed_insert_hooked_blocks && function_exists( 'insert_hooked_blocks' ) ) {
-                       add_filter( 'render_block', 'insert_hooked_blocks', 10, 4 );
-               }
+		if ( $this->removed_insert_hooked_blocks && function_exists( 'insert_hooked_blocks' ) ) {
+				add_filter( 'render_block', 'insert_hooked_blocks', 10, 4 );
+		}
 
-               remove_filter( 'hooked_block_types', '__return_empty_array', 10 );
+				remove_filter( 'hooked_block_types', '__return_empty_array', 10 );
 
-               unregister_taxonomy( 'event_type' );
-               parent::tear_down();
-       }
+				unregister_taxonomy( 'event_type' );
+				parent::tear_down();
+	}
 
-        public function test_event_card_outputs_meta(): void {
-                $html = ap_get_event_card( $this->event_id );
-                $this->assertStringContainsString( 'Exhibition', $html );
-                $this->assertStringContainsString( '&#64;', $html );
-                $this->assertStringNotContainsString( 'org@example.com', $html );
-                $this->assertStringNotContainsString( '@', $html );
-        }
+	public function test_event_card_outputs_meta(): void {
+			$html = ap_get_event_card( $this->event_id );
+			$this->assertStringContainsString( 'Exhibition', $html );
+			$this->assertStringContainsString( '&#64;', $html );
+			$this->assertStringNotContainsString( 'org@example.com', $html );
+			$this->assertStringNotContainsString( '@', $html );
+	}
 
-       public function test_single_template_outputs_meta(): void {
-               $path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'templates/salient/content-artpulse_event.php';
-               $html = get_echo(
-                       static function () use ( $path ) {
-                               include $path;
-                       }
-               );
-               $this->assertStringContainsString( 'Exhibition', $html );
-               $this->assertStringContainsString( '&#64;', $html );
-               $this->assertStringNotContainsString( 'org@example.com', $html );
-               $this->assertStringNotContainsString( '@', $html );
-       }
+	public function test_single_template_outputs_meta(): void {
+			$path = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'templates/salient/content-artpulse_event.php';
+			$html = get_echo(
+				static function () use ( $path ) {
+							include $path;
+				}
+			);
+			$this->assertStringContainsString( 'Exhibition', $html );
+			$this->assertStringContainsString( '&#64;', $html );
+			$this->assertStringNotContainsString( 'org@example.com', $html );
+			$this->assertStringNotContainsString( '@', $html );
+	}
 }

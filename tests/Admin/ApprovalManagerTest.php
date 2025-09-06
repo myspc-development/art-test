@@ -46,7 +46,6 @@ use Brain\Monkey\Functions;
 /**
 
  * @group ADMIN
-
  */
 
 class ApprovalManagerTest extends TestCase {

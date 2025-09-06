@@ -36,26 +36,26 @@ class LoginShortcode {
 		?>
 		<div class="ap-login-forms">
 			<div id="ap-login-message" class="ap-form-messages" role="status" aria-live="polite"></div>
-                       <form id="ap-login-form" class="ap-form-container">
-                               <?php wp_nonce_field( 'ap_login_nonce', 'nonce' ); ?>
-                               <p>
-                                       <label class="ap-form-label" for="ap_login_username"><?php esc_html_e( 'Username or Email', 'artpulse' ); ?></label>
-                                       <input class="ap-input" id="ap_login_username" type="text" name="username" placeholder="<?php esc_attr_e( 'Username or Email', 'artpulse' ); ?>" autocomplete="username" required />
-                               </p>
-                               <p>
-                                       <label class="ap-form-label" for="ap_login_password"><?php esc_html_e( 'Password', 'artpulse' ); ?></label>
-                                       <input class="ap-input" id="ap_login_password" type="password" name="password" placeholder="<?php esc_attr_e( 'Password', 'artpulse' ); ?>" autocomplete="current-password" required />
-                               </p>
-                               <p>
-                                       <label class="ap-form-label" for="ap_login_remember">
-                                               <input class="ap-input" id="ap_login_remember" type="checkbox" name="remember" />
-                                               <?php esc_html_e( 'Remember me', 'artpulse' ); ?>
-                                       </label>
-                               </p>
-                               <p>
-                                       <button class="ap-form-button nectar-button" type="submit"><?php esc_html_e( 'Login', 'artpulse' ); ?></button>
-                               </p>
-                       </form>
+						<form id="ap-login-form" class="ap-form-container">
+								<?php wp_nonce_field( 'ap_login_nonce', 'nonce' ); ?>
+								<p>
+										<label class="ap-form-label" for="ap_login_username"><?php esc_html_e( 'Username or Email', 'artpulse' ); ?></label>
+										<input class="ap-input" id="ap_login_username" type="text" name="username" placeholder="<?php esc_attr_e( 'Username or Email', 'artpulse' ); ?>" autocomplete="username" required />
+								</p>
+								<p>
+										<label class="ap-form-label" for="ap_login_password"><?php esc_html_e( 'Password', 'artpulse' ); ?></label>
+										<input class="ap-input" id="ap_login_password" type="password" name="password" placeholder="<?php esc_attr_e( 'Password', 'artpulse' ); ?>" autocomplete="current-password" required />
+								</p>
+								<p>
+										<label class="ap-form-label" for="ap_login_remember">
+												<input class="ap-input" id="ap_login_remember" type="checkbox" name="remember" />
+												<?php esc_html_e( 'Remember me', 'artpulse' ); ?>
+										</label>
+								</p>
+								<p>
+										<button class="ap-form-button nectar-button" type="submit"><?php esc_html_e( 'Login', 'artpulse' ); ?></button>
+								</p>
+						</form>
 
 			<?php echo \ArtPulse\Integration\OAuthManager::render_buttons(); ?>
 
@@ -72,99 +72,99 @@ class LoginShortcode {
 		return ob_get_clean();
 	}
 
-        public static function ajax_login(): void {
-               check_ajax_referer( 'ap_login_nonce', 'nonce' );
+	public static function ajax_login(): void {
+			check_ajax_referer( 'ap_login_nonce', 'nonce' );
 
-               $username_raw = $_POST['username'] ?? '';
-               $password     = $_POST['password'] ?? '';
+			$username_raw = $_POST['username'] ?? '';
+			$password     = $_POST['password'] ?? '';
 
-               $invalid = array();
-               if ( '' === $username_raw ) {
-                       $invalid[] = 'username';
-               }
-               if ( '' === $password ) {
-                       $invalid[] = 'password';
-               }
-               if ( $invalid ) {
-                       wp_send_json_error(
-                               array(
-                                       'code'    => 'VALIDATION',
-                                       'message' => __( 'Username or email and password are required.', 'artpulse' ),
-                                       'invalid' => $invalid,
-                               ),
-                               400
-                       );
-               }
+			$invalid = array();
+		if ( '' === $username_raw ) {
+				$invalid[] = 'username';
+		}
+		if ( '' === $password ) {
+					$invalid[] = 'password';
+		}
+		if ( $invalid ) {
+				wp_send_json_error(
+					array(
+						'code'    => 'VALIDATION',
+						'message' => __( 'Username or email and password are required.', 'artpulse' ),
+						'invalid' => $invalid,
+					),
+					400
+				);
+		}
 
-               $identifier = is_email( $username_raw ) ? sanitize_email( $username_raw ) : sanitize_user( $username_raw );
-               $remember   = ! empty( $_POST['remember'] );
+				$identifier = is_email( $username_raw ) ? sanitize_email( $username_raw ) : sanitize_user( $username_raw );
+				$remember   = ! empty( $_POST['remember'] );
 
-               $raw_ip   = $_SERVER['REMOTE_ADDR'] ?? '';
-               $san_ip   = sanitize_text_field( $raw_ip );
-               $parts    = explode( ',', $san_ip );
-               $ip       = filter_var( trim( $parts[0] ?? '' ), FILTER_VALIDATE_IP );
-               if ( false === $ip ) {
-                       $ip = '';
-               }
-               $ip       = wp_privacy_anonymize_ip( $ip );
-               $key      = 'ap_login_fail_' . md5( $ip . '|' . $identifier );
-               $attempts = (int) get_transient( $key );
+				$raw_ip = $_SERVER['REMOTE_ADDR'] ?? '';
+				$san_ip = sanitize_text_field( $raw_ip );
+				$parts  = explode( ',', $san_ip );
+				$ip     = filter_var( trim( $parts[0] ?? '' ), FILTER_VALIDATE_IP );
+		if ( false === $ip ) {
+				$ip = '';
+		}
+				$ip       = wp_privacy_anonymize_ip( $ip );
+				$key      = 'ap_login_fail_' . md5( $ip . '|' . $identifier );
+				$attempts = (int) get_transient( $key );
 
-               $max_attempts    = 5;
-               $lockout_minutes = 5;
+				$max_attempts    = 5;
+				$lockout_minutes = 5;
 
-               if ( $attempts >= $max_attempts ) {
-                       wp_send_json_error(
-                               array(
-                                       'code'    => 'RATE_LIMIT',
-                                       'message' => __( 'Too many failed login attempts. Please try again later.', 'artpulse' ),
-                               ),
-                               429
-                       );
-               }
+		if ( $attempts >= $max_attempts ) {
+				wp_send_json_error(
+					array(
+						'code'    => 'RATE_LIMIT',
+						'message' => __( 'Too many failed login attempts. Please try again later.', 'artpulse' ),
+					),
+					429
+				);
+		}
 
-               $creds = array(
-                       'user_login'    => $identifier,
-                       'user_password' => $password,
-                       'remember'      => $remember,
-               );
+				$creds = array(
+					'user_login'    => $identifier,
+					'user_password' => $password,
+					'remember'      => $remember,
+				);
 
-               $user = wp_signon( $creds );
+				$user = wp_signon( $creds );
 
-               if ( is_wp_error( $user ) ) {
-                       set_transient( $key, $attempts + 1, MINUTE_IN_SECONDS * $lockout_minutes );
-                       wp_send_json_error(
-                               array(
-                                       'code'    => 'INVALID_CREDENTIALS',
-                                       'message' => __( 'Invalid username/email or password.', 'artpulse' ),
-                               ),
-                               403
-                       );
-               }
+				if ( is_wp_error( $user ) ) {
+						set_transient( $key, $attempts + 1, MINUTE_IN_SECONDS * $lockout_minutes );
+						wp_send_json_error(
+							array(
+								'code'    => 'INVALID_CREDENTIALS',
+								'message' => __( 'Invalid username/email or password.', 'artpulse' ),
+							),
+							403
+						);
+				}
 
-               delete_transient( $key );
+				delete_transient( $key );
 
-               $opts = get_option( 'artpulse_settings', array() );
-               if ( ! empty( $opts['enforce_two_factor'] ) && ! get_user_meta( $user->ID, 'two_factor_enabled', true ) ) {
-                       wp_clear_auth_cookie();
-                       wp_send_json_error(
-                               array(
-                                       'code'    => 'TWO_FACTOR_REQUIRED',
-                                       'message' => __( 'Two-factor authentication is required.', 'artpulse' ),
-                               ),
-                               403
-                       );
-               }
+				$opts = get_option( 'artpulse_settings', array() );
+				if ( ! empty( $opts['enforce_two_factor'] ) && ! get_user_meta( $user->ID, 'two_factor_enabled', true ) ) {
+						wp_clear_auth_cookie();
+						wp_send_json_error(
+							array(
+								'code'    => 'TWO_FACTOR_REQUIRED',
+								'message' => __( 'Two-factor authentication is required.', 'artpulse' ),
+							),
+							403
+						);
+				}
 
-               $target = \ArtPulse\Core\LoginRedirectManager::get_post_login_redirect_url( $user, '' );
+				$target = \ArtPulse\Core\LoginRedirectManager::get_post_login_redirect_url( $user, '' );
 
-               wp_send_json_success(
-                       array(
-                               'message'      => __( 'Signed in successfully.', 'artpulse' ),
-                               'dashboardUrl' => $target,
-                       )
-               );
-        }
+				wp_send_json_success(
+					array(
+						'message'      => __( 'Signed in successfully.', 'artpulse' ),
+						'dashboardUrl' => $target,
+					)
+				);
+	}
 
 	public static function ajax_register(): void {
 		check_ajax_referer( 'ap_login_nonce', 'nonce' );

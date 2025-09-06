@@ -34,16 +34,16 @@ class AutoTagger {
 			return;
 		}
 
-                $opts       = get_option( 'artpulse_settings', array() );
-                $option_key = $opts['openai_api_key'] ?? '';
-                if ( $option_key === '' ) {
-                        $option_key = getenv( 'ARTPULSE_OPENAI_API_KEY' ) ?: getenv( 'OPENAI_API_KEY' ) ?: '';
-                }
-                $filtered_key = apply_filters( 'artpulse_openai_api_key', $option_key );
-                if ( $filtered_key === '' && $option_key === '' ) {
-                        return;
-                }
-                $key = $filtered_key !== '' ? $filtered_key : $option_key;
+				$opts       = get_option( 'artpulse_settings', array() );
+				$option_key = $opts['openai_api_key'] ?? '';
+		if ( $option_key === '' ) {
+				$option_key = getenv( 'ARTPULSE_OPENAI_API_KEY' ) ?: getenv( 'OPENAI_API_KEY' ) ?: '';
+		}
+				$filtered_key = apply_filters( 'artpulse_openai_api_key', $option_key );
+		if ( $filtered_key === '' && $option_key === '' ) {
+				return;
+		}
+				$key = $filtered_key !== '' ? $filtered_key : $option_key;
 
 		$content = trim( wp_strip_all_tags( $post->post_content ) );
 		if ( ! $content ) {
@@ -118,31 +118,31 @@ class AutoTagger {
 	 * Basic language detection.
 	 */
 	private static function detect_language( string $text ): string {
-            if (
-                    preg_match( '/[áíóúñ]/iu', $text ) ||
-                    preg_match( '/\b(el|la|es|una)\b/iu', $text )
-            ) {
-                    return 'es';
-            }
-            if ( preg_match( '/[а-яё]/iu', $text ) ) {
-                    return 'ru';
-            }
-            if (
-                    preg_match( '/[àâçéèêëîïôûùÿœ]/iu', $text ) ||
-                    preg_match( '/\b(ceci|est|une)\b/iu', $text )
-            ) {
-                    return 'fr';
-            }
-            if (
-                    preg_match( '/[äöüß]/iu', $text ) ||
-                    preg_match( '/\b(dies|ist|ein)\b/iu', $text )
-            ) {
-                    return 'de';
-            }
-            if ( preg_match( '/[\x{4e00}-\x{9fff}]/u', $text ) ) {
-                    return 'zh';
-            }
-            return 'en';
+		if (
+					preg_match( '/[áíóúñ]/iu', $text ) ||
+					preg_match( '/\b(el|la|es|una)\b/iu', $text )
+			) {
+				return 'es';
+		}
+		if ( preg_match( '/[а-яё]/iu', $text ) ) {
+				return 'ru';
+		}
+		if (
+					preg_match( '/[àâçéèêëîïôûùÿœ]/iu', $text ) ||
+					preg_match( '/\b(ceci|est|une)\b/iu', $text )
+			) {
+				return 'fr';
+		}
+		if (
+					preg_match( '/[äöüß]/iu', $text ) ||
+					preg_match( '/\b(dies|ist|ein)\b/iu', $text )
+			) {
+				return 'de';
+		}
+		if ( preg_match( '/[\x{4e00}-\x{9fff}]/u', $text ) ) {
+				return 'zh';
+		}
+			return 'en';
 	}
 
 	/**

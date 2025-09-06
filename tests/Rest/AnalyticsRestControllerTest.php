@@ -9,29 +9,29 @@ use ArtPulse\Core\EventMetrics;
  */
 class AnalyticsRestControllerTest extends \WP_UnitTestCase {
 
-        private int $event_id;
-        private string $ticket_table;
+	private int $event_id;
+	private string $ticket_table;
 
-        public function set_up() {
-                parent::set_up();
-                EventMetrics::install_table();
-                \ArtPulse\Monetization\TicketManager::install_purchases_table();
+	public function set_up() {
+			parent::set_up();
+			EventMetrics::install_table();
+			\ArtPulse\Monetization\TicketManager::install_purchases_table();
 
-                $this->event_id = self::factory()->post->create(
-                        array(
-                                'post_type'   => 'artpulse_event',
-                                'post_status' => 'publish',
-                        )
-                );
+			$this->event_id = self::factory()->post->create(
+				array(
+					'post_type'   => 'artpulse_event',
+					'post_status' => 'publish',
+				)
+			);
 
-               wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
+			wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
 
-                global $wpdb;
-                $this->ticket_table = $wpdb->prefix . 'ap_tickets';
+			global $wpdb;
+			$this->ticket_table = $wpdb->prefix . 'ap_tickets';
 
-                AnalyticsRestController::register();
-                do_action( 'rest_api_init' );
-        }
+			AnalyticsRestController::register();
+			do_action( 'rest_api_init' );
+	}
 
 	public function test_trends_and_export(): void {
 		global $wpdb;

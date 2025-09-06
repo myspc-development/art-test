@@ -18,8 +18,8 @@ class DirectoryManager {
 	}
 
 	public static function enqueueAssets() {
-               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-directory-js', 'assets/js/ap-directory.js', array( 'wp-api-fetch' ) );
-               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-analytics-js', 'assets/js/ap-analytics.js', array( 'ap-directory-js' ), true, array( 'type' => 'module' ) );
+				\ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-directory-js', 'assets/js/ap-directory.js', array( 'wp-api-fetch' ) );
+				\ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-analytics-js', 'assets/js/ap-analytics.js', array( 'ap-directory-js' ), true, array( 'type' => 'module' ) );
 		wp_localize_script(
 			'ap-directory-js',
 			'ArtPulseApi',
@@ -37,40 +37,40 @@ class DirectoryManager {
 	public static function register_routes() {
 		if ( ! ap_rest_route_registered( ARTPULSE_API_NAMESPACE, '/filter' ) ) {
 				register_rest_route(
-                                       ARTPULSE_API_NAMESPACE,
-                                       '/filter',
-                                       array(
-                                               'methods'             => 'GET',
-                                               'callback'            => array( self::class, 'handleFilter' ),
-                                               'permission_callback' => function () {
-                                                       return \ArtPulse\Rest\Util\Auth::require_cap( 'read' );
-                                               },
-                                               'args'                => array(
-                                                       'type'         => array(
-                                                               'type'     => 'string',
-                                                               'required' => true,
-                                                       ),
-						'limit'        => array(
-							'type'    => 'integer',
-							'default' => 10,
+					ARTPULSE_API_NAMESPACE,
+					'/filter',
+					array(
+						'methods'             => 'GET',
+						'callback'            => array( self::class, 'handleFilter' ),
+						'permission_callback' => function () {
+								return \ArtPulse\Rest\Util\Auth::require_cap( 'read' );
+						},
+						'args'                => array(
+							'type'         => array(
+								'type'     => 'string',
+								'required' => true,
+							),
+							'limit'        => array(
+								'type'    => 'integer',
+								'default' => 10,
+							),
+							'event_type'   => array( 'type' => 'integer' ),
+							'medium'       => array( 'type' => 'integer' ),
+							'style'        => array( 'type' => 'integer' ),
+							'org_type'     => array( 'type' => 'string' ),
+							'location'     => array( 'type' => 'string' ),
+							'city'         => array( 'type' => 'string' ),
+							'region'       => array( 'type' => 'string' ),
+							'for_sale'     => array( 'type' => 'boolean' ),
+							'keyword'      => array( 'type' => 'string' ),
+							'first_letter' => array( 'type' => 'string' ),
+							'page'         => array(
+								'type'    => 'integer',
+								'default' => 1,
+							),
 						),
-						'event_type'   => array( 'type' => 'integer' ),
-						'medium'       => array( 'type' => 'integer' ),
-						'style'        => array( 'type' => 'integer' ),
-						'org_type'     => array( 'type' => 'string' ),
-						'location'     => array( 'type' => 'string' ),
-						'city'         => array( 'type' => 'string' ),
-						'region'       => array( 'type' => 'string' ),
-						'for_sale'     => array( 'type' => 'boolean' ),
-						'keyword'      => array( 'type' => 'string' ),
-						'first_letter' => array( 'type' => 'string' ),
-						'page'         => array(
-							'type'    => 'integer',
-							'default' => 1,
-						),
-					),
-				)
-			);
+					)
+				);
 		}
 	}
 
@@ -89,196 +89,196 @@ class DirectoryManager {
 		$keyword      = sanitize_text_field( $request->get_param( 'keyword' ) );
 		$first_letter = sanitize_text_field( $request->get_param( 'first_letter' ) );
 
-               $allowed = array( 'event', 'artist', 'artwork', 'org' );
-               if ( ! in_array( $type, $allowed, true ) ) {
-                       return new \WP_Error( 'invalid_type', 'Invalid directory type', array( 'status' => 400 ) );
-               }
-
-               $cache_args = array(
-                       'type'         => $type,
-                       'limit'        => $limit,
-                       'event_type'   => $event_type,
-                       'medium'       => $medium,
-                       'style'        => $style,
-                       'org_type'     => $org_type,
-                       'location'     => $location,
-                       'city'         => $city,
-                       'region'       => $region,
-                       'for_sale'     => $for_sale,
-                       'keyword'      => $keyword,
-                       'first_letter' => $first_letter,
-               );
-
-               $cache_key = self::get_cache_key( $cache_args );
-               $cached    = get_transient( $cache_key );
-               if ( $cached !== false ) {
-                       return \rest_ensure_response( $cached );
-               }
-
-               $args       = array(
-                       'post_type'      => 'artpulse_' . $type,
-                       'posts_per_page' => $limit,
-                       'paged'          => $page,
-                       'orderby'        => 'title',
-                       'order'          => 'ASC',
-               );
-		$tax_query  = array();
-		$meta_query = array();
-
-               $search_args = array(
-                       'limit'        => $limit,
-                       'event_type'   => $event_type,
-                       'medium'       => $medium,
-                       'style'        => $style,
-                       'org_type'     => $org_type,
-                       'location'     => $location,
-                       'city'         => $city,
-                       'region'       => $region,
-                       'for_sale'     => $for_sale,
-                       'keyword'      => $keyword,
-                       'first_letter' => $first_letter,
-                       'page'         => $page,
-               );
-
-		if ( ExternalSearch::is_enabled() ) {
-			$posts = ExternalSearch::search( $type, $search_args );
-		} else {
-			if ( $type === 'event' ) {
-                                if ( $event_type ) {
-                                        $tax_query[] = array(
-                                                'taxonomy' => 'event_type',
-                                                'field'    => 'term_id',
-                                                'terms'    => $event_type,
-					);
-				}
-
-				if ( $city ) {
-					$meta_query[] = array(
-						'key'   => 'event_city',
-						'value' => $city,
-					);
-				}
-
-				if ( $region ) {
-					$meta_query[] = array(
-						'key'   => 'event_state',
-						'value' => $region,
-					);
-				}
-			}
-
-			if ( $type === 'artwork' && $for_sale !== null ) {
-				$meta_query[] = array(
-					'key'     => 'for_sale',
-					'value'   => $for_sale ? '1' : '0',
-					'compare' => '=',
-				);
-			}
-
-			if ( $medium ) {
-				$tax_query[] = array(
-					'taxonomy' => $type === 'artist' ? 'artist_specialty' : 'artpulse_medium',
-					'field'    => 'term_id',
-					'terms'    => $medium,
-				);
-			}
-
-			if ( $style ) {
-				$tax_query[] = array(
-					'taxonomy' => 'artwork_style',
-					'field'    => 'term_id',
-					'terms'    => $style,
-				);
-			}
-
-			if ( $type === 'org' && $org_type ) {
-				$meta_query[] = array(
-					'key'   => 'ead_org_type',
-					'value' => $org_type,
-				);
-			}
-
-			if ( $location ) {
-				$meta_query[] = array(
-					'key'     => 'address_components',
-					'value'   => $location,
-					'compare' => 'LIKE',
-				);
-			}
-
-			if ( $keyword ) {
-				$args['s'] = $keyword;
-			}
-
-			if ( ! empty( $tax_query ) ) {
-				$args['tax_query'] = $tax_query;
-			}
-
-			if ( ! empty( $meta_query ) ) {
-				$args['meta_query'] = $meta_query;
-			}
-
-			$posts = get_posts( $args );
+				$allowed = array( 'event', 'artist', 'artwork', 'org' );
+		if ( ! in_array( $type, $allowed, true ) ) {
+				return new \WP_Error( 'invalid_type', 'Invalid directory type', array( 'status' => 400 ) );
 		}
 
-		$posts = self::filter_by_first_letter( $posts, $first_letter );
-
-		$data = array_map(
-			function ( $p ) use ( $type ) {
-				$featured = get_the_post_thumbnail_url( $p, 'medium' );
-				if ( $type === 'org' && empty( $featured ) ) {
-					$logo_id       = get_post_meta( $p->ID, 'ead_org_logo_id', true );
-					$banner_id     = get_post_meta( $p->ID, 'ead_org_banner_id', true );
-					$attachment_id = $logo_id ?: $banner_id;
-                                        if ( $attachment_id ) {
-                                                $featured = wp_get_attachment_url( $attachment_id );
-                                        }
-                                }
-
-				$item = array(
-					'id'                 => $p->ID,
-					'title'              => $p->post_title,
-					'link'               => get_permalink( $p ),
-					'featured_media_url' => $featured,
+				$cache_args = array(
+					'type'         => $type,
+					'limit'        => $limit,
+					'event_type'   => $event_type,
+					'medium'       => $medium,
+					'style'        => $style,
+					'org_type'     => $org_type,
+					'location'     => $location,
+					'city'         => $city,
+					'region'       => $region,
+					'for_sale'     => $for_sale,
+					'keyword'      => $keyword,
+					'first_letter' => $first_letter,
 				);
-				if ( $type === 'event' ) {
-					$item['date']      = get_post_meta( $p->ID, '_ap_event_date', true );
-					$item['location']  = get_post_meta( $p->ID, '_ap_event_location', true );
-					$item['card_html'] = ap_get_event_card( $p->ID );
-				} elseif ( $type === 'artist' ) {
-					$item['bio']    = get_post_meta( $p->ID, '_ap_artist_bio', true );
-					$item['org_id'] = (int) get_post_meta( $p->ID, '_ap_artist_org', true );
-					$medium_terms   = get_the_terms( $p->ID, 'artist_specialty' );
-					$style_terms    = get_the_terms( $p->ID, 'artwork_style' );
-					$item['medium'] = $medium_terms && ! is_wp_error( $medium_terms ) ? wp_list_pluck( $medium_terms, 'name' ) : array();
-					$item['style']  = $style_terms && ! is_wp_error( $style_terms ) ? wp_list_pluck( $style_terms, 'name' ) : array();
-				} elseif ( $type === 'artwork' ) {
-					$item['medium'] = get_post_meta( $p->ID, '_ap_artwork_medium', true );
-					$terms          = get_the_terms( $p->ID, 'artwork_style' );
-					if ( $terms && ! is_wp_error( $terms ) ) {
-						$names         = wp_list_pluck( $terms, 'name' );
-						$item['style'] = implode( ', ', $names );
-					} else {
-						$item['style'] = '';
-					}
-					$item['dimensions'] = get_post_meta( $p->ID, '_ap_artwork_dimensions', true );
-					$item['materials']  = get_post_meta( $p->ID, '_ap_artwork_materials', true );
-					$item['for_sale']   = (bool) get_post_meta( $p->ID, 'for_sale', true );
-					$item['price']      = get_post_meta( $p->ID, 'price', true );
-				} elseif ( $type === 'org' ) {
-					$item['address']  = get_post_meta( $p->ID, 'ead_org_street_address', true );
-					$item['website']  = get_post_meta( $p->ID, 'ead_org_website_url', true );
-					$item['org_type'] = get_post_meta( $p->ID, 'ead_org_type', true );
+
+				$cache_key = self::get_cache_key( $cache_args );
+				$cached    = get_transient( $cache_key );
+				if ( $cached !== false ) {
+						return \rest_ensure_response( $cached );
 				}
-				return $item;
-			},
-			$posts
-		);
+
+				$args       = array(
+					'post_type'      => 'artpulse_' . $type,
+					'posts_per_page' => $limit,
+					'paged'          => $page,
+					'orderby'        => 'title',
+					'order'          => 'ASC',
+				);
+				$tax_query  = array();
+				$meta_query = array();
+
+				$search_args = array(
+					'limit'        => $limit,
+					'event_type'   => $event_type,
+					'medium'       => $medium,
+					'style'        => $style,
+					'org_type'     => $org_type,
+					'location'     => $location,
+					'city'         => $city,
+					'region'       => $region,
+					'for_sale'     => $for_sale,
+					'keyword'      => $keyword,
+					'first_letter' => $first_letter,
+					'page'         => $page,
+				);
+
+				if ( ExternalSearch::is_enabled() ) {
+					$posts = ExternalSearch::search( $type, $search_args );
+				} else {
+					if ( $type === 'event' ) {
+						if ( $event_type ) {
+								$tax_query[] = array(
+									'taxonomy' => 'event_type',
+									'field'    => 'term_id',
+									'terms'    => $event_type,
+								);
+						}
+
+						if ( $city ) {
+							$meta_query[] = array(
+								'key'   => 'event_city',
+								'value' => $city,
+							);
+						}
+
+						if ( $region ) {
+							$meta_query[] = array(
+								'key'   => 'event_state',
+								'value' => $region,
+							);
+						}
+					}
+
+					if ( $type === 'artwork' && $for_sale !== null ) {
+						$meta_query[] = array(
+							'key'     => 'for_sale',
+							'value'   => $for_sale ? '1' : '0',
+							'compare' => '=',
+						);
+					}
+
+					if ( $medium ) {
+						$tax_query[] = array(
+							'taxonomy' => $type === 'artist' ? 'artist_specialty' : 'artpulse_medium',
+							'field'    => 'term_id',
+							'terms'    => $medium,
+						);
+					}
+
+					if ( $style ) {
+						$tax_query[] = array(
+							'taxonomy' => 'artwork_style',
+							'field'    => 'term_id',
+							'terms'    => $style,
+						);
+					}
+
+					if ( $type === 'org' && $org_type ) {
+						$meta_query[] = array(
+							'key'   => 'ead_org_type',
+							'value' => $org_type,
+						);
+					}
+
+					if ( $location ) {
+						$meta_query[] = array(
+							'key'     => 'address_components',
+							'value'   => $location,
+							'compare' => 'LIKE',
+						);
+					}
+
+					if ( $keyword ) {
+						$args['s'] = $keyword;
+					}
+
+					if ( ! empty( $tax_query ) ) {
+						$args['tax_query'] = $tax_query;
+					}
+
+					if ( ! empty( $meta_query ) ) {
+						$args['meta_query'] = $meta_query;
+					}
+
+					$posts = get_posts( $args );
+				}
+
+				$posts = self::filter_by_first_letter( $posts, $first_letter );
+
+				$data = array_map(
+					function ( $p ) use ( $type ) {
+						$featured = get_the_post_thumbnail_url( $p, 'medium' );
+						if ( $type === 'org' && empty( $featured ) ) {
+							$logo_id       = get_post_meta( $p->ID, 'ead_org_logo_id', true );
+							$banner_id     = get_post_meta( $p->ID, 'ead_org_banner_id', true );
+							$attachment_id = $logo_id ?: $banner_id;
+							if ( $attachment_id ) {
+								$featured = wp_get_attachment_url( $attachment_id );
+							}
+						}
+
+						$item = array(
+							'id'                 => $p->ID,
+							'title'              => $p->post_title,
+							'link'               => get_permalink( $p ),
+							'featured_media_url' => $featured,
+						);
+						if ( $type === 'event' ) {
+							$item['date']      = get_post_meta( $p->ID, '_ap_event_date', true );
+							$item['location']  = get_post_meta( $p->ID, '_ap_event_location', true );
+							$item['card_html'] = ap_get_event_card( $p->ID );
+						} elseif ( $type === 'artist' ) {
+							$item['bio']    = get_post_meta( $p->ID, '_ap_artist_bio', true );
+							$item['org_id'] = (int) get_post_meta( $p->ID, '_ap_artist_org', true );
+							$medium_terms   = get_the_terms( $p->ID, 'artist_specialty' );
+							$style_terms    = get_the_terms( $p->ID, 'artwork_style' );
+							$item['medium'] = $medium_terms && ! is_wp_error( $medium_terms ) ? wp_list_pluck( $medium_terms, 'name' ) : array();
+							$item['style']  = $style_terms && ! is_wp_error( $style_terms ) ? wp_list_pluck( $style_terms, 'name' ) : array();
+						} elseif ( $type === 'artwork' ) {
+							$item['medium'] = get_post_meta( $p->ID, '_ap_artwork_medium', true );
+							$terms          = get_the_terms( $p->ID, 'artwork_style' );
+							if ( $terms && ! is_wp_error( $terms ) ) {
+								$names         = wp_list_pluck( $terms, 'name' );
+								$item['style'] = implode( ', ', $names );
+							} else {
+								$item['style'] = '';
+							}
+							$item['dimensions'] = get_post_meta( $p->ID, '_ap_artwork_dimensions', true );
+							$item['materials']  = get_post_meta( $p->ID, '_ap_artwork_materials', true );
+							$item['for_sale']   = (bool) get_post_meta( $p->ID, 'for_sale', true );
+							$item['price']      = get_post_meta( $p->ID, 'price', true );
+						} elseif ( $type === 'org' ) {
+							$item['address']  = get_post_meta( $p->ID, 'ead_org_street_address', true );
+							$item['website']  = get_post_meta( $p->ID, 'ead_org_website_url', true );
+							$item['org_type'] = get_post_meta( $p->ID, 'ead_org_type', true );
+						}
+						return $item;
+					},
+					$posts
+				);
 
 		set_transient( $cache_key, $data, 5 * MINUTE_IN_SECONDS );
 
 		return \rest_ensure_response( $data );
-       }
+	}
 
 	public static function renderDirectory( $atts ) {
 		$atts = shortcode_atts(
@@ -499,5 +499,5 @@ class DirectoryManager {
 				delete_transient( $transient );
 			}
 		}
-       }
+	}
 }

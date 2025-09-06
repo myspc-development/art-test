@@ -2,78 +2,78 @@
 
 namespace ArtPulse\Frontend {
 
-class StubState {
+	class StubState {
 
-public static array $post_meta             = array();
-public static array $meta_log              = array();
-public static array $get_posts_return      = array();
-public static array $get_posts_args        = array();
-public static array $wp_update_post_args   = array();
-public static array $wp_set_post_terms_args = array();
-public static array $json                  = array();
-public static $json_error                  = null;
-public static $deleted_post                = null;
-public static array $media_returns         = array();
-public static $media_default               = 1;
-public static array $inserted_post         = array();
-public static $wp_insert_post_return       = 1;
-public static $thumbnail                  = 0;
-public static array $shortcodes            = array();
-public static int $current_user            = 0;
-public static array $current_user_caps     = array();
-public static $page                        = null;
-public static string $notice               = '';
-public static array $function_exists_map   = array();
-public static array $terms_return          = array();
-public static array $post_types            = array();
-public static array $post_authors          = array();
+		public static array $post_meta              = array();
+		public static array $meta_log               = array();
+		public static array $get_posts_return       = array();
+		public static array $get_posts_args         = array();
+		public static array $wp_update_post_args    = array();
+		public static array $wp_set_post_terms_args = array();
+		public static array $json                   = array();
+		public static $json_error                   = null;
+		public static $deleted_post                 = null;
+		public static array $media_returns          = array();
+		public static $media_default                = 1;
+		public static array $inserted_post          = array();
+		public static $wp_insert_post_return        = 1;
+		public static $thumbnail                    = 0;
+		public static array $shortcodes             = array();
+		public static int $current_user             = 0;
+		public static array $current_user_caps      = array();
+		public static $page                         = null;
+		public static string $notice                = '';
+		public static array $function_exists_map    = array();
+		public static array $terms_return           = array();
+		public static array $post_types             = array();
+		public static array $post_authors           = array();
 
-public static function reset(): void {
-self::$post_meta            = array();
-self::$meta_log             = array();
-self::$get_posts_return     = array();
-self::$get_posts_args       = array();
-self::$wp_update_post_args  = array();
-self::$wp_set_post_terms_args = array();
-self::$json                 = array();
-self::$json_error           = null;
-self::$deleted_post         = null;
-self::$media_returns        = array();
-self::$media_default        = 1;
-self::$inserted_post        = array();
-self::$wp_insert_post_return = 1;
-self::$thumbnail            = 0;
-self::$shortcodes           = array();
-self::$current_user         = 0;
-self::$current_user_caps    = array();
-self::$page                 = null;
-self::$notice               = '';
-self::$function_exists_map  = array();
-self::$terms_return         = array();
-self::$post_types           = array();
-self::$post_authors         = array();
-}
-}
+		public static function reset(): void {
+			self::$post_meta              = array();
+			self::$meta_log               = array();
+			self::$get_posts_return       = array();
+			self::$get_posts_args         = array();
+			self::$wp_update_post_args    = array();
+			self::$wp_set_post_terms_args = array();
+			self::$json                   = array();
+			self::$json_error             = null;
+			self::$deleted_post           = null;
+			self::$media_returns          = array();
+			self::$media_default          = 1;
+			self::$inserted_post          = array();
+			self::$wp_insert_post_return  = 1;
+			self::$thumbnail              = 0;
+			self::$shortcodes             = array();
+			self::$current_user           = 0;
+			self::$current_user_caps      = array();
+			self::$page                   = null;
+			self::$notice                 = '';
+			self::$function_exists_map    = array();
+			self::$terms_return           = array();
+			self::$post_types             = array();
+			self::$post_authors           = array();
+		}
+	}
 
 	if ( ! function_exists( __NAMESPACE__ . '\\get_post' ) ) {
-                function get_post( $id ) {
-                        return (object) array(
-                                'ID'          => $id,
-                                'post_title'  => 'Event ' . $id,
-                                'post_type'   => StubState::$post_types[ $id ] ?? 'artpulse_event',
-                                'post_author' => StubState::$post_authors[ $id ] ?? 1,
-                        );
-                }
-        }
+		function get_post( $id ) {
+				return (object) array(
+					'ID'          => $id,
+					'post_title'  => 'Event ' . $id,
+					'post_type'   => StubState::$post_types[ $id ] ?? 'artpulse_event',
+					'post_author' => StubState::$post_authors[ $id ] ?? 1,
+				);
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\get_permalink' ) ) {
-                function get_permalink( $id ) {
-                        if ( is_object( $id ) ) {
-                                $id = $id->ID ?? 0;
-                        }
-                        return '/post/' . $id;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\get_permalink' ) ) {
+		function get_permalink( $id ) {
+			if ( is_object( $id ) ) {
+				$id = $id->ID ?? 0;
+			}
+				return '/post/' . $id;
+		}
+	}
 
 	if ( ! function_exists( __NAMESPACE__ . '\\get_the_title' ) ) {
 		function get_the_title( $postOrId ) {
@@ -84,48 +84,48 @@ self::$post_authors         = array();
 		}
 	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\get_posts' ) ) {
-                function get_posts( $args = array() ) {
-                        StubState::$get_posts_args = $args;
-                        return StubState::$get_posts_return;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\get_posts' ) ) {
+		function get_posts( $args = array() ) {
+				StubState::$get_posts_args = $args;
+				return StubState::$get_posts_return;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\get_post_meta' ) ) {
-                function get_post_meta( $post_id, $key, $single = false ) {
-                        if ( isset( StubState::$post_meta[ $post_id ] ) && array_key_exists( $key, StubState::$post_meta[ $post_id ] ) ) {
-                                return StubState::$post_meta[ $post_id ][ $key ];
-                        }
+	if ( ! function_exists( __NAMESPACE__ . '\\get_post_meta' ) ) {
+		function get_post_meta( $post_id, $key, $single = false ) {
+			if ( isset( StubState::$post_meta[ $post_id ] ) && array_key_exists( $key, StubState::$post_meta[ $post_id ] ) ) {
+				return StubState::$post_meta[ $post_id ][ $key ];
+			}
 
-                        if ( function_exists( '\\get_post_meta' ) ) {
-                                return \get_post_meta( $post_id, $key, $single );
-                        }
+			if ( function_exists( '\\get_post_meta' ) ) {
+					return \get_post_meta( $post_id, $key, $single );
+			}
 
-                        return '';
-                }
-        }
+				return '';
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\update_post_meta' ) ) {
-                function update_post_meta( $post_id, $key, $value ) {
-                        if ( isset( StubState::$post_meta[ $post_id ] ) && array_key_exists( $key, StubState::$post_meta[ $post_id ] ) ) {
-                                StubState::$post_meta[ $post_id ][ $key ] = $value;
-                                StubState::$meta_log[]                    = array( $post_id, $key, $value );
+	if ( ! function_exists( __NAMESPACE__ . '\\update_post_meta' ) ) {
+		function update_post_meta( $post_id, $key, $value ) {
+			if ( isset( StubState::$post_meta[ $post_id ] ) && array_key_exists( $key, StubState::$post_meta[ $post_id ] ) ) {
+				StubState::$post_meta[ $post_id ][ $key ] = $value;
+				StubState::$meta_log[]                    = array( $post_id, $key, $value );
 
-                                return true;
-                        }
+				return true;
+			}
 
-                        if ( function_exists( '\\update_post_meta' ) ) {
-                                StubState::$meta_log[] = array( $post_id, $key, $value );
+			if ( function_exists( '\\update_post_meta' ) ) {
+					StubState::$meta_log[] = array( $post_id, $key, $value );
 
-                                return \update_post_meta( $post_id, $key, $value );
-                        }
+					return \update_post_meta( $post_id, $key, $value );
+			}
 
-                        StubState::$post_meta[ $post_id ][ $key ] = $value;
-                        StubState::$meta_log[]                    = array( $post_id, $key, $value );
+				StubState::$post_meta[ $post_id ][ $key ] = $value;
+				StubState::$meta_log[]                    = array( $post_id, $key, $value );
 
-                        return true;
-                }
-        }
+				return true;
+		}
+	}
 
 	if ( ! function_exists( __NAMESPACE__ . '\\delete_post_meta' ) ) {
 		function delete_post_meta( $post_id, $key ) {
@@ -145,79 +145,87 @@ self::$post_authors         = array();
 			return $s; }
 	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\shortcode_atts' ) ) {
-                function shortcode_atts( $pairs, $atts, $tag = null ) {
-                        return array_merge( $pairs, $atts ); }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\shortcode_atts' ) ) {
+		function shortcode_atts( $pairs, $atts, $tag = null ) {
+				return array_merge( $pairs, $atts ); }
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\wp_list_pluck' ) ) {
-                function wp_list_pluck( $input, $field ) {
-                        return array_map( function ( $i ) use ( $field ) {
-                                return is_object( $i ) ? $i->$field : $i[ $field ];
-                        }, $input );
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\wp_list_pluck' ) ) {
+		function wp_list_pluck( $input, $field ) {
+				return array_map(
+					function ( $i ) use ( $field ) {
+							return is_object( $i ) ? $i->$field : $i[ $field ];
+					},
+					$input
+				);
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\get_user_meta' ) ) {
-                function get_user_meta( $user_id, $key, $single = false ) {
-                        $value = $GLOBALS['__ap_test_user_meta'][ $user_id ][ $key ] ?? null;
-                        if ( $single ) {
-                                return $value ?? '';
-                        }
-                        return null === $value ? array() : (array) $value;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\get_user_meta' ) ) {
+		function get_user_meta( $user_id, $key, $single = false ) {
+				$value = $GLOBALS['__ap_test_user_meta'][ $user_id ][ $key ] ?? null;
+			if ( $single ) {
+				return $value ?? '';
+			}
+				return null === $value ? array() : (array) $value;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\update_user_meta' ) ) {
-                function update_user_meta( $user_id, $key, $value ) {
-                        $GLOBALS['__ap_test_user_meta'][ $user_id ][ $key ] = $value;
-                        return true;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\update_user_meta' ) ) {
+		function update_user_meta( $user_id, $key, $value ) {
+				$GLOBALS['__ap_test_user_meta'][ $user_id ][ $key ] = $value;
+				return true;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\delete_user_meta' ) ) {
-                function delete_user_meta( $user_id, $key ) {
-                        unset( $GLOBALS['__ap_test_user_meta'][ $user_id ][ $key ] );
-                        return true;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\delete_user_meta' ) ) {
+		function delete_user_meta( $user_id, $key ) {
+				unset( $GLOBALS['__ap_test_user_meta'][ $user_id ][ $key ] );
+				return true;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\is_user_logged_in' ) ) {
-                function is_user_logged_in() {
-                        return StubState::$current_user > 0;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\is_user_logged_in' ) ) {
+		function is_user_logged_in() {
+				return StubState::$current_user > 0;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\get_current_user_id' ) ) {
-                function get_current_user_id() {
-                        return StubState::$current_user;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\get_current_user_id' ) ) {
+		function get_current_user_id() {
+				return StubState::$current_user;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\wp_set_current_user' ) ) {
-                function wp_set_current_user( $user_id ) {
-                        StubState::$current_user = (int) $user_id;
-                        return StubState::$current_user;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\wp_set_current_user' ) ) {
+		function wp_set_current_user( $user_id ) {
+				StubState::$current_user = (int) $user_id;
+				return StubState::$current_user;
+		}
+	}
 
 	if ( ! function_exists( __NAMESPACE__ . '\\wp_verify_nonce' ) ) {
 		function wp_verify_nonce( $nonce, $action ) {
 			return true; }
 	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\check_ajax_referer' ) ) {
-                function check_ajax_referer( $action, $name = false ) {
-                        if ( class_exists( __NAMESPACE__ . '\\AjaxLoginTestStubs' ) && ! AjaxLoginTestStubs::$nonce_valid ) {
-                                wp_send_json( array( 'ok' => false, 'code' => 'INVALID_NONCE' ) );
-                        }
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\check_ajax_referer' ) ) {
+		function check_ajax_referer( $action, $name = false ) {
+			if ( class_exists( __NAMESPACE__ . '\\AjaxLoginTestStubs' ) && ! AjaxLoginTestStubs::$nonce_valid ) {
+				wp_send_json(
+					array(
+						'ok'   => false,
+						'code' => 'INVALID_NONCE',
+					)
+				);
+			}
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\current_user_can' ) ) {
-                function current_user_can( $cap, $id = 0 ) {
-                        return StubState::$current_user_caps[ $cap ] ?? true; }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\current_user_can' ) ) {
+		function current_user_can( $cap, $id = 0 ) {
+				return StubState::$current_user_caps[ $cap ] ?? true; }
+	}
 
 	if ( ! function_exists( __NAMESPACE__ . '\\esc_html' ) ) {
 		function esc_html( $text ) {
@@ -239,143 +247,143 @@ self::$post_authors         = array();
 			return $t; }
 	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\wp_enqueue_script' ) ) {
-                function wp_enqueue_script( $handle ) {}
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\wp_enqueue_script' ) ) {
+		function wp_enqueue_script( $handle ) {}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\wp_delete_post' ) ) {
-                function wp_delete_post( $id, $force = false ) {
-                        StubState::$deleted_post = $id;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\wp_delete_post' ) ) {
+		function wp_delete_post( $id, $force = false ) {
+				StubState::$deleted_post = $id;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\wp_send_json_success' ) ) {
-                function wp_send_json_success( $data ) {
-                        StubState::$json = $data;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\wp_send_json_success' ) ) {
+		function wp_send_json_success( $data ) {
+				StubState::$json = $data;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\wp_send_json_error' ) ) {
-                function wp_send_json_error( $data ) {
-                        StubState::$json_error = $data;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\wp_send_json_error' ) ) {
+		function wp_send_json_error( $data ) {
+				StubState::$json_error = $data;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\do_shortcode' ) ) {
-                function do_shortcode( $code ) {
-                        return StubState::$shortcodes[ $code ] ?? '';
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\do_shortcode' ) ) {
+		function do_shortcode( $code ) {
+				return StubState::$shortcodes[ $code ] ?? '';
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\get_page_by_path' ) ) {
-                function get_page_by_path( $path, $output = null, $type = null ) {
-                        return StubState::$page;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\get_page_by_path' ) ) {
+		function get_page_by_path( $path, $output = null, $type = null ) {
+				return StubState::$page;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\wp_get_attachment_url' ) ) {
-                function wp_get_attachment_url( $id ) {
-                        return 'img' . $id . '.jpg';
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\wp_get_attachment_url' ) ) {
+		function wp_get_attachment_url( $id ) {
+				return 'img' . $id . '.jpg';
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\get_post_type' ) ) {
-                function get_post_type( $id ) {
-                        return StubState::$post_types[ $id ] ?? 'artpulse_event';
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\get_post_type' ) ) {
+		function get_post_type( $id ) {
+				return StubState::$post_types[ $id ] ?? 'artpulse_event';
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\wp_update_post' ) ) {
-                function wp_update_post( $arr ) {
-                        StubState::$wp_update_post_args = $arr;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\wp_update_post' ) ) {
+		function wp_update_post( $arr ) {
+				StubState::$wp_update_post_args = $arr;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\media_handle_upload' ) ) {
-                function media_handle_upload( $field, $post_id ) {
-                        return StubState::$media_returns[ $field ] ?? StubState::$media_default;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\media_handle_upload' ) ) {
+		function media_handle_upload( $field, $post_id ) {
+				return StubState::$media_returns[ $field ] ?? StubState::$media_default;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\wp_insert_post' ) ) {
-                function wp_insert_post( $arr ) {
-                        StubState::$inserted_post = $arr;
-                        return StubState::$wp_insert_post_return;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\wp_insert_post' ) ) {
+		function wp_insert_post( $arr ) {
+				StubState::$inserted_post = $arr;
+				return StubState::$wp_insert_post_return;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\set_post_thumbnail' ) ) {
-                function set_post_thumbnail( $post_id, $thumb ) {
-                        StubState::$thumbnail = $thumb;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\set_post_thumbnail' ) ) {
+		function set_post_thumbnail( $post_id, $thumb ) {
+				StubState::$thumbnail = $thumb;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\get_post_thumbnail_id' ) ) {
-                function get_post_thumbnail_id( $post_id ) {
-                        return StubState::$thumbnail;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\get_post_thumbnail_id' ) ) {
+		function get_post_thumbnail_id( $post_id ) {
+				return StubState::$thumbnail;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\wc_add_notice' ) ) {
-                function wc_add_notice( $msg, $type = '' ) {
-                        StubState::$notice = $msg;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\wc_add_notice' ) ) {
+		function wc_add_notice( $msg, $type = '' ) {
+				StubState::$notice = $msg;
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\wp_die' ) ) {
-                function wp_die( $msg ) {
-                        StubState::$notice = $msg;
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\wp_die' ) ) {
+		function wp_die( $msg ) {
+				StubState::$notice = $msg;
+		}
+	}
 
-       if ( ! function_exists( __NAMESPACE__ . '\\function_exists' ) ) {
-               function function_exists( $name ) {
-                       if ( array_key_exists( $name, StubState::$function_exists_map ) ) {
-                               return StubState::$function_exists_map[ $name ];
-                       }
+	if ( ! function_exists( __NAMESPACE__ . '\\function_exists' ) ) {
+		function function_exists( $name ) {
+			if ( array_key_exists( $name, StubState::$function_exists_map ) ) {
+					return StubState::$function_exists_map[ $name ];
+			}
 
-                       $trimmed = ltrim( $name, '\\' );
-                       if ( array_key_exists( $trimmed, StubState::$function_exists_map ) ) {
-                               return StubState::$function_exists_map[ $trimmed ];
-                       }
+				$trimmed = ltrim( $name, '\\' );
+			if ( array_key_exists( $trimmed, StubState::$function_exists_map ) ) {
+						return StubState::$function_exists_map[ $trimmed ];
+			}
 
-                       if ( false !== strpos( $trimmed, '\\' ) ) {
-                               $parts = explode( '\\', $trimmed );
-                               $base  = end( $parts );
-                               if ( array_key_exists( $base, StubState::$function_exists_map ) ) {
-                                       return StubState::$function_exists_map[ $base ];
-                               }
-                       }
+			if ( false !== strpos( $trimmed, '\\' ) ) {
+						$parts = explode( '\\', $trimmed );
+						$base  = end( $parts );
+				if ( array_key_exists( $base, StubState::$function_exists_map ) ) {
+						return StubState::$function_exists_map[ $base ];
+				}
+			}
 
-                       return \function_exists( $name );
-               }
-       }
+					return \function_exists( $name );
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\wp_safe_redirect' ) ) {
-                function wp_safe_redirect( $url ) {
-                        StubState::$page = $url;
-                        throw new \RuntimeException( 'redirect' );
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\wp_safe_redirect' ) ) {
+		function wp_safe_redirect( $url ) {
+				StubState::$page = $url;
+				throw new \RuntimeException( 'redirect' );
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\wp_get_referer' ) ) {
-                function wp_get_referer() {
-                        return '/referer';
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\wp_get_referer' ) ) {
+		function wp_get_referer() {
+				return '/referer';
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\get_terms' ) ) {
-               function get_terms( $tax, $args = array() ) {
-                       $taxonomy = is_array( $tax ) ? ( $tax['taxonomy'] ?? '' ) : $tax;
-                       return StubState::$terms_return[ $taxonomy ] ?? array();
-               }
-       }
+	if ( ! function_exists( __NAMESPACE__ . '\\get_terms' ) ) {
+		function get_terms( $tax, $args = array() ) {
+				$taxonomy = is_array( $tax ) ? ( $tax['taxonomy'] ?? '' ) : $tax;
+				return StubState::$terms_return[ $taxonomy ] ?? array();
+		}
+	}
 
-        if ( ! function_exists( __NAMESPACE__ . '\\wp_set_post_terms' ) ) {
-                function wp_set_post_terms( $id, $terms, $tax ) {
-                        StubState::$wp_set_post_terms_args = array( $id, $terms, $tax );
-                }
-        }
+	if ( ! function_exists( __NAMESPACE__ . '\\wp_set_post_terms' ) ) {
+		function wp_set_post_terms( $id, $terms, $tax ) {
+				StubState::$wp_set_post_terms_args = array( $id, $terms, $tax );
+		}
+	}
 
 	if ( ! function_exists( __NAMESPACE__ . '\\is_wp_error' ) ) {
 		function is_wp_error( $obj ) {

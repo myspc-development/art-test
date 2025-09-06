@@ -25,9 +25,9 @@ class VisitRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/checkin',
 				array(
-                                        'methods'             => 'POST',
-                                        'callback'            => array( self::class, 'checkin' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'methods'             => 'POST',
+					'callback'            => array( self::class, 'checkin' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'event_id'    => array(
 							'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ),

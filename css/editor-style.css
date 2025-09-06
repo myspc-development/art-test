@@ -1,18 +1,17 @@
 .ap-widget-item{
-    padding:8px;
-    margin-bottom:4px;
-    background:#fff;
-    border:1px solid #ccc;
-    cursor:move;
+	padding:8px;
+	margin-bottom:4px;
+	background:#fff;
+	border:1px solid #ccc;
+	cursor:move;
 }
 #ap-widget-notice{
-    margin-top:1em;
-    padding:10px;
-    background:#f0f6f9;
-    border-left:4px solid #2271b1;
+	margin-top:1em;
+	padding:10px;
+	background:#f0f6f9;
+	border-left:4px solid #2271b1;
 }
 .hidden{display:none;}
 
 .ap-widget--placeholder { background:#fff; border:1px dashed #cbd5e1; padding:16px; border-radius:12px; }
 .ap-widget--placeholder .ap-widget__title { margin:0 0 8px; font-size:1.1rem; }
-

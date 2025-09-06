@@ -18,7 +18,7 @@ class PromoManager {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( self::class, 'apply_code' ),
-                                        'permission_callback' => '__return_true',
+					'permission_callback' => '__return_true',
 					'args'                => array( 'id' => array( 'validate_callback' => 'absint' ) ),
 				)
 			);

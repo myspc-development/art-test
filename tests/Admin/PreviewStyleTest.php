@@ -32,7 +32,6 @@ if ( ! function_exists( __NAMESPACE__ . '\\sanitize_key' ) ) {
 /**
 
  * @group ADMIN
-
  */
 
 class PreviewStyleTest extends TestCase {
@@ -46,8 +45,8 @@ class PreviewStyleTest extends TestCase {
 	}
 
 	public function test_preview_injects_style_tag(): void {
-               DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', '__return_null' );
-               UserLayoutManager::save_role_layout( 'subscriber', array( array( 'id' => 'widget_alpha' ) ) );
+				DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', '__return_null' );
+				UserLayoutManager::save_role_layout( 'subscriber', array( array( 'id' => 'widget_alpha' ) ) );
 		UserLayoutManager::save_role_style( 'subscriber', array( 'background_color' => '#000' ) );
 
 		ob_start();

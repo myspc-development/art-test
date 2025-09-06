@@ -7,50 +7,50 @@ use WP_Error;
 use ArtPulse\Rest\RestResponder;
 
 final class SystemStatusController {
-        use RestResponder;
+		use RestResponder;
 
-        public static function register(): void {
-                $controller = new self();
-                if ( did_action( 'rest_api_init' ) ) {
-                        $controller->routes();
-                } else {
-                        add_action( 'rest_api_init', array( $controller, 'routes' ) );
-                }
-        }
+	public static function register(): void {
+			$controller = new self();
+		if ( did_action( 'rest_api_init' ) ) {
+				$controller->routes();
+		} else {
+				add_action( 'rest_api_init', array( $controller, 'routes' ) );
+		}
+	}
 
-       public function routes(): void {
-                if ( ! ap_rest_route_registered( 'ap/v1', '/system/status' ) ) {
-                        register_rest_route(
-                                'ap/v1',
-                                '/system/status',
-                                array(
-                                        'methods'             => WP_REST_Server::READABLE,
-                                        'permission_callback' => '__return_true',
-                                        'callback'            => array( $this, 'get_status' ),
-                                )
-                        );
-                }
-                if ( ! ap_rest_route_registered( 'ap/v1', '/status' ) ) {
-                        register_rest_route(
-                                'ap/v1',
-                                '/status',
-                                array(
-                                        'methods'             => WP_REST_Server::READABLE,
-                                        'permission_callback' => '__return_true',
-                                        'callback'            => array( $this, 'get_status' ),
-                                )
-                        );
-                }
-       }
+	public function routes(): void {
+		if ( ! ap_rest_route_registered( 'ap/v1', '/system/status' ) ) {
+				register_rest_route(
+					'ap/v1',
+					'/system/status',
+					array(
+						'methods'             => WP_REST_Server::READABLE,
+						'permission_callback' => '__return_true',
+						'callback'            => array( $this, 'get_status' ),
+					)
+				);
+		}
+		if ( ! ap_rest_route_registered( 'ap/v1', '/status' ) ) {
+				register_rest_route(
+					'ap/v1',
+					'/status',
+					array(
+						'methods'             => WP_REST_Server::READABLE,
+						'permission_callback' => '__return_true',
+						'callback'            => array( $this, 'get_status' ),
+					)
+				);
+		}
+	}
 
-       public function get_status(): WP_REST_Response|WP_Error {
-                global $wp_version;
-                return $this->ok(
-                        array(
-                                'wordpress' => $wp_version,
-                                'php'       => PHP_VERSION,
-                                'plugin'    => ARTPULSE_VERSION,
-                        )
-                );
-        }
+	public function get_status(): WP_REST_Response|WP_Error {
+			global $wp_version;
+			return $this->ok(
+				array(
+					'wordpress' => $wp_version,
+					'php'       => PHP_VERSION,
+					'plugin'    => ARTPULSE_VERSION,
+				)
+			);
+	}
 }

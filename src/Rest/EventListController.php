@@ -54,24 +54,24 @@ class EventListController {
 		}
 	}
 
-        public static function get_list( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
-                $responder = new self();
+	public static function get_list( WP_REST_Request $request ): \WP_REST_Response|\WP_Error {
+			$responder = new self();
 
-                $cache_key = 'ap_event_list_' . get_current_user_id() . '_' . md5( serialize( $request->get_params() ) );
-                if ( false !== ( $cached = get_transient( $cache_key ) ) ) {
-                        return $responder->ok( $cached );
-                }
+			$cache_key = 'ap_event_list_' . get_current_user_id() . '_' . md5( serialize( $request->get_params() ) );
+		if ( false !== ( $cached = get_transient( $cache_key ) ) ) {
+				return $responder->ok( $cached );
+		}
 
-		$meta_query = array();
-		$venue      = $request->get_param( 'venue' );
-		$after      = $request->get_param( 'after' );
-		$before     = $request->get_param( 'before' );
-		$organizer  = $request->get_param( 'organizer' );
-		$price_type = $request->get_param( 'price_type' );
-		$lat        = $request->get_param( 'lat' );
-		$lng        = $request->get_param( 'lng' );
-		$radius     = $request->get_param( 'radius' );
-		$alpha      = $request->get_param( 'alpha' );
+			$meta_query = array();
+			$venue      = $request->get_param( 'venue' );
+			$after      = $request->get_param( 'after' );
+			$before     = $request->get_param( 'before' );
+			$organizer  = $request->get_param( 'organizer' );
+			$price_type = $request->get_param( 'price_type' );
+			$lat        = $request->get_param( 'lat' );
+			$lng        = $request->get_param( 'lng' );
+			$radius     = $request->get_param( 'radius' );
+			$alpha      = $request->get_param( 'alpha' );
 		if ( $venue !== null && $venue !== '' ) {
 			$meta_query[] = array(
 				'key'     => 'venue_name',
@@ -126,9 +126,9 @@ class EventListController {
 			);
 		}
 
-		$tax_query  = array();
-		$category   = $request->get_param( 'category' );
-		$event_type = $request->get_param( 'event_type' );
+			$tax_query  = array();
+			$category   = $request->get_param( 'category' );
+			$event_type = $request->get_param( 'event_type' );
 		if ( $category ) {
 			$tax_query[] = array(
 				'taxonomy' => 'category',
@@ -144,10 +144,10 @@ class EventListController {
 			);
 		}
 
-		$sort     = $request->get_param( 'sort' );
-		$orderby  = 'meta_value';
-		$order    = 'ASC';
-		$meta_key = 'event_start_date';
+			$sort     = $request->get_param( 'sort' );
+			$orderby  = 'meta_value';
+			$order    = 'ASC';
+			$meta_key = 'event_start_date';
 		if ( $sort === 'az' ) {
 			$orderby  = 'title';
 			$meta_key = '';
@@ -157,42 +157,42 @@ class EventListController {
 			$meta_key = '';
 		}
 
-		$args = array(
-			'post_type'      => 'artpulse_event',
-			'post_status'    => 'publish',
-			'posts_per_page' => intval( $request->get_param( 'per_page' ) ),
-			'orderby'        => $orderby,
-			'order'          => $order,
-		);
-		if ( $meta_key ) {
-			$args['meta_key'] = $meta_key;
-		}
-		if ( $meta_query ) {
-			$args['meta_query'] = $meta_query;
-		}
-		if ( $tax_query ) {
-			$args['tax_query'] = $tax_query;
-		}
+			$args = array(
+				'post_type'      => 'artpulse_event',
+				'post_status'    => 'publish',
+				'posts_per_page' => intval( $request->get_param( 'per_page' ) ),
+				'orderby'        => $orderby,
+				'order'          => $order,
+			);
+			if ( $meta_key ) {
+				$args['meta_key'] = $meta_key;
+			}
+			if ( $meta_query ) {
+				$args['meta_query'] = $meta_query;
+			}
+			if ( $tax_query ) {
+				$args['tax_query'] = $tax_query;
+			}
 
-		$query = new \WP_Query( $args );
-		$html  = '';
-		if ( $query->have_posts() ) {
-			foreach ( $query->posts as $p ) {
-				$title_first = strtoupper( mb_substr( $p->post_title, 0, 1 ) );
-				if ( $alpha ) {
-					if ( $alpha === '#' ) {
-						if ( ctype_alpha( $title_first ) ) {
+			$query = new \WP_Query( $args );
+			$html  = '';
+			if ( $query->have_posts() ) {
+				foreach ( $query->posts as $p ) {
+					$title_first = strtoupper( mb_substr( $p->post_title, 0, 1 ) );
+					if ( $alpha ) {
+						if ( $alpha === '#' ) {
+							if ( ctype_alpha( $title_first ) ) {
+								continue;
+							}
+						} elseif ( $title_first !== strtoupper( $alpha ) ) {
 							continue;
 						}
-					} elseif ( $title_first !== strtoupper( $alpha ) ) {
-						continue;
 					}
+					$html .= ap_get_event_card( $p->ID );
 				}
-				$html .= ap_get_event_card( $p->ID );
 			}
-		}
-                $data = array( 'html' => $html );
-                set_transient( $cache_key, $data, 30 );
-                return $responder->ok( $data );
-        }
+			$data = array( 'html' => $html );
+			set_transient( $cache_key, $data, 30 );
+			return $responder->ok( $data );
+	}
 }

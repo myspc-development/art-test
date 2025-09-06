@@ -16,7 +16,6 @@ use PHPUnit\Framework\TestCase;
 /**
 
  * @group SUPPORT
-
  */
 
 class OptionUtilsTest extends TestCase {

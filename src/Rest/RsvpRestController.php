@@ -24,9 +24,9 @@ class RsvpRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/rsvp',
 				array(
-                                        'methods'             => 'POST',
-                                        'callback'            => array( self::class, 'join' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'methods'             => 'POST',
+					'callback'            => array( self::class, 'join' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'event_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
@@ -39,9 +39,9 @@ class RsvpRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/rsvp/cancel',
 				array(
-                                        'methods'             => 'POST',
-                                        'callback'            => array( self::class, 'cancel' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'methods'             => 'POST',
+					'callback'            => array( self::class, 'cancel' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'event_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
@@ -54,9 +54,9 @@ class RsvpRestController {
 				ARTPULSE_API_NAMESPACE,
 				'/waitlist/remove',
 				array(
-                                        'methods'             => 'POST',
-                                        'callback'            => array( self::class, 'remove_waitlist' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'methods'             => 'POST',
+					'callback'            => array( self::class, 'remove_waitlist' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'event_id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
 					),
@@ -250,17 +250,17 @@ class RsvpRestController {
 			update_user_meta( $user_id, 'ap_rsvp_events', $events );
 		}
 
-		$user    = wp_get_current_user();
-                $subject = sprintf( esc_html__( 'RSVP Confirmation for "%1$s"', 'artpulse' ), esc_html( get_the_title( $event_id ) ) );
-                $message = sprintf( esc_html__( 'Hi %1$s,\n\nYou have successfully RSVPed for "%2$s".', 'artpulse' ), esc_html( $user->display_name ), esc_html( get_the_title( $event_id ) ) );
+		$user            = wp_get_current_user();
+				$subject = sprintf( esc_html__( 'RSVP Confirmation for "%1$s"', 'artpulse' ), esc_html( get_the_title( $event_id ) ) );
+				$message = sprintf( esc_html__( 'Hi %1$s,\n\nYou have successfully RSVPed for "%2$s".', 'artpulse' ), esc_html( $user->display_name ), esc_html( get_the_title( $event_id ) ) );
 		if ( $user && is_email( $user->user_email ) ) {
 			\ArtPulse\Core\EmailService::send( $user->user_email, $subject, $message );
 		}
 
 		$org_email = get_post_meta( $event_id, 'event_organizer_email', true );
 		if ( $org_email && is_email( $org_email ) ) {
-                        $org_subject = sprintf( esc_html__( 'New RSVP for "%1$s"', 'artpulse' ), esc_html( get_the_title( $event_id ) ) );
-                        $org_message = sprintf( esc_html__( '%1$s (%2$s) just RSVPed.', 'artpulse' ), esc_html( $user->display_name ), esc_html( $user->user_email ) );
+						$org_subject = sprintf( esc_html__( 'New RSVP for "%1$s"', 'artpulse' ), esc_html( get_the_title( $event_id ) ) );
+						$org_message = sprintf( esc_html__( '%1$s (%2$s) just RSVPed.', 'artpulse' ), esc_html( $user->display_name ), esc_html( $user->user_email ) );
 			\ArtPulse\Core\EmailService::send( $org_email, $org_subject, $org_message );
 		}
 
@@ -494,9 +494,9 @@ class RsvpRestController {
 		}
 
 		$subject = sanitize_text_field( $request->get_param( 'subject' ) );
-                if ( ! $subject ) {
-                        $subject = sprintf( esc_html__( 'Reminder for "%1$s"', 'artpulse' ), esc_html( get_the_title( $event_id ) ) );
-                }
+		if ( ! $subject ) {
+				$subject = sprintf( esc_html__( 'Reminder for "%1$s"', 'artpulse' ), esc_html( get_the_title( $event_id ) ) );
+		}
 		$message = sanitize_textarea_field( $request->get_param( 'message' ) );
 		if ( ! $message ) {
 			$message = __( 'This is a reminder for your upcoming event.', 'artpulse' );
@@ -523,9 +523,9 @@ class RsvpRestController {
 		}
 
 		$subject = sanitize_text_field( $request->get_param( 'subject' ) );
-                if ( ! $subject ) {
-                        $subject = sprintf( esc_html__( 'Message regarding "%1$s"', 'artpulse' ), esc_html( get_the_title( $event_id ) ) );
-                }
+		if ( ! $subject ) {
+				$subject = sprintf( esc_html__( 'Message regarding "%1$s"', 'artpulse' ), esc_html( get_the_title( $event_id ) ) );
+		}
 		$message = sanitize_textarea_field( $request->get_param( 'message' ) );
 		if ( ! $message ) {
 			$message = __( 'Hello from your event organizer.', 'artpulse' );

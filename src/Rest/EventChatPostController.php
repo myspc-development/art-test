@@ -36,45 +36,45 @@ class EventChatPostController extends WP_REST_Controller {
 		// ],
 		// ]);
 
-                register_rest_route(
-                        $this->namespace,
-                        '/chat/(?P<id>\d+)/reaction',
-                        array(
-                                'methods'             => WP_REST_Server::CREATABLE,
-                                'callback'            => array( $this, 'add_reaction' ),
-                                'permission_callback' => array( Auth::class, 'guard_read' ),
-                                'args'                => array(
-                                        'id'    => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
-                                        'emoji' => array(
-                                                'type'     => 'string',
-                                                'required' => true,
-                                        ),
-                                ),
-                        )
-                );
+				register_rest_route(
+					$this->namespace,
+					'/chat/(?P<id>\d+)/reaction',
+					array(
+						'methods'             => WP_REST_Server::CREATABLE,
+						'callback'            => array( $this, 'add_reaction' ),
+						'permission_callback' => array( Auth::class, 'guard_read' ),
+						'args'                => array(
+							'id'    => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ),
+							'emoji' => array(
+								'type'     => 'string',
+								'required' => true,
+							),
+						),
+					)
+				);
 
-                register_rest_route(
-                        $this->namespace,
-                        '/chat/(?P<id>\d+)',
-                        array(
-                                'methods'             => WP_REST_Server::DELETABLE,
-                                'callback'            => array( $this, 'delete_item' ),
-                                'permission_callback' => array( Auth::class, 'guard_manage' ),
-                                'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
-                        )
-                );
+				register_rest_route(
+					$this->namespace,
+					'/chat/(?P<id>\d+)',
+					array(
+						'methods'             => WP_REST_Server::DELETABLE,
+						'callback'            => array( $this, 'delete_item' ),
+						'permission_callback' => array( Auth::class, 'guard_manage' ),
+						'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
+					)
+				);
 
-                register_rest_route(
-                        $this->namespace,
-                        '/chat/(?P<id>\d+)/flag',
-                        array(
-                                'methods'             => WP_REST_Server::EDITABLE,
-                                'callback'            => array( $this, 'flag_item' ),
-                                'permission_callback' => array( Auth::class, 'guard_manage' ),
-                                'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
-                        )
-                );
-        }
+				register_rest_route(
+					$this->namespace,
+					'/chat/(?P<id>\d+)/flag',
+					array(
+						'methods'             => WP_REST_Server::EDITABLE,
+						'callback'            => array( $this, 'flag_item' ),
+						'permission_callback' => array( Auth::class, 'guard_manage' ),
+						'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
+					)
+				);
+	}
 
 	public function add_reaction( WP_REST_Request $request ): WP_REST_Response|WP_Error {
 		$msg_id = absint( $request['id'] );

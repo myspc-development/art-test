@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 /**
 
  * @group WIDGETS
-
  */
 
 class AvailableWidgetsTest extends TestCase {

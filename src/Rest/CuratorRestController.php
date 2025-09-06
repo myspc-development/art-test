@@ -23,8 +23,8 @@ class CuratorRestController {
 				'/curators',
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-                                        'callback'            => array( self::class, 'get_curators' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'callback'            => array( self::class, 'get_curators' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 				)
 			);
 		}
@@ -35,8 +35,8 @@ class CuratorRestController {
 				'/curator/(?P<slug>[a-z0-9-]+)',
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-                                        'callback'            => array( self::class, 'get_curator' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'callback'            => array( self::class, 'get_curator' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'slug' => array( 'sanitize_callback' => 'sanitize_title' ),
 					),

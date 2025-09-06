@@ -6,7 +6,6 @@ use ArtPulse\Community\ProfileLinkRequestRestController;
 /**
 
  * @group COMMUNITY
-
  */
 
 class ProfileLinkRequestRestControllerTest extends \WP_UnitTestCase {

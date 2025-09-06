@@ -76,18 +76,18 @@ class PromotionManager {
 	}
 
 	public static function list_promoted(): WP_REST_Response {
-               global $wpdb;
-               $table   = $wpdb->prefix . 'ap_promotions';
-               $today   = current_time( 'Y-m-d' );
-               $columns = 'id, artwork_id, start_date, end_date, type, priority_level';
-               $rows    = $wpdb->get_results(
-                       $wpdb->prepare(
-                               "SELECT $columns FROM $table WHERE start_date <= %s AND end_date >= %s ORDER BY priority_level DESC, start_date DESC",
-                               $today,
-                               $today
-                       ),
-                       ARRAY_A
-               );
+				global $wpdb;
+				$table   = $wpdb->prefix . 'ap_promotions';
+				$today   = current_time( 'Y-m-d' );
+				$columns = 'id, artwork_id, start_date, end_date, type, priority_level';
+				$rows    = $wpdb->get_results(
+					$wpdb->prepare(
+						"SELECT $columns FROM $table WHERE start_date <= %s AND end_date >= %s ORDER BY priority_level DESC, start_date DESC",
+						$today,
+						$today
+					),
+					ARRAY_A
+				);
 		return \rest_ensure_response( $rows );
 	}
 

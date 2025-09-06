@@ -20,9 +20,9 @@ class OrgMetaController {
 				ARTPULSE_API_NAMESPACE,
 				'/org/(?P<id>\d+)/meta',
 				array(
-                                        'methods'             => array( 'GET', 'POST' ),
-                                        'callback'            => array( self::class, 'handle' ),
-                                        'permission_callback' => array( Auth::class, 'guard_read' ),
+					'methods'             => array( 'GET', 'POST' ),
+					'callback'            => array( self::class, 'handle' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
 				)
 			);

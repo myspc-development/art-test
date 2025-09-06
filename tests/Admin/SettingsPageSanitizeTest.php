@@ -7,7 +7,6 @@ use WP_UnitTestCase;
 /**
 
  * @group ADMIN
-
  */
 
 class SettingsPageSanitizeTest extends WP_UnitTestCase {

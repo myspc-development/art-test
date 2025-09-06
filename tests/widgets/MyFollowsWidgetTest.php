@@ -5,7 +5,6 @@ use ArtPulse\Community\FollowManager;
 /**
 
  * @group WIDGETS
-
  */
 
 class MyFollowsWidgetTest extends \WP_UnitTestCase {

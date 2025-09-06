@@ -7,7 +7,6 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 /**
 
  * @group ADMIN
-
  */
 
 class WidgetFallbackTest extends WP_UnitTestCase {
@@ -26,8 +25,8 @@ class WidgetFallbackTest extends WP_UnitTestCase {
 	}
 
 	public function test_missing_callback_outputs_fallback(): void {
-               DashboardWidgetRegistry::register( 'widget_foo', 'Foo', '', '', 'missing_func' );
-               $cb = DashboardWidgetRegistry::get_widget_callback( 'widget_foo' );
+				DashboardWidgetRegistry::register( 'widget_foo', 'Foo', '', '', 'missing_func' );
+				$cb = DashboardWidgetRegistry::get_widget_callback( 'widget_foo' );
 		ob_start();
 		if ( $cb ) {
 			$cb();

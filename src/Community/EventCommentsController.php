@@ -24,11 +24,11 @@ class EventCommentsController {
 					array(
 						'methods'             => 'GET',
 						'callback'            => array( self::class, 'list' ),
-                                               'permission_callback' => '__return_true',
-                                               'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
-                                       ),
-                                       array(
-                                               'methods'             => 'POST',
+						'permission_callback' => '__return_true',
+						'args'                => array( 'id' => array( 'validate_callback' => static fn( $value, $request, $param ) => \is_numeric( $value ) ) ),
+					),
+					array(
+						'methods'             => 'POST',
 						'callback'            => array( self::class, 'add' ),
 						'permission_callback' => fn() => is_user_logged_in(),
 						'args'                => array(

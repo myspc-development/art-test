@@ -23,11 +23,11 @@ class UpdateDiagnosticsController {
 			'artpulse/v1',
 			'/update/diagnostics',
 			array(
-                                array(
-                                        'methods'             => WP_REST_Server::READABLE,
-                                        'callback'            => array( self::class, 'get_diagnostics' ),
-                                        'permission_callback' => Auth::require_login_and_cap( 'update_plugins' ),
-                                ),
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( self::class, 'get_diagnostics' ),
+					'permission_callback' => Auth::require_login_and_cap( 'update_plugins' ),
+				),
 			)
 		);
 	}

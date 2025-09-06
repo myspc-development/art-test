@@ -23,7 +23,6 @@ use PHPUnit\Framework\TestCase;
 /**
 
  * @group CRM
-
  */
 
 class ContactModelTest extends TestCase {

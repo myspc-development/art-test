@@ -13,21 +13,21 @@ class TestRouteShim {
 
 	public static function register(): void {
 		// Only in tests
-		$in_tests = (defined('AP_TEST_MODE') && AP_TEST_MODE) || getenv('AP_TEST_MODE');
+		$in_tests = ( defined( 'AP_TEST_MODE' ) && AP_TEST_MODE ) || getenv( 'AP_TEST_MODE' );
 		if ( ! $in_tests ) {
 			return;
 		}
 
-               // Use a high priority so core controllers register first.
-               add_action('rest_api_init', [self::class, 'register_stub_routes'], 999);
+				// Use a high priority so core controllers register first.
+				add_action( 'rest_api_init', array( self::class, 'register_stub_routes' ), 999 );
 	}
 
 	public static function register_stub_routes(): void {
-		$ns = defined('ARTPULSE_API_NAMESPACE') ? constant('ARTPULSE_API_NAMESPACE') : 'artpulse/v1';
+		$ns = defined( 'ARTPULSE_API_NAMESPACE' ) ? constant( 'ARTPULSE_API_NAMESPACE' ) : 'artpulse/v1';
 
 		// Exact routes your smoke test reports as missing.
 		// If you add/remove expectations in the test, just edit this array.
-		$routes = [
+		$routes = array(
 			'/user/export',
 			'/user/delete',
 			'/events',
@@ -198,11 +198,11 @@ class TestRouteShim {
 			'/chat/(?P<id>\d+)',
 			'/chat/(?P<id>\d+)/flag',
 			'/event/by-slug/(?P<slug>[A-Za-z0-9-_]+)/chat',
-		];
+		);
 
 		foreach ( $routes as $route ) {
 			// Skip if another controller already registered it.
-			if ( function_exists('ap_rest_route_registered') && ap_rest_route_registered($ns, $route) ) {
+			if ( function_exists( 'ap_rest_route_registered' ) && ap_rest_route_registered( $ns, $route ) ) {
 				continue;
 			}
 
@@ -212,12 +212,12 @@ class TestRouteShim {
 				array(
 					array(
 						'methods'             => 'GET',
-						'callback'            => [self::class, 'ok'],
+						'callback'            => array( self::class, 'ok' ),
 						'permission_callback' => '__return_true',
 					),
 					array(
 						'methods'             => 'POST',
-						'callback'            => [self::class, 'ok'],
+						'callback'            => array( self::class, 'ok' ),
 						'permission_callback' => '__return_true',
 					),
 				)
@@ -232,12 +232,12 @@ class TestRouteShim {
 			array(
 				array(
 					'methods'             => 'GET',
-					'callback'            => [self::class, 'ok'],
+					'callback'            => array( self::class, 'ok' ),
 					'permission_callback' => '__return_true',
 				),
 				array(
 					'methods'             => 'POST',
-					'callback'            => [self::class, 'ok'],
+					'callback'            => array( self::class, 'ok' ),
 					'permission_callback' => '__return_true',
 				),
 			)
@@ -245,11 +245,13 @@ class TestRouteShim {
 	}
 
 	public static function ok( WP_REST_Request $req ): WP_REST_Response|WP_Error {
-		return new WP_REST_Response(array(
-			'ok'    => true,
-			'path'  => $req->get_route(),
-			'query' => $req->get_query_params(),
-			'body'  => $req->get_json_params(),
-		));
+		return new WP_REST_Response(
+			array(
+				'ok'    => true,
+				'path'  => $req->get_route(),
+				'query' => $req->get_query_params(),
+				'body'  => $req->get_json_params(),
+			)
+		);
 	}
 }

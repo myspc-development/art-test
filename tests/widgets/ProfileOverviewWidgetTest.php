@@ -8,15 +8,14 @@ use ArtPulse\Widgets\ProfileOverviewWidget;
 /**
 
  * @group WIDGETS
-
  */
 
 class ProfileOverviewWidgetTest extends WidgetTestCase {
-        protected function setUp(): void {
-                parent::setUp();
-                DashboardWidgetRegistry::reset();
-                ProfileOverviewWidget::register();
-        }
+	protected function setUp(): void {
+			parent::setUp();
+			DashboardWidgetRegistry::reset();
+			ProfileOverviewWidget::register();
+	}
 
 	public function test_registration_and_access(): void {
 		$this->assertTrue( DashboardWidgetRegistry::exists( ProfileOverviewWidget::get_id() ) );

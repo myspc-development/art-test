@@ -1,5 +1,5 @@
 .ap-event-filter-form { margin-bottom: 2rem; display: flex; gap: 1.2rem; flex-wrap: wrap; }
 .ap-event-filter-form input, .ap-event-filter-form button {
-    padding: 0.7em 1em; border-radius: 10px; border: 1px solid #ccc; font-size: 1em;
+	padding: 0.7em 1em; border-radius: 10px; border: 1px solid #ccc; font-size: 1em;
 }
 .ap-event-filter-form button { background: #f5ab35; color: #fff; border: none; }

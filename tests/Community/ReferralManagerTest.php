@@ -8,7 +8,6 @@ use ArtPulse\Core\UserDashboardManager;
 /**
 
  * @group COMMUNITY
-
  */
 
 class ReferralManagerTest extends \WP_UnitTestCase {

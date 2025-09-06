@@ -21,9 +21,9 @@ class PaymentReportsController {
 				ARTPULSE_API_NAMESPACE,
 				'/payment-reports',
 				array(
-                                        'methods'             => 'GET',
-                                        'callback'            => array( self::class, 'get_reports' ),
-                                        'permission_callback' => array( Auth::class, 'guard_manage' ),
+					'methods'             => 'GET',
+					'callback'            => array( self::class, 'get_reports' ),
+					'permission_callback' => array( Auth::class, 'guard_manage' ),
 				)
 			);
 		}

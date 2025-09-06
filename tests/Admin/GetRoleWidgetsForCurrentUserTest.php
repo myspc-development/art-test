@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 /**
 
  * @group ADMIN
-
  */
 
 class GetRoleWidgetsForCurrentUserTest extends TestCase {

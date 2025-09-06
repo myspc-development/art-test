@@ -134,16 +134,16 @@ class EventAnalyticsController extends WP_REST_Controller {
 		$top_events  = array();
 		$top_event   = '';
 
-                if ( $ids ) {
-                        $table  = $wpdb->prefix . 'ap_rsvps';
-                        $exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-                        if ( ! $exists ) {
-                                return $this->fail( 'ap_db_missing', 'Required table missing', 500 );
-                        }
-                        $in    = implode( ',', array_map( 'intval', $ids ) );
+		if ( $ids ) {
+				$table  = $wpdb->prefix . 'ap_rsvps';
+				$exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+			if ( ! $exists ) {
+						return $this->fail( 'ap_db_missing', 'Required table missing', 500 );
+			}
+				$in = implode( ',', array_map( 'intval', $ids ) );
 
-			// Totals by status (robust to unknown statuses).
-			$rows = $wpdb->get_results( "SELECT status, COUNT(*) c FROM {$table} WHERE event_id IN ($in) GROUP BY status", ARRAY_A ) ?: array();
+					// Totals by status (robust to unknown statuses).
+					$rows = $wpdb->get_results( "SELECT status, COUNT(*) c FROM {$table} WHERE event_id IN ($in) GROUP BY status", ARRAY_A ) ?: array();
 			foreach ( $rows as $row ) {
 				$st = (string) ( $row['status'] ?? '' );
 				$c  = (int) ( $row['c'] ?? 0 );
@@ -153,10 +153,10 @@ class EventAnalyticsController extends WP_REST_Controller {
 				$total_rsvps += $c;
 			}
 
-			// Unique attendees (by email).
-			$unique = (int) $wpdb->get_var( "SELECT COUNT(DISTINCT email) FROM {$table} WHERE event_id IN ($in)" ) ?: 0;
+					// Unique attendees (by email).
+					$unique = (int) $wpdb->get_var( "SELECT COUNT(DISTINCT email) FROM {$table} WHERE event_id IN ($in)" ) ?: 0;
 
-			// Trend: group by UTC date in SQL, then map buckets into local TZ in PHP (portable; no CONVERT_TZ).
+					// Trend: group by UTC date in SQL, then map buckets into local TZ in PHP (portable; no CONVERT_TZ).
 			try {
 				$rows = $wpdb->get_results(
 					$wpdb->prepare(

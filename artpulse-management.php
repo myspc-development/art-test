@@ -57,11 +57,11 @@ if ( version_compare( PHP_VERSION, '8.2', '<' ) ) {
 	if ( function_exists( 'deactivate_plugins' ) ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 	}
-        wp_die(
-                esc_html(
-                        sprintf( __( 'ArtPulse requires PHP 8.2 or higher. You are running %1$s.', 'artpulse' ), PHP_VERSION )
-                )
-        );
+		wp_die(
+			esc_html(
+				sprintf( __( 'ArtPulse requires PHP 8.2 or higher. You are running %1$s.', 'artpulse' ), PHP_VERSION )
+			)
+		);
 }
 
 // Load Composer autoloader
@@ -118,10 +118,10 @@ add_action(
 
 require_once __DIR__ . '/includes/widget-loader.php';
 add_action(
-        'init',
-        static function () {
-                \ArtPulse\DashboardWidgetRegistryLoader::load_all();
-        }
+	'init',
+	static function () {
+				\ArtPulse\DashboardWidgetRegistryLoader::load_all();
+	}
 );
 
 // Setup automatic plugin updates from GitHub
@@ -389,15 +389,15 @@ function ap_copy_templates_to_child_theme() {
 			ap_log( "ArtPulse: failed to copy template $file" );
 			add_action(
 				'admin_notices',
-                                static function () use ( $file ) {
-                                        printf(
-                                                '<div class="notice notice-error"><p>%s</p></div>',
-                                                sprintf( esc_html__( 'ArtPulse template %1$s could not be copied.', 'artpulse' ), esc_html( $file ) )
-                                        );
-                                }
-                        );
-                }
-        }
+				static function () use ( $file ) {
+										printf(
+											'<div class="notice notice-error"><p>%s</p></div>',
+											sprintf( esc_html__( 'ArtPulse template %1$s could not be copied.', 'artpulse' ), esc_html( $file ) )
+										);
+				}
+			);
+		}
+	}
 }
 
 // Instantiate WooCommerce integration (if needed for runtime)
@@ -673,13 +673,13 @@ function artpulse_create_custom_table() {
  * @return bool
  */
 add_action(
-        'wp_enqueue_scripts',
-        function () {
-                global $post;
-                if ( $post && has_shortcode( $post->post_content, 'ap_favorite_portfolio' ) ) {
-                        wp_enqueue_style( 'ap-frontend', plugins_url( '/assets/css/frontend.css', __FILE__ ) );
-                }
-        }
+	'wp_enqueue_scripts',
+	function () {
+			global $post;
+		if ( $post && has_shortcode( $post->post_content, 'ap_favorite_portfolio' ) ) {
+				wp_enqueue_style( 'ap-frontend', plugins_url( '/assets/css/frontend.css', __FILE__ ) );
+		}
+	}
 );
 
 /**
@@ -691,21 +691,21 @@ add_action(
  * @deprecated Use ArtPulse\Helpers\GlobalHelpers::pageHasShortcode().
  */
 function ap_page_has_shortcode( string $tag ): bool {
-        return GlobalHelpers::pageHasShortcode( $tag );
+		return GlobalHelpers::pageHasShortcode( $tag );
 }
 
 /**
  * @deprecated Use ArtPulse\Helpers\GlobalHelpers::stylesDisabled().
  */
 function ap_styles_disabled() {
-        return GlobalHelpers::stylesDisabled();
+		return GlobalHelpers::stylesDisabled();
 }
 
 /**
  * @deprecated Use ArtPulse\Helpers\GlobalHelpers::wpAdminAccessEnabled().
  */
 function ap_wp_admin_access_enabled() {
-        return GlobalHelpers::wpAdminAccessEnabled();
+		return GlobalHelpers::wpAdminAccessEnabled();
 }
 
 /**
@@ -719,74 +719,74 @@ function ap_wp_admin_access_enabled() {
  * Conditionally hook frontend assets.
  */
 function ap_register_frontend_assets() {
-        $needs = GlobalHelpers::pageHasArtpulseShortcode() ||
-                is_page( 'dashboard' ) ||
-                is_page( 'organization-dashboard' ) ||
-                is_page( 'events' ) ||
-                is_singular( 'artpulse_event' );
+		$needs = GlobalHelpers::pageHasArtpulseShortcode() ||
+				is_page( 'dashboard' ) ||
+				is_page( 'organization-dashboard' ) ||
+				is_page( 'events' ) ||
+				is_singular( 'artpulse_event' );
 
-        if ( ! $needs ) {
-                return;
-        }
+	if ( ! $needs ) {
+			return;
+	}
 
-        add_action( 'wp_enqueue_scripts', [ GlobalHelpers::class, 'enqueueGlobalStyles' ] );
-        add_action( 'wp_enqueue_scripts', 'ap_enqueue_dashboard_styles' );
-        add_action( 'wp_enqueue_scripts', 'ap_enqueue_main_style' );
-        add_action( 'wp_enqueue_scripts', fn() => wp_enqueue_style( 'dashicons' ) );
-        add_action(
-                'wp_enqueue_scripts',
-                function () {
-                        wp_enqueue_style(
-                                'ap-frontend-styles',
-                                plugin_dir_url( __FILE__ ) . 'assets/css/ap-frontend-styles.css',
-                                array(),
-                                filemtime( plugin_dir_path( __FILE__ ) . 'assets/css/ap-frontend-styles.css' )
-                        );
-                }
-        );
+		add_action( 'wp_enqueue_scripts', array( GlobalHelpers::class, 'enqueueGlobalStyles' ) );
+		add_action( 'wp_enqueue_scripts', 'ap_enqueue_dashboard_styles' );
+		add_action( 'wp_enqueue_scripts', 'ap_enqueue_main_style' );
+		add_action( 'wp_enqueue_scripts', fn() => wp_enqueue_style( 'dashicons' ) );
+		add_action(
+			'wp_enqueue_scripts',
+			function () {
+					wp_enqueue_style(
+						'ap-frontend-styles',
+						plugin_dir_url( __FILE__ ) . 'assets/css/ap-frontend-styles.css',
+						array(),
+						filemtime( plugin_dir_path( __FILE__ ) . 'assets/css/ap-frontend-styles.css' )
+					);
+			}
+		);
 
-        if ( is_page( 'events' ) || is_singular( 'artpulse_event' ) ) {
-                add_action( 'wp_enqueue_scripts', 'ap_enqueue_event_calendar_assets' );
-        }
+	if ( is_page( 'events' ) || is_singular( 'artpulse_event' ) ) {
+			add_action( 'wp_enqueue_scripts', 'ap_enqueue_event_calendar_assets' );
+	}
 
-        if ( GlobalHelpers::pageHasShortcode( 'react_form' ) ) {
-                add_action( 'wp_enqueue_scripts', 'artpulse_enqueue_react_form' );
-        }
+	if ( GlobalHelpers::pageHasShortcode( 'react_form' ) ) {
+			add_action( 'wp_enqueue_scripts', 'artpulse_enqueue_react_form' );
+	}
 
-        $sortable_rel = 'assets/libs/sortablejs/Sortable.min.js';
-        add_action(
-                'wp_enqueue_scripts',
-                function () use ( $sortable_rel ) {
-                        if ( is_page( 'dashboard' ) || is_page( 'organization-dashboard' ) ) {
-                                $sortable_path = plugin_dir_path( __FILE__ ) . $sortable_rel;
-                                wp_enqueue_script(
-                                        'sortablejs',
-                                        plugins_url( $sortable_rel, __FILE__ ),
-                                        array(),
-                                        file_exists( $sortable_path ) ? (string) filemtime( $sortable_path ) : null,
-                                        true
-                                );
+		$sortable_rel = 'assets/libs/sortablejs/Sortable.min.js';
+		add_action(
+			'wp_enqueue_scripts',
+			function () use ( $sortable_rel ) {
+				if ( is_page( 'dashboard' ) || is_page( 'organization-dashboard' ) ) {
+						$sortable_path = plugin_dir_path( __FILE__ ) . $sortable_rel;
+						wp_enqueue_script(
+							'sortablejs',
+							plugins_url( $sortable_rel, __FILE__ ),
+							array(),
+							file_exists( $sortable_path ) ? (string) filemtime( $sortable_path ) : null,
+							true
+						);
 
-                                $script_path = plugin_dir_path( __FILE__ ) . 'assets/js/organization-dashboard.js';
-                                wp_enqueue_script(
-                                        'organization-dashboard',
-                                        plugins_url( 'assets/js/organization-dashboard.js', __FILE__ ),
-                                        array( 'sortablejs' ),
-                                        file_exists( $script_path ) ? (string) filemtime( $script_path ) : null,
-                                        true
-                                );
-                                wp_localize_script(
-                                        'organization-dashboard',
-                                        'APWidgetOrder',
-                                        array(
-                                                'ajax_url'   => admin_url( 'admin-ajax.php' ),
-                                                'nonce'      => wp_create_nonce( 'ap_widget_order' ),
-                                                'identifier' => get_current_user_id(),
-                                        )
-                                );
-                        }
-                }
-        );
+						$script_path = plugin_dir_path( __FILE__ ) . 'assets/js/organization-dashboard.js';
+						wp_enqueue_script(
+							'organization-dashboard',
+							plugins_url( 'assets/js/organization-dashboard.js', __FILE__ ),
+							array( 'sortablejs' ),
+							file_exists( $script_path ) ? (string) filemtime( $script_path ) : null,
+							true
+						);
+						wp_localize_script(
+							'organization-dashboard',
+							'APWidgetOrder',
+							array(
+								'ajax_url'   => admin_url( 'admin-ajax.php' ),
+								'nonce'      => wp_create_nonce( 'ap_widget_order' ),
+								'identifier' => get_current_user_id(),
+							)
+						);
+				}
+			}
+		);
 }
 add_action( 'wp', 'ap_register_frontend_assets' );
 
@@ -794,9 +794,9 @@ add_action( 'wp', 'ap_register_frontend_assets' );
  * Enqueue dashboard styles only when a page uses an ArtPulse shortcode.
  */
 function ap_enqueue_dashboard_styles() {
-        if ( ! GlobalHelpers::pageHasArtpulseShortcode() ) {
-                return;
-        }
+	if ( ! GlobalHelpers::pageHasArtpulseShortcode() ) {
+			return;
+	}
 
 	wp_enqueue_style(
 		'ap-complete-dashboard-style',
@@ -870,37 +870,37 @@ $sortable_rel = 'assets/libs/sortablejs/Sortable.min.js';
 $role_rel     = 'assets/js/role-dashboard.js';
 
 add_action(
-        'admin_enqueue_scripts',
-        function ( $hook ) use ( $sortable_rel, $role_rel ) {
-                // Only load on the main WordPress dashboard. The custom dashboard
-                // page handles its own assets to avoid duplicate rendering.
-                if ( $hook === 'index.php' ) {
-                        $sortable_path = plugin_dir_path( __FILE__ ) . $sortable_rel;
-                        wp_enqueue_script(
-                                'sortablejs',
-                                plugin_dir_url( __FILE__ ) . $sortable_rel,
-                                array(),
-                                file_exists( $sortable_path ) ? (string) filemtime( $sortable_path ) : null,
-                                true
-                        );
-                        $role_path = plugin_dir_path( __FILE__ ) . $role_rel;
-                        wp_enqueue_script(
-                                'role-dashboard',
-                                plugin_dir_url( __FILE__ ) . $role_rel,
-                                array( 'jquery', 'sortablejs' ),
-                                file_exists( $role_path ) ? (string) filemtime( $role_path ) : null,
-                                true
-                        );
-                        wp_localize_script(
-                                'role-dashboard',
-                                'ArtPulseDashboard',
-                                array(
-                                        'ajax_url' => admin_url( 'admin-ajax.php' ),
-                                        'nonce'    => wp_create_nonce( 'ap_dashboard_nonce' ),
-                                )
-                        );
-                }
-        }
+	'admin_enqueue_scripts',
+	function ( $hook ) use ( $sortable_rel, $role_rel ) {
+			// Only load on the main WordPress dashboard. The custom dashboard
+			// page handles its own assets to avoid duplicate rendering.
+		if ( $hook === 'index.php' ) {
+				$sortable_path = plugin_dir_path( __FILE__ ) . $sortable_rel;
+				wp_enqueue_script(
+					'sortablejs',
+					plugin_dir_url( __FILE__ ) . $sortable_rel,
+					array(),
+					file_exists( $sortable_path ) ? (string) filemtime( $sortable_path ) : null,
+					true
+				);
+				$role_path = plugin_dir_path( __FILE__ ) . $role_rel;
+				wp_enqueue_script(
+					'role-dashboard',
+					plugin_dir_url( __FILE__ ) . $role_rel,
+					array( 'jquery', 'sortablejs' ),
+					file_exists( $role_path ) ? (string) filemtime( $role_path ) : null,
+					true
+				);
+				wp_localize_script(
+					'role-dashboard',
+					'ArtPulseDashboard',
+					array(
+						'ajax_url' => admin_url( 'admin-ajax.php' ),
+						'nonce'    => wp_create_nonce( 'ap_dashboard_nonce' ),
+					)
+				);
+		}
+	}
 );
 
 
@@ -931,37 +931,37 @@ add_action(
 
 // Enqueue the full SortableJS library on dashboard pages.
 add_action(
-        'wp_enqueue_scripts',
-        function () use ( $sortable_rel ) {
-                if ( is_page( 'dashboard' ) || is_page( 'organization-dashboard' ) ) {
-                        $sortable_path = plugin_dir_path( __FILE__ ) . $sortable_rel;
-                        wp_enqueue_script(
-                                'sortablejs',
-                                plugins_url( $sortable_rel, __FILE__ ),
-                                array(),
-                                file_exists( $sortable_path ) ? (string) filemtime( $sortable_path ) : null,
-                                true
-                        );
+	'wp_enqueue_scripts',
+	function () use ( $sortable_rel ) {
+		if ( is_page( 'dashboard' ) || is_page( 'organization-dashboard' ) ) {
+				$sortable_path = plugin_dir_path( __FILE__ ) . $sortable_rel;
+				wp_enqueue_script(
+					'sortablejs',
+					plugins_url( $sortable_rel, __FILE__ ),
+					array(),
+					file_exists( $sortable_path ) ? (string) filemtime( $sortable_path ) : null,
+					true
+				);
 
-                        $script_path = plugin_dir_path( __FILE__ ) . 'assets/js/organization-dashboard.js';
-                        wp_enqueue_script(
-                                'organization-dashboard',
-                                plugins_url( 'assets/js/organization-dashboard.js', __FILE__ ),
-                                array( 'sortablejs' ),
-                                file_exists( $script_path ) ? (string) filemtime( $script_path ) : null,
-                                true
-                        );
-                        wp_localize_script(
-                                'organization-dashboard',
-                                'APWidgetOrder',
-                                array(
-                                        'ajax_url'   => admin_url( 'admin-ajax.php' ),
-                                        'nonce'      => wp_create_nonce( 'ap_widget_order' ),
-                                        'identifier' => get_current_user_id(),
-                                )
-                        );
-                }
-        }
+				$script_path = plugin_dir_path( __FILE__ ) . 'assets/js/organization-dashboard.js';
+				wp_enqueue_script(
+					'organization-dashboard',
+					plugins_url( 'assets/js/organization-dashboard.js', __FILE__ ),
+					array( 'sortablejs' ),
+					file_exists( $script_path ) ? (string) filemtime( $script_path ) : null,
+					true
+				);
+				wp_localize_script(
+					'organization-dashboard',
+					'APWidgetOrder',
+					array(
+						'ajax_url'   => admin_url( 'admin-ajax.php' ),
+						'nonce'      => wp_create_nonce( 'ap_widget_order' ),
+						'identifier' => get_current_user_id(),
+					)
+				);
+		}
+	}
 );
 
 // Deprecated: use REST endpoint /artpulse/v1/favorites instead
@@ -1182,14 +1182,14 @@ function ap_enqueue_event_calendar_assets() {
 			'fullcalendar-css',
 			plugins_url( 'assets/libs/fullcalendar/6.1.11/main.min.css', __FILE__ )
 		);
-               wp_enqueue_script(
-                       'fullcalendar-js',
-                       plugins_url( 'assets/libs/fullcalendar/6.1.11/main.min.js', __FILE__ ),
-                       array(),
-                       null,
-                       true
-               );
-               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-event-calendar', 'assets/js/ap-event-calendar.js', array( 'fullcalendar-js', 'jquery' ), true, array( 'type' => 'module' ) );
+				wp_enqueue_script(
+					'fullcalendar-js',
+					plugins_url( 'assets/libs/fullcalendar/6.1.11/main.min.js', __FILE__ ),
+					array(),
+					null,
+					true
+				);
+				\ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-event-calendar', 'assets/js/ap-event-calendar.js', array( 'fullcalendar-js', 'jquery' ), true, array( 'type' => 'module' ) );
 		wp_localize_script(
 			'ap-event-calendar',
 			'APCalendar',
@@ -1378,9 +1378,9 @@ add_filter(
 
 // === React Form Demo ===
 function artpulse_enqueue_react_form() {
-        if ( ! GlobalHelpers::pageHasShortcode( 'react_form' ) ) {
-                return;
-        }
+	if ( ! GlobalHelpers::pageHasShortcode( 'react_form' ) ) {
+			return;
+	}
 	wp_enqueue_script(
 		'artpulse-react-form',
 		plugin_dir_url( __FILE__ ) . 'dist/react-form.js',
@@ -1426,7 +1426,7 @@ function artpulse_handle_react_form() {
 		array(
 			'user_id'     => get_current_user_id() ?: null,
 			'type'        => 'react_form',
-                        'description' => sprintf( 'Name: %1$s', $name ),
+			'description' => sprintf( 'Name: %1$s', $name ),
 			'email'       => $email,
 			'tags'        => '',
 			'context'     => '',
@@ -1435,12 +1435,12 @@ function artpulse_handle_react_form() {
 	);
 
 	$admin_email = get_option( 'admin_email' );
-        $subject     = sprintf( esc_html__( 'React form submission from %1$s', 'artpulse' ), esc_html( $name ) );
-        $message     = sprintf(
-                esc_html__( "Name: %1\$s\nEmail: %2\$s", 'artpulse' ),
-                esc_html( $name ),
-                esc_html( $email )
-        );
+		$subject = sprintf( esc_html__( 'React form submission from %1$s', 'artpulse' ), esc_html( $name ) );
+		$message = sprintf(
+			esc_html__( "Name: %1\$s\nEmail: %2\$s", 'artpulse' ),
+			esc_html( $name ),
+			esc_html( $email )
+		);
 	\ArtPulse\Core\EmailService::send( $admin_email, $subject, $message );
 
 	wp_send_json_success(
@@ -1549,24 +1549,24 @@ add_action(
 		if ( defined( 'AP_DEBUG' ) && ! AP_DEBUG ) {
 			return;
 		}
-               $roles = array( 'member', 'artist', 'organization' );
-               foreach ( $roles as $role ) {
-                       $dashboard_url = \ArtPulse\Core\Plugin::get_user_dashboard_url();
-                       if ( 'artist' === $role ) {
-                               $dashboard_url = \ArtPulse\Core\Plugin::get_artist_dashboard_url();
-                       } elseif ( 'organization' === $role ) {
-                               $dashboard_url = \ArtPulse\Core\Plugin::get_org_dashboard_url();
-                       }
-                       $wp_admin_bar->add_node(
-                               array(
-                                       'id'    => 'ap-switch-' . $role,
-                                       'title' => 'View as: ' . $role,
-                                       'href'  => add_query_arg( 'ap_preview_role', $role, $dashboard_url ),
-                               )
-                       );
-               }
-       },
-       100
+				$roles = array( 'member', 'artist', 'organization' );
+		foreach ( $roles as $role ) {
+				$dashboard_url = \ArtPulse\Core\Plugin::get_user_dashboard_url();
+			if ( 'artist' === $role ) {
+						$dashboard_url = \ArtPulse\Core\Plugin::get_artist_dashboard_url();
+			} elseif ( 'organization' === $role ) {
+							$dashboard_url = \ArtPulse\Core\Plugin::get_org_dashboard_url();
+			}
+							$wp_admin_bar->add_node(
+								array(
+									'id'    => 'ap-switch-' . $role,
+									'title' => 'View as: ' . $role,
+									'href'  => add_query_arg( 'ap_preview_role', $role, $dashboard_url ),
+								)
+							);
+		}
+	},
+	100
 );
 
 

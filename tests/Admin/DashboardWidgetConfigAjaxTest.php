@@ -44,7 +44,6 @@ require_once __DIR__ . '/../../includes/dashboard-widgets.php';
 /**
 
  * @group ADMIN
-
  */
 
 class DashboardWidgetConfigAjaxTest extends TestCase {

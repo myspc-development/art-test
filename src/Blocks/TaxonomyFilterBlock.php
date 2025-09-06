@@ -10,39 +10,39 @@ class TaxonomyFilterBlock {
 		add_action( 'init', array( self::class, 'register_block' ) );
 	}
 
-       public static function register_block() {
-               if ( ! function_exists( 'register_block_type' ) ) {
-                       return;
-               }
+	public static function register_block() {
+		if ( ! function_exists( 'register_block_type' ) ) {
+				return;
+		}
 
-               if ( WP_Block_Type_Registry::get_instance()->is_registered( 'artpulse/taxonomy-filter' ) ) {
-                       return;
-               }
+		if ( WP_Block_Type_Registry::get_instance()->is_registered( 'artpulse/taxonomy-filter' ) ) {
+					return;
+		}
 
-               register_block_type(
-                       'artpulse/taxonomy-filter',
-                       array(
-                               'editor_script'   => 'artpulse-taxonomy-filter-block',
-                               'render_callback' => array( self::class, 'render_callback' ),
-                               'attributes'      => array(
-                                       'postType' => array(
-                                               'type'    => 'string',
-                                               'default' => 'artpulse_artist',
-                                       ),
-                                       'taxonomy' => array(
-                                               'type'    => 'string',
-                                               'default' => 'artist_specialty',
-                                       ),
-                                       'terms'    => array(
-                                               'type'    => 'array',
-                                               'default' => array(),
-                                       ),
-                               ),
-                       )
-               );
+			register_block_type(
+				'artpulse/taxonomy-filter',
+				array(
+					'editor_script'   => 'artpulse-taxonomy-filter-block',
+					'render_callback' => array( self::class, 'render_callback' ),
+					'attributes'      => array(
+						'postType' => array(
+							'type'    => 'string',
+							'default' => 'artpulse_artist',
+						),
+						'taxonomy' => array(
+							'type'    => 'string',
+							'default' => 'artist_specialty',
+						),
+						'terms'    => array(
+							'type'    => 'array',
+							'default' => array(),
+						),
+					),
+				)
+			);
 
-               EnqueueAssets::register_script( 'artpulse-taxonomy-filter-block', 'assets/js/taxonomy-filter-block.js', array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-api-fetch' ), false );
-       }
+			EnqueueAssets::register_script( 'artpulse-taxonomy-filter-block', 'assets/js/taxonomy-filter-block.js', array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data', 'wp-api-fetch' ), false );
+	}
 
 	public static function render_callback( $attributes ) {
 		if ( empty( $attributes['postType'] ) || empty( $attributes['taxonomy'] ) ) {

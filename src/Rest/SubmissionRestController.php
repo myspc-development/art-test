@@ -57,18 +57,18 @@ class SubmissionRestController {
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => fn() => \rest_ensure_response( array( 'message' => 'Use POST to submit a form.' ) ),
-                                        'permission_callback' => \ArtPulse\Rest\Util\Auth::require_login_and_cap( 'read' ),
-                                ),
-                        )
-                );
-        }
+					'permission_callback' => \ArtPulse\Rest\Util\Auth::require_login_and_cap( 'read' ),
+				),
+			)
+		);
+	}
 
 	/**
 	 * Permission callback for the submission endpoint.
 	 */
-       public static function check_permissions( WP_REST_Request $request ) {
-               return \ArtPulse\Rest\Util\Auth::guard( $request, 'upload_files' );
-       }
+	public static function check_permissions( WP_REST_Request $request ) {
+			return \ArtPulse\Rest\Util\Auth::guard( $request, 'upload_files' );
+	}
 
 	/**
 	 * Handle the form submission via REST.

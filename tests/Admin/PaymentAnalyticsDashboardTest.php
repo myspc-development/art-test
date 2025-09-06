@@ -7,7 +7,6 @@ use ArtPulse\Admin\PaymentAnalyticsDashboard;
 /**
 
  * @group ADMIN
-
  */
 
 class PaymentAnalyticsDashboardTest extends TestCase {

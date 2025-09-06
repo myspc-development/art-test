@@ -37,7 +37,7 @@ class OrgRoleInviteController {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( self::class, 'accept' ),
-                                        'permission_callback' => Auth::require_login_and_cap(null),
+					'permission_callback' => Auth::require_login_and_cap( null ),
 				)
 			);
 		}

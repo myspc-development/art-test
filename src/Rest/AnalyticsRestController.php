@@ -23,7 +23,7 @@ class AnalyticsRestController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'get_trends' ),
-                                       'permission_callback' => array( Auth::class, 'guard_read' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'event_id' => array(
 							'type'     => 'integer',
@@ -45,7 +45,7 @@ class AnalyticsRestController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( self::class, 'export_csv' ),
-                                       'permission_callback' => array( Auth::class, 'guard_read' ),
+					'permission_callback' => array( Auth::class, 'guard_read' ),
 					'args'                => array(
 						'event_id' => array(
 							'type'     => 'integer',
@@ -68,16 +68,16 @@ class AnalyticsRestController {
 			return new WP_Error( 'invalid_event', 'Invalid event.', array( 'status' => 400 ) );
 		}
 
-                global $wpdb;
-                $table  = $wpdb->prefix . 'ap_tickets';
-                $exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-                if ( ! $exists ) {
-                        return ( new self() )->fail( 'ap_db_missing', 'Required table missing', 500 );
-                }
+				global $wpdb;
+				$table  = $wpdb->prefix . 'ap_tickets';
+				$exists = (bool) $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+		if ( ! $exists ) {
+				return ( new self() )->fail( 'ap_db_missing', 'Required table missing', 500 );
+		}
 
-                $views   = EventMetrics::get_counts( $event_id, 'view', $days );
-                $favs    = EventMetrics::get_counts( $event_id, 'favorite', $days );
-                $tickets = self::get_ticket_counts( $event_id, $days );
+				$views   = EventMetrics::get_counts( $event_id, 'view', $days );
+				$favs    = EventMetrics::get_counts( $event_id, 'favorite', $days );
+				$tickets = self::get_ticket_counts( $event_id, $days );
 
 		return \rest_ensure_response(
 			array(

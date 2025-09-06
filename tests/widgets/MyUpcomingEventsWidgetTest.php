@@ -4,7 +4,6 @@ use ArtPulse\Widgets\MyUpcomingEventsWidget;
 /**
 
  * @group WIDGETS
-
  */
 
 class MyUpcomingEventsWidgetTest extends \WP_UnitTestCase {

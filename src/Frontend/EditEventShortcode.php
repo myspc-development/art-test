@@ -287,8 +287,8 @@ class EditEventShortcode {
 	}
 
 	public static function enqueue_scripts() {
-               wp_enqueue_media();
-               \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-edit-event-js', 'assets/js/ap-edit-event.js', array( 'jquery' ) );
+				wp_enqueue_media();
+				\ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-edit-event-js', 'assets/js/ap-edit-event.js', array( 'jquery' ) );
 		wp_localize_script(
 			'ap-edit-event-js',
 			'APEditEvent',
@@ -298,8 +298,8 @@ class EditEventShortcode {
 			)
 		);
 
-               \ArtPulse\Admin\EnqueueAssets::register_script( 'chart-js', 'assets/libs/chart.js/4.4.1/chart.min.js' );
-               \ArtPulse\Admin\EnqueueAssets::register_script( 'ap-rsvp-analytics', 'assets/js/ap-rsvp-analytics.js', array( 'chart-js' ) );
+				\ArtPulse\Admin\EnqueueAssets::register_script( 'chart-js', 'assets/libs/chart.js/4.4.1/chart.min.js' );
+				\ArtPulse\Admin\EnqueueAssets::register_script( 'ap-rsvp-analytics', 'assets/js/ap-rsvp-analytics.js', array( 'chart-js' ) );
 	}
 
 	public static function handle_ajax() {

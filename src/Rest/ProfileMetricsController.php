@@ -11,55 +11,68 @@ use ArtPulse\Rest\RestResponder;
 
 final class ProfileMetricsController {
 	use RestResponder;
-    public static function register(): void {
-        add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
-    }
 
-    public static function register_routes(): void {
-        $permission = function () {
-            return Auth::require_cap( 'read' );
-        };
+	public static function register(): void {
+		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
+	}
 
-        register_rest_route(
-            ARTPULSE_API_NAMESPACE,
-            '/profile/metrics',
-            array(
-                'methods'             => WP_REST_Server::READABLE,
-                'callback'            => array( self::class, 'get_metrics' ),
-                'permission_callback' => $permission,
-                'args'                => array(
-                    'metric' => array( 'type' => 'string', 'default' => 'view' ),
-                    'days'   => array( 'type' => 'integer', 'default' => 30 ),
-                    'id'     => array( 'type' => 'integer' ),
-                ),
-            )
-        );
+	public static function register_routes(): void {
+		$permission = function () {
+			return Auth::require_cap( 'read' );
+		};
 
-        // Legacy path for backward compatibility.
-        register_rest_route(
-            ARTPULSE_API_NAMESPACE,
-            '/profile-metrics/(?P<id>\d+)',
-            array(
-                'methods'             => WP_REST_Server::READABLE,
-                'callback'            => array( self::class, 'get_metrics' ),
-                'permission_callback' => $permission,
-                'args'                => array(
-                    'metric' => array( 'type' => 'string', 'default' => 'view' ),
-                    'days'   => array( 'type' => 'integer', 'default' => 30 ),
-                ),
-            )
-        );
-    }
+		register_rest_route(
+			ARTPULSE_API_NAMESPACE,
+			'/profile/metrics',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( self::class, 'get_metrics' ),
+				'permission_callback' => $permission,
+				'args'                => array(
+					'metric' => array(
+						'type'    => 'string',
+						'default' => 'view',
+					),
+					'days'   => array(
+						'type'    => 'integer',
+						'default' => 30,
+					),
+					'id'     => array( 'type' => 'integer' ),
+				),
+			)
+		);
 
-    public static function get_metrics( WP_REST_Request $req ): WP_REST_Response|WP_Error {
-        $metric = sanitize_key( $req->get_param( 'metric' ) );
-        $days   = max( 1, absint( $req->get_param( 'days' ) ) );
-        $uid    = absint( $req->get_param( 'id' ) );
-        if ( ! $uid ) {
-            $uid = get_current_user_id();
-        }
+		// Legacy path for backward compatibility.
+		register_rest_route(
+			ARTPULSE_API_NAMESPACE,
+			'/profile-metrics/(?P<id>\d+)',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( self::class, 'get_metrics' ),
+				'permission_callback' => $permission,
+				'args'                => array(
+					'metric' => array(
+						'type'    => 'string',
+						'default' => 'view',
+					),
+					'days'   => array(
+						'type'    => 'integer',
+						'default' => 30,
+					),
+				),
+			)
+		);
+	}
 
-        $data = ProfileMetrics::get_counts( $uid, $metric, $days );
-        return \rest_ensure_response( $data );
-    }
+	public static function get_metrics( WP_REST_Request $req ): WP_REST_Response|WP_Error {
+		$metric = sanitize_key( $req->get_param( 'metric' ) );
+		$days   = max( 1, absint( $req->get_param( 'days' ) ) );
+		$uid    = absint( $req->get_param( 'id' ) );
+		if ( ! $uid ) {
+			$uid = get_current_user_id();
+		}
+
+		$data = ProfileMetrics::get_counts( $uid, $metric, $days );
+		return \rest_ensure_response( $data );
+	}
 }

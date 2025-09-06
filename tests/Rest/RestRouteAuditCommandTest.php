@@ -62,7 +62,7 @@ class RestRouteAuditCommandTest extends \WP_UnitTestCase {
 
 		ob_start();
 		$cmd->__invoke( array(), array( 'json' => true ) );
-		$out  = ob_get_clean();
+		$out = ob_get_clean();
 
 		$data = json_decode( $out, true );
 		$this->assertIsArray( $data );

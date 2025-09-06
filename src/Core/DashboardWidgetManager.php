@@ -27,8 +27,8 @@ class DashboardWidgetManager {
 		add_filter( 'artpulse_dashboard_user_layout', array( self::class, 'getUserLayout' ), 10, 2 );
 		add_filter( 'artpulse_dashboard_role_layout', array( self::class, 'getRoleLayout' ), 10, 1 );
 
-                // Ensure newly created users receive a default dashboard layout.
-                add_action( 'user_register', array( self::class, 'assign_default_layout' ), 10, 2 );
+				// Ensure newly created users receive a default dashboard layout.
+				add_action( 'user_register', array( self::class, 'assign_default_layout' ), 10, 2 );
 	}
 
 	/**
@@ -173,45 +173,45 @@ class DashboardWidgetManager {
 	 * configuration. Falls back to a minimal layout containing the core
 	 * `my-events` widget when no role preset is available.
 	 */
-       public static function assign_default_layout( int $user_id, $user = null ): void {
-               if ( defined( 'AP_TEST_MODE' ) && AP_TEST_MODE ) {
-                       return;
-               }
+	public static function assign_default_layout( int $user_id, $user = null ): void {
+		if ( defined( 'AP_TEST_MODE' ) && AP_TEST_MODE ) {
+				return;
+		}
 
-               $current = get_user_meta( $user_id, UserLayoutManager::META_KEY, true );
-               if ( is_array( $current ) && ! empty( $current ) ) {
-                       return;
-               }
+			$current = get_user_meta( $user_id, UserLayoutManager::META_KEY, true );
+		if ( is_array( $current ) && ! empty( $current ) ) {
+					return;
+		}
 
-               // Determine the user's effective role.
-               $role = RoleResolver::resolve( $user_id );
+			// Determine the user's effective role.
+			$role = RoleResolver::resolve( $user_id );
 
-               // Compute the canonical default layout for the role.
-               $ids = DashboardPresets::forRole( $role );
-               $ids = array_values(
-                       array_unique(
-                               array_filter(
-                                       array_map( array( DashboardWidgetRegistry::class, 'canon_slug' ), $ids )
-                               )
-                       )
-               );
-               $layout = array_map(
-                       fn( $id ) => array(
-                               'id'      => $id,
-                               'visible' => true,
-                       ),
-                       $ids
-               );
+			// Compute the canonical default layout for the role.
+			$ids    = DashboardPresets::forRole( $role );
+			$ids    = array_values(
+				array_unique(
+					array_filter(
+						array_map( array( DashboardWidgetRegistry::class, 'canon_slug' ), $ids )
+					)
+				)
+			);
+			$layout = array_map(
+				fn( $id ) => array(
+					'id'      => $id,
+					'visible' => true,
+				),
+				$ids
+			);
 
-               if ( empty( $layout ) ) {
-                       $layout[] = array(
-                               'id'      => 'my-events',
-                               'visible' => true,
-                       );
-               }
+		if ( empty( $layout ) ) {
+				$layout[] = array(
+					'id'      => 'my-events',
+					'visible' => true,
+				);
+		}
 
-               update_user_meta( $user_id, UserLayoutManager::META_KEY, $layout );
-       }
+			update_user_meta( $user_id, UserLayoutManager::META_KEY, $layout );
+	}
 
 	public static function renderPreview( string $role ): void {
 		DashboardWidgetTools::render_role_dashboard_preview( $role );

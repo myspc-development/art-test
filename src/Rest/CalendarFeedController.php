@@ -29,13 +29,13 @@ class CalendarFeedController {
 		}
 	}
 
-        public static function get_feed( WP_REST_Request $req ): \WP_REST_Response|\WP_Error {
-                $responder = new self();
-		$lat    = $req->get_param( 'lat' );
-		$lng    = $req->get_param( 'lng' );
-		$radius = $req->get_param( 'radius_km' );
-		$start  = $req->get_param( 'start' );
-		$end    = $req->get_param( 'end' );
+	public static function get_feed( WP_REST_Request $req ): \WP_REST_Response|\WP_Error {
+			$responder = new self();
+		$lat           = $req->get_param( 'lat' );
+		$lng           = $req->get_param( 'lng' );
+		$radius        = $req->get_param( 'radius_km' );
+		$start         = $req->get_param( 'start' );
+		$end           = $req->get_param( 'end' );
 
 		$cache_key = 'ap_cal_' . md5(
 			json_encode(
@@ -49,13 +49,13 @@ class CalendarFeedController {
 			)
 		);
 
-                $cached = get_transient( $cache_key );
-                if ( $cached !== false ) {
-                        return $responder->ok( $cached );
-                }
+			$cached = get_transient( $cache_key );
+		if ( $cached !== false ) {
+				return $responder->ok( $cached );
+		}
 
-                $events = \ArtPulse\Util\ap_fetch_calendar_events( $lat, $lng, $radius, $start, $end );
-                set_transient( $cache_key, $events, MINUTE_IN_SECONDS * 10 );
-                return $responder->ok( $events );
-        }
+			$events = \ArtPulse\Util\ap_fetch_calendar_events( $lat, $lng, $radius, $start, $end );
+			set_transient( $cache_key, $events, MINUTE_IN_SECONDS * 10 );
+			return $responder->ok( $events );
+	}
 }

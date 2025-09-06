@@ -8,7 +8,6 @@ use ArtPulse\Integration\WebhookManager;
 /**
 
  * @group DB
-
  */
 
 class MigrationWebhookLogsTest extends WP_UnitTestCase {

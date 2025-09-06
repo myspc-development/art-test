@@ -34,7 +34,7 @@ class DashboardController {
 	 */
 	private static array $role_widgets = array(
 		// Default widgets for newly created members
-		'member'       => array(
+		'member'        => array(
 			'widget_news',
 			'widget_membership',
 			'widget_upgrade',
@@ -50,7 +50,7 @@ class DashboardController {
 			'widget_cat_fact',
 		),
 		// Artist dashboard starter widgets
-		'artist'       => array(
+		'artist'        => array(
 			'widget_artist_feed_publisher',
 			'widget_artist_audience_insights',
 			'widget_artist_spotlight',
@@ -63,7 +63,7 @@ class DashboardController {
 		),
 		// Organization admin widgets
 		// Synced with widget manifest. Guard below will warn on drift.
-		'organization' => array(
+		'organization'  => array(
 			'widget_org_event_overview',
 			'widget_artpulse_analytics_widget',
 			'widget_org_ticket_insights',
@@ -119,48 +119,48 @@ class DashboardController {
 		}
 
 		return array(
-				'member_default'   => array(
-					 'title'  => 'Member Default',
-					 'role'   => 'member',
-					 'layout' => array(
-						 array( 'id' => 'widget_news' ),
-						 array( 'id' => 'widget_favorites' ),
-						 array( 'id' => 'widget_events' ),
-						 array( 'id' => 'instagram_widget' ),
-					 ),
+			'member_default'       => array(
+				'title'  => 'Member Default',
+				'role'   => 'member',
+				'layout' => array(
+					array( 'id' => 'widget_news' ),
+					array( 'id' => 'widget_favorites' ),
+					array( 'id' => 'widget_events' ),
+					array( 'id' => 'instagram_widget' ),
 				),
-				'artist_default'   => array(
-					 'title'  => 'Artist Default',
-					 'role'   => 'artist',
-					 'layout' => array_values(
-						 array_filter(
-						         array(
-						                 defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ? array( 'id' => 'activity_feed' ) : null,
-						                 array( 'id' => 'artist_inbox_preview' ),
-						                 array( 'id' => 'artist_revenue_summary' ),
-						                 array( 'id' => 'artist_spotlight' ),
-						                 array( 'id' => 'widget_favorites' ),
-						                 defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ? array( 'id' => 'qa_checklist' ) : null,
-						         )
-						 )
-					 ),
+			),
+			'artist_default'       => array(
+				'title'  => 'Artist Default',
+				'role'   => 'artist',
+				'layout' => array_values(
+					array_filter(
+						array(
+							defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ? array( 'id' => 'activity_feed' ) : null,
+							array( 'id' => 'artist_inbox_preview' ),
+							array( 'id' => 'artist_revenue_summary' ),
+							array( 'id' => 'artist_spotlight' ),
+							array( 'id' => 'widget_favorites' ),
+							defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ? array( 'id' => 'qa_checklist' ) : null,
+						)
+					)
 				),
-				// New sample layouts that can be applied from the dashboard UI
+			),
+			// New sample layouts that can be applied from the dashboard UI
 				'new_member_intro' => array(
-					 'title'  => 'New Member Intro',
-					 'role'   => 'member',
-					 'layout' => self::load_preset_layout( 'member', 'discovery' ),
+					'title'  => 'New Member Intro',
+					'role'   => 'member',
+					'layout' => self::load_preset_layout( 'member', 'discovery' ),
 				),
-				'artist_tools'     => array(
-					 'title'  => 'Artist Tools',
-					 'role'   => 'artist',
-					 'layout' => self::load_preset_layout( 'artist', 'tools' ),
-				),
-				'org_admin_start'  => array(
-					 'title'  => 'Organization Admin Start',
-					 'role'   => 'organization',
-					 'layout' => self::load_preset_layout( 'organization', 'admin' ),
-				),
+			'artist_tools'         => array(
+				'title'  => 'Artist Tools',
+				'role'   => 'artist',
+				'layout' => self::load_preset_layout( 'artist', 'tools' ),
+			),
+			'org_admin_start'      => array(
+				'title'  => 'Organization Admin Start',
+				'role'   => 'organization',
+				'layout' => self::load_preset_layout( 'organization', 'admin' ),
+			),
 		);
 	}
 
@@ -241,7 +241,7 @@ class DashboardController {
 			foreach ( $ids as $id ) {
 				$id = WidgetIds::canonicalize( $id );
 				if ( ! DashboardWidgetRegistry::exists( $id ) ) {
-					 $missing[] = $id;
+					$missing[] = $id;
 				}
 			}
 		}
@@ -313,21 +313,21 @@ class DashboardController {
 				( \function_exists( __NAMESPACE__ . '\get_role' ) || \function_exists( '\\get_role' ) )
 			) {
 				$role_obj = \function_exists( __NAMESPACE__ . '\get_role' )
-					 ? \call_user_func( __NAMESPACE__ . '\get_role', $role )
-					 : \get_role( $role );
+					? \call_user_func( __NAMESPACE__ . '\get_role', $role )
+					: \get_role( $role );
 				if ( $role_obj && method_exists( $role_obj, 'has_cap' ) && ! $role_obj->has_cap( $cap ) ) {
-					 continue;
+					continue;
 				}
 			}
 
 			$class = $config['class'] ?? '';
 			if ( $class && method_exists( $class, 'can_view' ) ) {
 				try {
-					 if ( ! call_user_func( array( $class, 'can_view' ), 0 ) ) {
-						 continue;
-					 }
+					if ( ! call_user_func( array( $class, 'can_view' ), 0 ) ) {
+						continue;
+					}
 				} catch ( \Throwable $e ) {
-					 continue;
+					continue;
 				}
 			}
 
@@ -404,8 +404,8 @@ class DashboardController {
 			array_filter(
 				$layout,
 				static function ( $w ) use ( $user_id ) {
-					 $id = $w['id'] ?? null;
-					 return $id && DashboardWidgetRegistry::user_can_see( $id, $user_id );
+					$id = $w['id'] ?? null;
+					return $id && DashboardWidgetRegistry::user_can_see( $id, $user_id );
 				}
 			)
 		);
@@ -498,15 +498,15 @@ class DashboardController {
 				$id = WidgetRegistry::normalize_slug( sanitize_key( $entry['id'] ) );
 
 				if ( ! WidgetRegistry::exists( $id ) && ! DashboardWidgetRegistry::exists( $id ) ) {
-				if (
+					if (
 					defined( 'AP_VERBOSE_DEBUG' ) && AP_VERBOSE_DEBUG &&
 					function_exists( 'is_user_logged_in' ) && is_user_logged_in() &&
 					( ! defined( 'AP_TEST_MODE' ) || ! AP_TEST_MODE )
-				) {
-					error_log( "[Dashboard Preset] Widget {$id} not registered" );
+					) {
+						error_log( "[Dashboard Preset] Widget {$id} not registered" );
+					}
+					continue;
 				}
-				continue;
-			}
 
 				$entry['id'] = $id;
 				$clean[]     = $entry;
@@ -556,10 +556,10 @@ class DashboardController {
 		return self::get_role( $user_id );
 	}
 
-       public static function get_role( $user_id ): string {
+	public static function get_role( $user_id ): string {
 		if (
-			function_exists( '\ap_get_effective_role' )
-			&& ( $user_id === 0 || $user_id === get_current_user_id() )
+		function_exists( '\ap_get_effective_role' )
+		&& ( $user_id === 0 || $user_id === get_current_user_id() )
 		) {
 			$role = \ap_get_effective_role();
 		} else {
@@ -571,7 +571,7 @@ class DashboardController {
 		}
 
 		return sanitize_key( (string) $role );
-       }
+	}
 
 	/**
 	 * Retrieve custom dashboard widget posts visible to the user's role.

@@ -13,7 +13,6 @@ if ( ! function_exists( 'add_action' ) ) {
 /**
 
  * @group WIDGETS
-
  */
 
 class SponsorDisplayWidgetTest extends \WP_UnitTestCase {

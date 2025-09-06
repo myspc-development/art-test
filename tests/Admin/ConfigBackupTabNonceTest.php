@@ -6,7 +6,6 @@ use ArtPulse\Admin\ConfigBackupTab;
 /**
 
  * @group ADMIN
-
  */
 
 class ConfigBackupTabNonceTest extends \WP_UnitTestCase {

@@ -251,11 +251,11 @@ class DashboardWidgetRegistry {
 	 * @param array<string,array> $widgets Widget definitions.
 	 */
 	public static function set( array $widgets ): void {
-		self::$widgets        = $widgets;
+		self::$widgets         = $widgets;
 		self::$builder_widgets = array();
-		self::$id_map         = null;
-		self::$issues         = array();
-		self::$aliases        = array();
+		self::$id_map          = null;
+		self::$issues          = array();
+		self::$aliases         = array();
 	}
 
 	/**
@@ -291,7 +291,7 @@ class DashboardWidgetRegistry {
 		if ( is_array( $label ) ) {
 			$id = sanitize_key( $id );
 			if ( ! $id ) {
-			        return array();
+					return array();
 			}
 			$base = strpos( $id, 'widget_' ) === 0 ? substr( $id, 7 ) : $id;
 			$args = array_merge(
@@ -315,12 +315,12 @@ class DashboardWidgetRegistry {
 			$args['roles'] = self::normalizeRoleList( $args['roles'] ?? array() );
 
 			self::$builder_widgets[ $base ] = array(
-			        'id'              => $base,
-			        'title'           => (string) $args['title'],
-			        'render_callback' => $args['render_callback'],
-			        'roles'           => $args['roles'],
-			        'file'            => (string) $args['file'],
-			        'visibility'      => $visibility,
+				'id'              => $base,
+				'title'           => (string) $args['title'],
+				'render_callback' => $args['render_callback'],
+				'roles'           => $args['roles'],
+				'file'            => (string) $args['file'],
+				'visibility'      => $visibility,
 			);
 
 			return self::$builder_widgets[ $base ];
@@ -334,10 +334,10 @@ class DashboardWidgetRegistry {
 		$options['roles'] = self::normalizeRoleList( $options['roles'] ?? array() );
 
 		if ( isset( self::$widgets[ $id ] ) ) {
-                        if ( empty( self::$logged_duplicates[ $id ] ) && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                                ap_debug_log( "widget id already registered: $id" );
-                                self::$logged_duplicates[ $id ] = true;
-                        }
+			if ( empty( self::$logged_duplicates[ $id ] ) && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					ap_debug_log( "widget id already registered: $id" );
+					self::$logged_duplicates[ $id ] = true;
+			}
 			return self::$widgets[ $id ];
 		}
 
@@ -716,48 +716,48 @@ class DashboardWidgetRegistry {
 	 *
 	 * @return array<string,array>
 	 */
-       public static function get_all( ?string $visibility = null, bool $builder = false, bool $canonical = false ): array {
-               if ( $builder ) {
-                       $widgets = self::$builder_widgets;
-                       if ( $visibility !== null ) {
-                               $widgets = array_filter(
-                                       $widgets,
-                                       static fn( $w ) => ( $w['visibility'] ?? WidgetVisibility::PUBLIC ) === $visibility
-                               );
-                       }
+	public static function get_all( ?string $visibility = null, bool $builder = false, bool $canonical = false ): array {
+		if ( $builder ) {
+				$widgets = self::$builder_widgets;
+			if ( $visibility !== null ) {
+					$widgets = array_filter(
+						$widgets,
+						static fn( $w ) => ( $w['visibility'] ?? WidgetVisibility::PUBLIC ) === $visibility
+					);
+			}
 
-                       return $widgets;
-               }
+				return $widgets;
+		}
 
-               // Start with in-memory registry.
-               $widgets = self::$widgets;
+			// Start with in-memory registry.
+			$widgets = self::$widgets;
 
-               // Merge DB-driven overrides (test writes via update_option()).
-               $widgets = self::apply_roles_overrides( $widgets );
+			// Merge DB-driven overrides (test writes via update_option()).
+			$widgets = self::apply_roles_overrides( $widgets );
 
-               // Filter out widgets disabled by group visibility.
-               $group_vis = get_option( 'ap_widget_group_visibility', array() );
-               foreach ( $widgets as $id => $cfg ) {
-                       $grp = $cfg['group'] ?? '';
-                       if ( $grp && isset( $group_vis[ $grp ] ) && ! $group_vis[ $grp ] ) {
-                               unset( $widgets[ $id ] );
-                       }
-               }
+			// Filter out widgets disabled by group visibility.
+			$group_vis = get_option( 'ap_widget_group_visibility', array() );
+		foreach ( $widgets as $id => $cfg ) {
+					$grp = $cfg['group'] ?? '';
+			if ( $grp && isset( $group_vis[ $grp ] ) && ! $group_vis[ $grp ] ) {
+				unset( $widgets[ $id ] );
+			}
+		}
 
-               if ( ! $canonical ) {
-                       // Expose both canonical and unprefixed IDs (helps tests access 'test_widget').
-                       $widgets = self::expand_legacy_keys( $widgets );
-               }
+		if ( ! $canonical ) {
+					// Expose both canonical and unprefixed IDs (helps tests access 'test_widget').
+					$widgets = self::expand_legacy_keys( $widgets );
+		}
 
-               if ( $visibility !== null ) {
-                       $widgets = array_filter(
-                               $widgets,
-                               static fn( $w ) => ( $w['visibility'] ?? WidgetVisibility::PUBLIC ) === $visibility
-                       );
-               }
+		if ( $visibility !== null ) {
+				$widgets = array_filter(
+					$widgets,
+					static fn( $w ) => ( $w['visibility'] ?? WidgetVisibility::PUBLIC ) === $visibility
+				);
+		}
 
-               return $widgets;
-       }
+				return $widgets;
+	}
 
 	/**
 	 * Backwards compatibility alias for legacy code.
@@ -811,7 +811,7 @@ class DashboardWidgetRegistry {
 		} catch ( \Throwable $e ) {
 			$file = $cfg['file'] ?? 'unknown';
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			        error_log( '[DashboardBuilder] Failed rendering widget ' . $id . ' (' . $file . '): ' . $e->getMessage() );
+					error_log( '[DashboardBuilder] Failed rendering widget ' . $id . ' (' . $file . '): ' . $e->getMessage() );
 			}
 		}
 		$html = ob_get_clean();
@@ -827,7 +827,7 @@ class DashboardWidgetRegistry {
 	 * @return string
 	 */
 	public static function render_role_layout( string $role ): string {
-	       $slugs = RolePresets::get_preset_slugs( $role );
+			$slugs = RolePresets::get_preset_slugs( $role );
 		if ( ! $slugs ) {
 			return '';
 		}
@@ -838,7 +838,7 @@ class DashboardWidgetRegistry {
 		foreach ( $slugs as $slug ) {
 			$out = self::render( $slug, array( 'preview_role' => $role ) );
 			if ( $out === '' ) {
-			        continue;
+					continue;
 			}
 			$html .= $out;
 			++$rendered;
@@ -865,25 +865,25 @@ class DashboardWidgetRegistry {
 			return false;
 		}
 
-                $preview       = $preview_role ? sanitize_key( $preview_role ) : ( \function_exists( '\\get_query_var' ) ? \get_query_var( 'ap_role' ) : null );
-                $admin_preview = false;
-                if ( \function_exists( '\\current_user_can' ) && \current_user_can( 'manage_options' ) ) {
-                        if ( is_string( $preview ) && $preview !== '' ) {
-                                $role          = $preview;
-                                $admin_preview = true;
-                        } else {
-                                $role = DashboardController::get_role( $user_id );
-                        }
-                } else {
-                        $role = DashboardController::get_role( $user_id );
-                }
+				$preview       = $preview_role ? sanitize_key( $preview_role ) : ( \function_exists( '\\get_query_var' ) ? \get_query_var( 'ap_role' ) : null );
+				$admin_preview = false;
+		if ( \function_exists( '\\current_user_can' ) && \current_user_can( 'manage_options' ) ) {
+			if ( is_string( $preview ) && $preview !== '' ) {
+						$role          = $preview;
+						$admin_preview = true;
+			} else {
+							$role = DashboardController::get_role( $user_id );
+			}
+		} else {
+				$role = DashboardController::get_role( $user_id );
+		}
 		$widget_roles = self::normalizeRoleList( $widget['roles'] ?? array() );
 		if ( $widget_roles && ! in_array( $role, $widget_roles, true ) ) {
 			return false;
 		}
 
-                $cap = $widget['capability'] ?? '';
-                if ( ! $admin_preview && $cap && ! \user_can( $user_id, $cap ) ) {
+				$cap = $widget['capability'] ?? '';
+		if ( ! $admin_preview && $cap && ! \user_can( $user_id, $cap ) ) {
 			return false;
 		}
 
@@ -933,26 +933,26 @@ class DashboardWidgetRegistry {
 		$allowed = array();
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                        error_log( sprintf( 'ap widget get_widgets roles=%1$s user=%2$d', implode( ',', $roles ), $user_id ) );
+						error_log( sprintf( 'ap widget get_widgets roles=%1$s user=%2$d', implode( ',', $roles ), $user_id ) );
 		}
 
 		foreach ( self::get_all() as $id => $config ) {
 			$widget_roles = self::normalizeRoleList( $config['roles'] ?? array() );
 			if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
 				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                                        error_log( sprintf( 'ap widget %1$s excluded: role mismatch', $id ) );
+										error_log( sprintf( 'ap widget %1$s excluded: role mismatch', $id ) );
 				}
 				continue;
 			}
 			if ( ! self::user_can_see( $id, $user_id ) ) {
 				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                                        error_log( sprintf( 'ap widget %1$s excluded: capability', $id ) );
+										error_log( sprintf( 'ap widget %1$s excluded: capability', $id ) );
 				}
 				continue;
 			}
 			$allowed[ $id ] = $config['callback'];
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                                error_log( sprintf( 'ap widget %1$s included', $id ) );
+								error_log( sprintf( 'ap widget %1$s included', $id ) );
 			}
 		}
 
@@ -1031,19 +1031,19 @@ class DashboardWidgetRegistry {
 	 * @param string|array $role Single role or array of roles.
 	 */
 	public static function get_widgets_by_role( $role, int $user_id = 0 ): array {
-               $roles   = self::normalizeRoleList( $role );
-               $defs    = array();
-               $preview = count( $roles ) === 1 ? $roles[0] : null;
-               foreach ( self::get_all() as $id => $cfg ) {
-                       $widget_roles = self::normalizeRoleList( $cfg['roles'] ?? array() );
-                       if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
-                               continue;
-                       }
-                       if ( ! self::user_can_see( $id, $user_id, $preview ) ) {
-                               continue;
-                       }
-                       $defs[ $id ] = $cfg;
-               }
+				$roles   = self::normalizeRoleList( $role );
+				$defs    = array();
+				$preview = count( $roles ) === 1 ? $roles[0] : null;
+		foreach ( self::get_all() as $id => $cfg ) {
+				$widget_roles = self::normalizeRoleList( $cfg['roles'] ?? array() );
+			if ( $widget_roles && empty( array_intersect( $roles, $widget_roles ) ) ) {
+						continue;
+			}
+			if ( ! self::user_can_see( $id, $user_id, $preview ) ) {
+							continue;
+			}
+							$defs[ $id ] = $cfg;
+		}
 
 		return $defs;
 	}
@@ -1231,95 +1231,95 @@ class DashboardWidgetRegistry {
 	/**
 	 * Render all widgets visible to the specified user in a basic grid layout.
 	 */
-       public static function render_for_role( int $user_id ): void {
-               self::init();
-               WidgetRegistryLoader::register_widgets();
-               $role = DashboardController::get_role( $user_id );
+	public static function render_for_role( int $user_id ): void {
+			self::init();
+			WidgetRegistryLoader::register_widgets();
+			$role = DashboardController::get_role( $user_id );
 
-	       do_action( 'ap_before_widgets', $role );
+		do_action( 'ap_before_widgets', $role );
 
-	       $layout  = UserLayoutManager::get_layout_for_user( $user_id );
-	       $widgets = apply_filters( 'ap_dashboard_widgets', self::get_widgets_by_role( $role, $user_id ), $role );
+		$layout  = UserLayoutManager::get_layout_for_user( $user_id );
+		$widgets = apply_filters( 'ap_dashboard_widgets', self::get_widgets_by_role( $role, $user_id ), $role );
 
-	       $debug = defined( 'WP_DEBUG' ) && WP_DEBUG;
+		$debug = defined( 'WP_DEBUG' ) && WP_DEBUG;
 
-	       $sections = array();
-	       $order    = array();
-	       $rendered = 0;
+		$sections = array();
+		$order    = array();
+		$rendered = 0;
 
-	       foreach ( $layout as $row ) {
-		       $id      = self::canon_slug( $row['id'] ?? '' );
-		       if ( ! $id ) {
-			       continue;
-		       }
-		       $cfg        = $widgets[ $id ] ?? null;
-		       $can_render = $cfg && self::user_can_see( $id, $user_id ) && is_callable( $cfg['callback'] ?? null );
-		       $section    = '';
-		       if ( $cfg ) {
-			       $class   = $cfg['class'] ?? '';
-			       $section = $cfg['section'] ?? '';
-			       if ( $class && method_exists( $class, 'get_section' ) ) {
-			               try {
-			                       $section = call_user_func( array( $class, 'get_section' ) );
-			               } catch ( \Throwable $e ) {
-			                       $section = '';
-			               }
-			       }
-			       $section = sanitize_key( $section );
-		       }
-		       if ( ! isset( $sections[ $section ] ) ) {
-			       $sections[ $section ] = array();
-			       $order[]              = $section;
-		       }
+		foreach ( $layout as $row ) {
+			$id = self::canon_slug( $row['id'] ?? '' );
+			if ( ! $id ) {
+				continue;
+			}
+			$cfg        = $widgets[ $id ] ?? null;
+			$can_render = $cfg && self::user_can_see( $id, $user_id ) && is_callable( $cfg['callback'] ?? null );
+			$section    = '';
+			if ( $cfg ) {
+				$class   = $cfg['class'] ?? '';
+				$section = $cfg['section'] ?? '';
+				if ( $class && method_exists( $class, 'get_section' ) ) {
+					try {
+							$section = call_user_func( array( $class, 'get_section' ) );
+					} catch ( \Throwable $e ) {
+								$section = '';
+					}
+				}
+				$section = sanitize_key( $section );
+			}
+			if ( ! isset( $sections[ $section ] ) ) {
+				$sections[ $section ] = array();
+				$order[]              = $section;
+			}
 
-		       $html = '';
-		       if ( $can_render ) {
-			       try {
-			               ob_start();
-			               $result = call_user_func( $cfg['callback'], $user_id );
-			               $echoed = ob_get_clean();
-			               $html   = is_string( $result ) && '' !== $result ? $result : $echoed;
-			       } catch ( \Throwable $e ) {
-			               ob_end_clean();
-			               if ( $debug ) {
-			                       error_log( 'Widget ' . $id . ' failed: ' . $e->getMessage() );
-			               }
-			       }
-		       }
-		       if ( $html === '' ) {
-			       ob_start();
-			       ApPlaceholderWidget::render( $user_id );
-			       $html = ob_get_clean();
-		       }
+			$html = '';
+			if ( $can_render ) {
+				try {
+						ob_start();
+						$result = call_user_func( $cfg['callback'], $user_id );
+						$echoed = ob_get_clean();
+						$html   = is_string( $result ) && '' !== $result ? $result : $echoed;
+				} catch ( \Throwable $e ) {
+						ob_end_clean();
+					if ( $debug ) {
+							error_log( 'Widget ' . $id . ' failed: ' . $e->getMessage() );
+					}
+				}
+			}
+			if ( $html === '' ) {
+				ob_start();
+				ApPlaceholderWidget::render( $user_id );
+				$html = ob_get_clean();
+			}
 
-                       $sections[ $section ][] =
-                               '<div class="postbox" id="' . esc_attr( $id ) . '" data-widget-id="' . esc_attr( $id ) . '"><div class="inside">' . $html . '</div></div>';
-		       ++$rendered;
-	       }
+					$sections[ $section ][] =
+							'<div class="postbox" id="' . esc_attr( $id ) . '" data-widget-id="' . esc_attr( $id ) . '"><div class="inside">' . $html . '</div></div>';
+			++$rendered;
+		}
 
-	       foreach ( $order as $sec ) {
-		       echo '<section class="ap-widget-section">';
-		       if ( $sec ) {
-			       echo '<h2>' . self::late_i18n( ucfirst( $sec ) ) . '</h2>';
-		       }
-		       echo '<div class="meta-box-sortables">';
-		       foreach ( $sections[ $sec ] as $html ) {
-			       echo $html;
-		       }
-		       echo '</div></section>';
-	       }
+		foreach ( $order as $sec ) {
+			echo '<section class="ap-widget-section">';
+			if ( $sec ) {
+				echo '<h2>' . self::late_i18n( ucfirst( $sec ) ) . '</h2>';
+			}
+			echo '<div class="meta-box-sortables">';
+			foreach ( $sections[ $sec ] as $html ) {
+				echo $html;
+			}
+			echo '</div></section>';
+		}
 
-	       if ( 0 === $rendered ) {
-		       echo '<div class="ap-dashboard-error">' . self::late_i18n( 'No dashboard widgets could be rendered.' ) . '</div>';
-		       if ( $debug ) {
-			       error_log( "[AP Dashboard] No widgets rendered for role {$role}" );
-		       }
-	       } elseif ( $debug ) {
-		       error_log( "[AP Dashboard] Rendered {$rendered} widgets for role {$role}" );
-	       }
+		if ( 0 === $rendered ) {
+			echo '<div class="ap-dashboard-error">' . self::late_i18n( 'No dashboard widgets could be rendered.' ) . '</div>';
+			if ( $debug ) {
+				error_log( "[AP Dashboard] No widgets rendered for role {$role}" );
+			}
+		} elseif ( $debug ) {
+			error_log( "[AP Dashboard] Rendered {$rendered} widgets for role {$role}" );
+		}
 
-	       do_action( 'ap_after_widgets', $role );
-       }
+		do_action( 'ap_after_widgets', $role );
+	}
 
 	/**
 	 * Merge roles/capability overrides from the `artpulse_widget_roles` option.
@@ -1351,10 +1351,10 @@ class DashboardWidgetRegistry {
 			}
 
 			if ( isset( $cfg['roles'] ) ) {
-			        $normalized = self::normalizeRoleList( $cfg['roles'] );
-			        if ( $normalized !== array() ) {
-			                $widgets[ $id ]['roles'] = $normalized;
-			        }
+					$normalized = self::normalizeRoleList( $cfg['roles'] );
+				if ( $normalized !== array() ) {
+						$widgets[ $id ]['roles'] = $normalized;
+				}
 			}
 			if ( array_key_exists( 'capability', $cfg ) ) {
 				$widgets[ $id ]['capability'] = sanitize_key( (string) $cfg['capability'] );
