@@ -1,10 +1,9 @@
+# Validate dashboard REST contract
 name: rest-contract-check
 
 on:
+  push:
   pull_request:
-    paths:
-      - 'src/Rest/**'
-      - 'schema/dashboard-config.schema.json'
   workflow_dispatch:
 
 permissions:
@@ -13,50 +12,53 @@ permissions:
 jobs:
   contract:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20.x] # Latest LTS for CLI tooling
+        env:
+          - name: staging
+            base: https://staging.example.com
+          - name: production
+            base: https://example.com
     steps:
       - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          extensions: mysqli
-          coverage: none
+
       - uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: ${{ matrix.node }}
           cache: npm
-      - run: npm install -g @wordpress/env
-      - name: Start WP
-        run: wp-env start
-      - name: Fetch endpoint
+
+      - name: Fetch and validate
+        id: validate
         run: |
           mkdir -p artifacts/contract
-          curl -s http://localhost:8889/wp-json/artpulse/v1/dashboard-config > artifacts/contract/response.json
-      - name: Validate schema
-        run: node -e "const Ajv=require('ajv');const fs=require('fs');const schema=JSON.parse(fs.readFileSync('schema/dashboard-config.schema.json'));const data=JSON.parse(fs.readFileSync('artifacts/contract/response.json'));const ajv=new Ajv({allErrors:true});const valid=ajv.validate(schema,data);if(!valid){console.log(JSON.stringify(ajv.errors,null,2));process.exit(1);}"
+          SECONDS=0
+          url="${{ matrix.env.base }}/wp-json/artpulse/v1/dashboard-config"
+          curl -fsSL "$url" -o artifacts/contract/dashboard-config.json
+          npx ajv validate -s schema/dashboard-config.schema.json -d artifacts/contract/dashboard-config.json -c ajv-formats --strict=false --all-errors > artifacts/contract/ajv.json && ok=1 || ok=0
+          echo "ok=$ok" >> $GITHUB_OUTPUT
+          echo "duration=$SECONDS" >> $GITHUB_OUTPUT
+          if [ "$ok" -ne 1 ]; then exit 1; fi
+
       - name: Upload artifacts
         if: always()
+        id: upload
         uses: actions/upload-artifact@v4
         with:
-          name: rest-response
+          name: rest-contract-${{ matrix.env.name }}
           path: artifacts/contract/
-          if-no-files-found: ignore
-      - name: Summary
-        run: echo "### REST contract validated" >> $GITHUB_STEP_SUMMARY
-      - name: Upload logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ github.workflow }}-${{ github.job }}-logs
-          path: |
-            **/test-results/**/*.xml
-            **/logs/**
-          if-no-files-found: ignore
-      - name: Status table
+
+      - name: Job summary
         if: always()
         run: |
-          ICON="❌"
-          if [ "${{ job.status }}" = "success" ]; then ICON="✅"; fi
-          echo '| Job | Status | Artifacts |' >> $GITHUB_STEP_SUMMARY
-          echo '| --- | ------ | --------- |' >> $GITHUB_STEP_SUMMARY
-          echo "| ${{ github.job }} | $ICON | [link](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY
+          icon="❌"; [ "${{ steps.validate.outputs.ok }}" = "1" ] && icon="✅"
+          echo '| Env | Result | Duration (s) | Artifact |' >> $GITHUB_STEP_SUMMARY
+          echo '| --- | --- | --- | --- |' >> $GITHUB_STEP_SUMMARY
+          echo "| ${{ matrix.env.name }} | $icon | ${{ steps.validate.outputs.duration }} | [payload](${{ steps.upload.outputs.artifact-url }}) |" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.validate.outputs.ok }}" != "1" ]; then
+            echo '' >> $GITHUB_STEP_SUMMARY
+            echo '### Validation errors' >> $GITHUB_STEP_SUMMARY
+            cat artifacts/contract/ajv.json >> $GITHUB_STEP_SUMMARY
+          fi

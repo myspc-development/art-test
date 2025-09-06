@@ -1,3 +1,4 @@
+# Unit tests across Node LTS versions with coverage summary
 name: jest-unit
 
 on:
@@ -10,60 +11,85 @@ permissions:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+    name: node-${{ matrix.node }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
     strategy:
+      fail-fast: false
       matrix:
-        node-version: [lts/*, node]
+        node: [18.x, 20.x] # Run against active LTS lines
+        os: [ubuntu-latest] # Ubuntu provides consistent environment
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.node }}
           cache: npm
-      - run: npm ci
+
+      - name: Cache Jest
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/jest
+          key: ${{ runner.os }}-jest-${{ matrix.node }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Run Jest
-        run: npx jest --ci --runInBand --reporters=default --reporters=jest-junit --coverage
-      - name: Upload coverage
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-${{ matrix.node-version }}
-          path: coverage/
-          if-no-files-found: ignore
-      - name: Upload junit
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: junit-${{ matrix.node-version }}
-          path: junit.xml
-          if-no-files-found: ignore
-      - name: Jest summary
+        id: test
+        env:
+          JEST_JUNIT_OUTPUT: artifacts/junit/junit.xml
         run: |
-          PASSED=$(jq '.testResults | map(select(.status=="passed")) | length' junit.xml 2>/dev/null || echo 0)
-          FAILED=$(jq '.testResults | map(select(.status=="failed")) | length' junit.xml 2>/dev/null || echo 0)
-          echo "### Jest" >> $GITHUB_STEP_SUMMARY
-          echo "- passed: $PASSED" >> $GITHUB_STEP_SUMMARY
-          echo "- failed: $FAILED" >> $GITHUB_STEP_SUMMARY
-          if [ -f coverage/coverage-summary.json ]; then
-            echo '
-#### Top uncovered files' >> $GITHUB_STEP_SUMMARY
-            jq -r '.total // {} | to_entries[] | select(.value.lines.pct < 100) | "- \(.key): \(.value.lines.pct)%"' coverage/coverage-summary.json | head -n 10 >> $GITHUB_STEP_SUMMARY
-          fi
-      - name: Upload logs
+          mkdir -p artifacts/junit
+          SECONDS=0
+          npm run test:js
+          echo "duration=$SECONDS" >> $GITHUB_OUTPUT
+
+      - name: Process coverage
+        id: coverage
         if: always()
+        run: |
+          node <<'NODE' > cov.txt || true
+          const fs=require('fs');
+          const summary=JSON.parse(fs.readFileSync('coverage/coverage-summary.json','utf8'));
+          const metrics={lines:summary.total.lines.pct,branches:summary.total.branches.pct,functions:summary.total.functions.pct,statements:summary.total.statements.pct};
+          const entries=Object.entries(summary).filter(([k])=>k!=='total').map(([file,data])=>({file,pct:data.lines.pct})).sort((a,b)=>a.pct-b.pct).slice(0,10);
+          fs.mkdirSync('artifacts',{recursive:true});
+          fs.writeFileSync('artifacts/lowest.md','| File | Line % |\n| --- | --- |\n'+entries.map(e=>`| ${e.file} | ${e.pct} |`).join('\n'));
+          for (const [k,v] of Object.entries(metrics)) console.log(`${k}=${v}`);
+NODE
+          cat cov.txt >> $GITHUB_OUTPUT || true
+
+      - name: Upload artifacts
+        if: always()
+        id: upload
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.workflow }}-${{ github.job }}-logs
+          name: jest-unit-${{ matrix.node }}-${{ matrix.os }}
           path: |
-            **/test-results/**/*.xml
-            **/logs/**
-          if-no-files-found: ignore
-      - name: Status table
+            coverage/lcov.info
+            coverage/
+            artifacts/junit/
+            artifacts/lowest.md
+
+      - name: Job summary
         if: always()
         run: |
-          ICON="❌"
-          if [ "${{ job.status }}" = "success" ]; then ICON="✅"; fi
-          echo '| Job | Status | Artifacts |' >> $GITHUB_STEP_SUMMARY
-          echo '| --- | ------ | --------- |' >> $GITHUB_STEP_SUMMARY
-          echo "| ${{ github.job }} | $ICON | [link](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY
+          icon="❌"
+          if [ "${{ job.status }}" = "success" ]; then icon="✅"; fi
+          echo '| Result | Duration (s) | Artifacts |' >> $GITHUB_STEP_SUMMARY
+          echo '| --- | --- | --- |' >> $GITHUB_STEP_SUMMARY
+          echo "| $icon | ${{ steps.test.outputs.duration }} | [downloads](${{ steps.upload.outputs.artifact-url }}) |" >> $GITHUB_STEP_SUMMARY
+          echo '' >> $GITHUB_STEP_SUMMARY
+          echo '### Coverage' >> $GITHUB_STEP_SUMMARY
+          echo '| Metric | % |' >> $GITHUB_STEP_SUMMARY
+          echo '| --- | --- |' >> $GITHUB_STEP_SUMMARY
+          echo "| Lines | ${{ steps.coverage.outputs.lines }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Branches | ${{ steps.coverage.outputs.branches }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Functions | ${{ steps.coverage.outputs.functions }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Statements | ${{ steps.coverage.outputs.statements }} |" >> $GITHUB_STEP_SUMMARY
+          echo '' >> $GITHUB_STEP_SUMMARY
+          echo '#### Lowest Covered Files' >> $GITHUB_STEP_SUMMARY
+          cat artifacts/lowest.md >> $GITHUB_STEP_SUMMARY

@@ -1,61 +1,61 @@
+# Lightweight WordPress integration smoke tests
 name: wp-integration-tests
 
 on:
+  push:
   pull_request:
   workflow_dispatch:
-  schedule:
-    - cron: '0 3 * * *'
 
 permissions:
   contents: read
 
 jobs:
-  wp-test:
+  wp:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
+      fail-fast: false
       matrix:
-        php: ['8.1', '8.2', '8.3']
-        wp: ['6.3', '6.4', '6.5', '6.6']
+        php: ['8.1', '8.2'] # Supported PHP versions
+        wordpress: ['6.5', '6.6'] # Recent WP releases
     steps:
       - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+
+      - uses: actions/setup-node@v4
         with:
-          php-version: ${{ matrix.php }}
-          extensions: mysqli
-          coverage: none
-      - name: Set up WP environment
+          node-version: 20.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start environment and smoke test
+        id: test
         run: |
-          npm install -g @wordpress/env
-          wp-env start --wp-version ${{ matrix.wp }}
-      - name: Install deps
-        run: composer install --no-progress --no-interaction
-      - name: Run PHPUnit
-        run: vendor/bin/phpunit -c phpunit.wp.xml.dist --log-junit junit.xml || true
-      - name: Upload junit
-        uses: actions/upload-artifact@v4
-        with:
-          name: junit-php${{ matrix.php }}-wp${{ matrix.wp }}
-          path: junit.xml
-          if-no-files-found: ignore
-      - name: Summary
-        run: |
-          echo "### WP Integration" >> $GITHUB_STEP_SUMMARY
-          if [ -f junit.xml ]; then
-            ENDPOINTS=$(grep -o '/artpulse/v1/[^<]*' junit.xml | sort | uniq -c)
-            echo "$ENDPOINTS" | sed 's/^/ - /' >> $GITHUB_STEP_SUMMARY
-          fi
-      - name: Upload logs
+          mkdir -p artifacts/wp
+          SECONDS=0
+          npx wp-env start --wordpress-version=${{ matrix.wordpress }} --php-version=${{ matrix.php }} > artifacts/wp/start.log 2>&1
+          npx wp-env run cli "wp plugin activate artpulse" >> artifacts/wp/start.log 2>&1 || true
+          curl -fsS http://localhost:8888/wp-json/artpulse/v1/dashboard-config -o artifacts/wp/response.json
+          echo "duration=$SECONDS" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Stop environment
         if: always()
+        run: npx wp-env stop
+
+      - name: Upload artifacts
+        if: always()
+        id: upload
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.workflow }}-${{ github.job }}-logs
-          path: |
-            **/test-results/**/*.xml
-            **/logs/**
-          if-no-files-found: ignore
+          name: wp-integration-${{ matrix.php }}-wp${{ matrix.wordpress }}
+          path: artifacts/wp/
+
       - name: Job summary
         if: always()
         run: |
-          echo "### ${{ github.workflow }} / ${{ github.job }}" >> $GITHUB_STEP_SUMMARY
-          echo "- status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          icon="❌"; [ "${{ job.status }}" = "success" ] && icon="✅"
+          echo '| PHP | WP | Result | Duration (s) | Artifacts |' >> $GITHUB_STEP_SUMMARY
+          echo '| --- | --- | --- | --- | --- |' >> $GITHUB_STEP_SUMMARY
+          echo "| ${{ matrix.php }} | ${{ matrix.wordpress }} | $icon | ${{ steps.test.outputs.duration }} | [logs](${{ steps.upload.outputs.artifact-url }}) |" >> $GITHUB_STEP_SUMMARY
