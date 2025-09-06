@@ -7,6 +7,7 @@ function studly(string $str): string {
     return str_replace(' ', '', $str);
 }
 // Check includes/rest-*.php files
+$map = [ 'auth-code' => 'AuthCodeRouteTest.php' ];
 foreach (glob($root . '/includes/rest-*.php') as $file) {
     $slug = basename($file, '.php');
     $slug = preg_replace('/^rest-/', '', $slug);
@@ -15,6 +16,9 @@ foreach (glob($root . '/includes/rest-*.php') as $file) {
         $root . '/tests/Rest/' . $name . 'Test.php',
         $root . '/tests/Rest/Rest' . $name . 'Test.php',
     ];
+    if (isset($map[$slug])) {
+        $candidates[] = $root . '/tests/Rest/' . $map[$slug];
+    }
     $found = false;
     foreach ($candidates as $candidate) {
         if (file_exists($candidate)) {
