@@ -6,7 +6,11 @@ export interface EventItem {
   startsAt: string;
 }
 
-export default function UpcomingEvents({ events = [] }: { events: EventItem[] }) {
+export interface UpcomingEventsProps {
+  events?: EventItem[];
+}
+
+export default function UpcomingEvents({ events = [] }: UpcomingEventsProps) {
   const items = events.map(evt => <li key={evt.id}>{evt.title}</li>);
   // istanbul ignore next
   return events.length === 0 ? (
