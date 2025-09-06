@@ -1,26 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import useFilteredWidgets from '../../../dashboard/useFilteredWidgets';
 
-const mockFetch = jest.fn(() =>
-  Promise.resolve({
-    ok: true,
-    status: 200,
-    json: () => Promise.resolve({ widget_roles: {} }),
-  })
-) as any;
-(globalThis as any).fetch = mockFetch;
-
-beforeEach(() => {
-  mockFetch.mockReset();
-  mockFetch.mockImplementation(() =>
-    Promise.resolve({
-      ok: true,
-      status: 200,
-      json: () => Promise.resolve({ widget_roles: {} }),
-    })
-  );
-});
-
 test('returns widgets matching any user role', async () => {
   const widgets = [
     { id: 'alpha', roles: ['member'] },
@@ -44,7 +24,7 @@ test('includes widgets with no allowed roles for any user', async () => {
 });
 
 test('includes REST-only widgets as stubs', async () => {
-  mockFetch.mockResolvedValueOnce({
+  (global.fetch as jest.Mock).mockResolvedValueOnce({
     ok: true,
     status: 200,
     json: () => Promise.resolve({ widget_roles: { gamma: ['member'] } }),
@@ -57,7 +37,7 @@ test('includes REST-only widgets as stubs', async () => {
 });
 
 test('includes REST-only widgets with no allowed roles for any user', async () => {
-  mockFetch.mockResolvedValueOnce({
+  (global.fetch as jest.Mock).mockResolvedValueOnce({
     ok: true,
     status: 200,
     json: () => Promise.resolve({ widget_roles: { gamma: [] } }),
@@ -66,8 +46,27 @@ test('includes REST-only widgets with no allowed roles for any user', async () =
   await waitFor(() => expect(result.current.widgets.some(w => w.id === 'gamma')).toBe(true));
 });
 
+test('allows all widgets when user has no roles', async () => {
+  const widgets = [{ id: 'alpha', roles: ['member'] }];
+  const { result } = renderHook(() => useFilteredWidgets(widgets, { roles: [] }));
+  await waitFor(() => expect(result.current.loading).toBe(false));
+  await waitFor(() =>
+    expect(result.current.widgets.map(w => w.id)).toEqual(['alpha'])
+  );
+});
+
+test('fetches dashboard config from REST endpoint', async () => {
+  renderHook(() => useFilteredWidgets([], { roles: [] }));
+  await waitFor(() =>
+    expect((global.fetch as jest.Mock)).toHaveBeenCalledWith(
+      '/wp-json/artpulse/v1/dashboard-config',
+      expect.anything()
+    )
+  );
+});
+
 test('omits widgets when preview role lacks capability', async () => {
-  mockFetch.mockResolvedValueOnce({
+  (global.fetch as jest.Mock).mockResolvedValueOnce({
     ok: true,
     status: 200,
     json: () =>
@@ -84,7 +83,7 @@ test('omits widgets when preview role lacks capability', async () => {
 });
 
 test('omits widgets when preview role is excluded', async () => {
-  mockFetch.mockResolvedValueOnce({
+  (global.fetch as jest.Mock).mockResolvedValueOnce({
     ok: true,
     status: 200,
     json: () =>
@@ -107,7 +106,7 @@ test('reports loading state', async () => {
 });
 
 test('sets error when fetch rejects and keeps widgets unchanged', async () => {
-  mockFetch.mockRejectedValueOnce(new Error('Network error'));
+  (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
   const widgets = [{ id: 'alpha', roles: ['member'] }];
   const { result } = renderHook(() =>
     useFilteredWidgets(widgets, { roles: ['member'] })
@@ -118,7 +117,7 @@ test('sets error when fetch rejects and keeps widgets unchanged', async () => {
 });
 
 test('sets error when fetch returns non-ok response', async () => {
-  mockFetch.mockResolvedValueOnce({ ok: false, status: 500 });
+  (global.fetch as jest.Mock).mockResolvedValueOnce({ ok: false, status: 500 });
   const widgets = [{ id: 'alpha', roles: ['member'] }];
   const { result } = renderHook(() =>
     useFilteredWidgets(widgets, { roles: ['member'] })
@@ -130,7 +129,7 @@ test('sets error when fetch returns non-ok response', async () => {
 
 test('aborts fetch on unmount', () => {
   let aborted = false;
-  mockFetch.mockImplementationOnce((url: any, { signal }: any) => {
+  (global.fetch as jest.Mock).mockImplementationOnce((url: any, { signal }: any) => {
     signal.addEventListener('abort', () => {
       aborted = true;
     });
