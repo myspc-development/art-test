@@ -8,6 +8,7 @@ const config: Config = {
     '<rootDir>/src/js',
     '<rootDir>/src/components',
     '<rootDir>/tests',
+    '<rootDir>/dashboard',
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'mjs', 'json'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
