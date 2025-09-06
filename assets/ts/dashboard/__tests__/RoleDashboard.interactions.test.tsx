@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
 import type { DragEndEvent } from '@dnd-kit/core';
 
 let triggerDrag: (e: DragEndEvent) => void = () => {};
@@ -38,7 +38,9 @@ describe('RoleDashboard interactions', () => {
     render(<RoleDashboard role="member" initialEdit={true} />);
 
     // Trigger drag to cover handleDragEnd/announce
-    triggerDrag({ active: { id: 'tasks' }, over: { id: 'inbox' } } as any);
+    act(() => {
+      triggerDrag({ active: { id: 'tasks' }, over: { id: 'inbox' } } as any);
+    });
     const liveMsg = screen.getByText(/moved tasks to position 3/i);
     expect(liveMsg).toBeInTheDocument();
     jest.runAllTimers();
@@ -61,5 +63,37 @@ describe('RoleDashboard interactions', () => {
     fireEvent.click(screen.getByText(/reset/i));
     expect(screen.getAllByLabelText(/remove/i)).toHaveLength(3);
     expect(screen.getByText(/no upcoming events/i)).toBeInTheDocument();
+  });
+
+  it('reorders widgets and ignores drags without target', async () => {
+    render(<RoleDashboard role="member" initialEdit={true} />);
+    act(() => {
+      triggerDrag({ active: { id: 'tasks' }, over: { id: 'inbox' } } as any);
+    });
+    await waitFor(() =>
+      expect(
+        JSON.parse(
+          window.localStorage.getItem('ap.dashboard.layout.v1:member') as string
+        )
+      ).toEqual(['upcoming', 'inbox', 'tasks'])
+    );
+
+    act(() => {
+      triggerDrag({ active: { id: 'tasks' }, over: undefined } as any);
+    });
+    expect(
+      JSON.parse(
+        window.localStorage.getItem('ap.dashboard.layout.v1:member') as string
+      )
+    ).toEqual(['upcoming', 'inbox', 'tasks']);
+
+    act(() => {
+      triggerDrag({ active: { id: 'tasks' }, over: { id: 'tasks' } } as any);
+    });
+    expect(
+      JSON.parse(
+        window.localStorage.getItem('ap.dashboard.layout.v1:member') as string
+      )
+    ).toEqual(['upcoming', 'inbox', 'tasks']);
   });
 });
