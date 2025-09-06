@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 const ReactForm = ({ type = 'default' }) => {
   const [formData, setFormData] = useState({ name: '', email: '' });
   const [status, setStatus] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('Submitting...');
+    setIsSubmitting(true);
     try {
       const { ajaxurl, nonce } = window.apReactForm || {};
 
@@ -33,6 +35,8 @@ const ReactForm = ({ type = 'default' }) => {
       setStatus(result.message);
     } catch (error) {
       setStatus('There was an error submitting the form.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -54,7 +58,7 @@ const ReactForm = ({ type = 'default' }) => {
         value={formData.email}
         onChange={e => setFormData({ ...formData, email: e.target.value })}
       />
-      <button type="submit">Submit</button>
+      <button type="submit" disabled={isSubmitting}>Submit</button>
       <p>{status} {type !== 'default' ? `(${type})` : ''}</p>
     </form>
   );

@@ -31,4 +31,21 @@ describe('ReactForm smoke test', () => {
 
     await waitFor(() => expect(screen.getByText('Thanks!')).toBeInTheDocument());
   });
+
+  it('shows error and disables button on failed submit', async () => {
+    global.fetch.mockResolvedValueOnce({ ok: false });
+    render(<ReactForm />);
+
+    fireEvent.submit(screen.getByRole('button', { name: /submit/i }).closest('form'));
+    const button = screen.getByRole('button', { name: /submit/i });
+    expect(button).toBeDisabled();
+
+    await waitFor(() =>
+      expect(
+        screen.getByText('There was an error submitting the form.')
+      ).toBeInTheDocument()
+    );
+
+    expect(button).not.toBeDisabled();
+  });
 });
