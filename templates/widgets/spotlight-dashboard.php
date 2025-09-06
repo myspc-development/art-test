@@ -1,4 +1,5 @@
 <?php
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 /**
  * Spotlight dashboard widget template.
  *

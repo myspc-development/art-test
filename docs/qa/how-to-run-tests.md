@@ -21,6 +21,17 @@ npm run lint:js
 npm run typecheck
 ```
 
+## Codex Checks
+The Codex pipeline includes a widget guard checker that prevents widgets from rendering during dashboard builder previews.
+Run it in check mode via:
+```bash
+npm run codex:checks
+```
+Use the `--fix` flag to insert missing guards automatically:
+```bash
+python3 scripts/widget-preview-guard-check.py --fix
+```
+
 ## Test Commands
 ```bash
 npm run test:js -- --coverage
