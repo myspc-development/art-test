@@ -7,7 +7,6 @@ use ArtPulse\Core\CompetitionEntryManager;
 /**
 
  * @group CORE
-
  */
 
 class CompetitionEntryManagerTest extends WP_UnitTestCase {

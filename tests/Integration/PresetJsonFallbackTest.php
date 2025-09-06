@@ -6,7 +6,6 @@ use ArtPulse\Dashboard\WidgetGuard;
 /**
 
  * @group INTEGRATION
-
  */
 
 class PresetJsonFallbackTest extends WP_UnitTestCase {

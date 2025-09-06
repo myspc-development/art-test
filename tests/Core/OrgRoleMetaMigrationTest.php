@@ -8,7 +8,6 @@ namespace ArtPulse\Core\Tests {
 	/**
 
 	 * @group CORE
-
 	 */
 
 	class OrgRoleMetaMigrationTest extends TestCase {

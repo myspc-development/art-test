@@ -30,29 +30,29 @@ function artpulse_enqueue_widget_scripts(): void {
 		return;
 	}
 
-        $handle      = 'art-widgets';
-        $script_rel  = 'assets/dist/index.js';
-        $script_path = plugin_dir_path( __FILE__ ) . $script_rel;
-        if ( file_exists( $script_path ) ) {
-                wp_enqueue_script(
-                        $handle,
-                        plugins_url( $script_rel, __FILE__ ),
-                        array( 'wp-element', 'wp-api-fetch' ),
-                        (string) filemtime( $script_path ),
-                        true
-                );
-                wp_script_add_data( $handle, 'type', 'module' );
+		$handle      = 'art-widgets';
+		$script_rel  = 'assets/dist/index.js';
+		$script_path = plugin_dir_path( __FILE__ ) . $script_rel;
+	if ( file_exists( $script_path ) ) {
+			wp_enqueue_script(
+				$handle,
+				plugins_url( $script_rel, __FILE__ ),
+				array( 'wp-element', 'wp-api-fetch' ),
+				(string) filemtime( $script_path ),
+				true
+			);
+			wp_script_add_data( $handle, 'type', 'module' );
 
-                wp_localize_script(
-                        $handle,
-                        'APChat',
-                        array(
-                                'apiRoot'  => esc_url_raw( rest_url() ),
-                                'nonce'    => wp_create_nonce( 'wp_rest' ),
-                                'loggedIn' => is_user_logged_in(),
-                        )
-                );
-        }
+			wp_localize_script(
+				$handle,
+				'APChat',
+				array(
+					'apiRoot'  => esc_url_raw( rest_url() ),
+					'nonce'    => wp_create_nonce( 'wp_rest' ),
+					'loggedIn' => is_user_logged_in(),
+				)
+			);
+	}
 }
 
 add_action( 'wp_enqueue_scripts', 'artpulse_enqueue_widget_scripts' );

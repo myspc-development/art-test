@@ -3,7 +3,6 @@
 /**
 
  * @group INTEGRATION
-
  */
 
 class DbTablesExistTest extends WP_UnitTestCase {

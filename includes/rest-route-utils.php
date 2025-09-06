@@ -14,13 +14,13 @@ declare(strict_types=1);
  *              REST server is unavailable.
  */
 function ap_rest_route_registered( string $namespace, string $route ): bool {
-        $server = rest_get_server();
-        if ( ! $server ) {
-                return false;
-        }
+		$server = rest_get_server();
+	if ( ! $server ) {
+			return false;
+	}
 
-        $routes = $server->get_routes();
-        $key    = '/' . ltrim( $namespace, '/' ) . $route;
+		$routes = $server->get_routes();
+		$key    = '/' . ltrim( $namespace, '/' ) . $route;
 
-        return isset( $routes[ $key ] );
+		return isset( $routes[ $key ] );
 }

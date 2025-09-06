@@ -43,7 +43,6 @@ if ( ! function_exists( __NAMESPACE__ . '\wp_mail' ) ) {
 /**
 
  * @group CORE
-
  */
 
 class DBStub {

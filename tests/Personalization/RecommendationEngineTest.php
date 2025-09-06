@@ -8,7 +8,6 @@ use ArtPulse\Personalization\RecommendationPreferenceManager;
 /**
 
  * @group PERSONALIZATION
-
  */
 
 class RecommendationEngineTest extends WP_UnitTestCase {

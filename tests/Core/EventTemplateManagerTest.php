@@ -7,7 +7,6 @@ use ArtPulse\Core\EventTemplateManager;
 /**
 
  * @group CORE
-
  */
 
 class EventTemplateManagerTest extends WP_UnitTestCase {

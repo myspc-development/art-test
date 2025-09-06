@@ -14,7 +14,6 @@ require_once __DIR__ . '/../TestStubs.php';
 /**
 
  * @group PHPUNIT
-
  */
 
 class ArtistWidgetsTest extends TestCase {
@@ -44,19 +43,19 @@ class ArtistWidgetsTest extends TestCase {
 		);
 	}
 
-        /**
-         * @dataProvider widgetIds
-         * @group slow
-         */
-        public function test_widgets_registered( string $id ): void {
+		/**
+		 * @dataProvider widgetIds
+		 * @group slow
+		 */
+	public function test_widgets_registered( string $id ): void {
 		$this->assertTrue( DashboardWidgetRegistry::exists( $id ) );
 	}
 
-        /**
-         * @dataProvider widgetIds
-         * @group slow
-         */
-        public function test_widgets_render( string $id ): void {
+		/**
+		 * @dataProvider widgetIds
+		 * @group slow
+		 */
+	public function test_widgets_render( string $id ): void {
 		$def = DashboardWidgetRegistry::getById( $id );
 		$this->assertIsArray( $def );
 		$callback = $def['callback'];

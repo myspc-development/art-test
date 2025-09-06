@@ -7,7 +7,6 @@ use ArtPulse\Core\ArtworkEventLinkManager;
 /**
 
  * @group CORE
-
  */
 
 class ArtworkEventLinkManagerTest extends WP_UnitTestCase {

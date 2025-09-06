@@ -9,35 +9,35 @@ use ArtPulse\Tests\Email;
  */
 class DirectMessagesTest extends \WP_UnitTestCase {
 
-        private int $user1;
-        private int $user2;
-        private string $nonce;
+	private int $user1;
+	private int $user2;
+	private string $nonce;
 
-        public static function setUpBeforeClass(): void {
-                parent::setUpBeforeClass();
-                Email::install();
-        }
+	public static function setUpBeforeClass(): void {
+			parent::setUpBeforeClass();
+			Email::install();
+	}
 
-        public function set_up() {
-                parent::set_up();
-                DirectMessages::install_table();
-                DirectMessages::install_flags_table();
-                DirectMessages::register();
-                do_action( 'rest_api_init' );
+	public function set_up() {
+			parent::set_up();
+			DirectMessages::install_table();
+			DirectMessages::install_flags_table();
+			DirectMessages::register();
+			do_action( 'rest_api_init' );
 
-                $this->user1 = self::factory()->user->create( array( 'user_email' => 'u1@test.com' ) );
-                $this->user2 = self::factory()->user->create( array( 'user_email' => 'u2@test.com' ) );
+			$this->user1 = self::factory()->user->create( array( 'user_email' => 'u1@test.com' ) );
+			$this->user2 = self::factory()->user->create( array( 'user_email' => 'u2@test.com' ) );
 
-                wp_set_current_user( $this->user1 );
-                $user = new \WP_User( $this->user1 );
-                $user->add_cap( 'ap_send_messages' );
-                $this->nonce = wp_create_nonce( 'wp_rest' );
-        }
+			wp_set_current_user( $this->user1 );
+			$user = new \WP_User( $this->user1 );
+			$user->add_cap( 'ap_send_messages' );
+			$this->nonce = wp_create_nonce( 'wp_rest' );
+	}
 
-        public function tear_down() {
-                Email::clear();
-                parent::tear_down();
-        }
+	public function tear_down() {
+			Email::clear();
+			parent::tear_down();
+	}
 
 	public function test_send_and_fetch_message(): void {
 		$post = new \WP_REST_Request( 'POST', '/artpulse/v1/messages' );
@@ -55,7 +55,7 @@ class DirectMessagesTest extends \WP_UnitTestCase {
 		$this->assertSame( 'Hello', $row['content'] );
 		$this->assertSame( '0', $row['is_read'] );
 
-                $this->assertCount( 1, Email::messages() );
+				$this->assertCount( 1, Email::messages() );
 
 		$get = new \WP_REST_Request( 'GET', '/artpulse/v1/messages' );
 		$get->set_param( 'with', $this->user2 );
@@ -172,7 +172,7 @@ class DirectMessagesTest extends \WP_UnitTestCase {
 		$post->set_param( 'content', 'extras' );
 		$post->set_param( 'parent_id', 9 );
 		$post->set_param( 'attachments', array( 5, '6' ) );
-               $post->set_param( 'tags', array( 'widget_foo', 'bar' ) );
+				$post->set_param( 'tags', array( 'widget_foo', 'bar' ) );
 		$res = rest_get_server()->dispatch( $post );
 		$this->assertSame( 200, $res->get_status() );
 
@@ -181,6 +181,6 @@ class DirectMessagesTest extends \WP_UnitTestCase {
 		$row   = $wpdb->get_row( "SELECT * FROM $table ORDER BY id DESC", ARRAY_A );
 		$this->assertSame( '9', $row['parent_id'] );
 		$this->assertSame( '5,6', $row['attachments'] );
-               $this->assertSame( 'widget_foo,bar', $row['tags'] );
+				$this->assertSame( 'widget_foo,bar', $row['tags'] );
 	}
 }

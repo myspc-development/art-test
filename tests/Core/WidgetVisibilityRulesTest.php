@@ -14,7 +14,6 @@ require_once __DIR__ . '/../../src/Core/DashboardWidgetRegistry.php';
 /**
 
  * @group CORE
-
  */
 
 class WidgetVisibilityRulesTest extends TestCase {

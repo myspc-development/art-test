@@ -7,7 +7,6 @@ use ArtPulse\Core\WidgetRegistry;
 /**
 
  * @group INTEGRATION
-
  */
 
 class WidgetAliasTest extends \WP_UnitTestCase {

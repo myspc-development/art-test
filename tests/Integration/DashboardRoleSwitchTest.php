@@ -6,7 +6,6 @@ use ArtPulse\Core\DashboardController;
 /**
 
  * @group INTEGRATION
-
  */
 
 class DashboardRoleSwitchTest extends \WP_UnitTestCase {

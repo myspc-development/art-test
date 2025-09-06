@@ -7,7 +7,6 @@ use ArtPulse\Rest\ArtistEventsController;
 /**
 
  * @group INTEGRATION
-
  */
 
 class ArtistEventsEndpointTest extends \WP_UnitTestCase {

@@ -6,7 +6,6 @@ use ArtPulse\Core\DashboardController;
 /**
 
  * @group INTEGRATION
-
  */
 
 class ResolvedRoleHeaderTest extends \WP_UnitTestCase {

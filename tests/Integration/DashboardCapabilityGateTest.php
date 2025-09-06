@@ -6,7 +6,6 @@ use ArtPulse\Core\DashboardController;
 /**
 
  * @group INTEGRATION
-
  */
 
 class DashboardCapabilityGateTest extends \WP_UnitTestCase {

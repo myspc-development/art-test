@@ -6,7 +6,6 @@ use function ArtPulse\Util\ap_fetch_calendar_events;
 /**
 
  * @group INTEGRATION
-
  */
 
 class EventFeedTest extends \WP_UnitTestCase {

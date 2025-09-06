@@ -6,7 +6,6 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 /**
 
  * @group INTEGRATION
-
  */
 
 class DashboardWidgetTemplateExistsTest extends \WP_UnitTestCase {

@@ -7,7 +7,6 @@ use ArtPulse\Core\AccessControlManager;
 /**
 
  * @group CORE
-
  */
 
 class AccessControlManagerTest extends TestCase {

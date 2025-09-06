@@ -12,7 +12,6 @@ require_once __DIR__ . '/../TestStubs.php';
 /**
 
  * @group PHPUNIT
-
  */
 
 class ParityPlaceholderTest extends TestCase {

@@ -42,8 +42,8 @@ class DebugDashboardCommand {
 			? sanitize_key( $assoc_args['role'] )
 			: DashboardController::get_role( $user_id );
 
-                WP_CLI::log( sprintf( 'User ID: %1$d', $user_id ) );
-                WP_CLI::log( sprintf( 'Role: %1$s', $role ) );
+				WP_CLI::log( sprintf( 'User ID: %1$d', $user_id ) );
+				WP_CLI::log( sprintf( 'Role: %1$s', $role ) );
 
 		$raw_layout = DashboardController::get_user_dashboard_layout( $user_id );
 

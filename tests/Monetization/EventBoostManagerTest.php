@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 /**
 
  * @group MONETIZATION
-
  */
 
 class EventBoostManagerTest extends TestCase {

@@ -13,26 +13,25 @@ use Brain\Monkey\Functions;
 /**
 
  * @group PHPUNIT
-
  */
 
 final class DashboardPresetsLoadTest extends TestCase {
 	private string $dataDir;
 
-        protected function setUp(): void {
-                parent::setUp();
-                Monkey\setUp();
-                DashboardPresets::resetCache();
-                $this->dataDir = dirname( __DIR__, 2 ) . '/data';
-        }
+	protected function setUp(): void {
+			parent::setUp();
+			Monkey\setUp();
+			DashboardPresets::resetCache();
+			$this->dataDir = dirname( __DIR__, 2 ) . '/data';
+	}
 
-        protected function tearDown(): void {
-                DashboardPresets::resetCache();
-                Monkey\tearDown();
-                parent::tearDown();
-        }
+	protected function tearDown(): void {
+			DashboardPresets::resetCache();
+			Monkey\tearDown();
+			parent::tearDown();
+	}
 
-        public function test_missing_preset_skips_legacy_and_uses_defaults(): void {
+	public function test_missing_preset_skips_legacy_and_uses_defaults(): void {
 		$roles   = array( 'member', 'artist', 'organization' );
 		$backups = array();
 		foreach ( $roles as $r ) {
@@ -42,70 +41,70 @@ final class DashboardPresetsLoadTest extends TestCase {
 				safe_unlink( $path );
 			}
 		}
-                $expected = array(
-                        'member'       => array(
-                                'widget_news',
-                                'widget_membership',
-                                'widget_account_tools',
-                                'widget_my_follows',
-                                'widget_recommended_for_you',
-                                'widget_local_events',
-                                'widget_my_events',
-                                'widget_site_stats',
-                        ),
-                        'artist'       => array(
-                                'widget_artist_revenue_summary',
-                                'widget_artist_artwork_manager',
-                                'widget_artist_audience_insights',
-                                'widget_artist_feed_publisher',
-                                'widget_my_events',
-                                'widget_site_stats',
-                        ),
-                        'organization' => array(
-                                'widget_audience_crm',
-                                'widget_org_ticket_insights',
-                                'widget_webhooks',
-                                'widget_my_events',
-                                'widget_site_stats',
-                        ),
-                );
-                foreach ( $roles as $r ) {
-                        $this->assertSame( $expected[ $r ], DashboardPresets::forRole( $r ) );
-                }
-		foreach ( $backups as $r => $contents ) {
-			file_put_contents( "$this->dataDir/preset-$r.json", (string) $contents );
-		}
+			$expected = array(
+				'member'       => array(
+					'widget_news',
+					'widget_membership',
+					'widget_account_tools',
+					'widget_my_follows',
+					'widget_recommended_for_you',
+					'widget_local_events',
+					'widget_my_events',
+					'widget_site_stats',
+				),
+				'artist'       => array(
+					'widget_artist_revenue_summary',
+					'widget_artist_artwork_manager',
+					'widget_artist_audience_insights',
+					'widget_artist_feed_publisher',
+					'widget_my_events',
+					'widget_site_stats',
+				),
+				'organization' => array(
+					'widget_audience_crm',
+					'widget_org_ticket_insights',
+					'widget_webhooks',
+					'widget_my_events',
+					'widget_site_stats',
+				),
+			);
+			foreach ( $roles as $r ) {
+					$this->assertSame( $expected[ $r ], DashboardPresets::forRole( $r ) );
+			}
+			foreach ( $backups as $r => $contents ) {
+				file_put_contents( "$this->dataDir/preset-$r.json", (string) $contents );
+			}
 	}
 
 	public function test_json_canonicalization(): void {
 		$path = "$this->dataDir/preset-member.json";
 		$orig = is_readable( $path ) ? file_get_contents( $path ) : null;
-                file_put_contents(
-                        $path,
-                        json_encode(
-                                array(
-                                        'membership',
-                                        'account-tools',
-                                        'widget_followed_artists',
-                                        'recommended_for_you',
-                                        'local-events',
-                                        'my-events',
-                                        'site-stats',
-                                )
-                        )
-                );
-                $this->assertSame(
-                        array(
-                                'widget_membership',
-                                'widget_account_tools',
-                                'widget_my_follows',
-                                'widget_recommended_for_you',
-                                'widget_local_events',
-                                'widget_my_events',
-                                'widget_site_stats',
-                        ),
-                        DashboardPresets::forRole( 'member' )
-                );
+				file_put_contents(
+					$path,
+					json_encode(
+						array(
+							'membership',
+							'account-tools',
+							'widget_followed_artists',
+							'recommended_for_you',
+							'local-events',
+							'my-events',
+							'site-stats',
+						)
+					)
+				);
+				$this->assertSame(
+					array(
+						'widget_membership',
+						'widget_account_tools',
+						'widget_my_follows',
+						'widget_recommended_for_you',
+						'widget_local_events',
+						'widget_my_events',
+						'widget_site_stats',
+					),
+					DashboardPresets::forRole( 'member' )
+				);
 		if ( $orig !== null ) {
 			file_put_contents( $path, $orig );
 		} else {

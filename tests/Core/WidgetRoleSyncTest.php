@@ -9,7 +9,6 @@ use ArtPulse\Core\DashboardController;
 /**
 
  * @group CORE
-
  */
 
 class WidgetRoleSyncTest extends TestCase {

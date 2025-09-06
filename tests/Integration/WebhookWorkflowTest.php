@@ -7,7 +7,6 @@ use WP_Error;
 /**
 
  * @group INTEGRATION
-
  */
 
 class WebhookWorkflowTest extends \WP_UnitTestCase {

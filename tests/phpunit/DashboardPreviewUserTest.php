@@ -11,7 +11,6 @@ use ArtPulse\Tests\Stubs\MockStorage;
 /**
 
  * @group PHPUNIT
-
  */
 
 class DashboardPreviewUserTest extends TestCase {
@@ -66,7 +65,7 @@ class DashboardPreviewUserTest extends TestCase {
 		parent::tearDown();
 	}
 
-       public function test_preview_user_parameter_overrides_user_with_valid_nonce(): void {
+	public function test_preview_user_parameter_overrides_user_with_valid_nonce(): void {
 		MockStorage::$users[1] = (object) array( 'roles' => array( 'member' ) );
 		MockStorage::$users[2] = (object) array( 'roles' => array( 'artist' ) );
 
@@ -81,9 +80,9 @@ class DashboardPreviewUserTest extends TestCase {
 			$layoutDefault
 		);
 
-		$_GET['ap_preview_user']  = '2';
-                $_GET['ap_preview_nonce'] = 'test-nonce';
-		$layoutPreview            = DashboardController::get_user_dashboard_layout( 1 );
+		$_GET['ap_preview_user']      = '2';
+			$_GET['ap_preview_nonce'] = 'test-nonce';
+		$layoutPreview                = DashboardController::get_user_dashboard_layout( 1 );
 		$this->assertSame(
 			array(
 				array(
@@ -96,7 +95,7 @@ class DashboardPreviewUserTest extends TestCase {
 		unset( $_GET['ap_preview_user'], $_GET['ap_preview_nonce'] );
 	}
 
-       public function test_preview_user_missing_nonce_is_ignored(): void {
+	public function test_preview_user_missing_nonce_is_ignored(): void {
 		MockStorage::$users[1] = (object) array( 'roles' => array( 'member' ) );
 		MockStorage::$users[2] = (object) array( 'roles' => array( 'artist' ) );
 
@@ -114,14 +113,14 @@ class DashboardPreviewUserTest extends TestCase {
 		unset( $_GET['ap_preview_user'] );
 	}
 
-       public function test_preview_user_fails_for_unauthorized_user(): void {
+	public function test_preview_user_fails_for_unauthorized_user(): void {
 		MockStorage::$users[1]      = (object) array( 'roles' => array( 'member' ) );
 		MockStorage::$users[2]      = (object) array( 'roles' => array( 'artist' ) );
 		MockStorage::$current_roles = array();
 
-		$_GET['ap_preview_user']  = '2';
-                $_GET['ap_preview_nonce'] = 'test-nonce';
-		$layout                   = DashboardController::get_user_dashboard_layout( 1 );
+		$_GET['ap_preview_user']      = '2';
+			$_GET['ap_preview_nonce'] = 'test-nonce';
+		$layout                       = DashboardController::get_user_dashboard_layout( 1 );
 		$this->assertSame(
 			array(
 				array(
@@ -144,8 +143,8 @@ class DashboardPreviewUserTest extends TestCase {
 			),
 		);
 
-		$_GET['ap_preview_user']  = '2';
-                $_GET['ap_preview_nonce'] = 'test-nonce';
+		$_GET['ap_preview_user']          = '2';
+				$_GET['ap_preview_nonce'] = 'test-nonce';
 		DashboardController::get_user_dashboard_layout( 1 );
 		unset( $_GET['ap_preview_user'], $_GET['ap_preview_nonce'] );
 

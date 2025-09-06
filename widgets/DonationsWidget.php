@@ -1,5 +1,7 @@
 <?php
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
+if ( defined( 'IS_DASHBOARD_BUILDER_PREVIEW' ) ) {
+	return;
+}
 namespace ArtPulse\Widgets;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
@@ -40,23 +42,23 @@ class DonationsWidget {
 		if ( ! self::can_view( $user_id ) ) {
 			return '<div class="notice notice-error"><p>' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p></div>';
 		}
-                $template = locate_template( 'widgets/donations.php' );
-                if ( ! $template ) {
-                        $plugin_template = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'templates/widgets/donations.php';
-                        if ( file_exists( $plugin_template ) ) {
-                                $template = $plugin_template;
-                        }
-                }
+				$template = locate_template( 'widgets/donations.php' );
+		if ( ! $template ) {
+				$plugin_template = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'templates/widgets/donations.php';
+			if ( file_exists( $plugin_template ) ) {
+						$template = $plugin_template;
+			}
+		}
 
-                ob_start();
-                if ( $template ) {
-                        load_template( $template, false );
-                } else {
-                        echo '<p>' . esc_html__( 'Example donations', 'artpulse' ) . '</p>';
-                }
+				ob_start();
+		if ( $template ) {
+				load_template( $template, false );
+		} else {
+				echo '<p>' . esc_html__( 'Example donations', 'artpulse' ) . '</p>';
+		}
 
-                return ob_get_clean();
-       }
+				return ob_get_clean();
+	}
 }
 
 DonationsWidget::register();

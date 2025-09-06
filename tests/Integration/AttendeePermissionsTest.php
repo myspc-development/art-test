@@ -6,7 +6,6 @@ use ArtPulse\Rest\RsvpRestController;
 /**
 
  * @group INTEGRATION
-
  */
 
 class AttendeePermissionsTest extends \WP_UnitTestCase {

@@ -16,7 +16,6 @@ use ArtPulse\Tests\Stubs\MockStorage;
 /**
 
  * @group PHPUNIT
-
  */
 
 final class WidgetAliasTest extends TestCase {
@@ -24,13 +23,13 @@ final class WidgetAliasTest extends TestCase {
 		// ensure widgets+aliases registered for the test
 		do_action( 'init' );
 		MockStorage::$current_roles = array( 'read' );
-                 $this->registerWidget( 'widget_membership' );
-                 $this->registerWidget( 'widget_my_events' );
-                 $this->registerWidget( 'widget_account_tools' );
-                 $this->registerWidget( 'widget_site_stats' );
-                 $this->registerWidget( 'widget_recommended_for_you' );
-                 $this->registerWidget( 'widget_local_events' );
-                 WidgetRegistry::register( 'widget_my_follows', [self::class, 'renderMyFollows'] );
+				$this->registerWidget( 'widget_membership' );
+				$this->registerWidget( 'widget_my_events' );
+				$this->registerWidget( 'widget_account_tools' );
+				$this->registerWidget( 'widget_site_stats' );
+				$this->registerWidget( 'widget_recommended_for_you' );
+				$this->registerWidget( 'widget_local_events' );
+				WidgetRegistry::register( 'widget_my_follows', array( self::class, 'renderMyFollows' ) );
 	}
 
 	/**
@@ -44,7 +43,7 @@ final class WidgetAliasTest extends TestCase {
 		$this->assertNotSame( '', trim( $html ) );
 	}
 
-    public function aliasProvider(): array {
+	public function aliasProvider(): array {
 		return array(
 			array( 'membership', 'widget_membership' ),
 			array( 'my-events', 'widget_my_events' ),
@@ -55,26 +54,26 @@ final class WidgetAliasTest extends TestCase {
 			array( 'recommended_for_you', 'widget_recommended_for_you' ),
 			array( 'local_events', 'widget_local_events' ),
 		);
-        }
+	}
 
-        public function test_canonical_slug_renders_template(): void {
-                $html = WidgetRegistry::render( 'widget_my_follows' );
-                $this->assertIsString( $html );
-                $this->assertNotSame( '', trim( $html ) );
-                $this->assertStringContainsString( '<div', $html );
-        }
+	public function test_canonical_slug_renders_template(): void {
+			$html = WidgetRegistry::render( 'widget_my_follows' );
+			$this->assertIsString( $html );
+			$this->assertNotSame( '', trim( $html ) );
+			$this->assertStringContainsString( '<div', $html );
+	}
 
-        private function registerWidget( string $slug ): void {
-                WidgetRegistry::register( $slug, [self::class, 'renderSection'] );
-        }
+	private function registerWidget( string $slug ): void {
+			WidgetRegistry::register( $slug, array( self::class, 'renderSection' ) );
+	}
 
-        public static function renderSection( array $ctx = array() ): string {
-                return '<section></section>';
-        }
+	public static function renderSection( array $ctx = array() ): string {
+			return '<section></section>';
+	}
 
-        public static function renderMyFollows( array $ctx = array() ): string {
-                ob_start();
-                require __DIR__ . '/../../templates/widgets/widget-my-follows.php';
-                return ob_get_clean();
-        }
+	public static function renderMyFollows( array $ctx = array() ): string {
+			ob_start();
+			require __DIR__ . '/../../templates/widgets/widget-my-follows.php';
+			return ob_get_clean();
+	}
 }

@@ -9,7 +9,6 @@ namespace ArtPulse\Core\Tests {
 	/**
 
 	 * @group CORE
-
 	 */
 
 	class GetUserDashboardLayoutTest extends TestCase {
@@ -26,43 +25,43 @@ namespace ArtPulse\Core\Tests {
 			$prop2->setAccessible( true );
 			$prop2->setValue(
 				null,
-                                array(
-                                        'member'       => array( 'widget_alpha' ),
-                                        'artist'       => array( 'widget_beta' ),
-                                        'organization' => array( 'widget_gamma' ),
-                                )
+				array(
+					'member'       => array( 'widget_alpha' ),
+					'artist'       => array( 'widget_beta' ),
+					'organization' => array( 'widget_gamma' ),
+				)
 			);
 
-                        DashboardWidgetRegistry::register_widget(
-                                'widget_alpha',
-                                array(
-                                        'label'    => 'Alpha',
-                                        'callback' => '__return_null',
-                                        'roles'    => array( 'member' ),
-                                )
-                        );
-                        DashboardWidgetRegistry::register_widget(
-                                'widget_beta',
-                                array(
-                                        'label'    => 'Beta',
-                                        'callback' => '__return_null',
-                                        'roles'    => array( 'artist' ),
-                                )
-                        );
-                        DashboardWidgetRegistry::register_widget(
-                                'widget_gamma',
-                                array(
-                                        'label'    => 'Gamma',
-                                        'callback' => '__return_null',
-                                        'roles'    => array( 'organization' ),
-                                )
-                        );
+						DashboardWidgetRegistry::register_widget(
+							'widget_alpha',
+							array(
+								'label'    => 'Alpha',
+								'callback' => '__return_null',
+								'roles'    => array( 'member' ),
+							)
+						);
+						DashboardWidgetRegistry::register_widget(
+							'widget_beta',
+							array(
+								'label'    => 'Beta',
+								'callback' => '__return_null',
+								'roles'    => array( 'artist' ),
+							)
+						);
+						DashboardWidgetRegistry::register_widget(
+							'widget_gamma',
+							array(
+								'label'    => 'Gamma',
+								'callback' => '__return_null',
+								'roles'    => array( 'organization' ),
+							)
+						);
 		}
 
 		public static function layoutProvider(): iterable {
-                       yield 'member' => array( 'member', array( array( 'id' => 'widget_alpha' ) ) );
-                       yield 'artist' => array( 'artist', array( array( 'id' => 'widget_beta' ) ) );
-                       yield 'organization' => array( 'organization', array( array( 'id' => 'widget_gamma' ) ) );
+						yield 'member' => array( 'member', array( array( 'id' => 'widget_alpha' ) ) );
+						yield 'artist' => array( 'artist', array( array( 'id' => 'widget_beta' ) ) );
+						yield 'organization' => array( 'organization', array( array( 'id' => 'widget_gamma' ) ) );
 			yield 'invalid role' => array( 'invalid', array() );
 		}
 

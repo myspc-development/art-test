@@ -6,7 +6,6 @@ use ArtPulse\Integration\WebhookManager;
 /**
 
  * @group INTEGRATION
-
  */
 
 class WebhookManagerTest extends \WP_UnitTestCase {

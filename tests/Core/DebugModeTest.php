@@ -4,7 +4,6 @@ use PHPUnit\Framework\TestCase;
 /**
 
  * @group CORE
-
  */
 
 class DebugModeTest extends TestCase {

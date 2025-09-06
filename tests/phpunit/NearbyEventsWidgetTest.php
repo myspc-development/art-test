@@ -11,7 +11,6 @@ if ( ! function_exists( 'do_shortcode' ) ) {
 /**
 
  * @group PHPUNIT
-
  */
 
 class NearbyEventsWidgetTest extends TestCase {

@@ -22,7 +22,6 @@ use function ArtPulse\Tests\safe_unlink;
 /**
 
  * @group CORE
-
  */
 
 class DocumentGeneratorTest extends TestCase {

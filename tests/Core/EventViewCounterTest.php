@@ -8,7 +8,6 @@ use ArtPulse\Core\EventMetrics;
 /**
 
  * @group CORE
-
  */
 
 class EventViewCounterTest extends WP_UnitTestCase {

@@ -7,7 +7,6 @@ use function Brain\Monkey\Functions\stubs;
 /**
 
  * @group WIDGETS
-
  */
 
 class QuickAddEventWidgetTest extends TestCase {

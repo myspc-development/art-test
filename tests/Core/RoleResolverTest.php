@@ -11,7 +11,6 @@ namespace ArtPulse\Core\Tests {
 	/**
 
 	 * @group CORE
-
 	 */
 
 	class RoleResolverTest extends TestCase {

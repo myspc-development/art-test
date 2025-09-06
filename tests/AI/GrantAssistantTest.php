@@ -37,20 +37,19 @@ require_once __DIR__ . '/../Rest/RequestStub.php';
 /**
 
  * @group AI
-
  */
 
 class GrantAssistantTest extends TestCase {
 
-        public function test_generate_returns_prompted_text(): void {
-                $req = new TestRequest( 'POST', '/' );
-                $req->set_param( 'type', 'project_summary' );
-                $req->set_param( 'tone', 'grant' );
-                $req->set_param( 'source', 'Community arts event.' );
+	public function test_generate_returns_prompted_text(): void {
+			$req = new TestRequest( 'POST', '/' );
+			$req->set_param( 'type', 'project_summary' );
+			$req->set_param( 'tone', 'grant' );
+			$req->set_param( 'source', 'Community arts event.' );
 
-               $res  = GrantAssistant::generate( $req );
-               $data = $res->get_data();
-               $this->assertStringContainsString( 'Community arts event.', $data['draft'] );
-               $this->assertStringContainsString( '<p>', $data['output'] );
-        }
+			$res  = GrantAssistant::generate( $req );
+			$data = $res->get_data();
+			$this->assertStringContainsString( 'Community arts event.', $data['draft'] );
+			$this->assertStringContainsString( '<p>', $data['output'] );
+	}
 }

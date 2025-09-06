@@ -7,7 +7,6 @@ use ArtPulse\Core\AnalyticsManager;
 /**
 
  * @group CORE
-
  */
 
 class AnalyticsManagerTest extends WP_UnitTestCase {

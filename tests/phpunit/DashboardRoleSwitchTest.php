@@ -5,10 +5,10 @@ require_once __DIR__ . '/../TestStubs.php';
 require_once __DIR__ . '/../Support/Stubs/DashboardControllerStub.php';
 require_once __DIR__ . '/../Stubs/WP_Query.php';
 if ( ! class_exists( 'WP_Query' ) ) {
-        /**
-         * @group PHPUNIT
-         */
-        class_alias( \ArtPulse\Tests\Stubs\WP_Query::class, 'WP_Query' );
+		/**
+		 * @group PHPUNIT
+		 */
+		class_alias( \ArtPulse\Tests\Stubs\WP_Query::class, 'WP_Query' );
 }
 
 use PHPUnit\Framework\TestCase;
@@ -21,13 +21,13 @@ use function Patchwork\restore;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 if ( ! defined( 'AP_VERBOSE_DEBUG' ) ) {
-        define( 'AP_VERBOSE_DEBUG', true );
+		define( 'AP_VERBOSE_DEBUG', true );
 }
 if ( ! defined( 'ARTPULSE_PLUGIN_DIR' ) ) {
-        define( 'ARTPULSE_PLUGIN_DIR', dirname( __DIR__, 2 ) );
+		define( 'ARTPULSE_PLUGIN_DIR', dirname( __DIR__, 2 ) );
 }
 if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
-        define( 'ARTPULSE_PLUGIN_FILE', dirname( __DIR__, 2 ) . '/artpulse.php' );
+		define( 'ARTPULSE_PLUGIN_FILE', dirname( __DIR__, 2 ) . '/artpulse.php' );
 }
 
 /**
@@ -35,80 +35,81 @@ if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
  */
 final class DashboardRoleSwitchTest extends TestCase {
 
-        protected function setUp(): void {
-                if ( ! class_exists( \ArtPulse\Core\DashboardController::class, false ) ) {
-                        class_alias( \ArtPulse\Tests\Stubs\DashboardControllerStub::class, \ArtPulse\Core\DashboardController::class );
-                }
-                parent::setUp();
-                Monkey\setUp();
-                Functions\when( 'is_page' )->justReturn( false );
-                Functions\when( 'is_user_logged_in' )->justReturn( true );
-                Functions\when( 'current_user_can' )->justReturn( true );
-                Functions\when( 'register_activation_hook' )->justReturn( null );
-                Functions\when( 'get_query_var' )->alias( fn( $key ) => $_GET[ $key ] ?? '' );
-                Functions\when( 'set_query_var' )->alias( fn( $key, $value ) => $_GET[ $key ] = $value );
+	protected function setUp(): void {
+		if ( ! class_exists( \ArtPulse\Core\DashboardController::class, false ) ) {
+				class_alias( \ArtPulse\Tests\Stubs\DashboardControllerStub::class, \ArtPulse\Core\DashboardController::class );
+		}
+			parent::setUp();
+			Monkey\setUp();
+			Functions\when( 'is_page' )->justReturn( false );
+			Functions\when( 'is_user_logged_in' )->justReturn( true );
+			Functions\when( 'current_user_can' )->justReturn( true );
+			Functions\when( 'register_activation_hook' )->justReturn( null );
+			Functions\when( 'get_query_var' )->alias( fn( $key ) => $_GET[ $key ] ?? '' );
+			Functions\when( 'set_query_var' )->alias( fn( $key, $value ) => $_GET[ $key ] = $value );
 
-                DashboardPresets::resetCache();
-                MockStorage::$current_roles = array( 'view_artpulse_dashboard', 'artist' );
-                ini_set( 'error_log', '/tmp/phpunit-error.log' );
-                WidgetRegistry::register( 'widget_membership', [self::class, 'renderSection'] );
-                WidgetRegistry::register( 'widget_artist_revenue_summary', [self::class, 'renderSection'] );
-                WidgetRegistry::register( 'widget_audience_crm', [self::class, 'renderSection'] );
-        }
+			DashboardPresets::resetCache();
+			MockStorage::$current_roles = array( 'view_artpulse_dashboard', 'artist' );
+			ini_set( 'error_log', '/tmp/phpunit-error.log' );
+			WidgetRegistry::register( 'widget_membership', array( self::class, 'renderSection' ) );
+			WidgetRegistry::register( 'widget_artist_revenue_summary', array( self::class, 'renderSection' ) );
+			WidgetRegistry::register( 'widget_audience_crm', array( self::class, 'renderSection' ) );
+	}
 
-        protected function tearDown(): void {
-                DashboardPresets::resetCache();
-                Monkey\tearDown();
-                parent::tearDown();
-        }
+	protected function tearDown(): void {
+			DashboardPresets::resetCache();
+			Monkey\tearDown();
+			parent::tearDown();
+	}
 
 	/**
 	 * @dataProvider roles
 	 */
-        public function test_role_param_sets_header_and_attributes( string $role ): void {
-                $_GET['ap_dashboard'] = '1';
-                $_GET['role']         = $role;
-                $captured             = array();
-                Functions\when( 'header' )->alias(
-                        static function ( $string ) use ( &$captured ) {
-                                $captured[] = $string;
-                        }
-                );
-                $hooks = array();
-                Functions\when( 'add_action' )->alias(
-                        static function ( $hook, $callback, $priority = 10, $accepted_args = 1 ) use ( &$hooks ) {
-                                $hooks[ $hook ][] = $callback;
-                                return true;
-                        }
-                );
-                $initHandle           = redefine(
-                        '\\ArtPulse\\Core\\DashboardWidgetRegistry::init',
-                        static function (): void {}
-                );
-                $q = new WP_Query();
-                DashboardController::resolveRoleIntoQuery( $q );
-                $tpl = DashboardController::interceptTemplate( 'index.php' );
-                do_action( 'send_headers' );
-                foreach ( $hooks['send_headers'] ?? array() as $cb ) {
-                        $cb();
-                }
-                ob_start();
-                include $tpl;
-                $html = ob_get_clean();
+	public function test_role_param_sets_header_and_attributes( string $role ): void {
+			$_GET['ap_dashboard'] = '1';
+			$_GET['role']         = $role;
+			$captured             = array();
+			Functions\when( 'header' )->alias(
+				static function ( $string ) use ( &$captured ) {
+							$captured[] = $string;
+				}
+			);
+			$hooks = array();
+			Functions\when( 'add_action' )->alias(
+				static function ( $hook, $callback, $priority = 10, $accepted_args = 1 ) use ( &$hooks ) {
+							$hooks[ $hook ][] = $callback;
+							return true;
+				}
+			);
+			$initHandle = redefine(
+				'\\ArtPulse\\Core\\DashboardWidgetRegistry::init',
+				static function (): void {}
+			);
+			$q          = new WP_Query();
+			DashboardController::resolveRoleIntoQuery( $q );
+			$tpl = DashboardController::interceptTemplate( 'index.php' );
+			do_action( 'send_headers' );
+		foreach ( $hooks['send_headers'] ?? array() as $cb ) {
+				$cb();
+		}
+			ob_start();
+			include $tpl;
+			$html = ob_get_clean();
 
-		$this->assertStringContainsString( sprintf( 'id="ap-panel-%s"', $role ), $html );
-		$this->assertStringContainsString( sprintf( 'aria-labelledby="ap-tab-%s"', $role ), $html );
-		$this->assertStringContainsString( sprintf( 'data-role="%s"', $role ), $html );
+			$this->assertStringContainsString( sprintf( 'id="ap-panel-%s"', $role ), $html );
+			$this->assertStringContainsString( sprintf( 'aria-labelledby="ap-tab-%s"', $role ), $html );
+			$this->assertStringContainsString( sprintf( 'data-role="%s"', $role ), $html );
 
-                $this->assertContains( 'X-AP-Resolved-Role: ' . $role, $captured );
+			$this->assertContains( 'X-AP-Resolved-Role: ' . $role, $captured );
 
-                restore( $initHandle );
-                unset( $_GET['role'], $_GET['ap_role'], $_GET['ap_dashboard'] );
-        }
+			restore( $initHandle );
+			unset( $_GET['role'], $_GET['ap_role'], $_GET['ap_dashboard'] );
+	}
 
-        public function roles(): array {
-                return array( array( 'member' ), array( 'artist' ), array( 'organization' ) );
-        }
+	public function roles(): array {
+			return array( array( 'member' ), array( 'artist' ), array( 'organization' ) );
+	}
 
-        public static function renderSection(): string { return '<section></section>'; }
- }
+	public static function renderSection(): string {
+		return '<section></section>'; }
+}

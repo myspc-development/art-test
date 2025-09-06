@@ -7,7 +7,6 @@ use ArtPulse\Core\EventRsvpMetaMigration;
 /**
 
  * @group CORE
-
  */
 
 class EventRsvpMetaMigrationTest extends WP_UnitTestCase {

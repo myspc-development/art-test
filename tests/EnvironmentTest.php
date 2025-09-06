@@ -4,7 +4,6 @@ use PHPUnit\Framework\TestCase;
 /**
 
  * @group ENVIRONMENT
-
  */
 
 class EnvironmentTest extends TestCase {

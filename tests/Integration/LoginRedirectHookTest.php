@@ -4,7 +4,6 @@ namespace ArtPulse\Integration\Tests;
 /**
 
  * @group INTEGRATION
-
  */
 
 class LoginRedirectHookTest extends \WP_UnitTestCase {

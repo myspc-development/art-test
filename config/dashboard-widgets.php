@@ -17,7 +17,7 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 
 return array_filter(
 	array(
-		'welcome_box'               => array(
+		'welcome_box'                      => array(
 			'class'       => WelcomeBoxWidget::class,
 			'label'       => 'Welcome',
 			'description' => 'Personal greeting for the signed-in user.',
@@ -25,7 +25,7 @@ return array_filter(
 			'category'    => 'general',
 			'icon'        => 'smiley',
 		),
-		'portfolio_preview'         => array(
+		'portfolio_preview'                => array(
 			'callback'    => array( \ArtPulse\Widgets::class, 'render_portfolio_box' ),
 			'label'       => 'Portfolio Overview',
 			'description' => 'Summary of your published artworks.',
@@ -33,7 +33,7 @@ return array_filter(
 			'category'    => 'general',
 			'icon'        => 'portfolio',
 		),
-		'org_insights'              => array(
+		'org_insights'                     => array(
 			'callback'    => array( \ArtPulse\Widgets::class, 'render_org_insights_box' ),
 			'label'       => 'Organization Insights',
 			'description' => 'Key metrics for organization accounts.',
@@ -41,7 +41,7 @@ return array_filter(
 			'category'    => 'general',
 			'icon'        => 'chart-area',
 		),
-		'activity_feed'             => ( defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ) ? array(
+		'activity_feed'                    => ( defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ) ? array(
 			'class'       => ActivityFeedWidget::class,
 			'label'       => 'Activity Feed',
 			'description' => 'Shows recent user and org activity',
@@ -50,7 +50,7 @@ return array_filter(
 			'icon'        => 'activity',
 			'cache'       => true,
 		) : null,
-		'artist_inbox_preview'      => array(
+		'artist_inbox_preview'             => array(
 			'class'       => ArtistInboxPreviewWidget::class,
 			'label'       => 'Artist Inbox Preview',
 			'description' => 'Recent unread messages from artists.',
@@ -59,7 +59,7 @@ return array_filter(
 			'icon'        => 'inbox',
 			'capability'  => 'can_receive_messages',
 		),
-		'event_chat'                => array(
+		'event_chat'                       => array(
 			'class'       => EventChatWidget::class,
 			'label'       => 'Event Chat',
 			'description' => 'Chat with other attendees.',
@@ -67,7 +67,7 @@ return array_filter(
 			'category'    => 'events',
 			'icon'        => 'comments',
 		),
-		'my_favorites'              => array(
+		'my_favorites'                     => array(
 			'callback'    => array( DashboardWidgetRegistry::class, 'render_widget_my_favorites' ),
 			'label'       => 'My Favorite Events',
 			'description' => 'Your saved events.',
@@ -75,7 +75,7 @@ return array_filter(
 			'category'    => 'general',
 			'icon'        => 'star',
 		),
-		'nearby_events_map'         => array(
+		'nearby_events_map'                => array(
 			'callback'    => array( DashboardWidgetRegistry::class, 'render_widget_nearby_events_map' ),
 			'label'       => 'Nearby Events Map',
 			'description' => 'Events around your location.',
@@ -83,7 +83,7 @@ return array_filter(
 			'category'    => 'general',
 			'icon'        => 'location',
 		),
-		'news_feed'                 => array(
+		'news_feed'                        => array(
 			'class'       => \ArtPulseNewsFeedWidget::class,
 			'label'       => 'ArtPulse News Feed',
 			'description' => 'Latest posts from followed artists.',
@@ -91,14 +91,14 @@ return array_filter(
 			'category'    => 'general',
 			'icon'        => 'rss',
 		),
-		'qa_checklist'              => ( defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ) ? array(
+		'qa_checklist'                     => ( defined( 'AP_DEV_MODE' ) && AP_DEV_MODE ) ? array(
 			'class'       => \QAChecklistWidget::class,
 			'label'       => 'QA Checklist',
 			'description' => 'Steps to verify basic dashboard features.',
 			'roles'       => array( 'member' ),
 			'icon'        => 'yes',
 		) : null,
-		'rsvp_button'               => array(
+		'rsvp_button'                      => array(
 			'callback'    => 'ap_widget_rsvp_button',
 			'label'       => 'RSVP Button',
 			'description' => 'Toggle RSVP status for an event.',
@@ -106,7 +106,7 @@ return array_filter(
 			'category'    => 'events',
 			'icon'        => 'calendar-check',
 		),
-		'share_this_event'          => array(
+		'share_this_event'                 => array(
 			'callback'    => 'ap_widget_share_this_event',
 			'label'       => 'Share This Event',
 			'description' => 'Share this event with friends.',
@@ -114,7 +114,7 @@ return array_filter(
 			'category'    => 'events',
 			'icon'        => 'share',
 		),
-		'sample_events'             => array(
+		'sample_events'                    => array(
 			'class'       => EventsWidget::class,
 			'label'       => 'Events Widget',
 			'description' => 'Sample upcoming events list.',
@@ -124,7 +124,7 @@ return array_filter(
 			'cache'       => true,
 			'lazy'        => true,
 		),
-		'revenue_summary'           => array(
+		'revenue_summary'                  => array(
 			'callback'    => 'ap_widget_artist_revenue_summary',
 			'label'       => 'Revenue Summary',
 			'description' => 'Revenue totals from tickets and donations.',
@@ -133,7 +133,7 @@ return array_filter(
 			'icon'        => 'chart-bar',
 			'lazy'        => true,
 		),
-		'artist_spotlight'          => array(
+		'artist_spotlight'                 => array(
 			'callback'    => 'ap_widget_artist_spotlight',
 			'label'       => 'Artist Spotlight',
 			'description' => 'Recent mentions and highlights.',
@@ -142,7 +142,7 @@ return array_filter(
 			'icon'        => 'star-filled',
 			'lazy'        => true,
 		),
-		'artist_artwork_manager'    => array(
+		'artist_artwork_manager'           => array(
 			'callback'    => 'ap_widget_artist_artwork_manager',
 			'label'       => 'Artwork Manager',
 			'description' => 'Manage your artworks.',
@@ -151,7 +151,7 @@ return array_filter(
 			'icon'        => 'art',
 			'lazy'        => true,
 		),
-		'artist_audience_insights'  => array(
+		'artist_audience_insights'         => array(
 			'callback'    => 'ap_widget_artist_audience_insights',
 			'label'       => 'Audience Insights',
 			'description' => 'View audience insights.',
@@ -160,7 +160,7 @@ return array_filter(
 			'icon'        => 'chart-pie',
 			'lazy'        => true,
 		),
-		'artist_earnings_summary'   => array(
+		'artist_earnings_summary'          => array(
 			'callback'    => 'ap_widget_artist_earnings_summary',
 			'label'       => 'Earnings Summary',
 			'description' => 'Overview of earnings from sales and tips.',
@@ -169,7 +169,7 @@ return array_filter(
 			'icon'        => 'money',
 			'lazy'        => true,
 		),
-		'artist_feed_publisher'     => array(
+		'artist_feed_publisher'            => array(
 			'callback'    => 'ap_widget_artist_feed_publisher',
 			'label'       => 'Post & Engage',
 			'description' => 'Publish updates to your feed.',
@@ -178,7 +178,7 @@ return array_filter(
 			'icon'        => 'megaphone',
 			'lazy'        => true,
 		),
-		'collab_requests'           => array(
+		'collab_requests'                  => array(
 			'callback'    => 'ap_widget_collab_requests',
 			'label'       => 'Collab Requests',
 			'description' => 'Manage collaboration requests.',
@@ -187,7 +187,7 @@ return array_filter(
 			'icon'        => 'groups',
 			'lazy'        => true,
 		),
-		'onboarding_tracker'        => array(
+		'onboarding_tracker'               => array(
 			'callback'    => 'ap_widget_onboarding_tracker',
 			'label'       => 'Onboarding Checklist',
 			'description' => 'Track setup tasks.',
@@ -196,7 +196,7 @@ return array_filter(
 			'icon'        => 'yes-alt',
 			'lazy'        => true,
 		),
-		'audience_crm'              => array(
+		'audience_crm'                     => array(
 			'callback'    => 'ap_widget_audience_crm',
 			'label'       => 'Audience CRM',
 			'description' => 'Manage organization contacts.',
@@ -204,7 +204,7 @@ return array_filter(
 			'icon'        => 'groups',
 			'lazy'        => true,
 		),
-		'sponsored_event_config'    => array(
+		'sponsored_event_config'           => array(
 			'callback'    => 'ap_widget_sponsored_event_config',
 			'label'       => 'Sponsored Event Config',
 			'description' => 'Configure sponsored event settings.',
@@ -212,7 +212,7 @@ return array_filter(
 			'icon'        => 'star',
 			'lazy'        => true,
 		),
-		'embed_tool'                => array(
+		'embed_tool'                       => array(
 			'callback'    => 'ap_widget_embed_tool',
 			'label'       => 'Embed Tool',
 			'description' => 'Generate embeddable event widgets.',
@@ -220,7 +220,7 @@ return array_filter(
 			'icon'        => 'share',
 			'lazy'        => true,
 		),
-                'widget_org_event_overview' => array(
+		'widget_org_event_overview'        => array(
 			'callback'    => 'ap_widget_org_event_overview',
 			'label'       => 'Event Overview',
 			'description' => 'Overview of upcoming organization events.',
@@ -228,7 +228,7 @@ return array_filter(
 			'icon'        => 'calendar',
 			'lazy'        => true,
 		),
-		'org_team_roster'           => array(
+		'org_team_roster'                  => array(
 			'class'       => OrgTeamRosterWidget::class,
 			'label'       => 'Team Roster',
 			'description' => 'List and manage team members.',
@@ -236,7 +236,7 @@ return array_filter(
 			'icon'        => 'admin-users',
 			'lazy'        => true,
 		),
-		'branding_settings_panel'   => array(
+		'branding_settings_panel'          => array(
 			'callback'    => 'ap_widget_branding_settings_panel',
 			'label'       => 'Branding Settings',
 			'description' => 'Customize organization branding.',
@@ -244,21 +244,21 @@ return array_filter(
 			'icon'        => 'admin-customizer',
 			'lazy'        => true,
 		),
-		'ap_donor_activity'         => array(
+		'ap_donor_activity'                => array(
 			'class'       => \DonorActivityWidget::class,
 			'label'       => 'Donor Activity',
 			'description' => 'Recent donations for your organization.',
 			'roles'       => array( 'organization' ),
 			'icon'        => 'chart-line',
 		),
-                'widget_artpulse_analytics_widget' => array(
+		'widget_artpulse_analytics_widget' => array(
 			'class'       => OrgAnalyticsWidget::class,
 			'label'       => 'Organization Analytics',
 			'description' => 'Basic traffic and engagement metrics.',
 			'roles'       => array( 'organization' ),
 			'icon'        => 'chart-bar',
 		),
-		'org_widget_sharing'        => array(
+		'org_widget_sharing'               => array(
 			'callback'    => 'ap_widget_org_widget_sharing',
 			'label'       => 'Widget Sharing',
 			'description' => 'Share widgets with partners.',
@@ -266,14 +266,14 @@ return array_filter(
 			'icon'        => 'share',
 			'lazy'        => true,
 		),
-		'webhooks'                  => array(
+		'webhooks'                         => array(
 			'callback'    => 'ap_widget_webhooks',
 			'label'       => 'Webhooks',
 			'description' => 'Manage outbound webhooks for automation.',
 			'roles'       => array( 'organization' ),
 			'icon'        => 'admin-links',
 		),
-		'sponsor_display'           => array(
+		'sponsor_display'                  => array(
 			'callback'    => 'ap_widget_sponsor_display',
 			'label'       => 'Sponsor Display',
 			'description' => 'Showcase sponsors on events.',
@@ -281,7 +281,7 @@ return array_filter(
 			'icon'        => 'star-filled',
 			'lazy'        => true,
 		),
-		'org_approval_center'       => array(
+		'org_approval_center'              => array(
 			'callback'    => 'ap_widget_org_approval_center',
 			'label'       => 'Approval Center',
 			'description' => 'Review pending items awaiting approval.',
@@ -289,7 +289,7 @@ return array_filter(
 			'icon'        => 'yes',
 			'lazy'        => true,
 		),
-		'org_ticket_insights'       => array(
+		'org_ticket_insights'              => array(
 			'callback'    => 'ap_widget_org_ticket_insights',
 			'label'       => 'Ticket Insights',
 			'description' => 'Analyze ticket sales and attendance.',
@@ -297,7 +297,7 @@ return array_filter(
 			'icon'        => 'chart-line',
 			'lazy'        => true,
 		),
-		'org_broadcast_box'         => array(
+		'org_broadcast_box'                => array(
 			'callback'    => 'ap_widget_org_broadcast_box',
 			'label'       => 'Broadcast Box',
 			'description' => 'Send messages to followers.',
@@ -305,7 +305,7 @@ return array_filter(
 			'icon'        => 'megaphone',
 			'lazy'        => true,
 		),
-		'my_upcoming_events'        => array(
+		'my_upcoming_events'               => array(
 			'class'       => MyUpcomingEventsWidget::class,
 			'label'       => 'My Upcoming Events',
 			'description' => 'List of your upcoming events.',
@@ -313,7 +313,7 @@ return array_filter(
 			'category'    => 'events',
 			'icon'        => 'calendar',
 		),
-		'profile_overview'          => array(
+		'profile_overview'                 => array(
 			'class'       => ProfileOverviewWidget::class,
 			'label'       => 'Profile Overview',
 			'description' => 'Quick stats about your profile.',
@@ -321,7 +321,7 @@ return array_filter(
 			'category'    => 'general',
 			'icon'        => 'user',
 		),
-		'sample_donations'          => array(
+		'sample_donations'                 => array(
 			'class'       => DonationsWidget::class,
 			'label'       => 'Donations Widget',
 			'description' => 'Recent donations list.',
@@ -329,7 +329,7 @@ return array_filter(
 			'category'    => 'commerce',
 			'icon'        => 'money-alt',
 		),
-		'widget_events'             => array(
+		'widget_events'                    => array(
 			'class'       => WidgetEventsWidget::class,
 			'label'       => 'Upcoming Events (Member)',
 			'description' => 'Events happening soon.',
@@ -337,7 +337,7 @@ return array_filter(
 			'category'    => 'general',
 			'icon'        => 'calendar',
 		),
-		'widget_near_me_events'     => array(
+		'widget_near_me_events'            => array(
 			'class'       => NearbyEventsWidget::class,
 			'label'       => 'Nearby Events (Legacy)',
 			'description' => 'Events near your location.',
@@ -345,7 +345,7 @@ return array_filter(
 			'category'    => 'general',
 			'icon'        => 'location',
 		),
-		'widget_favorites'          => array(
+		'widget_favorites'                 => array(
 			'class'       => FavoritesOverviewWidget::class,
 			'label'       => 'Favorites Overview',
 			'description' => 'Your favorite artists and works.',

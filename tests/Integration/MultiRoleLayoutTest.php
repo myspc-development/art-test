@@ -8,7 +8,6 @@ use ArtPulse\Core\UserDashboardManager;
 /**
 
  * @group INTEGRATION
-
  */
 
 class MultiRoleLayoutTest extends \WP_UnitTestCase {
@@ -25,34 +24,34 @@ class MultiRoleLayoutTest extends \WP_UnitTestCase {
 			add_role( 'artist', 'Artist' );
 		}
 
-               DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', '__return_null', array( 'roles' => array( 'member' ) ) );
-               DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', '__return_null', array( 'roles' => array( 'artist' ) ) );
-               DashboardWidgetRegistry::register( 'widget_shared', 'Shared', '', '', '__return_null', array( 'roles' => array( 'member', 'artist' ) ) );
+				DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', '__return_null', array( 'roles' => array( 'member' ) ) );
+				DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', '__return_null', array( 'roles' => array( 'artist' ) ) );
+				DashboardWidgetRegistry::register( 'widget_shared', 'Shared', '', '', '__return_null', array( 'roles' => array( 'member', 'artist' ) ) );
 
 		UserLayoutManager::save_role_layout(
 			'member',
 			array(
-                               array(
-                                       'id'      => 'widget_alpha',
-                                       'visible' => true,
-                               ),
-                               array(
-                                       'id'      => 'widget_shared',
-                                       'visible' => true,
-                               ),
+				array(
+					'id'      => 'widget_alpha',
+					'visible' => true,
+				),
+				array(
+					'id'      => 'widget_shared',
+					'visible' => true,
+				),
 			)
 		);
 		UserLayoutManager::save_role_layout(
 			'artist',
 			array(
-                               array(
-                                       'id'      => 'widget_beta',
-                                       'visible' => false,
-                               ),
-                               array(
-                                       'id'      => 'widget_shared',
-                                       'visible' => true,
-                               ),
+				array(
+					'id'      => 'widget_beta',
+					'visible' => false,
+				),
+				array(
+					'id'      => 'widget_shared',
+					'visible' => true,
+				),
 			)
 		);
 
@@ -68,14 +67,14 @@ class MultiRoleLayoutTest extends \WP_UnitTestCase {
 		wp_set_current_user( $this->userId );
 		$resp = UserDashboardManager::getDashboardLayout();
 		$data = $resp->get_data();
-               $this->assertSame( array( 'widget_alpha', 'widget_shared', 'widget_beta' ), $data['layout'] );
-               $this->assertSame(
-                       array(
-                               'widget_alpha'  => true,
-                               'widget_shared' => true,
-                               'widget_beta'   => false,
-                       ),
-                       $data['visibility']
-               );
+				$this->assertSame( array( 'widget_alpha', 'widget_shared', 'widget_beta' ), $data['layout'] );
+				$this->assertSame(
+					array(
+						'widget_alpha'  => true,
+						'widget_shared' => true,
+						'widget_beta'   => false,
+					),
+					$data['visibility']
+				);
 	}
 }

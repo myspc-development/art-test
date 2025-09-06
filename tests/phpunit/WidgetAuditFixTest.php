@@ -13,7 +13,6 @@ require_once __DIR__ . '/fixtures/TestWidget.php';
 /**
 
  * @group PHPUNIT
-
  */
 
 class WidgetAuditFixTest extends TestCase {

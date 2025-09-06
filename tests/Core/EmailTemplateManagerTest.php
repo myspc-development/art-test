@@ -7,7 +7,6 @@ use WP_UnitTestCase;
 /**
 
  * @group CORE
-
  */
 
 class EmailTemplateManagerTest extends WP_UnitTestCase {

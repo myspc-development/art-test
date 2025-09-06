@@ -44,11 +44,11 @@ class AP_CLI_Widget_Roles {
 			if ( ! file_exists( $file ) ) {
 				\WP_CLI::error( 'File not found.' );
 			}
-                        $data = json_decode( file_get_contents( $file ), true );
-                        if ( JSON_ERROR_NONE !== json_last_error() ) {
-                                \WP_CLI::error( 'Invalid JSON.' );
-                        }
-                        update_option( 'artpulse_widget_roles', $data );
+						$data = json_decode( file_get_contents( $file ), true );
+			if ( JSON_ERROR_NONE !== json_last_error() ) {
+					\WP_CLI::error( 'Invalid JSON.' );
+			}
+						update_option( 'artpulse_widget_roles', $data );
 			\WP_CLI::success( 'Imported widget-role map.' );
 			return;
 		}

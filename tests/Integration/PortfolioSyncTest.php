@@ -6,7 +6,6 @@ use ArtPulse\Integration\PortfolioSync;
 /**
 
  * @group INTEGRATION
-
  */
 
 class PortfolioSyncTest extends \WP_UnitTestCase {

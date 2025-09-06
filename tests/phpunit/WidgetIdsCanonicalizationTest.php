@@ -9,18 +9,17 @@ require_once __DIR__ . '/../TestStubs.php';
 /**
 
  * @group PHPUNIT
-
  */
 
 class WidgetIdsCanonicalizationTest extends TestCase {
 
-        public function test_canonicalize_aliases(): void {
+	public function test_canonicalize_aliases(): void {
 		$map = array(
 			'membership'                  => 'widget_membership',
 			'upgrade'                     => 'widget_upgrade',
-                       'account-tools'               => 'widget_account_tools',
-                       'widget_account-tools'        => 'widget_account_tools',
-                       'my-events'                   => 'widget_my_events',
+			'account-tools'               => 'widget_account_tools',
+			'widget_account-tools'        => 'widget_account_tools',
+			'my-events'                   => 'widget_my_events',
 			'recommended_for_you'         => 'widget_recommended_for_you',
 			'my_rsvps'                    => 'widget_my_rsvps',
 			'favorites'                   => 'widget_favorites',
@@ -35,32 +34,32 @@ class WidgetIdsCanonicalizationTest extends TestCase {
 			'webhooks'                    => 'widget_webhooks',
 			'notifications'               => 'widget_notifications',
 			'messages'                    => 'widget_messages',
-                        'dashboard_feedback'          => 'widget_dashboard_feedback',
-                        'cat_fact'                    => 'widget_cat_fact',
-                        'news'                         => 'widget_news',
-                        'widget_news_feed'            => 'widget_news',
-                        'widget_widget_events'        => 'widget_events',
-                        'widget_widget_favorites'     => 'widget_favorites',
+			'dashboard_feedback'          => 'widget_dashboard_feedback',
+			'cat_fact'                    => 'widget_cat_fact',
+			'news'                        => 'widget_news',
+			'widget_news_feed'            => 'widget_news',
+			'widget_widget_events'        => 'widget_events',
+			'widget_widget_favorites'     => 'widget_favorites',
 		);
 		foreach ( $map as $in => $expected ) {
 			$this->assertSame( $expected, WidgetIds::canonicalize( $in ) );
-                }
-        }
+		}
+	}
 
-        public function test_canonicalize_sanitization(): void {
-                $map = array(
-                        'A-'              => 'widget_a',
-                        'B C'             => 'widget_bc',
-                        'in valid/slug'   => 'widget_invalidslug',
-                );
-                foreach ( $map as $in => $expected ) {
-                        $this->assertSame( $expected, WidgetIds::canonicalize( $in ) );
-                }
-        }
+	public function test_canonicalize_sanitization(): void {
+			$map = array(
+				'A-'            => 'widget_a',
+				'B C'           => 'widget_bc',
+				'in valid/slug' => 'widget_invalidslug',
+			);
+			foreach ( $map as $in => $expected ) {
+					$this->assertSame( $expected, WidgetIds::canonicalize( $in ) );
+			}
+	}
 
-        public function test_canonicalize_non_strings_return_empty(): void {
-               $this->assertSame( '', WidgetIds::canonicalize( array( 'widget_foo' ) ) );
-                $this->assertSame( '', WidgetIds::canonicalize( null ) );
-                $this->assertSame( '', WidgetIds::canonicalize( new \stdClass() ) );
+	public function test_canonicalize_non_strings_return_empty(): void {
+			$this->assertSame( '', WidgetIds::canonicalize( array( 'widget_foo' ) ) );
+			$this->assertSame( '', WidgetIds::canonicalize( null ) );
+			$this->assertSame( '', WidgetIds::canonicalize( new \stdClass() ) );
 	}
 }

@@ -1,5 +1,7 @@
 <?php
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
+if ( defined( 'IS_DASHBOARD_BUILDER_PREVIEW' ) ) {
+	return;
+}
 namespace ArtPulse\Widgets;
 
 if ( ! defined( 'ABSPATH' ) ) {

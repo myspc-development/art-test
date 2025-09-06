@@ -3,35 +3,34 @@
 namespace ArtPulse\Widgets\Organization;
 
 if ( ! function_exists( __NAMESPACE__ . '\\admin_url' ) ) {
-        function admin_url( $path = '', $scheme = 'admin' ) {
-                return '#';
-        }
+	function admin_url( $path = '', $scheme = 'admin' ) {
+			return '#';
+	}
 }
 
 namespace ArtPulse\Tests;
 
 require_once __DIR__ . '/../TestStubs.php';
-        use PHPUnit\Framework\TestCase;
-        use ArtPulse\Core\DashboardWidgetRegistry;
-        use ArtPulse\Widgets\Organization\LeadCaptureWidget;
-        use ArtPulse\Widgets\Organization\RsvpStatsWidget;
-        use ArtPulse\Widgets\Organization\WebhooksWidget;
-        use ArtPulse\Widgets\Organization\MyEventsWidget;
-        use ArtPulse\Widgets\Common\SiteStatsWidget;
+		use PHPUnit\Framework\TestCase;
+		use ArtPulse\Core\DashboardWidgetRegistry;
+		use ArtPulse\Widgets\Organization\LeadCaptureWidget;
+		use ArtPulse\Widgets\Organization\RsvpStatsWidget;
+		use ArtPulse\Widgets\Organization\WebhooksWidget;
+		use ArtPulse\Widgets\Organization\MyEventsWidget;
+		use ArtPulse\Widgets\Common\SiteStatsWidget;
 
 /**
 
  * @group PHPUNIT
-
  */
 
 class OrgWidgetsTest extends TestCase {
-        protected function setUp(): void {
-                parent::setUp();
-                $ref  = new \ReflectionClass( DashboardWidgetRegistry::class );
-                $prop = $ref->getProperty( 'widgets' );
-                $prop->setAccessible( true );
-                $prop->setValue( null, array() );
+	protected function setUp(): void {
+			parent::setUp();
+			$ref  = new \ReflectionClass( DashboardWidgetRegistry::class );
+			$prop = $ref->getProperty( 'widgets' );
+			$prop->setAccessible( true );
+			$prop->setValue( null, array() );
 
 		LeadCaptureWidget::register();
 		RsvpStatsWidget::register();
@@ -50,19 +49,19 @@ class OrgWidgetsTest extends TestCase {
 		);
 	}
 
-        /**
-         * @dataProvider widgetIds
-         * @group slow
-         */
-        public function test_widgets_registered( string $id ): void {
+		/**
+		 * @dataProvider widgetIds
+		 * @group slow
+		 */
+	public function test_widgets_registered( string $id ): void {
 		$this->assertTrue( DashboardWidgetRegistry::exists( $id ) );
 	}
 
-        /**
-         * @dataProvider widgetIds
-         * @group slow
-         */
-        public function test_widgets_render( string $id ): void {
+		/**
+		 * @dataProvider widgetIds
+		 * @group slow
+		 */
+	public function test_widgets_render( string $id ): void {
 		$def = DashboardWidgetRegistry::getById( $id );
 		$this->assertIsArray( $def );
 		$callback = $def['callback'];

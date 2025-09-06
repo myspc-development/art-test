@@ -6,7 +6,6 @@ use ArtPulse\Integration\SocialAutoPoster;
 /**
 
  * @group INTEGRATION
-
  */
 
 class SocialAutoPosterTest extends \WP_UnitTestCase {

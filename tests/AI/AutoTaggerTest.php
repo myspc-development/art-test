@@ -7,7 +7,6 @@ use ArtPulse\AI\AutoTagger;
 /**
 
  * @group AI
-
  */
 
 class AutoTaggerTest extends TestCase {
@@ -22,22 +21,22 @@ class AutoTaggerTest extends TestCase {
 	}
 
 	public static function languageSamples(): array {
-                return array(
-                        // Spanish with diacritics.
-                        array( 'Canción para niño.', 'es' ),
-                        // Spanish using common stopwords without accents.
-                        array( 'Esto es una prueba.', 'es' ),
-                        // French with diacritics.
-                        array( 'école française', 'fr' ),
-                        // French using common stopwords without accents.
-                        array( 'Ceci est un test', 'fr' ),
-                        // German with diacritics.
-                        array( 'Füße müde', 'de' ),
-                        // German using common stopwords without accents.
-                        array( 'Dies ist ein Test', 'de' ),
-                        array( 'Это тест', 'ru' ),
-                        array( '这是一个测试', 'zh' ),
-                        array( 'A simple test', 'en' ),
-                );
-        }
+				return array(
+					// Spanish with diacritics.
+					array( 'Canción para niño.', 'es' ),
+					// Spanish using common stopwords without accents.
+					array( 'Esto es una prueba.', 'es' ),
+					// French with diacritics.
+					array( 'école française', 'fr' ),
+					// French using common stopwords without accents.
+					array( 'Ceci est un test', 'fr' ),
+					// German with diacritics.
+					array( 'Füße müde', 'de' ),
+					// German using common stopwords without accents.
+					array( 'Dies ist ein Test', 'de' ),
+					array( 'Это тест', 'ru' ),
+					array( '这是一个测试', 'zh' ),
+					array( 'A simple test', 'en' ),
+				);
+	}
 }

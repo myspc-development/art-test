@@ -7,7 +7,6 @@ use ArtPulse\Core\EventMetrics;
 /**
 
  * @group INTEGRATION
-
  */
 
 class EventRankingManagerTest extends \WP_UnitTestCase {

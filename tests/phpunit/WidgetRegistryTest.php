@@ -7,16 +7,15 @@ use ArtPulse\Core\WidgetRegistry;
 /**
 
  * @group PHPUNIT
-
  */
 
 class WidgetRegistryTest extends TestCase {
 
-         public static function renderGreeting( array $ctx = array() ): string {
-                 return 'hello ' . ( $ctx['name'] ?? 'world' );
-         }
+	public static function renderGreeting( array $ctx = array() ): string {
+			return 'hello ' . ( $ctx['name'] ?? 'world' );
+	}
 
-         protected function tearDown(): void {
+	protected function tearDown(): void {
 		$ref  = new \ReflectionClass( WidgetRegistry::class );
 		$prop = $ref->getProperty( 'widgets' );
 		$prop->setAccessible( true );
@@ -27,13 +26,13 @@ class WidgetRegistryTest extends TestCase {
 		WidgetRegistry::resetDebug();
 	}
 
-         public function test_register_and_render(): void {
-                 WidgetRegistry::setDebug( false );
-                WidgetRegistry::register( 'widget_foo', [self::class, 'renderGreeting'] );
-                $this->assertTrue( WidgetRegistry::exists( 'widget_foo' ) );
-                $this->assertSame( 'hello bob', WidgetRegistry::render( 'widget_foo', array( 'name' => 'bob' ) ) );
-                $this->assertContains( 'widget_foo', WidgetRegistry::list() );
-         }
+	public function test_register_and_render(): void {
+			WidgetRegistry::setDebug( false );
+			WidgetRegistry::register( 'widget_foo', array( self::class, 'renderGreeting' ) );
+			$this->assertTrue( WidgetRegistry::exists( 'widget_foo' ) );
+			$this->assertSame( 'hello bob', WidgetRegistry::render( 'widget_foo', array( 'name' => 'bob' ) ) );
+			$this->assertContains( 'widget_foo', WidgetRegistry::list() );
+	}
 
 	public function test_missing_slug_returns_placeholder_with_data_slug(): void {
 		WidgetRegistry::setDebug( true );

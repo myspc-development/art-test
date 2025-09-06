@@ -13,7 +13,6 @@ use ArtPulse\Widgets\Placeholder\ApPlaceholderWidget;
 /**
 
  * @group PHPUNIT
-
  */
 
 class UserLayoutManagerRoleLayoutTest extends TestCase {
@@ -39,16 +38,18 @@ class UserLayoutManagerRoleLayoutTest extends TestCase {
 			)
 		);
 
-                  DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', [self::class, 'returnEmpty'], array( 'roles' => array( 'member' ) ) );
-                  DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', [self::class, 'returnEmpty'], array( 'roles' => array( 'artist' ) ) );
-                  WidgetRegistry::register( 'widget_alpha', [self::class, 'renderSection'] );
-                  WidgetRegistry::register( 'widget_beta', [self::class, 'renderSection'] );
-        }
+					DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', array( self::class, 'returnEmpty' ), array( 'roles' => array( 'member' ) ) );
+					DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', array( self::class, 'returnEmpty' ), array( 'roles' => array( 'artist' ) ) );
+					WidgetRegistry::register( 'widget_alpha', array( self::class, 'renderSection' ) );
+					WidgetRegistry::register( 'widget_beta', array( self::class, 'renderSection' ) );
+	}
 
-        public static function returnEmpty(): string { return ''; }
-        public static function renderSection(): string { return '<section></section>'; }
+	public static function returnEmpty(): string {
+		return ''; }
+	public static function renderSection(): string {
+		return '<section></section>'; }
 
-        public function test_role_layout_registers_placeholders_for_missing_widgets(): void {
+	public function test_role_layout_registers_placeholders_for_missing_widgets(): void {
 		MockStorage::$options['ap_dashboard_widget_config'] = array(
 			'member' => array(
 				array(
@@ -76,33 +77,33 @@ class UserLayoutManagerRoleLayoutTest extends TestCase {
 			),
 			$result['layout']
 		);
-               $this->assertSame( array( 'ghost' ), $result['logs'] );
+			$this->assertSame( array( 'ghost' ), $result['logs'] );
 		$def = DashboardWidgetRegistry::getById( 'ghost' );
 		$this->assertSame( ApPlaceholderWidget::class, $def['class'] );
-        }
+	}
 
-       public function test_existing_widgets_not_added_to_log(): void {
-               MockStorage::$options['ap_dashboard_widget_config'] = array(
-                       'member' => array(
-                               array(
-                                       'id'      => 'widget_alpha',
-                                       'visible' => true,
-                               ),
-                       ),
-               );
+	public function test_existing_widgets_not_added_to_log(): void {
+			MockStorage::$options['ap_dashboard_widget_config'] = array(
+				'member' => array(
+					array(
+						'id'      => 'widget_alpha',
+						'visible' => true,
+					),
+				),
+			);
 
-               $result = UserLayoutManager::get_role_layout( 'member' );
-               $this->assertSame(
-                       array(
-                               array(
-                                       'id'      => 'widget_alpha',
-                                       'visible' => true,
-                               ),
-                       ),
-                       $result['layout']
-               );
-               $this->assertSame( array(), $result['logs'] );
-       }
+			$result = UserLayoutManager::get_role_layout( 'member' );
+			$this->assertSame(
+				array(
+					array(
+						'id'      => 'widget_alpha',
+						'visible' => true,
+					),
+				),
+				$result['layout']
+			);
+			$this->assertSame( array(), $result['logs'] );
+	}
 
 	public function test_role_layout_falls_back_to_default_widgets(): void {
 		$result = UserLayoutManager::get_role_layout( 'artist' );

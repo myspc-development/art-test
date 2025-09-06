@@ -7,7 +7,6 @@ namespace ArtPulse\Core\Tests {
 	/**
 
 	 * @group CORE
-
 	 */
 
 	class DashboardControllerTest extends TestCase {
@@ -100,12 +99,12 @@ namespace ArtPulse\Core\Tests {
 			$this->assertSame( $expected, DashboardController::get_widgets_for_role( 'organization' ) );
 		}
 
-               public function test_get_widgets_for_administrator_role_returns_empty(): void {
-                       $this->assertSame( array(), DashboardController::get_widgets_for_role( 'administrator' ) );
-               }
+		public function test_get_widgets_for_administrator_role_returns_empty(): void {
+				$this->assertSame( array(), DashboardController::get_widgets_for_role( 'administrator' ) );
+		}
 
-               public function test_get_widgets_for_unknown_role_returns_empty(): void {
-                       $this->assertSame( array(), DashboardController::get_widgets_for_role( 'unknown' ) );
-               }
-       }
+		public function test_get_widgets_for_unknown_role_returns_empty(): void {
+				$this->assertSame( array(), DashboardController::get_widgets_for_role( 'unknown' ) );
+		}
+	}
 }

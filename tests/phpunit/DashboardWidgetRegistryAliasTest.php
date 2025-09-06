@@ -10,11 +10,11 @@ require_once __DIR__ . '/../TestStubs.php';
 /**
 
  * @group PHPUNIT
-
  */
 
 class DashboardWidgetRegistryAliasTest extends TestCase {
-        public static function renderBlank(): string { return ''; }
+	public static function renderBlank(): string {
+		return ''; }
 
 	protected function setUp(): void {
 		$ref = new \ReflectionClass( DashboardWidgetRegistry::class );
@@ -28,8 +28,8 @@ class DashboardWidgetRegistryAliasTest extends TestCase {
 	}
 
 	public function test_alias_resolves_to_canonical(): void {
-                DashboardWidgetRegistry::register( 'widget_favorites', 'Favorites', '', '', [self::class, 'renderBlank'] );
-                DashboardWidgetRegistry::register( 'widget_widget_favorites', 'Legacy', '', '', [self::class, 'renderBlank'] );
+				DashboardWidgetRegistry::register( 'widget_favorites', 'Favorites', '', '', array( self::class, 'renderBlank' ) );
+				DashboardWidgetRegistry::register( 'widget_widget_favorites', 'Legacy', '', '', array( self::class, 'renderBlank' ) );
 		DashboardWidgetRegistry::alias( 'widget_widget_favorites', 'widget_favorites' );
 
 		$defs = DashboardWidgetRegistry::get_all();
@@ -56,30 +56,30 @@ class DashboardWidgetRegistryAliasTest extends TestCase {
 		$this->assertTrue( is_callable( $def['callback'] ) );
 	}
 
-        public function test_feed_alias_maps_to_news(): void {
-                DashboardWidgetRegistry::register( 'widget_news', 'News', '', '', [self::class, 'renderBlank'] );
-                DashboardWidgetRegistry::alias( 'widget_news_feed', 'widget_news' );
-                $this->assertTrue( DashboardWidgetRegistry::exists( 'widget_news_feed' ) );
-                $this->assertSame(
-                        DashboardWidgetRegistry::get( 'widget_news' ),
-                        DashboardWidgetRegistry::get( 'widget_news_feed' )
-                );
-        }
+	public function test_feed_alias_maps_to_news(): void {
+			DashboardWidgetRegistry::register( 'widget_news', 'News', '', '', array( self::class, 'renderBlank' ) );
+			DashboardWidgetRegistry::alias( 'widget_news_feed', 'widget_news' );
+			$this->assertTrue( DashboardWidgetRegistry::exists( 'widget_news_feed' ) );
+			$this->assertSame(
+				DashboardWidgetRegistry::get( 'widget_news' ),
+				DashboardWidgetRegistry::get( 'widget_news_feed' )
+			);
+	}
 
-       public function test_hyphenated_aliases_resolve_to_canonical(): void {
-               DashboardWidgetRegistry::register( 'widget_my_events', 'My Events', '', '', [self::class, 'renderBlank'] );
-               DashboardWidgetRegistry::register( 'widget_account_tools', 'Account Tools', '', '', [self::class, 'renderBlank'] );
+	public function test_hyphenated_aliases_resolve_to_canonical(): void {
+			DashboardWidgetRegistry::register( 'widget_my_events', 'My Events', '', '', array( self::class, 'renderBlank' ) );
+			DashboardWidgetRegistry::register( 'widget_account_tools', 'Account Tools', '', '', array( self::class, 'renderBlank' ) );
 
-               $this->assertTrue( DashboardWidgetRegistry::exists( 'my-events' ) );
-               $this->assertSame(
-                       DashboardWidgetRegistry::get( 'widget_my_events' ),
-                       DashboardWidgetRegistry::get( 'my-events' )
-               );
+			$this->assertTrue( DashboardWidgetRegistry::exists( 'my-events' ) );
+			$this->assertSame(
+				DashboardWidgetRegistry::get( 'widget_my_events' ),
+				DashboardWidgetRegistry::get( 'my-events' )
+			);
 
-               $this->assertTrue( DashboardWidgetRegistry::exists( 'widget_account-tools' ) );
-               $this->assertSame(
-                       DashboardWidgetRegistry::get( 'widget_account_tools' ),
-                       DashboardWidgetRegistry::get( 'widget_account-tools' )
-               );
-       }
+			$this->assertTrue( DashboardWidgetRegistry::exists( 'widget_account-tools' ) );
+			$this->assertSame(
+				DashboardWidgetRegistry::get( 'widget_account_tools' ),
+				DashboardWidgetRegistry::get( 'widget_account-tools' )
+			);
+	}
 }

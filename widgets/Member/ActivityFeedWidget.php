@@ -1,5 +1,7 @@
 <?php
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
+if ( defined( 'IS_DASHBOARD_BUILDER_PREVIEW' ) ) {
+	return;
+}
 namespace ArtPulse\Widgets\Member;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,11 +12,11 @@ use ArtPulse\Core\DashboardWidgetInterface;
 use ArtPulse\Core\DashboardWidgetRegistry;
 
 class ActivityFeedWidget implements DashboardWidgetInterface {
-        public static function can_view( int $user_id = 0 ): bool {
-                $user_id = $user_id ?: get_current_user_id();
-                $role    = \ArtPulse\Core\DashboardController::get_role( $user_id );
-                return in_array( $role, self::roles(), true );
-        }
+	public static function can_view( int $user_id = 0 ): bool {
+			$user_id = $user_id ?: get_current_user_id();
+			$role    = \ArtPulse\Core\DashboardController::get_role( $user_id );
+			return in_array( $role, self::roles(), true );
+	}
 
 	public static function id(): string {
 		return 'activity_feed';
@@ -48,11 +50,11 @@ class ActivityFeedWidget implements DashboardWidgetInterface {
 	}
 
 	public static function render( int $user_id = 0 ): string {
-                $user_id = $user_id ?: get_current_user_id();
+				$user_id = $user_id ?: get_current_user_id();
 
-                if ( ! $user_id || ! self::can_view( $user_id ) ) {
-                        return '<div class="notice notice-error"><p>' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p></div>';
-                }
+		if ( ! $user_id || ! self::can_view( $user_id ) ) {
+				return '<div class="notice notice-error"><p>' . esc_html__( 'You do not have access.', 'artpulse' ) . '</p></div>';
+		}
 
 		$org_id = intval( get_user_meta( $user_id, 'ap_organization_id', true ) );
 		$logs   = ActivityLogger::get_logs( $org_id ?: null, $user_id, 10 );

@@ -8,7 +8,6 @@ use ArtPulse\Dashboard\WidgetVisibility;
 /**
 
  * @group CORE
-
  */
 
 class DashboardBuilderRegistryVisibilityTest extends TestCase {
@@ -26,16 +25,16 @@ class DashboardBuilderRegistryVisibilityTest extends TestCase {
 	}
 
 	public function test_default_visibility_is_public(): void {
-               DashboardWidgetRegistry::register(
-                       'widget_alpha',
-                       array(
-                               'title'           => 'Alpha',
-                               'render_callback' => '__return_null',
-                       )
-               );
+				DashboardWidgetRegistry::register(
+					'widget_alpha',
+					array(
+						'title'           => 'Alpha',
+						'render_callback' => '__return_null',
+					)
+				);
 
-               $all = DashboardWidgetRegistry::get_all( null, true );
-               $this->assertSame( WidgetVisibility::PUBLIC, $all['widget_alpha']['visibility'] );
+				$all = DashboardWidgetRegistry::get_all( null, true );
+				$this->assertSame( WidgetVisibility::PUBLIC, $all['widget_alpha']['visibility'] );
 	}
 
 	public function test_filter_by_visibility(): void {

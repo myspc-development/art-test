@@ -16,7 +16,6 @@ if ( ! function_exists( 'get_user_meta' ) ) {
 /**
 
  * @group CORE
-
  */
 
 class UserLayoutManagerTest extends \WP_UnitTestCase {

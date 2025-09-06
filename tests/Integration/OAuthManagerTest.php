@@ -6,7 +6,6 @@ namespace ArtPulse\Integration\Tests {
 	/**
 
 	 * @group INTEGRATION
-
 	 */
 
 	class OAuthManagerTest extends \WP_UnitTestCase {

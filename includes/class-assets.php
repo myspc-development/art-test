@@ -11,60 +11,69 @@ class ArtPulse_Assets {
 	/**
 	 * Register hooks.
 	 */
-        public static function init(): void {
-                add_action( 'wp', array( self::class, 'maybe_hook' ) );
-        }
+	public static function init(): void {
+			add_action( 'wp', array( self::class, 'maybe_hook' ) );
+	}
 
-        /**
-         * Only hook assets on dashboard pages.
-         */
-        public static function maybe_hook(): void {
-                if ( is_page( 'dashboard' ) || is_page_template( 'page-dashboard.php' ) ) {
-                        add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_assets' ) );
-                }
-        }
+		/**
+		 * Only hook assets on dashboard pages.
+		 */
+	public static function maybe_hook(): void {
+		if ( is_page( 'dashboard' ) || is_page_template( 'page-dashboard.php' ) ) {
+				add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_assets' ) );
+		}
+	}
 
-        /**
-         * Enqueue scripts and styles for dashboard pages.
-         */
-        public static function enqueue_assets(): void {
-                \ArtPulse\Admin\EnqueueAssets::enqueue_style_if_exists( 'ap-dashboard', 'assets/css/dashboard.css' );
-                \ArtPulse\Admin\EnqueueAssets::enqueue_style_if_exists( 'ap-calendar', 'assets/css/calendar.css' );
+		/**
+		 * Enqueue scripts and styles for dashboard pages.
+		 */
+	public static function enqueue_assets(): void {
+			\ArtPulse\Admin\EnqueueAssets::enqueue_style_if_exists( 'ap-dashboard', 'assets/css/dashboard.css' );
+			\ArtPulse\Admin\EnqueueAssets::enqueue_style_if_exists( 'ap-calendar', 'assets/css/calendar.css' );
 
-                \ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists( 'ap-user-dashboard', 'assets/js/ap-user-dashboard.js', array(), true, array( 'type' => 'module', 'strategy' => 'defer' ) );
+			\ArtPulse\Admin\EnqueueAssets::enqueue_script_if_exists(
+				'ap-user-dashboard',
+				'assets/js/ap-user-dashboard.js',
+				array(),
+				true,
+				array(
+					'type'     => 'module',
+					'strategy' => 'defer',
+				)
+			);
 
-                $user = wp_get_current_user();
-                $boot = array(
-                        'restRoot'     => esc_url_raw( rest_url() ),
-                        'restNonce'    => wp_create_nonce( 'wp_rest' ),
-                        'currentUser'  => array(
-                                'id'          => $user->ID,
-                                'displayName' => $user->display_name,
-                                'roles'       => $user->roles,
-                        ),
-                        'i18n'         => array(
-                                'Confirm' => __( 'Confirm', 'artpulse' ),
-                                'Cancel'  => __( 'Cancel', 'artpulse' ),
-                                'OK'      => __( 'OK', 'artpulse' ),
-                        ),
-                        'routes'       => array(
-                                'overview'  => '#overview',
-                                'calendar'  => '#calendar',
-                                'favorites' => '#favorites',
-                                'my-rsvps'  => '#my-rsvps',
-                                'rsvps'     => '#rsvps',
-                                'events'    => '#events',
-                                'analytics' => '#analytics',
-                                'portfolio' => '#portfolio',
-                                'artworks'  => '#artworks',
-                                'settings'  => '#settings',
-                        ),
-                        'featureFlags' => array(),
-                );
-                wp_localize_script( 'ap-user-dashboard', 'ARTPULSE_BOOT', $boot );
+			$user = wp_get_current_user();
+			$boot = array(
+				'restRoot'     => esc_url_raw( rest_url() ),
+				'restNonce'    => wp_create_nonce( 'wp_rest' ),
+				'currentUser'  => array(
+					'id'          => $user->ID,
+					'displayName' => $user->display_name,
+					'roles'       => $user->roles,
+				),
+				'i18n'         => array(
+					'Confirm' => __( 'Confirm', 'artpulse' ),
+					'Cancel'  => __( 'Cancel', 'artpulse' ),
+					'OK'      => __( 'OK', 'artpulse' ),
+				),
+				'routes'       => array(
+					'overview'  => '#overview',
+					'calendar'  => '#calendar',
+					'favorites' => '#favorites',
+					'my-rsvps'  => '#my-rsvps',
+					'rsvps'     => '#rsvps',
+					'events'    => '#events',
+					'analytics' => '#analytics',
+					'portfolio' => '#portfolio',
+					'artworks'  => '#artworks',
+					'settings'  => '#settings',
+				),
+				'featureFlags' => array(),
+			);
+			wp_localize_script( 'ap-user-dashboard', 'ARTPULSE_BOOT', $boot );
 
-                if ( function_exists( 'wp_set_script_translations' ) ) {
-                        wp_set_script_translations( 'ap-user-dashboard', 'artpulse', plugin_dir_path( __DIR__ ) . 'languages' );
-                }
-        }
+			if ( function_exists( 'wp_set_script_translations' ) ) {
+					wp_set_script_translations( 'ap-user-dashboard', 'artpulse', plugin_dir_path( __DIR__ ) . 'languages' );
+			}
+	}
 }

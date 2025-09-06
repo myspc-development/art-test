@@ -7,7 +7,6 @@ use ArtPulse\Core\DelegatedAccessManager;
 /**
 
  * @group CORE
-
  */
 
 class DelegatedAccessManagerTest extends WP_UnitTestCase {

@@ -27,7 +27,7 @@ require_once __DIR__ . '/includes/widget-logging.php';
 require_once __DIR__ . '/includes/unhide-default-widgets.php';
 
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
-        require_once __DIR__ . '/vendor/autoload.php';
+		require_once __DIR__ . '/vendor/autoload.php';
 }
 require_once __DIR__ . '/src/Core/Debug.php';
 
@@ -37,35 +37,35 @@ class_exists( \ArtPulse\Rest\OrgRolesController::class );
 require_once __DIR__ . '/src/Blocks/Version.php';
 
 add_action(
-        'rest_api_init',
-        static function () {
-                ( new \ArtPulse\Rest\OrgRolesController() )->register_routes();
-                ( new \ArtPulse\Rest\StatusController() )->register_routes();
-                ( new \ArtPulse\Rest\DirectoryController() )->register_routes();
-                ( new \ArtPulse\Rest\OrgDirectoryController() )->register_routes();
-                \ArtPulse\Rest\RouteAudit::routes();
-                ( new \ArtPulse\Rest\SystemStatusController() )->routes();
-        }
+	'rest_api_init',
+	static function () {
+				( new \ArtPulse\Rest\OrgRolesController() )->register_routes();
+				( new \ArtPulse\Rest\StatusController() )->register_routes();
+				( new \ArtPulse\Rest\DirectoryController() )->register_routes();
+				( new \ArtPulse\Rest\OrgDirectoryController() )->register_routes();
+				\ArtPulse\Rest\RouteAudit::routes();
+				( new \ArtPulse\Rest\SystemStatusController() )->routes();
+	}
 );
 
 // Register test-only REST route shim when in test mode.
 $ap_test_mode = ( defined( 'AP_TEST_MODE' ) && AP_TEST_MODE ) || filter_var( getenv( 'AP_TEST_MODE' ), FILTER_VALIDATE_BOOLEAN );
 if ( $ap_test_mode && class_exists( \ArtPulse\Rest\TestRouteShim::class ) ) {
-        \ArtPulse\Rest\TestRouteShim::register();
+		\ArtPulse\Rest\TestRouteShim::register();
 }
 
 if ( defined( 'WP_RUNNING_TESTS' ) && WP_RUNNING_TESTS && ! function_exists( 'ap_as_user_with_role' ) ) {
-        function ap_as_user_with_role( string $role ): int {
-                $user_id = wp_insert_user(
-                        array(
-                                'user_login' => uniqid( 'ap_test_' ),
-                                'user_pass'  => wp_generate_password(),
-                                'user_email' => uniqid( 'ap_test_' ) . '@example.com',
-                                'role'       => sanitize_key( $role ),
-                        )
-                );
-                return is_wp_error( $user_id ) ? 0 : (int) $user_id;
-        }
+	function ap_as_user_with_role( string $role ): int {
+			$user_id = wp_insert_user(
+				array(
+					'user_login' => uniqid( 'ap_test_' ),
+					'user_pass'  => wp_generate_password(),
+					'user_email' => uniqid( 'ap_test_' ) . '@example.com',
+					'role'       => sanitize_key( $role ),
+				)
+			);
+			return is_wp_error( $user_id ) ? 0 : (int) $user_id;
+	}
 }
 
 // Load the textdomain after WordPress bootstrap but before most init callbacks.
@@ -84,9 +84,9 @@ add_action(
 	'init',
 	function () {
 		\ArtPulse\Core\DashboardWidgetRegistry::alias( 'widget_widget_favorites', 'widget_favorites' );
-                \ArtPulse\Core\DashboardWidgetRegistry::alias( 'widget_widget_near_me_events', 'widget_widget_near_me' );
-                \ArtPulse\Core\DashboardWidgetRegistry::alias( 'widget_news_feed', 'widget_news' );
-                \ArtPulse\Core\DashboardWidgetRegistry::alias( 'widget_local-events', 'widget_events' );
+				\ArtPulse\Core\DashboardWidgetRegistry::alias( 'widget_widget_near_me_events', 'widget_widget_near_me' );
+				\ArtPulse\Core\DashboardWidgetRegistry::alias( 'widget_news_feed', 'widget_news' );
+				\ArtPulse\Core\DashboardWidgetRegistry::alias( 'widget_local-events', 'widget_events' );
 		\ArtPulse\Core\DashboardWidgetRegistry::alias( 'widget_account-tools', 'widget_account_tools' );
 
 		if ( class_exists( \ArtPulse\Widgets\FavoritesOverviewWidget::class ) ) {
@@ -317,7 +317,7 @@ add_action(
 			if ( ! $admin->has_cap( $cap ) ) {
 				$admin->add_cap( $cap );
 				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                                        ap_log( sprintf( 'ap init restored %1$s capability for administrators', $cap ) );
+										ap_log( sprintf( 'ap init restored %1$s capability for administrators', $cap ) );
 				}
 			}
 		}
@@ -332,7 +332,7 @@ add_action(
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG && get_current_user_id() ) {
 			foreach ( array( 'user_has_cap', 'map_meta_cap' ) as $hook ) {
 				if ( has_filter( $hook ) ) {
-                                        ap_log( sprintf( 'ArtPulse: filter detected on %1$s', $hook ) );
+										ap_log( sprintf( 'ArtPulse: filter detected on %1$s', $hook ) );
 				}
 			}
 		}
@@ -358,8 +358,8 @@ add_filter(
 				if ( empty( $allcaps[ $cap ] ) ) {
 					$allcaps[ $cap ] = true;
 					if ( defined( 'WP_DEBUG' ) && WP_DEBUG && get_current_user_id() ) {
-                                                ap_log( sprintf( 'ap user_has_cap restored %1$s for admin %2$d', $cap, $user->ID ) );
-                                        }
+												ap_log( sprintf( 'ap user_has_cap restored %1$s for admin %2$d', $cap, $user->ID ) );
+					}
 				}
 			}
 		}

@@ -1,37 +1,37 @@
 <?php
 if ( ! function_exists( 'ap_dashboard_v2_enabled' ) ) {
-        function ap_dashboard_v2_enabled() {
-                return true; }
+	function ap_dashboard_v2_enabled() {
+			return true; }
 }
 
 if ( ! function_exists( 'sanitize_key' ) ) {
-        function sanitize_key( $key ) {
-                return strtolower( preg_replace( '/[^a-z0-9_]/', '', $key ) );
-        }
+	function sanitize_key( $key ) {
+			return strtolower( preg_replace( '/[^a-z0-9_]/', '', $key ) );
+	}
 }
 
 if ( ! function_exists( 'esc_attr__' ) ) {
-        function esc_attr__( $text, $domain = null ) {
-                return $text;
-        }
+	function esc_attr__( $text, $domain = null ) {
+			return $text;
+	}
 }
 
 if ( ! function_exists( 'esc_attr' ) ) {
-        function esc_attr( $text ) {
-                return $text;
-        }
+	function esc_attr( $text ) {
+			return $text;
+	}
 }
 
 if ( ! function_exists( 'esc_html' ) ) {
-        function esc_html( $text ) {
-                return $text;
-        }
+	function esc_html( $text ) {
+			return $text;
+	}
 }
 
 if ( ! function_exists( '__' ) ) {
-        function __( $text, $domain = null ) {
-                return $text;
-        }
+	function __( $text, $domain = null ) {
+			return $text;
+	}
 }
 
 use PHPUnit\Framework\TestCase;
@@ -49,9 +49,9 @@ final class DashboardRoleTabsTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		Monkey\setUp();
-                Functions\when( 'wp_get_current_user' )->justReturn( (object) array( 'roles' => array( 'member', 'artist', 'organization' ) ) );
-                Functions\when( 'wp_unslash' )->alias( fn( $v ) => $v );
-        }
+				Functions\when( 'wp_get_current_user' )->justReturn( (object) array( 'roles' => array( 'member', 'artist', 'organization' ) ) );
+				Functions\when( 'wp_unslash' )->alias( fn( $v ) => $v );
+	}
 
 	protected function tearDown(): void {
 		Monkey\tearDown();

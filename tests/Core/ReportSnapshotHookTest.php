@@ -4,7 +4,6 @@ namespace ArtPulse\Reporting;
 /**
 
  * @group CORE
-
  */
 
 class SnapshotBuilder {

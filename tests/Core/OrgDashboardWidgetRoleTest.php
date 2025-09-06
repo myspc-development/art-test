@@ -14,7 +14,6 @@ namespace ArtPulse\Core\Tests {
 	/**
 
 	 * @group CORE
-
 	 */
 
 	class OrgDashboardWidgetRoleTest extends TestCase {

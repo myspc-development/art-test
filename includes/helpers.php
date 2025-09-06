@@ -126,26 +126,26 @@ function ap_locate_template( string $relative_template, string $plugin_path ): s
  * @param string|string[]|null $keys Optional cache key or list of keys to clear.
  */
 function ap_clear_portfolio_cache( string|array|null $keys = null ): void {
-        $group = 'artpulse_queries';
+		$group = 'artpulse_queries';
 
-        if ( null !== $keys ) {
-                foreach ( (array) $keys as $key ) {
-                        wp_cache_delete( (string) $key, $group );
-                }
-                return;
-        }
+	if ( null !== $keys ) {
+		foreach ( (array) $keys as $key ) {
+				wp_cache_delete( (string) $key, $group );
+		}
+			return;
+	}
 
-        if ( function_exists( 'wp_cache_delete_group' ) ) {
-                wp_cache_delete_group( $group );
-                return;
-        }
+	if ( function_exists( 'wp_cache_delete_group' ) ) {
+			wp_cache_delete_group( $group );
+			return;
+	}
 
-        global $wp_object_cache;
-        if ( is_object( $wp_object_cache ) && isset( $wp_object_cache->cache[ $group ] ) ) {
-                foreach ( array_keys( $wp_object_cache->cache[ $group ] ) as $key ) {
-                        wp_cache_delete( $key, $group );
-                }
-        }
+		global $wp_object_cache;
+	if ( is_object( $wp_object_cache ) && isset( $wp_object_cache->cache[ $group ] ) ) {
+		foreach ( array_keys( $wp_object_cache->cache[ $group ] ) as $key ) {
+				wp_cache_delete( $key, $group );
+		}
+	}
 }
 
 /**
@@ -191,15 +191,15 @@ function ap_render_dashboard( array $allowed_roles = array() ): void {
 	$allowed_roles = array_map( 'sanitize_key', $allowed_roles );
 	$user_role     = function_exists( 'ap_get_effective_role' ) ? ap_get_effective_role() : \ArtPulse\Core\DashboardController::get_role( get_current_user_id() );
 
-        if (
-                ! headers_sent() &&
-                defined( 'AP_VERBOSE_DEBUG' ) &&
-                AP_VERBOSE_DEBUG &&
-                function_exists( 'is_user_logged_in' ) &&
-                is_user_logged_in()
-        ) {
-                header( 'X-AP-Resolved-Role: ' . $user_role );
-        }
+	if (
+				! headers_sent() &&
+				defined( 'AP_VERBOSE_DEBUG' ) &&
+				AP_VERBOSE_DEBUG &&
+				function_exists( 'is_user_logged_in' ) &&
+				is_user_logged_in()
+		) {
+			header( 'X-AP-Resolved-Role: ' . $user_role );
+	}
 
 	if ( $allowed_roles && ! in_array( $user_role, $allowed_roles, true ) ) {
 		wp_die( __( 'Access denied', 'artpulse' ) );
@@ -222,11 +222,11 @@ function ap_render_dashboard( array $allowed_roles = array() ): void {
  * @param string $role Role slug.
  */
 function ap_render_role_layout_template( string $role ): void {
-        $role  = sanitize_key( $role );
-        $slugs = \ArtPulse\Admin\RolePresets::get_preset_slugs( $role );
-        echo '<section class="ap-role-layout" role="tabpanel" id="ap-panel-' . esc_attr( $role ) . '" aria-labelledby="ap-tab-' . esc_attr( $role ) . '" data-role="' . esc_attr( $role ) . '">';
-        foreach ( $slugs as $slug ) {
-                echo '<section data-slug="' . esc_attr( $slug ) . '"></section>';
-        }
-        echo '</section>';
+		$role  = sanitize_key( $role );
+		$slugs = \ArtPulse\Admin\RolePresets::get_preset_slugs( $role );
+		echo '<section class="ap-role-layout" role="tabpanel" id="ap-panel-' . esc_attr( $role ) . '" aria-labelledby="ap-tab-' . esc_attr( $role ) . '" data-role="' . esc_attr( $role ) . '">';
+	foreach ( $slugs as $slug ) {
+			echo '<section data-slug="' . esc_attr( $slug ) . '"></section>';
+	}
+		echo '</section>';
 }

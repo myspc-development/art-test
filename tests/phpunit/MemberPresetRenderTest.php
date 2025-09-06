@@ -10,21 +10,20 @@ use Brain\Monkey\Functions;
 /**
 
  * @group PHPUNIT
-
  */
 
 final class MemberPresetRenderTest extends TestCase {
 
-        protected function setUp(): void {
-                parent::setUp();
-                Monkey\setUp();
-                WidgetRegistry::register( 'widget_my_follows', [self::class, 'renderSection'] );
-        }
+	protected function setUp(): void {
+			parent::setUp();
+			Monkey\setUp();
+			WidgetRegistry::register( 'widget_my_follows', array( self::class, 'renderSection' ) );
+	}
 
-        protected function tearDown(): void {
-                Monkey\tearDown();
-                parent::tearDown();
-        }
+	protected function tearDown(): void {
+			Monkey\tearDown();
+			parent::tearDown();
+	}
 	public function test_member_preset_contains_my_follows_section(): void {
 		$ids = $this->memberPresetIds();
 		$this->assertNotEmpty( $ids, 'Could not resolve member preset IDs' );
@@ -79,14 +78,16 @@ final class MemberPresetRenderTest extends TestCase {
 			$data = json_decode( (string) file_get_contents( $jsonPath ), true );
 			if ( is_array( $data ) ) {
 				// accept either full objects or string IDs
-                                  $ids = array_map( [self::class, 'mapItem'], $data );
-                                  return array_values( array_filter( $ids ) );
-                          }
-                  }
+									$ids = array_map( array( self::class, 'mapItem' ), $data );
+									return array_values( array_filter( $ids ) );
+			}
+		}
 
 		return array();
-        }
+	}
 
-        public static function renderSection( array $ctx = array() ): string { return '<section></section>'; }
-        private static function mapItem( $item ) { return is_array( $item ) ? ( $item['id'] ?? '' ) : (string) $item; }
+	public static function renderSection( array $ctx = array() ): string {
+		return '<section></section>'; }
+	private static function mapItem( $item ) {
+		return is_array( $item ) ? ( $item['id'] ?? '' ) : (string) $item; }
 }

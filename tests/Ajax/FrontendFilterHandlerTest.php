@@ -8,7 +8,6 @@ use WP_Query;
 /**
 
  * @group AJAX
-
  */
 
 class FrontendFilterHandlerTest extends \WP_UnitTestCase {

@@ -9,7 +9,6 @@ namespace ArtPulse\Core\Tests {
 	/**
 
 	 * @group CORE
-
 	 */
 
 	class DashboardControllerResetTest extends TestCase {

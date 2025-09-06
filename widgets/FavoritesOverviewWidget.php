@@ -1,5 +1,7 @@
 <?php
-if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
+if ( defined( 'IS_DASHBOARD_BUILDER_PREVIEW' ) ) {
+	return;
+}
 namespace ArtPulse\Widgets;
 
 use ArtPulse\Core\DashboardWidgetRegistry;
@@ -30,7 +32,7 @@ class FavoritesOverviewWidget {
 		if ( ! DashboardWidgetRegistry::exists( 'widget_widget_favorites' ) ) {
 			DashboardWidgetRegistry::register(
 				'widget_widget_favorites',
-                                sprintf( esc_html__( '%1$s (Legacy)', 'artpulse' ), self::label() ),
+				sprintf( esc_html__( '%1$s (Legacy)', 'artpulse' ), self::label() ),
 				self::icon(),
 				self::description(),
 				array( self::class, 'render' ),
@@ -79,7 +81,7 @@ class FavoritesOverviewWidget {
 			$title   = get_the_title( $post_id );
 
 			if ( $url && $title ) {
-                                $items[] = sprintf( '<li><a href="%1$s">%2$s</a></li>', esc_url( $url ), esc_html( $title ) );
+								$items[] = sprintf( '<li><a href="%1$s">%2$s</a></li>', esc_url( $url ), esc_html( $title ) );
 			}
 		}
 

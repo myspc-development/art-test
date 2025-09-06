@@ -8,7 +8,6 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 /**
 
  * @group INTEGRATION
-
  */
 
 class OrganizationWidgetConfigTest extends WP_UnitTestCase {

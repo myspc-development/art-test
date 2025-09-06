@@ -4,7 +4,6 @@ namespace ArtPulse\Integration\Tests;
 /**
 
  * @group INTEGRATION
-
  */
 
 class BootSmokeTest extends \WP_UnitTestCase {

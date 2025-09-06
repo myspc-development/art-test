@@ -7,7 +7,6 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 /**
 
  * @group CORE
-
  */
 
 class DashboardWidgetRegistryValidationTest extends TestCase {

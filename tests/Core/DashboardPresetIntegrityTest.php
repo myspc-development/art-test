@@ -15,7 +15,6 @@ namespace ArtPulse\Core\Tests {
 	/**
 
 	 * @group CORE
-
 	 */
 
 	class DashboardPresetIntegrityTest extends TestCase {
@@ -24,26 +23,26 @@ namespace ArtPulse\Core\Tests {
 			if ( ! defined( 'WP_DEBUG' ) ) {
 				define( 'WP_DEBUG', true );
 			}
-                        $slugs = array(
-                                'widget_news',
-                                'widget_membership',
-                                'widget_my_follows',
-                                'widget_local_events',
-                                'widget_recommended_for_you',
-                                'widget_my_events',
-                                'widget_account_tools',
-                                'widget_site_stats',
-                                'widget_artist_revenue_summary',
-                                'widget_artist_artwork_manager',
-                                'widget_artist_audience_insights',
-                                'widget_artist_feed_publisher',
-                                'widget_audience_crm',
-                                'widget_org_ticket_insights',
-                                'widget_webhooks',
-                        );
-			foreach ( $slugs as $slug ) {
-				WidgetRegistry::register( $slug, static fn() => '<div>' . $slug . '</div>' );
-			}
+						$slugs = array(
+							'widget_news',
+							'widget_membership',
+							'widget_my_follows',
+							'widget_local_events',
+							'widget_recommended_for_you',
+							'widget_my_events',
+							'widget_account_tools',
+							'widget_site_stats',
+							'widget_artist_revenue_summary',
+							'widget_artist_artwork_manager',
+							'widget_artist_audience_insights',
+							'widget_artist_feed_publisher',
+							'widget_audience_crm',
+							'widget_org_ticket_insights',
+							'widget_webhooks',
+						);
+						foreach ( $slugs as $slug ) {
+							WidgetRegistry::register( $slug, static fn() => '<div>' . $slug . '</div>' );
+						}
 		}
 
 		protected function tearDown(): void {

@@ -1,9 +1,9 @@
 <?php
 namespace {
-        require_once __DIR__ . '/../TestStubs.php';
-        if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
-                define( 'ARTPULSE_PLUGIN_FILE', dirname( __DIR__, 2 ) . '/artpulse.php' );
-        }
+		require_once __DIR__ . '/../TestStubs.php';
+	if ( ! defined( 'ARTPULSE_PLUGIN_FILE' ) ) {
+			define( 'ARTPULSE_PLUGIN_FILE', dirname( __DIR__, 2 ) . '/artpulse.php' );
+	}
 }
 
 namespace ArtPulse\Core {
@@ -27,25 +27,25 @@ namespace ArtPulse\Core {
 }
 
 namespace ArtPulse\Core\Tests {
-        use PHPUnit\Framework\TestCase;
-        use Brain\Monkey;
-        use Brain\Monkey\Functions;
-        use ArtPulse\Core\DashboardController;
-        use ArtPulse\Core\DashboardWidgetRegistry;
-        use ArtPulse\Tests\Stubs\MockStorage;
+		use PHPUnit\Framework\TestCase;
+		use Brain\Monkey;
+		use Brain\Monkey\Functions;
+		use ArtPulse\Core\DashboardController;
+		use ArtPulse\Core\DashboardWidgetRegistry;
+		use ArtPulse\Tests\Stubs\MockStorage;
 
-        class DashboardLayoutTest extends TestCase {
-                public static array $actions = array();
-                public static function noop(): void {}
+	class DashboardLayoutTest extends TestCase {
+		public static array $actions = array();
+		public static function noop(): void {}
 
 		protected function setUp(): void {
 			parent::setUp();
-                        Monkey\setUp();
-                        MockStorage::$user_meta     = array();
-			MockStorage::$options       = array();
-			MockStorage::$users         = array();
-			MockStorage::$current_roles = array();
-			self::$actions              = array();
+						Monkey\setUp();
+						MockStorage::$user_meta = array();
+			MockStorage::$options               = array();
+			MockStorage::$users                 = array();
+			MockStorage::$current_roles         = array();
+			self::$actions                      = array();
 
 			$ref  = new \ReflectionClass( DashboardWidgetRegistry::class );
 			$prop = $ref->getProperty( 'widgets' );
@@ -64,8 +64,8 @@ namespace ArtPulse\Core\Tests {
 		}
 
 		public function test_default_presets_loaded_per_role(): void {
-			DashboardWidgetRegistry::register( 'widget_news', 'News', '', '', [self::class, 'noop'], array( 'roles' => array( 'member' ) ) );
-			DashboardWidgetRegistry::register( 'artist_inbox_preview', 'Inbox Preview', '', '', [self::class, 'noop'], array( 'roles' => array( 'artist' ) ) );
+			DashboardWidgetRegistry::register( 'widget_news', 'News', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'member' ) ) );
+			DashboardWidgetRegistry::register( 'artist_inbox_preview', 'Inbox Preview', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'artist' ) ) );
 
 			$presets = DashboardController::get_default_presets();
 			$this->assertSame( 'member', $presets['member_default']['role'] );
@@ -91,18 +91,18 @@ namespace ArtPulse\Core\Tests {
 		}
 
 		public function test_fallback_layout_and_filtering(): void {
-                       DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', [self::class, 'noop'], array( 'roles' => array( 'member' ) ) );
-                       DashboardWidgetRegistry::register( 'widget_gamma', 'Gamma', '', '', [self::class, 'noop'], array( 'roles' => array( 'artist' ) ) );
+						DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'member' ) ) );
+						DashboardWidgetRegistry::register( 'widget_gamma', 'Gamma', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'artist' ) ) );
 
-                        $ref2  = new \ReflectionClass( DashboardController::class );
-                        $prop2 = $ref2->getProperty( 'role_widgets' );
-                        $prop2->setAccessible( true );
-                        $prop2->setValue(
-                                null,
-                                array(
-                                        'member' => array( 'widget_alpha', 'widget_gamma' ),
-                                )
-                        );
+						$ref2  = new \ReflectionClass( DashboardController::class );
+						$prop2 = $ref2->getProperty( 'role_widgets' );
+						$prop2->setAccessible( true );
+						$prop2->setValue(
+							null,
+							array(
+								'member' => array( 'widget_alpha', 'widget_gamma' ),
+							)
+						);
 
 			MockStorage::$users[1] = (object) array( 'roles' => array( 'member' ) );
 			$layout                = DashboardController::get_user_dashboard_layout( 1 );
@@ -118,8 +118,8 @@ namespace ArtPulse\Core\Tests {
 		}
 
 		public function test_saved_layout_overrides_fallback(): void {
-			DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', [self::class, 'noop'], array( 'roles' => array( 'member' ) ) );
-			DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', [self::class, 'noop'], array( 'roles' => array( 'member' ) ) );
+			DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'member' ) ) );
+			DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'member' ) ) );
 
 			$ref2  = new \ReflectionClass( DashboardController::class );
 			$prop2 = $ref2->getProperty( 'role_widgets' );
@@ -146,28 +146,28 @@ namespace ArtPulse\Core\Tests {
 		}
 
 		public function test_emits_action_when_layout_empty(): void {
-			DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', [self::class, 'noop'], array( 'roles' => array( 'artist' ) ) );
+			DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'artist' ) ) );
 			$ref2  = new \ReflectionClass( DashboardController::class );
 			$prop2 = $ref2->getProperty( 'role_widgets' );
 			$prop2->setAccessible( true );
 			$prop2->setValue( null, array( 'member' => array( 'widget_beta' ) ) );
 			MockStorage::$users[3] = (object) array( 'roles' => array( 'member' ) );
-                        $layout                = DashboardController::get_user_dashboard_layout( 3 );
-                        $this->assertSame(
-                                array(
-                                        array(
-                                                'id'      => 'empty_dashboard',
-                                                'visible' => true,
-                                        ),
-                                ),
-                                $layout
-                        );
+						$layout    = DashboardController::get_user_dashboard_layout( 3 );
+						$this->assertSame(
+							array(
+								array(
+									'id'      => 'empty_dashboard',
+									'visible' => true,
+								),
+							),
+							$layout
+						);
 			$this->assertSame( array( array( 'ap_dashboard_empty_layout', array( 3, 'member' ) ) ), self::$actions );
 		}
 
 		public function test_preview_role_renders_layout(): void {
-			DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', [self::class, 'noop'], array( 'roles' => array( 'member' ) ) );
-			DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', [self::class, 'noop'], array( 'roles' => array( 'artist' ) ) );
+			DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'member' ) ) );
+			DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'artist' ) ) );
 			$ref2  = new \ReflectionClass( DashboardController::class );
 			$prop2 = $ref2->getProperty( 'role_widgets' );
 			$prop2->setAccessible( true );
@@ -178,11 +178,11 @@ namespace ArtPulse\Core\Tests {
 					'artist' => array( 'widget_beta' ),
 				)
 			);
-			MockStorage::$users[4]      = (object) array( 'roles' => array( 'administrator' ) );
-			MockStorage::$current_roles = array( 'manage_options' );
-			$_GET['ap_preview_role']    = 'artist';
-                        $_GET['ap_preview_nonce']   = 'test-nonce';
-			$layout                     = DashboardController::get_user_dashboard_layout( 4 );
+			MockStorage::$users[4]                = (object) array( 'roles' => array( 'administrator' ) );
+			MockStorage::$current_roles           = array( 'manage_options' );
+			$_GET['ap_preview_role']              = 'artist';
+						$_GET['ap_preview_nonce'] = 'test-nonce';
+			$layout                               = DashboardController::get_user_dashboard_layout( 4 );
 			unset( $_GET['ap_preview_role'], $_GET['ap_preview_nonce'] );
 			$this->assertSame(
 				array(
@@ -196,8 +196,8 @@ namespace ArtPulse\Core\Tests {
 		}
 
 		public function test_preview_role_does_not_persist_layout(): void {
-			DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', [self::class, 'noop'], array( 'roles' => array( 'member' ) ) );
-			DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', [self::class, 'noop'], array( 'roles' => array( 'artist' ) ) );
+			DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'member' ) ) );
+			DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'artist' ) ) );
 			$ref2  = new \ReflectionClass( DashboardController::class );
 			$prop2 = $ref2->getProperty( 'role_widgets' );
 			$prop2->setAccessible( true );
@@ -217,7 +217,7 @@ namespace ArtPulse\Core\Tests {
 				),
 			);
 			$_GET['ap_preview_role']                          = 'artist';
-                        $_GET['ap_preview_nonce']                         = 'test-nonce';
+						$_GET['ap_preview_nonce']             = 'test-nonce';
 			DashboardController::get_user_dashboard_layout( 6 );
 			unset( $_GET['ap_preview_role'], $_GET['ap_preview_nonce'] );
 			$this->assertSame(
@@ -232,19 +232,19 @@ namespace ArtPulse\Core\Tests {
 		}
 
 		public function test_filter_accessible_layout_excludes_by_capability_and_role(): void {
-			DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', [self::class, 'noop'], array( 'roles' => array( 'member' ) ) );
+			DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'member' ) ) );
 			DashboardWidgetRegistry::register(
 				'widget_beta',
 				'Beta',
 				'',
 				'',
-				[self::class, 'noop'],
+				array( self::class, 'noop' ),
 				array(
 					'roles'      => array( 'member' ),
 					'capability' => 'edit_posts',
 				)
 			);
-			DashboardWidgetRegistry::register( 'widget_gamma', 'Gamma', '', '', [self::class, 'noop'], array( 'roles' => array( 'artist' ) ) );
+			DashboardWidgetRegistry::register( 'widget_gamma', 'Gamma', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'artist' ) ) );
 			$layout = array(
 				array(
 					'id'      => 'widget_alpha',
@@ -279,8 +279,8 @@ namespace ArtPulse\Core\Tests {
 		}
 
 		public function test_filter_accessible_layout_respects_entry_capability(): void {
-			DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', [self::class, 'noop'], array( 'roles' => array( 'member' ) ) );
-			DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', [self::class, 'noop'], array( 'roles' => array( 'member' ) ) );
+			DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'member' ) ) );
+			DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'member' ) ) );
 			$layout = array(
 				array(
 					'id'      => 'widget_alpha',
@@ -308,7 +308,7 @@ namespace ArtPulse\Core\Tests {
 		}
 
 		public function test_register_widgets_invoked_and_layout_not_empty(): void {
-			DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', [self::class, 'noop'], array( 'roles' => array( 'member' ) ) );
+			DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', array( self::class, 'noop' ), array( 'roles' => array( 'member' ) ) );
 
 			$refCtrl     = new \ReflectionClass( DashboardController::class );
 			$propWidgets = $refCtrl->getProperty( 'role_widgets' );

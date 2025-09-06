@@ -7,7 +7,6 @@ use ArtPulse\Core\ActivityLogger;
 /**
 
  * @group CORE
-
  */
 
 class ActivityLoggerTest extends WP_UnitTestCase {

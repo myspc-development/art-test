@@ -41,15 +41,15 @@ class AP_CLI_Rest_Route_Audit {
 		}
 
 		foreach ( $conflicts as $conflict ) {
-                        \WP_CLI::log( sprintf( '%1$s %2$s', $conflict['method'], $conflict['path'] ) );
+						\WP_CLI::log( sprintf( '%1$s %2$s', $conflict['method'], $conflict['path'] ) );
 			foreach ( $conflict['callbacks'] as $cb ) {
-                                $line = sprintf( '  - %1$s', $cb['description'] );
-                                if ( $cb['location'] ) {
-                                        $line .= sprintf( ' (%1$s)', $cb['location'] );
-                                }
-                                if ( $cb['plugin'] ) {
-                                        $line .= sprintf( ' [%1$s]', $cb['plugin'] );
-                                }
+								$line = sprintf( '  - %1$s', $cb['description'] );
+				if ( $cb['location'] ) {
+						$line .= sprintf( ' (%1$s)', $cb['location'] );
+				}
+				if ( $cb['plugin'] ) {
+						$line .= sprintf( ' [%1$s]', $cb['plugin'] );
+				}
 				\WP_CLI::log( $line );
 			}
 			if ( $conflict['overrides_core'] ) {
@@ -261,7 +261,7 @@ class AP_CLI_Rest_Route_Audit {
 	 */
 	private function suggest_fixes( string $path ): array {
 		return array(
-                    sprintf( "Wrap custom register_rest_route() in: if ( ! rest_route_exists( '%1\$s' ) ) { register_rest_route( ... ); }", $path ),
+			sprintf( "Wrap custom register_rest_route() in: if ( ! rest_route_exists( '%1\$s' ) ) { register_rest_route( ... ); }", $path ),
 			'Consider namespacing, conditional registration, or unregistering the conflicting route.',
 		);
 	}

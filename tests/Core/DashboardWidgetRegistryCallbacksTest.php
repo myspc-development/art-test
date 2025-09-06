@@ -7,7 +7,6 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 /**
 
  * @group CORE
-
  */
 
 class DashboardWidgetRegistryCallbacksTest extends WP_UnitTestCase {
@@ -26,10 +25,10 @@ class DashboardWidgetRegistryCallbacksTest extends WP_UnitTestCase {
 	}
 
 	public function test_member_widgets_return_callable_callbacks(): void {
-               DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', '__return_null', array( 'roles' => array( 'member' ) ) );
-               DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', static function () {}, array( 'roles' => array( 'member' ) ) );
+				DashboardWidgetRegistry::register( 'widget_alpha', 'Alpha', '', '', '__return_null', array( 'roles' => array( 'member' ) ) );
+				DashboardWidgetRegistry::register( 'widget_beta', 'Beta', '', '', static function () {}, array( 'roles' => array( 'member' ) ) );
 
-               $widgets = DashboardWidgetRegistry::get_widgets( 'member' );
+				$widgets = DashboardWidgetRegistry::get_widgets( 'member' );
 
 		$this->assertNotEmpty( $widgets );
 		foreach ( $widgets as $cb ) {

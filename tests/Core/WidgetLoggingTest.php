@@ -53,7 +53,6 @@ namespace ArtPulse\Core\Tests {
 	/**
 
 	 * @group CORE
-
 	 */
 
 	class WidgetLoggingTest extends TestCase {

@@ -8,26 +8,25 @@ use ArtPulse\Tests\Email;
 /**
 
  * @group INTEGRATION
-
  */
 
 class RsvpIntegrationTest extends \WP_UnitTestCase {
 
-        private int $event_id;
-        private int $user1;
-        private int $user2;
+	private int $event_id;
+	private int $user1;
+	private int $user2;
 
-        public static function setUpBeforeClass(): void {
-                parent::setUpBeforeClass();
-                Email::install();
-        }
+	public static function setUpBeforeClass(): void {
+			parent::setUpBeforeClass();
+			Email::install();
+	}
 
-        public function set_up() {
-                parent::set_up();
-                do_action( 'init' );
+	public function set_up() {
+			parent::set_up();
+			do_action( 'init' );
 
-                $this->user1 = self::factory()->user->create( array( 'role' => 'subscriber' ) );
-                $this->user2 = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+			$this->user1 = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+			$this->user2 = self::factory()->user->create( array( 'role' => 'subscriber' ) );
 
 		$this->event_id = wp_insert_post(
 			array(
@@ -46,11 +45,11 @@ class RsvpIntegrationTest extends \WP_UnitTestCase {
 		do_action( 'rest_api_init' );
 	}
 
-        public function tear_down() {
-                Email::clear();
-                $_POST = array();
-                parent::tear_down();
-        }
+	public function tear_down() {
+			Email::clear();
+			$_POST = array();
+			parent::tear_down();
+	}
 
 	public function test_rsvp_meta_fields_saved(): void {
 		$admin = self::factory()->user->create( array( 'role' => 'administrator' ) );

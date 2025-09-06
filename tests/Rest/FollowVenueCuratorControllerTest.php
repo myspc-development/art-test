@@ -42,14 +42,14 @@ class FollowVenueCuratorControllerTest extends \WP_UnitTestCase {
 		$this->assertSame( 200, $res->get_status() );
 		$this->assertSame( array( $this->curator ), get_user_meta( $this->user, 'ap_following_curators', true ) );
 
-                $req = new \WP_REST_Request( 'GET', '/artpulse/v1/followed/venues' );
-                $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 200, $res->get_status() );
-                $this->assertContains( $this->venue, $res->get_data() );
+				$req = new \WP_REST_Request( 'GET', '/artpulse/v1/followed/venues' );
+				$res = rest_get_server()->dispatch( $req );
+				$this->assertSame( 200, $res->get_status() );
+				$this->assertContains( $this->venue, $res->get_data() );
 
-                $req = new \WP_REST_Request( 'GET', '/artpulse/v1/followed/curators' );
-                $res = rest_get_server()->dispatch( $req );
-                $this->assertSame( 200, $res->get_status() );
-                $this->assertContains( $this->curator, $res->get_data() );
+				$req = new \WP_REST_Request( 'GET', '/artpulse/v1/followed/curators' );
+				$res = rest_get_server()->dispatch( $req );
+				$this->assertSame( 200, $res->get_status() );
+				$this->assertContains( $this->curator, $res->get_data() );
 	}
 }

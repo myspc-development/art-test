@@ -8,7 +8,6 @@ use WP_UnitTestCase;
 /**
 
  * @group AI
-
  */
 
 class OpenAIClientTest extends WP_UnitTestCase {

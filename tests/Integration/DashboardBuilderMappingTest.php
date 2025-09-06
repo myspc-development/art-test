@@ -9,7 +9,6 @@ use ArtPulse\Core\UserDashboardManager;
 /**
 
  * @group INTEGRATION
-
  */
 
 class DashboardBuilderMappingTest extends \WP_UnitTestCase {

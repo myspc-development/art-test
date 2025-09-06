@@ -10,7 +10,6 @@ use ArtPulse\Rest\RsvpRestController;
 /**
 
  * @group PERSONALIZATION
-
  */
 
 class ActivityLoggingTest extends \WP_UnitTestCase {

@@ -6,11 +6,11 @@ class AllRoutesSecurityTest extends \WP_UnitTestCase {
 		'/ap/v1/roles',
 		'/artpulse/v1/webhooks',
 	);
-        /**
-         * @dataProvider routesProvider
-         * @group REST
-         * @group slow
-         */
+		/**
+		 * @dataProvider routesProvider
+		 * @group REST
+		 * @group slow
+		 */
 	public function test_route_security( string $route, string $method, array $args ): void {
 		$server = rest_get_server();
 
@@ -18,45 +18,45 @@ class AllRoutesSecurityTest extends \WP_UnitTestCase {
 		$res = $server->dispatch( new \WP_REST_Request( $method, $route ) );
 		$this->assertEquals( 401, $res->get_status(), "Unauthenticated access to $method $route should return 401" );
 
-               // 403: authenticated without required capabilities.
-               // Some read-only endpoints are accessible to subscribers.
-               wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
-               $res       = $server->dispatch( new \WP_REST_Request( $method, $route ) );
-               $allowed   = array(
-                       '/ap/v1/routes/audit',
-                       '/ap/v1/routes/audit.json',
-                       '/artpulse/v1/roles',
-               );
-               if ( in_array( $route, $allowed, true ) ) {
-                       $this->assertSame( 200, $res->get_status(), "Subscriber access to $method $route should be allowed" );
-               } else {
-                       $this->assertSame( 403, $res->get_status(), "Subscriber access to $method $route should be 403" );
-               }
+				// 403: authenticated without required capabilities.
+				// Some read-only endpoints are accessible to subscribers.
+				wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
+				$res     = $server->dispatch( new \WP_REST_Request( $method, $route ) );
+				$allowed = array(
+					'/ap/v1/routes/audit',
+					'/ap/v1/routes/audit.json',
+					'/artpulse/v1/roles',
+				);
+				if ( in_array( $route, $allowed, true ) ) {
+						$this->assertSame( 200, $res->get_status(), "Subscriber access to $method $route should be allowed" );
+				} else {
+						$this->assertSame( 403, $res->get_status(), "Subscriber access to $method $route should be 403" );
+				}
 
-		// 2xx: authenticated as administrator
-		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
-		$req = new \WP_REST_Request( $method, $route );
-		foreach ( $args as $k => $v ) {
-			if ( $v !== null ) {
-				$req->set_param( $k, $v );
-			}
-		}
-		$res    = $server->dispatch( $req );
-		$status = $res->get_status();
-		$this->assertTrue( $status >= 200 && $status < 300, "Admin access to $method $route should be 2xx, got $status" );
-		$schema = self::get_response_schema( $route, $method );
+				// 2xx: authenticated as administrator
+				wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+				$req = new \WP_REST_Request( $method, $route );
+				foreach ( $args as $k => $v ) {
+					if ( $v !== null ) {
+						$req->set_param( $k, $v );
+					}
+				}
+				$res    = $server->dispatch( $req );
+				$status = $res->get_status();
+				$this->assertTrue( $status >= 200 && $status < 300, "Admin access to $method $route should be 2xx, got $status" );
+				$schema = self::get_response_schema( $route, $method );
 
-		if ( $schema ) {
-			$validation = rest_validate_value_from_schema( $res->get_data(), $schema, 'response' );
-			$this->assertNotWPError( $validation );
-		} elseif ( in_array( $route, self::$mustValidate, true ) ) {
-			$data = $res->get_data();
-			$this->assertIsArray( $data );
-			$this->assertNotEmpty( $data );
-			$first = is_array( $data ) ? reset( $data ) : $data;
-			$this->assertIsArray( $first );
-			$this->assertArrayHasKey( 'id', $first );
-		}
+				if ( $schema ) {
+					$validation = rest_validate_value_from_schema( $res->get_data(), $schema, 'response' );
+					$this->assertNotWPError( $validation );
+				} elseif ( in_array( $route, self::$mustValidate, true ) ) {
+					$data = $res->get_data();
+					$this->assertIsArray( $data );
+					$this->assertNotEmpty( $data );
+					$first = is_array( $data ) ? reset( $data ) : $data;
+					$this->assertIsArray( $first );
+					$this->assertArrayHasKey( 'id', $first );
+				}
 	}
 
 	private static function normalize_methods( $m ): array {

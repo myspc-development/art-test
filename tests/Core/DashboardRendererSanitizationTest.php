@@ -7,7 +7,6 @@ use ArtPulse\Core\DashboardWidgetRegistry;
 /**
 
  * @group CORE
-
  */
 
 class DashboardRendererSanitizationTest extends \WP_UnitTestCase {

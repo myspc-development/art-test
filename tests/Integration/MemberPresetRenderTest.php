@@ -8,7 +8,6 @@ use ArtPulse\Core\DashboardPresets;
 /**
 
  * @group INTEGRATION
-
  */
 
 final class MemberPresetRenderTest extends TestCase {

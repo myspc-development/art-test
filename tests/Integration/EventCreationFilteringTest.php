@@ -7,7 +7,6 @@ use ArtPulse\Frontend\EventFilter;
 /**
 
  * @group INTEGRATION
-
  */
 
 class EventCreationFilteringTest extends \WP_UnitTestCase {

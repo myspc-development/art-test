@@ -23,22 +23,22 @@ add_action(
 add_filter(
 	'wp_registration_redirect',
 	function ( $redirect_to ) {
-               if ( ! \ArtPulse\Helpers\GlobalHelpers::wpAdminAccessEnabled() ) {
-                       return \ArtPulse\Core\Plugin::get_user_dashboard_url();
-               }
-               return $redirect_to;
-       }
+		if ( ! \ArtPulse\Helpers\GlobalHelpers::wpAdminAccessEnabled() ) {
+				return \ArtPulse\Core\Plugin::get_user_dashboard_url();
+		}
+				return $redirect_to;
+	}
 );
 
 // Redirect members, artists, and organizations after first login as well
 add_filter(
-        'login_redirect',
-        function ( $redirect_to, $request, $user ) {
-              if ( $user instanceof \WP_User && ! \ArtPulse\Helpers\GlobalHelpers::wpAdminAccessEnabled() && ! user_can( $user, 'view_wp_admin' ) ) {
-                      return \ArtPulse\Core\LoginRedirectManager::get_post_login_redirect_url( $user, $request );
-              }
-              return $redirect_to;
-       },
-        10,
-        3
+	'login_redirect',
+	function ( $redirect_to, $request, $user ) {
+		if ( $user instanceof \WP_User && ! \ArtPulse\Helpers\GlobalHelpers::wpAdminAccessEnabled() && ! user_can( $user, 'view_wp_admin' ) ) {
+				return \ArtPulse\Core\LoginRedirectManager::get_post_login_redirect_url( $user, $request );
+		}
+			return $redirect_to;
+	},
+	10,
+	3
 );

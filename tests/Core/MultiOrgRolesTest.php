@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 /**
 
  * @group CORE
-
  */
 
 class MultiOrgRolesTest extends TestCase {
