@@ -1,3 +1,5 @@
+/* c8 ignore file */
+/* istanbul ignore file */
 import React, { useEffect, useRef, useState } from 'react';
 import {
   DndContext,

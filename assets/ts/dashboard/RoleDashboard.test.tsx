@@ -28,20 +28,27 @@ describe('RoleDashboard', () => {
   });
 
   test("See what's new link opens modal", () => {
+    (window as any).apDashboardData.seenDashboardV2 = false;
     render(<RoleDashboard role="artist" initialEdit={false} />);
     const link = screen.getByText(/see what's new/i);
     fireEvent.click(link);
+    const dialog = screen.getByRole('dialog', { name: /what's new in roles dashboard/i });
+    expect(dialog).toBeInTheDocument();
+    fireEvent.keyDown(window, { key: 'Escape' });
     expect(
-      screen.getByRole('dialog', { name: /what's new in roles dashboard/i })
-    ).toBeInTheDocument();
+      screen.queryByRole('dialog', { name: /what's new in roles dashboard/i })
+    ).toBeNull();
   });
 
-  test('Help button opens sheet', () => {
+  test('Help button opens sheet', async () => {
     render(<RoleDashboard role="artist" initialEdit={false} />);
     const btn = screen.getByText('?');
     fireEvent.click(btn);
+    const help = await screen.findByRole('dialog', { name: /keyboard help/i });
+    expect(help).toBeInTheDocument();
+    fireEvent.keyDown(window, { key: 'Escape' });
     expect(
-      screen.getByRole('dialog', { name: /keyboard help/i })
-    ).toBeInTheDocument();
+      screen.queryByRole('dialog', { name: /keyboard help/i })
+    ).toBeNull();
   });
 });

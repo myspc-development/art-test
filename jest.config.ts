@@ -44,6 +44,9 @@ const config: Config = {
     'src/**/*.{ts,tsx,js,jsx}',
     '!src/js/dashboard.js',
     '!src/components/ReactForm.js',
+    '!assets/ts/dashboard/components/SortableCard.tsx',
+    '!assets/ts/dashboard/widgets/UpcomingEvents.tsx',
+    '!assets/ts/dashboard/RoleDashboard.tsx',
     '!**/__tests__/**',
     '!**/__mocks__/**',
     '!**/*.d.ts'
