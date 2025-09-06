@@ -8,6 +8,7 @@
     "strict": true,
     "esModuleInterop": true,
     "allowJs": true,
+    "skipLibCheck": true,
 
     // ✅ Required for tsconfig-paths to work
     "baseUrl": ".",
