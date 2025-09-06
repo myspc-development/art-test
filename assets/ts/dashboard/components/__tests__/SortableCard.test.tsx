@@ -27,5 +27,6 @@ describe('SortableCard', () => {
   test('hides drag handle when not editing', () => {
     setup(false);
     expect(screen.getByLabelText(/drag handle/i)).toHaveClass('invisible');
+    expect(screen.queryByLabelText(/remove/i)).toBeNull();
   });
 });

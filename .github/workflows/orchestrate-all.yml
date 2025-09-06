@@ -28,14 +28,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          echo '| Workflow | Conclusion | URL |' >> table.md
-          echo '|---|---|---|' >> table.md
+          echo '| Workflow | Job | Conclusion | URL |' >> table.md
+          echo '|---|---|---|---|' >> table.md
           while read wf; do
             run_id=$(gh run list --workflow "$wf" --limit 1 --json databaseId -q '.[0].databaseId')
             gh run watch $run_id || true
-            concl=$(gh run view $run_id --json conclusion -q .conclusion)
+            gh run view $run_id --json jobs > run.json
             url="https://github.com/${{ github.repository }}/actions/runs/$run_id"
-            echo "| $wf | $concl | [logs]($url) |" >> table.md
+            jq -r ".jobs[] | \"| $wf | \(.name) | \(.conclusion) | [logs]($url) |\"" run.json >> table.md
             gh run download $run_id -D artifacts/$wf || true
           done < workflows.txt
           cat table.md >> $GITHUB_STEP_SUMMARY
@@ -43,6 +43,13 @@ jobs:
             echo '\n### Artifacts' >> $GITHUB_STEP_SUMMARY
             find artifacts -type f >> $GITHUB_STEP_SUMMARY
           fi
+      - name: Upload collected artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: combined-artifacts
+          path: artifacts
+          if-no-files-found: ignore
       - name: Upload logs
         if: always()
         uses: actions/upload-artifact@v4

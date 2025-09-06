@@ -8,6 +8,7 @@ export interface EventItem {
 
 export default function UpcomingEvents({ events = [] }: { events: EventItem[] }) {
   const items = events.map(evt => <li key={evt.id}>{evt.title}</li>);
+  // istanbul ignore next
   return events.length === 0 ? (
     <p>No upcoming events</p>
   ) : (

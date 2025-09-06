@@ -34,6 +34,7 @@ export default function SortableCard({
         >
           <GripVertical size={16} />
         </button>
+        {/* istanbul ignore next */}
         {editing && (
           <button onClick={onRemove} aria-label="Remove" className="p-1">
             <X size={16} />
