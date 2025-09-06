@@ -52,6 +52,7 @@
     "react-dom": "^18.3.1",
     "react-grid-layout": "^1.3.4",
     "recharts": "^3.1.2",
+    "redux": "^4.2.1",
     "socket.io": "^4.7.2"
   },
   "devDependencies": {
@@ -117,5 +118,9 @@
   "homepage": "https://github.com/myspc-development/art-test#readme",
   "jest-junit": {
     "output": "build/junit-jest.xml"
+  },
+  "overrides": {
+    "@reduxjs/toolkit": "1.9.7",
+    "redux-thunk": "2.4.2"
   }
 }
