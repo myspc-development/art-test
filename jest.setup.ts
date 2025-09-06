@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom';
+import { TextEncoder, TextDecoder } from 'util';
 
 if (typeof (global as any).TextEncoder === 'undefined') {
-  const util = require('util');
-  (global as any).TextEncoder = util.TextEncoder;
-  (global as any).TextDecoder = util.TextDecoder;
+  (global as any).TextEncoder = TextEncoder;
+  (global as any).TextDecoder = TextDecoder;
 }
 
 // Polyfill localStorage in Jest tests when missing

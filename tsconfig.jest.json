@@ -3,6 +3,7 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "isolatedModules": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": ["node", "jest", "@testing-library/jest-dom"]
   }
 }
