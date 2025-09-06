@@ -1,0 +1,56 @@
+name: rest-contract-check
+
+on:
+  pull_request:
+    paths:
+      - 'src/Rest/**'
+      - 'schema/dashboard-config.schema.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+      - run: npm install -g @wordpress/env
+      - name: Start WP
+        run: wp-env start
+      - name: Fetch endpoint
+        run: curl -s http://localhost:8889/wp-json/artpulse/v1/dashboard-config > response.json
+      - name: Validate schema
+        run: node -e "const Ajv=require('ajv');const fs=require('fs');const schema=JSON.parse(fs.readFileSync('schema/dashboard-config.schema.json'));const data=JSON.parse(fs.readFileSync('response.json'));const ajv=new Ajv({allErrors:true});const valid=ajv.validate(schema,data);if(!valid){console.log(JSON.stringify(ajv.errors,null,2));process.exit(1);}"
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rest-response
+          path: response.json
+          if-no-files-found: ignore
+      - name: Summary
+        run: echo "### REST contract validated" >> $GITHUB_STEP_SUMMARY
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.workflow }}-${{ github.job }}-logs
+          path: |
+            **/test-results/**/*.xml
+            **/logs/**
+          if-no-files-found: ignore
+      - name: Job summary
+        if: always()
+        run: |
+          echo "### ${{ github.workflow }} / ${{ github.job }}" >> $GITHUB_STEP_SUMMARY
+          echo "- status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY

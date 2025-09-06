@@ -1,0 +1,57 @@
+name: wp-coding-standards
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  phpcs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer
+          coverage: none
+      - uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+      - run: composer install --no-progress --no-interaction
+      - name: Run PHPCS
+        run: vendor/bin/phpcs --standard=WordPress --report=json > phpcs.json || true
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpcs
+          path: phpcs.json
+          if-no-files-found: ignore
+      - name: Summary
+        run: |
+          echo "### PHPCS" >> $GITHUB_STEP_SUMMARY
+          if [ -f phpcs.json ]; then
+            ERRORS=$(jq '.totals.errors' phpcs.json)
+            WARNINGS=$(jq '.totals.warnings' phpcs.json)
+            echo "- errors: $ERRORS" >> $GITHUB_STEP_SUMMARY
+            echo "- warnings: $WARNINGS" >> $GITHUB_STEP_SUMMARY
+            jq -r '.files|to_entries[]|"- \(.key)"' phpcs.json | head -n 10 >> $GITHUB_STEP_SUMMARY
+          fi
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.workflow }}-${{ github.job }}-logs
+          path: |
+            **/test-results/**/*.xml
+            **/logs/**
+          if-no-files-found: ignore
+      - name: Job summary
+        if: always()
+        run: |
+          echo "### ${{ github.workflow }} / ${{ github.job }}" >> $GITHUB_STEP_SUMMARY
+          echo "- status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY

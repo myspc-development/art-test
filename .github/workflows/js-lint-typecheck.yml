@@ -1,0 +1,56 @@
+name: js-lint-typecheck
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-typecheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        node-version: [lts/*]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+      - name: ESLint
+        run: npx eslint . --format json -o eslint-report.json || true
+      - name: TypeScript
+        run: npx tsc --noEmit
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: eslint-report
+          path: eslint-report.json
+          if-no-files-found: ignore
+      - name: Lint summary
+        run: |
+          echo '### ESLint summary' >> $GITHUB_STEP_SUMMARY
+          if [ -f eslint-report.json ]; then
+            ERRORS=$(jq '[.[].errorCount] | add' eslint-report.json)
+            echo "- errors: $ERRORS" >> $GITHUB_STEP_SUMMARY
+            jq -r '[.[] | {filePath, errorCount}] | sort_by(-.errorCount)[:10] | .[] | "- \(.filePath) (\(.errorCount))"' eslint-report.json >> $GITHUB_STEP_SUMMARY
+          fi
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.workflow }}-${{ github.job }}-logs
+          path: |
+            **/test-results/**/*.xml
+            **/logs/**
+          if-no-files-found: ignore
+      - name: Job summary
+        if: always()
+        run: |
+          echo "### ${{ github.workflow }} / ${{ github.job }}" >> $GITHUB_STEP_SUMMARY
+          echo "- status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY

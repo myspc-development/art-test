@@ -1,0 +1,59 @@
+name: php-static-analysis
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        php: ['8.1', '8.2', '8.3']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer
+      - uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+      - run: composer install --no-progress --no-interaction
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse --error-format=json > phpstan.json || true
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpstan-${{ matrix.php }}
+          path: phpstan.json
+          if-no-files-found: ignore
+      - name: Summary
+        run: |
+          echo "### PHPStan" >> $GITHUB_STEP_SUMMARY
+          if [ -f phpstan.json ]; then
+            ERRORS=$(jq '.totals.errors' phpstan.json)
+            echo "- errors: $ERRORS" >> $GITHUB_STEP_SUMMARY
+            jq -r '.files|to_entries[]|"- \(.key) (\(.value.errors))"' phpstan.json | head -n 10 >> $GITHUB_STEP_SUMMARY
+          fi
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.workflow }}-${{ github.job }}-logs
+          path: |
+            **/test-results/**/*.xml
+            **/logs/**
+          if-no-files-found: ignore
+      - name: Job summary
+        if: always()
+        run: |
+          echo "### ${{ github.workflow }} / ${{ github.job }}" >> $GITHUB_STEP_SUMMARY
+          echo "- status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
