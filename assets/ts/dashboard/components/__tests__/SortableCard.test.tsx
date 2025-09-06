@@ -17,21 +17,23 @@ describe('SortableCard', () => {
     );
   }
 
-  test('calls onRemove when remove button clicked', () => {
-    const onRemove = jest.fn();
-    setup(true, onRemove);
-    fireEvent.click(screen.getByLabelText(/remove/i));
-    expect(onRemove).toHaveBeenCalled();
+  describe('when editing', () => {
+    test('shows controls and triggers onRemove', () => {
+      const onRemove = jest.fn();
+      setup(true, onRemove);
+      expect(screen.getByLabelText(/drag handle/i)).not.toHaveClass('invisible');
+      fireEvent.click(screen.getByLabelText(/remove/i));
+      expect(onRemove).toHaveBeenCalledTimes(1);
+    });
   });
 
-  test('hides drag handle when not editing', () => {
-    setup(false);
-    expect(screen.getByLabelText(/drag handle/i)).toHaveClass('invisible');
-    expect(screen.queryByLabelText(/remove/i)).toBeNull();
-  });
-
-  test('shows drag handle when editing', () => {
-    setup(true);
-    expect(screen.getByLabelText(/drag handle/i)).not.toHaveClass('invisible');
+  describe('when not editing', () => {
+    test('hides controls and does not call onRemove', () => {
+      const onRemove = jest.fn();
+      setup(false, onRemove);
+      expect(screen.getByLabelText(/drag handle/i)).toHaveClass('invisible');
+      expect(screen.queryByLabelText(/remove/i)).toBeNull();
+      expect(onRemove).not.toHaveBeenCalled();
+    });
   });
 });
