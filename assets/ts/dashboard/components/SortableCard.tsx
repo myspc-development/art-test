@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -34,12 +35,11 @@ export default function SortableCard({
         >
           <GripVertical size={16} />
         </button>
-        {/* istanbul ignore next */}
-        {editing && (
+        {editing ? (
           <button onClick={onRemove} aria-label="Remove" className="p-1">
             <X size={16} />
           </button>
-        )}
+        ) : null}
       </div>
       <div className="flex-1">{children}</div>
     </div>

@@ -29,4 +29,9 @@ describe('SortableCard', () => {
     expect(screen.getByLabelText(/drag handle/i)).toHaveClass('invisible');
     expect(screen.queryByLabelText(/remove/i)).toBeNull();
   });
+
+  test('shows drag handle when editing', () => {
+    setup(true);
+    expect(screen.getByLabelText(/drag handle/i)).not.toHaveClass('invisible');
+  });
 });
