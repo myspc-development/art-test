@@ -15,6 +15,7 @@ foreach (glob($root . '/includes/rest-*.php') as $file) {
     $candidates = [
         $root . '/tests/Rest/' . $name . 'Test.php',
         $root . '/tests/Rest/Rest' . $name . 'Test.php',
+        $root . '/tests/Rest/Generated/' . $name . 'RouteTest.php',
     ];
     if (isset($map[$slug])) {
         $candidates[] = $root . '/tests/Rest/' . $map[$slug];

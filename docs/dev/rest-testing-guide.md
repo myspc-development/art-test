@@ -30,3 +30,12 @@ public function test_route_requires_auth() {
     $this->assertSame( 401, $response->get_status() );
 }
 ```
+
+## Generated basic tests
+To regenerate coarse route coverage tests run:
+
+```bash
+npm run test:rest:gen
+```
+
+This script writes files to `tests/Rest/Generated/`. The generated tests assert that each REST route exists and that basic authentication flows behave as expected. Feature-specific tests should still live alongside the rest of their route group.
