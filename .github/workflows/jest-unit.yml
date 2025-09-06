@@ -1,0 +1,63 @@
+name: jest-unit
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        node-version: [lts/*, node]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+      - name: Run Jest
+        run: npx jest --ci --runInBand --reporters=default --reporters=jest-junit --coverage
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.node-version }}
+          path: coverage
+      - name: Upload junit
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-${{ matrix.node-version }}
+          path: junit.xml
+          if-no-files-found: ignore
+      - name: Jest summary
+        run: |
+          PASSED=$(jq '.testResults | map(select(.status=="passed")) | length' junit.xml 2>/dev/null || echo 0)
+          FAILED=$(jq '.testResults | map(select(.status=="failed")) | length' junit.xml 2>/dev/null || echo 0)
+          echo "### Jest" >> $GITHUB_STEP_SUMMARY
+          echo "- passed: $PASSED" >> $GITHUB_STEP_SUMMARY
+          echo "- failed: $FAILED" >> $GITHUB_STEP_SUMMARY
+          if [ -f coverage/coverage-summary.json ]; then
+            echo '
+#### Top uncovered files' >> $GITHUB_STEP_SUMMARY
+            jq -r '.total // {} | to_entries[] | select(.value.lines.pct < 100) | "- \(.key): \(.value.lines.pct)%"' coverage/coverage-summary.json | head -n 10 >> $GITHUB_STEP_SUMMARY
+          fi
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.workflow }}-${{ github.job }}-logs
+          path: |
+            **/test-results/**/*.xml
+            **/logs/**
+          if-no-files-found: ignore
+      - name: Job summary
+        if: always()
+        run: |
+          echo "### ${{ github.workflow }} / ${{ github.job }}" >> $GITHUB_STEP_SUMMARY
+          echo "- status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY

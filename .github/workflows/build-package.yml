@@ -1,0 +1,68 @@
+name: build-package
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+      - run: npm ci
+      - run: composer install --no-progress --no-interaction
+      - name: Build plugin
+        run: |
+          npm run build
+          zip -r plugin.zip . -x 'node_modules/*' '.git/*'
+      - name: Start WP
+        run: |
+          npm install -g @wordpress/env
+          wp-env start
+      - name: Install plugin
+        run: wp-env run tests-cli wp plugin install plugin.zip --activate
+      - name: Smoke test
+        run: curl -s -o /dev/null -w "%{http_code}" http://localhost:8889/wp-admin/ > status.txt
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-package
+          path: |
+            plugin.zip
+            status.txt
+      - name: Summary
+        run: |
+          STATUS=$(cat status.txt)
+          echo "### Build package" >> $GITHUB_STEP_SUMMARY
+          echo "- admin status: $STATUS" >> $GITHUB_STEP_SUMMARY
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.workflow }}-${{ github.job }}-logs
+          path: |
+            **/test-results/**/*.xml
+            **/logs/**
+          if-no-files-found: ignore
+      - name: Job summary
+        if: always()
+        run: |
+          echo "### ${{ github.workflow }} / ${{ github.job }}" >> $GITHUB_STEP_SUMMARY
+          echo "- status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY

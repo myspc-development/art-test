@@ -1,0 +1,61 @@
+name: wp-integration-tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  wp-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        php: ['8.1', '8.2', '8.3']
+        wp: ['6.3', '6.4', '6.5', '6.6']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysqli
+          coverage: none
+      - name: Set up WP environment
+        run: |
+          npm install -g @wordpress/env
+          wp-env start --wp-version ${{ matrix.wp }}
+      - name: Install deps
+        run: composer install --no-progress --no-interaction
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit -c phpunit.wp.xml.dist --log-junit junit.xml || true
+      - name: Upload junit
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-php${{ matrix.php }}-wp${{ matrix.wp }}
+          path: junit.xml
+          if-no-files-found: ignore
+      - name: Summary
+        run: |
+          echo "### WP Integration" >> $GITHUB_STEP_SUMMARY
+          if [ -f junit.xml ]; then
+            ENDPOINTS=$(grep -o '/artpulse/v1/[^<]*' junit.xml | sort | uniq -c)
+            echo "$ENDPOINTS" | sed 's/^/ - /' >> $GITHUB_STEP_SUMMARY
+          fi
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.workflow }}-${{ github.job }}-logs
+          path: |
+            **/test-results/**/*.xml
+            **/logs/**
+          if-no-files-found: ignore
+      - name: Job summary
+        if: always()
+        run: |
+          echo "### ${{ github.workflow }} / ${{ github.job }}" >> $GITHUB_STEP_SUMMARY
+          echo "- status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
