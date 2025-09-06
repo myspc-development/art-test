@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -20,6 +19,20 @@ export default function SortableCard({
     transform: CSS.Transform.toString(transform),
     transition
   } as React.CSSProperties;
+  let handleClass = 'p-1 cursor-grab';
+  if (!editing) {
+    handleClass += ' invisible';
+  }
+
+  let removeButton: React.ReactNode = null;
+  if (editing) {
+    removeButton = (
+      <button onClick={onRemove} aria-label="Remove" className="p-1">
+        <X size={16} />
+      </button>
+    );
+  }
+
   return (
     <div
       ref={setNodeRef}
@@ -28,18 +41,14 @@ export default function SortableCard({
     >
       <div className="flex justify-between items-start mb-2">
         <button
-          className={`p-1 cursor-grab ${editing ? '' : 'invisible'}`}
+          className={handleClass}
           aria-label="Drag handle"
           {...attributes}
           {...listeners}
         >
           <GripVertical size={16} />
         </button>
-        {editing ? (
-          <button onClick={onRemove} aria-label="Remove" className="p-1">
-            <X size={16} />
-          </button>
-        ) : null}
+        {removeButton}
       </div>
       <div className="flex-1">{children}</div>
     </div>
