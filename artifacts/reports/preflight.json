@@ -1,0 +1,19 @@
+{
+  "commit": "4377d8d868fe1449ccb63f94b6d65754fb9cd405",
+  "base_url": "http://localhost:8889",
+  "results": {
+    "schema": { "ok": false, "errors": ["Unexpected end of JSON input"], "payload": "artifacts/contract/dashboard-config.json" },
+    "unit_widgets": { "ok": false, "coverage_summary": "coverage/summary.txt", "lowest_files": ["src/components/ReactForm.jsx", "assets/ts/dashboard/RoleDashboard.tsx"] },
+    "e2e_login": { "ok": false, "traces": ["artifacts/e2e/login/trace.zip"] },
+    "role_dashboards": {
+      "ok": false,
+      "roles": {
+        "admin": { "expected": ["overview-kpis","sales-pipeline"], "missing": [], "extras": [] },
+        "member": { "expected": ["overview-kpis","gamma"], "missing": [], "extras": [] }
+      }
+    },
+    "a11y": { "ok": false, "issues": 0, "report": "artifacts/a11y/axe.json" },
+    "perf": { "ok": false, "lighthouse": "artifacts/lighthouse/dashboard.json" },
+    "packaging": { "ok": false, "zip": "artifacts/build/plugin.zip" }
+  }
+}
