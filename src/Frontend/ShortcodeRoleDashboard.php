@@ -91,19 +91,21 @@ class ShortcodeRoleDashboard {
 			}
 		}
 
-		// New role dashboard bundle
-		$script_handle = 'ap-role-dashboard';
-		$script_path   = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'dist/dashboard.js';
-		if ( file_exists( $script_path ) ) {
-			wp_enqueue_script(
-				$script_handle,
-				plugins_url( 'dist/dashboard.js', ARTPULSE_PLUGIN_FILE ),
-				array( 'wp-element' ),
-				(string) filemtime( $script_path ),
-				true
-			);
-			wp_localize_script( $script_handle, 'apDashboardData', self::script_data( $role ) );
-		}
+                // New role dashboard bundle
+                $script_handle = 'ap-role-dashboard';
+                $script_rel    = 'assets/dist/RoleDashboard.js';
+                $script_path   = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . $script_rel;
+                if ( file_exists( $script_path ) ) {
+                        wp_enqueue_script(
+                                $script_handle,
+                                plugins_url( $script_rel, ARTPULSE_PLUGIN_FILE ),
+                                array( 'wp-element' ),
+                                (string) filemtime( $script_path ),
+                                true
+                        );
+                        wp_script_add_data( $script_handle, 'type', 'module' );
+                        wp_localize_script( $script_handle, 'apDashboardData', self::script_data( $role ) );
+                }
 
 		$style_handle = 'ap-role-dashboard-css';
 		$style_path   = plugin_dir_path( ARTPULSE_PLUGIN_FILE ) . 'assets/css/dashboard.css';
