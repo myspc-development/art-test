@@ -20,6 +20,7 @@ test('shows empty state with no events', () => {
 });
 
 test('uses empty state when events prop omitted', () => {
+  // @ts-expect-error testing default prop behavior
   render(<UpcomingEvents />);
   expect(screen.getByText(/no upcoming events/i)).toBeInTheDocument();
 });
