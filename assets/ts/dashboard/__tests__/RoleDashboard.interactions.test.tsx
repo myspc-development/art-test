@@ -18,6 +18,7 @@ import RoleDashboard from '../RoleDashboard';
 
 describe('RoleDashboard interactions', () => {
   beforeEach(() => {
+    jest.useFakeTimers();
     (window as any).apDashboardData = {
       restBase: '/',
       nonce: '',
@@ -29,12 +30,19 @@ describe('RoleDashboard interactions', () => {
     ) as any;
   });
 
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   it('allows removing, adding, resetting widgets and announces drag moves', () => {
     render(<RoleDashboard role="member" initialEdit={true} />);
 
     // Trigger drag to cover handleDragEnd/announce
     triggerDrag({ active: { id: 'tasks' }, over: { id: 'inbox' } } as any);
-    expect(screen.getByText(/moved tasks to position 3/i)).toBeInTheDocument();
+    const liveMsg = screen.getByText(/moved tasks to position 3/i);
+    expect(liveMsg).toBeInTheDocument();
+    jest.runAllTimers();
+    expect(screen.queryByText(/moved tasks to position 3/i)).toBeNull();
 
     // Initially three widgets
     expect(screen.getAllByLabelText(/remove/i)).toHaveLength(3);

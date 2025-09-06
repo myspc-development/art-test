@@ -35,4 +35,14 @@ describe('RoleDashboard states', () => {
       )
     ).toBe(true);
   });
+
+  it('closes whats new dialog on Escape', async () => {
+    render(<RoleDashboard role="artist" initialEdit={false} />);
+    fireEvent.keyDown(document, { key: 'Escape', bubbles: true });
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('dialog', { name: /what's new in roles dashboard/i })
+      ).not.toBeInTheDocument()
+    );
+  });
 });

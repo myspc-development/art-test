@@ -38,29 +38,3 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          echo '| Workflow | Status | Duration | Link |' >> table.md
-          echo '| --- | --- | --- | --- |' >> table.md
-          fail=0
-          while read wf; do
-            run_id=$(gh run list --workflow "$wf" --branch "${{ inputs.ref }}" --limit 1 --json databaseId -q '.[0].databaseId')
-            gh run watch "$run_id" --exit-status || fail=1
-            json=$(gh run view "$run_id" --json conclusion,duration,url)
-            status=$(echo "$json" | jq -r .conclusion)
-            dur=$(echo "$json" | jq -r .duration)
-            url=$(echo "$json" | jq -r .url)
-            icon='❌'; [ "$status" = 'success' ] && icon='✅'
-            echo "| $wf | $icon | ${dur}s | [logs]($url) |" >> table.md
-            if [ "$status" != 'success' ]; then
-              mkdir -p artifacts/orchestrator/$wf
-              gh run download "$run_id" --dir artifacts/orchestrator/$wf
-            fi
-          done < wf-list.txt
-          cat table.md >> $GITHUB_STEP_SUMMARY
-          exit $fail
-
-      - name: Upload artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: orchestrator
-          path: artifacts/

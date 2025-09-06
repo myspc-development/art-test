@@ -18,3 +18,8 @@ test('shows empty state with no events', () => {
   const empty = screen.queryByText(/no upcoming events/i) ?? screen.getByText(/no data|empty/i);
   expect(empty).toBeInTheDocument();
 });
+
+test('uses empty state when events prop omitted', () => {
+  render(<UpcomingEvents />);
+  expect(screen.getByText(/no upcoming events/i)).toBeInTheDocument();
+});

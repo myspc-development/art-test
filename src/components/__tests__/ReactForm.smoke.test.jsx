@@ -48,4 +48,23 @@ describe('ReactForm smoke test', () => {
 
     expect(button).not.toBeDisabled();
   });
+
+  it('handles unexpected response shape', async () => {
+    global.fetch.mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({}) });
+    render(<ReactForm />);
+    fireEvent.submit(screen.getByRole('button', { name: /submit/i }).closest('form'));
+    await waitFor(() =>
+      expect(
+        screen.getByText('There was an error submitting the form.')
+      ).toBeInTheDocument()
+    );
+  });
+
+  it('renders type label when provided', async () => {
+    render(<ReactForm type="special" />);
+    fireEvent.submit(screen.getByRole('button', { name: /submit/i }).closest('form'));
+    await waitFor(() =>
+      expect(screen.getByText(/special/i)).toBeInTheDocument()
+    );
+  });
 });

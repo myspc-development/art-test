@@ -31,6 +31,18 @@ describe('dashboard entry bootstrap', () => {
     expect(render).toHaveBeenCalledTimes(1);
   });
 
+  it('falls back to global role data when attribute missing', async () => {
+    const { createRoot } = await import('react-dom/client');
+    const render = jest.fn();
+    (createRoot as jest.Mock).mockReturnValue({ render });
+    (window as any).apDashboardData = { role: 'member' };
+    document.body.innerHTML = '<div id="ap-dashboard-root"></div>';
+    await import('./index');
+    document.dispatchEvent(new Event('DOMContentLoaded'));
+    expect(createRoot).toHaveBeenCalledTimes(1);
+    expect(render).toHaveBeenCalledTimes(1);
+  });
+
   it('does nothing if root element missing', async () => {
     const { createRoot } = await import('react-dom/client');
     (createRoot as jest.Mock).mockReturnValue({ render: jest.fn() });
