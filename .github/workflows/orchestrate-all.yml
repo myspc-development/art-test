@@ -1,69 +1,40 @@
+# Dispatch selected workflows and aggregate their results
 name: orchestrate-all
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 1 * * *'
+    inputs:
+      workflows:
+        description: 'Comma-separated workflow file names to run'
+        required: true
+      ref:
+        description: 'Git ref to use'
+        required: false
+        default: ${{ github.ref }}
 
 permissions:
-  contents: read
   actions: write
+  contents: read
 
 jobs:
   orchestrate:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+
       - name: Dispatch workflows
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REF: ${{ github.ref }}
-        run: |
-          gh workflow list --json name | jq -r '.[] | select(.name != "orchestrate-all") | .name' > workflows.txt
-          while read wf; do
-            gh workflow run "$wf" --ref "$REF" || true
-          done < workflows.txt
-      - name: Await and summarize
+        id: dispatch
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          echo '| Workflow | Job | Conclusion | URL |' >> table.md
-          echo '|---|---|---|---|' >> table.md
-          while read wf; do
-            run_id=$(gh run list --workflow "$wf" --limit 1 --json databaseId -q '.[0].databaseId')
-            gh run watch $run_id || true
-            gh run view $run_id --json jobs > run.json
-            url="https://github.com/${{ github.repository }}/actions/runs/$run_id"
-            jq -r ".jobs[] | \"| $wf | \(.name) | \(.conclusion) | [logs]($url) |\"" run.json >> table.md
-            gh run download $run_id -D artifacts/$wf || true
-          done < workflows.txt
-          cat table.md >> $GITHUB_STEP_SUMMARY
-          if [ -d artifacts ]; then
-            echo '\n### Artifacts' >> $GITHUB_STEP_SUMMARY
-            find artifacts -type f >> $GITHUB_STEP_SUMMARY
-          fi
-      - name: Upload collected artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: combined-artifacts
-          path: artifacts
-          if-no-files-found: ignore
-      - name: Upload logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ github.workflow }}-${{ github.job }}-logs
-          path: |
-            **/test-results/**/*.xml
-            **/logs/**
-          if-no-files-found: ignore
-      - name: Status table
-        if: always()
+          IFS=',' read -ra WFS <<< "${{ inputs.workflows }}"
+          printf '%s\n' "${WFS[@]}" > wf-list.txt
+          for wf in "${WFS[@]}"; do
+            gh workflow run "$wf" --ref "${{ inputs.ref }}"
+          done
+
+      - name: Wait for completion
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          ICON="❌"
-          if [ "${{ job.status }}" = "success" ]; then ICON="✅"; fi
-          echo '| Job | Status | Artifacts |' >> $GITHUB_STEP_SUMMARY
-          echo '| --- | ------ | --------- |' >> $GITHUB_STEP_SUMMARY
-          echo "| ${{ github.job }} | $ICON | [link](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY

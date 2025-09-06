@@ -1,6 +1,8 @@
+# Focused dashboard/widget unit tests
 name: widgets-unit
 
 on:
+  push:
   pull_request:
   workflow_dispatch:
 
@@ -9,44 +11,73 @@ permissions:
 
 jobs:
   test:
+    name: node-${{ matrix.node }}
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [18.x, 20.x] # Validate widget tests on LTS Node versions
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: ${{ matrix.node }}
           cache: npm
-      - run: npm ci
-      - name: Widgets tests
+
+      - name: Cache Jest
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/jest
+          key: ${{ runner.os }}-jest-${{ matrix.node }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run widget tests
+        id: test
         env:
-          JEST_JUNIT_OUTPUT: junit.xml
-        run: npx jest --ci --runInBand --testPathPattern="(widgets|Dashboard)" --reporters=default --reporters=jest-junit --coverage
-      - name: per-file summary
+          JEST_JUNIT_OUTPUT: artifacts/junit/junit.xml
         run: |
-          echo '### Widgets unit summary' >> $GITHUB_STEP_SUMMARY
-          if [ -f junit.xml ]; then
-            jq -r '.testResults[] | "- \(.name): \(.assertionResults | map(select(.status==\"failed\")) | length) failed"' junit.xml >> $GITHUB_STEP_SUMMARY
-          fi
-      - name: Upload coverage
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-widgets
-          path: coverage/
-          if-no-files-found: ignore
-      - name: Upload junit
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: junit-widgets
-          path: junit.xml
-          if-no-files-found: ignore
-      - name: Status table
+          mkdir -p artifacts/junit
+          SECONDS=0
+          npx jest --reporters=default --reporters=jest-junit --coverage --testPathPattern '(widgets|Dashboard)' --maxWorkers=50% --json --outputFile=artifacts/jest-report.json
+          echo "duration=$SECONDS" >> $GITHUB_OUTPUT
+
+      - name: Slowest tests
         if: always()
         run: |
-          ICON="❌"
-          if [ "${{ job.status }}" = "success" ]; then ICON="✅"; fi
-          echo '| Job | Status | Artifacts |' >> $GITHUB_STEP_SUMMARY
-          echo '| --- | ------ | --------- |' >> $GITHUB_STEP_SUMMARY
-          echo "| ${{ github.job }} | $ICON | [link](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY
+          node <<'NODE' > artifacts/slow-tests.md || true
+          const fs=require('fs');
+          const path=require('path');
+          const data=JSON.parse(fs.readFileSync('artifacts/jest-report.json','utf8'));
+          const arr=data.testResults.map(t=>({file:path.basename(t.name), ms:t.perfStats.runtime})).sort((a,b)=>b.ms-a.ms).slice(0,10);
+          console.log('| Test File | ms |\n| --- | --- |');
+          for(const t of arr) console.log(`| ${t.file} | ${t.ms} |`);
+NODE
+
+      - name: Upload artifacts
+        if: always()
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: widgets-unit-${{ matrix.node }}
+          path: |
+            coverage/lcov.info
+            coverage/
+            artifacts/junit/
+            artifacts/jest-report.json
+            artifacts/slow-tests.md
+
+      - name: Job summary
+        if: always()
+        run: |
+          icon="❌"
+          if [ "${{ job.status }}" = "success" ]; then icon="✅"; fi
+          echo '| Result | Duration (s) | Artifacts |' >> $GITHUB_STEP_SUMMARY
+          echo '| --- | --- | --- |' >> $GITHUB_STEP_SUMMARY
+          echo "| $icon | ${{ steps.test.outputs.duration }} | [downloads](${{ steps.upload.outputs.artifact-url }}) |" >> $GITHUB_STEP_SUMMARY
+          echo '' >> $GITHUB_STEP_SUMMARY
+          echo '### Slowest tests' >> $GITHUB_STEP_SUMMARY
+          cat artifacts/slow-tests.md >> $GITHUB_STEP_SUMMARY

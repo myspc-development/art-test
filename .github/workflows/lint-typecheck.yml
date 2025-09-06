@@ -1,0 +1,68 @@
+# Lint and TypeScript type checking
+name: lint-typecheck
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: node-${{ matrix.node }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [18.x, 20.x] # Ensure lint and types pass on active LTS versions
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint & typecheck
+        id: run
+        run: |
+          mkdir -p artifacts
+          SECONDS=0
+          npm run lint:js > artifacts/eslint.log || lint=$?
+          lint_dur=$SECONDS
+          SECONDS=0
+          npm run typecheck > artifacts/tsc.log || tsc=$?
+          type_dur=$SECONDS
+          errors=$(tail -n1 artifacts/eslint.log | grep -oP '(\d+) errors' | awk '{print $1}')
+          warns=$(tail -n1 artifacts/eslint.log | grep -oP '(\d+) warnings' | awk '{print $1}')
+          echo "lint_exit=${lint:-0}" >> $GITHUB_OUTPUT
+          echo "tsc_exit=${tsc:-0}" >> $GITHUB_OUTPUT
+          echo "lint_dur=$lint_dur" >> $GITHUB_OUTPUT
+          echo "tsc_dur=$type_dur" >> $GITHUB_OUTPUT
+          echo "lint_errors=${errors:-0}" >> $GITHUB_OUTPUT
+          echo "lint_warnings=${warns:-0}" >> $GITHUB_OUTPUT
+          exit $(( ${lint:-0} | ${tsc:-0} ))
+
+      - name: Upload logs
+        if: always()
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-typecheck-${{ matrix.node }}
+          path: artifacts/
+
+      - name: Job summary
+        if: always()
+        run: |
+          lint_icon="❌"; [ "${{ steps.run.outputs.lint_exit }}" = "0" ] && lint_icon="✅"
+          tsc_icon="❌"; [ "${{ steps.run.outputs.tsc_exit }}" = "0" ] && tsc_icon="✅"
+          echo '| Tool | Result | Duration (s) | Errors | Warnings | Artifacts |' >> $GITHUB_STEP_SUMMARY
+          echo '| --- | --- | --- | --- | --- | --- |' >> $GITHUB_STEP_SUMMARY
+          echo "| ESLint | $lint_icon | ${{ steps.run.outputs.lint_dur }} | ${{ steps.run.outputs.lint_errors }} | ${{ steps.run.outputs.lint_warnings }} | [logs](${{ steps.upload.outputs.artifact-url }}) |" >> $GITHUB_STEP_SUMMARY
+          echo "| TypeScript | $tsc_icon | ${{ steps.run.outputs.tsc_dur }} | ${{ steps.run.outputs.tsc_exit }} | 0 | [logs](${{ steps.upload.outputs.artifact-url }}) |" >> $GITHUB_STEP_SUMMARY

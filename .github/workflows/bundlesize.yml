@@ -1,6 +1,8 @@
+# Bundle size checks with size-limit
 name: bundlesize
 
 on:
+  push:
   pull_request:
   workflow_dispatch:
 
@@ -10,39 +12,50 @@ permissions:
 jobs:
   bundlesize:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20.x] # Use latest LTS for build tooling
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: ${{ matrix.node }}
           cache: npm
-      - run: npm ci
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Build
         run: npm run build
-      - name: Bundlesize
-        run: npx size-limit || npx bundlesize | tee bundlesize.txt
-      - name: Upload report
+
+      - name: Check size
+        id: size
+        run: |
+          mkdir -p artifacts/bundlesize
+          npx size-limit --json > artifacts/bundlesize/report.json
+          node <<'NODE' > artifacts/bundlesize/table.md
+          const fs=require('fs');
+          const data=JSON.parse(fs.readFileSync('artifacts/bundlesize/report.json','utf8'));
+          console.log('| Bundle | Size (KB) | Limit (KB) |\n| --- | --- | --- |');
+          data.forEach(r=>console.log(`| ${r.name} | ${(r.size/1024).toFixed(2)} | ${(r.limit/1024).toFixed(2)} |`));
+NODE
+
+      - name: Upload artifacts
         if: always()
+        id: upload
         uses: actions/upload-artifact@v4
         with:
-          name: bundlesize
-          path: bundlesize.txt
-          if-no-files-found: ignore
-      - name: Upload logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ github.workflow }}-${{ github.job }}-logs
-          path: |
-            **/test-results/**/*.xml
-            **/logs/**
-          if-no-files-found: ignore
-      - name: Status table
+          name: bundlesize-${{ matrix.node }}
+          path: artifacts/bundlesize/
+
+      - name: Job summary
         if: always()
         run: |
-          ICON="❌"
-          if [ "${{ job.status }}" = "success" ]; then ICON="✅"; fi
-          echo '| Job | Status | Artifacts |' >> $GITHUB_STEP_SUMMARY
-          echo '| --- | ------ | --------- |' >> $GITHUB_STEP_SUMMARY
-          echo "| ${{ github.job }} | $ICON | [link](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY
+          icon="❌"; [ "${{ job.status }}" = "success" ] && icon="✅"
+          echo '| Result | Artifact |' >> $GITHUB_STEP_SUMMARY
+          echo '| --- | --- |' >> $GITHUB_STEP_SUMMARY
+          echo "| $icon | [report](${{ steps.upload.outputs.artifact-url }}) |" >> $GITHUB_STEP_SUMMARY
+          cat artifacts/bundlesize/table.md >> $GITHUB_STEP_SUMMARY

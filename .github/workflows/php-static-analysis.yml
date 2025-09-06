@@ -1,3 +1,4 @@
+# PHP static analysis via PHPStan
 name: php-static-analysis
 
 on:
@@ -11,53 +12,62 @@ permissions:
 jobs:
   phpstan:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     strategy:
+      fail-fast: false
       matrix:
-        php: ['8.1', '8.2', '8.3']
+        php: ['8.1', '8.2', '8.3'] # Supported PHP versions
     steps:
       - uses: actions/checkout@v4
+
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: none
           tools: composer
-      - uses: actions/cache@v4
+
+      - name: Cache Composer
+        uses: actions/cache@v4
         with:
-          path: vendor
-          key: composer-${{ hashFiles('composer.lock') }}
-      - run: composer install --no-progress --no-interaction
-      - name: PHPStan
-        run: vendor/bin/phpstan analyse --error-format=json > phpstan.json || true
-      - name: Upload report
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-php-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist --no-interaction
+
+      - name: Run PHPStan
+        id: phpstan
+        run: |
+          mkdir -p artifacts/phpstan
+          SECONDS=0
+          vendor/bin/phpstan analyse --error-format=json > artifacts/phpstan/report.json || exit_code=$?
+          echo "duration=$SECONDS" >> $GITHUB_OUTPUT
+          echo "exit=${exit_code:-0}" >> $GITHUB_OUTPUT
+          if [ "${exit_code:-0}" -ne 0 ]; then exit ${exit_code:-0}; fi
+
+      - name: Summarize errors
         if: always()
+        run: |
+          node <<'NODE' > artifacts/phpstan/summary.md || true
+          const fs=require('fs');
+          const data=JSON.parse(fs.readFileSync('artifacts/phpstan/report.json','utf8'));
+          const entries=Object.entries(data.files||{}).map(([file,info])=>({file,errors:info.messages.length})).sort((a,b)=>b.errors-a.errors);
+          console.log('| File | Errors |\n| --- | --- |');
+          entries.forEach(e=>console.log(`| ${e.file} | ${e.errors} |`));
+NODE
+
+      - name: Upload artifacts
+        if: always()
+        id: upload
         uses: actions/upload-artifact@v4
         with:
           name: phpstan-${{ matrix.php }}
-          path: phpstan.json
-          if-no-files-found: ignore
-      - name: Summary
-        run: |
-          echo "### PHPStan" >> $GITHUB_STEP_SUMMARY
-          if [ -f phpstan.json ]; then
-            ERRORS=$(jq '.totals.errors' phpstan.json)
-            echo "- errors: $ERRORS" >> $GITHUB_STEP_SUMMARY
-            jq -r '.files|to_entries[]|"- \(.key) (\(.value.errors))"' phpstan.json | head -n 10 >> $GITHUB_STEP_SUMMARY
-          fi
-      - name: Upload logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ github.workflow }}-${{ github.job }}-logs
-          path: |
-            **/test-results/**/*.xml
-            **/logs/**
-          if-no-files-found: ignore
-      - name: Status table
+          path: artifacts/phpstan/
+
+      - name: Job summary
         if: always()
         run: |
-          ICON="❌"
-          if [ "${{ job.status }}" = "success" ]; then ICON="✅"; fi
-          echo '| Job | Status | Artifacts |' >> $GITHUB_STEP_SUMMARY
-          echo '| --- | ------ | --------- |' >> $GITHUB_STEP_SUMMARY
-          echo "| ${{ github.job }} | $ICON | [link](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY
+          icon="❌"; [ "${{ steps.phpstan.outputs.exit }}" = "0" ] && icon="✅"
+          echo '| PHP | Result | Duration (s) | Artifacts |' >> $GITHUB_STEP_SUMMARY
+          echo '| --- | --- | --- | --- |' >> $GITHUB_STEP_SUMMARY
+          echo "| ${{ matrix.php }} | $icon | ${{ steps.phpstan.outputs.duration }} | [report](${{ steps.upload.outputs.artifact-url }}) |" >> $GITHUB_STEP_SUMMARY
+          cat artifacts/phpstan/summary.md >> $GITHUB_STEP_SUMMARY
