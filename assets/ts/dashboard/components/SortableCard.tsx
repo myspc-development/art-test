@@ -1,3 +1,4 @@
+/* c8 ignore file */
 /* istanbul ignore file */
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
