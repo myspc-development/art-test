@@ -1,14 +1,14 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import UpcomingEvents from '../UpcomingEvents';
+import UpcomingEvents, { EventItem } from '../UpcomingEvents';
 
-const EVTS = [
+const EVTS: EventItem[] = [
   { id: 'e1', title: 'Opening Night', startsAt: new Date().toISOString() },
   { id: 'e2', title: 'Members Meetup', startsAt: new Date(Date.now() + 86400000).toISOString() },
 ];
 
 test('lists upcoming events when present', () => {
-  render(<UpcomingEvents events={EVTS as any} />);
+  render(<UpcomingEvents events={EVTS} />);
   expect(screen.getByText(/opening night/i)).toBeInTheDocument();
   expect(screen.getByText(/members meetup/i)).toBeInTheDocument();
 });
@@ -20,6 +20,7 @@ test('shows empty state with no events', () => {
 });
 
 test('uses empty state when events prop omitted', () => {
+  // @ts-expect-error testing default prop behavior
   render(<UpcomingEvents />);
   expect(screen.getByText(/no upcoming events/i)).toBeInTheDocument();
 });
