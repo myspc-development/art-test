@@ -12,5 +12,5 @@
       }
     }
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }

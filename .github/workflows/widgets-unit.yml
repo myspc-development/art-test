@@ -1,0 +1,41 @@
+name: widgets-unit
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+      - run: npm ci
+      - name: Widgets tests
+        env:
+          JEST_JUNIT_OUTPUT: junit.xml
+        run: npx jest --ci --runInBand --testPathPattern="(widgets|Dashboard)" --reporters=default --reporters=jest-junit
+      - name: per-file summary
+        run: |
+          echo '### Widgets unit summary' >> $GITHUB_STEP_SUMMARY
+          if [ -f junit.xml ]; then
+            jq -r '.testResults[] | "- \(.name): \(.assertionResults | map(select(.status==\"failed\")) | length) failed"' junit.xml >> $GITHUB_STEP_SUMMARY
+          fi
+      - name: Upload junit
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-widgets
+          path: junit.xml
+          if-no-files-found: ignore
+      - name: Job summary
+        if: always()
+        run: |
+          echo "### ${{ github.workflow }} / ${{ github.job }}" >> $GITHUB_STEP_SUMMARY
+          echo "- status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY

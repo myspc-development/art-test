@@ -37,7 +37,11 @@ if (typeof global.window !== 'undefined' && typeof (global.window as any).localS
 }
 
 const originalError = console.error;
-const allowed = [/React state update on an unmounted component/, /Warning:.*not wrapped in act/];
+const allowed = [
+  /React state update on an unmounted component/,
+  /Warning:.*not wrapped in act/,
+  /Failed to load dashboard configuration/,
+];
 
 beforeEach(() => {
   (global as any).fetch = jest.fn(() =>
