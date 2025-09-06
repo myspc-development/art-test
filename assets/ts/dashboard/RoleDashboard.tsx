@@ -11,11 +11,11 @@ import {
 import {
   SortableContext,
   arrayMove,
-  rectSortingStrategy,
-  useSortable
+  rectSortingStrategy
 } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, X } from 'lucide-react';
+
+import SortableCard from './components/SortableCard';
+import AddWidgetDialog from './components/AddWidgetDialog';
 
 import UpcomingEvents from './widgets/UpcomingEvents';
 import Sales from './widgets/Sales';
@@ -52,59 +52,6 @@ const storageKey = (role: Role) => `ap.dashboard.layout.v1:${role}`;
 /* istanbul ignore next */
 function getWidget(id: string): WidgetMeta {
   return WIDGETS.find(w => w.id === id)!;
-}
-
-/* istanbul ignore next */
-function SortableCard({
-  id,
-  editing,
-  onRemove,
-  children
-}: {
-  id: string;
-  editing: boolean;
-  onRemove: () => void;
-  children: React.ReactNode;
-}) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition
-  } = useSortable({ id });
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition
-  } as React.CSSProperties;
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="bg-white rounded shadow p-4 flex flex-col"
-    >
-      <div className="flex justify-between items-start mb-2">
-      <button
-          className={`p-1 cursor-grab ${editing ? '' : 'invisible'}`}
-          aria-label="Drag handle"
-          {...attributes}
-          {...listeners}
-        >
-          <GripVertical size={16} />
-        </button>
-        {editing && (
-          <button
-            onClick={onRemove}
-            aria-label="Remove"
-            className="p-1"
-          >
-            <X size={16} />
-          </button>
-        )}
-      </div>
-      <div className="flex-1">{children}</div>
-    </div>
-  );
 }
 
 export default function RoleDashboard({
@@ -377,53 +324,3 @@ export default function RoleDashboard({
     </div>
   );
 }
-
-/* istanbul ignore next */
-function AddWidgetDialog({
-  available,
-  onAdd,
-  onClose
-}: {
-  available: WidgetMeta[];
-  onAdd: (id: string) => void;
-  onClose: () => void;
-}) {
-  const [query, setQuery] = useState('');
-  const list = available.filter(w =>
-    w.title.toLowerCase().includes(query.toLowerCase())
-  );
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-      <div className="bg-white p-4 rounded w-80">
-        <h2 className="text-lg mb-2">Add widget</h2>
-        <input
-          className="border w-full mb-2 p-1"
-          placeholder="Search"
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-        />
-        <ul className="max-h-40 overflow-auto">
-          {list.map(w => (
-            <li key={w.id}>
-              <button
-                className="w-full text-left py-1 hover:bg-gray-100"
-                onClick={() => onAdd(w.id)}
-              >
-                {w.title}
-              </button>
-            </li>
-          ))}
-          {list.length === 0 && (
-            <li className="text-sm text-gray-500">No widgets</li>
-          )}
-        </ul>
-        <div className="text-right mt-2">
-          <button className="px-2 py-1 border rounded" onClick={onClose}>
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
