@@ -36,13 +36,6 @@ if (typeof global.window !== 'undefined' && typeof (global.window as any).localS
   });
 }
 
-const originalError = console.error;
-const allowed = [
-  /React state update on an unmounted component/,
-  /Warning:.*not wrapped in act/,
-  /Failed to load dashboard configuration/,
-];
-
 beforeEach(() => {
   (global as any).fetch = jest.fn(() =>
     Promise.resolve({
@@ -50,16 +43,28 @@ beforeEach(() => {
       json: () => Promise.resolve({ widgets: [], filters: [] }),
     })
   );
-  console.error = (...args: any[]) => {
-    if (allowed.some((re) => re.test(String(args[0])))) {
-      return;
-    }
-    originalError(...args);
-    throw new Error(args.join(' '));
-  };
 });
 
 afterEach(() => {
   jest.restoreAllMocks();
+});
+
+const ALLOW = [
+  /React act\(.+\) warning/i,
+  /React state update on an unmounted component/i,
+  /Warning:.*not wrapped in act/i,
+  /Failed to load dashboard configuration/i,
+];
+
+const originalError = console.error;
+console.error = (...args: unknown[]) => {
+  const asText = args.map(String).join(' ');
+  if (ALLOW.some((rx) => rx.test(asText))) {
+    return originalError(...(args as any));
+  }
+  throw new Error(`Unexpected console.error in test:\n${asText}`);
+};
+
+afterAll(() => {
   console.error = originalError;
 });

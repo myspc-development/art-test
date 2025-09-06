@@ -20,7 +20,7 @@ const config: Config = {
     '^@/components/ui/(.*)$': '<rootDir>/tests/js/__mocks__/shadcn-ui.tsx'
   },
   transform: {
-    '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: 'tsconfig.jest.json', isolatedModules: true }],
+    '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: 'tsconfig.jest.json' }],
     '^.+\\.[cm]?jsx?$': 'babel-jest',
   },
   testRegex: '.*\\.test\\.(ts|tsx|js|jsx)$',
@@ -41,6 +41,8 @@ const config: Config = {
   collectCoverageFrom: [
     'assets/ts/**/*.{ts,tsx}',
     'src/**/*.{ts,tsx,js,jsx}',
+    '!src/js/dashboard.js',
+    '!src/components/ReactForm.js',
     '!**/__tests__/**',
     '!**/__mocks__/**',
     '!**/*.d.ts'

@@ -85,12 +85,17 @@ const RoleDashboard: React.FC = () => {
     }
   }, [previewRole]);
 
-  const { widgets: allowed, error: configError, retry: retryConfig } = useFilteredWidgets(
-    RoleDashboardData.widgets,
-    {
-      roles: previewRole ? [previewRole] : RoleDashboardData.currentUser.roles,
-      capabilities: RoleDashboardData.currentUser.capabilities,
-    }
+  const {
+    widgets: allowedRaw,
+    error: configError,
+    retry: retryConfig,
+    loading,
+  } = useFilteredWidgets(RoleDashboardData.widgets, {
+    roles: previewRole ? [previewRole] : RoleDashboardData.currentUser.roles,
+    capabilities: RoleDashboardData.currentUser.capabilities,
+  });
+  const allowed = allowedRaw.filter(
+    w => !w.capability || (RoleDashboardData.currentUser.capabilities || []).includes(w.capability)
   );
   useEffect(() => {
     const role = previewRole || RoleDashboardData.currentUser.role;
@@ -199,6 +204,7 @@ const RoleDashboard: React.FC = () => {
           </select>
         </label>
       </div>
+      {loading && <div data-testid="dashboard-loading">Loading...</div>}
       {configError && (
         <div className="ap-error" role="alert">
           <p>{configError}</p>
