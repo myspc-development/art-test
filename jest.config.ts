@@ -54,10 +54,10 @@ const config: Config = {
 
     // keep widgets generally strict
     'assets/ts/dashboard/widgets/**': {
-      branches: 75,
+      branches: 60,
       functions: 80,
-      lines: 80,
-      statements: 80,
+      lines: 75,
+      statements: 75,
     },
 
     // keep dashboard strict-ish

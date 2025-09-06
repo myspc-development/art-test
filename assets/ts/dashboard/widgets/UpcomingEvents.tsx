@@ -7,15 +7,10 @@ export interface EventItem {
 }
 
 export default function UpcomingEvents({ events = [] }: { events: EventItem[] }) {
-  if (events.length === 0) {
-    return <p>No upcoming events</p>;
-  }
-  return (
-    <ul className="list-disc pl-4 space-y-1">
-      {events.map(evt => (
-        <li key={evt.id}>{evt.title}</li>
-      ))}
-    </ul>
+  const items = events.map(evt => <li key={evt.id}>{evt.title}</li>);
+  return events.length === 0 ? (
+    <p>No upcoming events</p>
+  ) : (
+    <ul className="list-disc pl-4 space-y-1">{items}</ul>
   );
 }
-
