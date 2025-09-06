@@ -9,6 +9,7 @@
     "esModuleInterop": true,
     "allowJs": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
 
     // ✅ Required for tsconfig-paths to work
     "baseUrl": ".",
