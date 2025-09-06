@@ -1,0 +1,34 @@
+{
+  "tasks": [
+    {
+      "priority": "P1",
+      "owner": "codex",
+      "task": "Align TypeScript, Jest and Ajv dependency versions; remove unused packages",
+      "acceptanceCriteria": "npm ci installs with no warnings and npm run build passes"
+    },
+    {
+      "priority": "P1",
+      "owner": "codex",
+      "task": "Add unit tests covering role gating precedence (excludeRoles, capability, roles)",
+      "acceptanceCriteria": "tests fail when precedence is broken"
+    },
+    {
+      "priority": "P2",
+      "owner": "codex",
+      "task": "Implement REST config merge without clobbering client props",
+      "acceptanceCriteria": "widgets merge by id preserving rest-only fields; tests cover [] and specific role arrays"
+    },
+    {
+      "priority": "P2",
+      "owner": "codex",
+      "task": "Ensure dashboard loading, error and empty states announce via aria-live",
+      "acceptanceCriteria": "axe reports 0 serious issues on dashboard screen"
+    },
+    {
+      "priority": "P3",
+      "owner": "codex",
+      "task": "Add CI workflows for lint-typecheck, jest-unit, widgets-unit, rest-contract-check, e2e, php-static-analysis, wp-coding-standards, bundlesize, build-package and orchestrate-all",
+      "acceptanceCriteria": "each workflow caches dependencies and uploads artifacts with a markdown summary"
+    }
+  ]
+}
