@@ -10,6 +10,13 @@
   <rule ref="WordPress-Extra"/>
   <rule ref="PHPCompatibility"/>
   <exclude-pattern>vendor/*</exclude-pattern>
+  <exclude-pattern>tests/widgets/__snapshots__/*</exclude-pattern>
+  <exclude-pattern>scripts/*</exclude-pattern>
+  <exclude-pattern>dist/*</exclude-pattern>
+
+  <rule ref="Squiz.Commenting.FileComment">
+    <exclude-pattern>tests/*</exclude-pattern>
+  </rule>
 
   <severity>5</severity>
   <arg value="sp"/>

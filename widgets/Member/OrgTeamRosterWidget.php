@@ -1,4 +1,5 @@
 <?php
+if (defined('IS_DASHBOARD_BUILDER_PREVIEW')) return;
 namespace ArtPulse\Widgets\Member;
 
 if ( ! defined( 'ABSPATH' ) ) {

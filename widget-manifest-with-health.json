@@ -30,26 +30,6 @@
         "status": "ok",
         "previewGuarded": true
     },
-    "site_stats": {
-        "file": "templates/widgets/site-stats.php",
-        "roles": [
-            "artist",
-            "member",
-            "organization",
-            "administrator"
-        ],
-        "status": "registered",
-        "previewGuarded": true
-    },
-    "artist_artwork_manager": {
-        "file": "templates/widgets/artist-artwork-manager.php",
-        "roles": [
-            "member",
-            "artist"
-        ],
-        "status": "registered",
-        "previewGuarded": true
-    },
     "artist_audience_insights": {
         "file": "templates/widgets/artist-audience-insights.php",
         "roles": [
@@ -98,15 +78,6 @@
         "status": "registered",
         "previewGuarded": true
     },
-    "messages": {
-        "file": "templates/widgets/messages.php",
-        "roles": [
-            "member",
-            "artist"
-        ],
-        "status": "registered",
-        "previewGuarded": true
-    },
     "onboarding_tracker": {
         "file": "templates/widgets/onboarding-tracker.php",
         "roles": [
@@ -131,6 +102,17 @@
         "status": "registered",
         "previewGuarded": true
     },
+    "site_stats": {
+        "file": "templates/widgets/site-stats.php",
+        "roles": [
+            "artist",
+            "member",
+            "organization",
+            "administrator"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
     "widget_spotlights": {
         "file": "templates/widgets/widget-spotlights.php",
         "roles": [
@@ -145,6 +127,15 @@
             "member",
             "artist",
             "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "artist_artwork_manager": {
+        "file": "templates/widgets/artist-artwork-manager.php",
+        "roles": [
+            "member",
+            "artist"
         ],
         "status": "registered",
         "previewGuarded": true
@@ -251,6 +242,15 @@
             "member",
             "artist",
             "organization"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "messages": {
+        "file": "templates/widgets/messages.php",
+        "roles": [
+            "member",
+            "artist"
         ],
         "status": "registered",
         "previewGuarded": true
@@ -412,6 +412,14 @@
         "status": "registered",
         "previewGuarded": true
     },
+    "welcome_box": {
+        "file": "widgets/Member/WelcomeBoxWidget.php",
+        "roles": [
+            "member"
+        ],
+        "status": "ok",
+        "previewGuarded": true
+    },
     "widget_events": {
         "file": "widgets/WidgetEventsWidget.php",
         "roles": [
@@ -423,14 +431,6 @@
     },
     "widget_favorites": {
         "file": "widgets/FavoritesOverviewWidget.php",
-        "roles": [
-            "member"
-        ],
-        "status": "registered",
-        "previewGuarded": true
-    },
-    "widget_near_me_events": {
-        "file": "widgets/NearbyEventsWidget.php",
         "roles": [
             "member"
         ],
@@ -461,6 +461,14 @@
         "roles": [
             "member",
             "artist"
+        ],
+        "status": "registered",
+        "previewGuarded": true
+    },
+    "widget_near_me_events": {
+        "file": "widgets/NearbyEventsWidget.php",
+        "roles": [
+            "member"
         ],
         "status": "registered",
         "previewGuarded": true
@@ -549,7 +557,7 @@
             "organization"
         ],
         "status": "registered",
-        "previewGuarded": false
+        "previewGuarded": true
     },
     "embed_tool": {
         "file": "assets/js/widgets/EmbedToolWidget.jsx",
@@ -584,12 +592,12 @@
         "previewGuarded": true
     },
     "org_insights": {
-        "file": "src/Widgets.php",
+        "file": "widgets/OrgAnalyticsWidget.php",
         "roles": [
             "organization"
         ],
         "status": "registered",
-        "previewGuarded": false
+        "previewGuarded": true
     },
     "org_team_roster": {
         "file": "assets/js/widgets/OrgTeamRosterWidget.jsx",
@@ -662,14 +670,6 @@
             "organization"
         ],
         "status": "registered",
-        "previewGuarded": true
-    },
-    "welcome_box": {
-        "file": "widgets/member/WelcomeBoxWidget.php",
-        "roles": [
-            "member"
-        ],
-        "status": "ok",
         "previewGuarded": true
     }
 }

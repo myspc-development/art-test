@@ -14,7 +14,7 @@
     "test:js": "jest --runInBand --coverage",
     "test:e2e:smoke": "node scripts/spin-wp.js && cypress run --spec \"cypress/e2e/**/smoke*.cy.{js,ts}\" || echo \"(optional)\"",
     "test": "npm run lint:php && npm run lint:js && npm run typecheck && npm run test:js && npm run test:php",
-    "codex:checks": "php codex/checks/widget-preview-guard.php && php codex/checks/rest-contracts.php && php codex/checks/migrations.php && php codex/checks/widgets-contracts.php && python3 scripts/docs_validate.py",
+    "codex:checks": "python3 scripts/widget-preview-guard-check.py --check && php codex/checks/widget-preview-guard.php && php codex/checks/rest-contracts.php && php codex/checks/migrations.php && php codex/checks/widgets-contracts.php && python3 scripts/docs_validate.py",
     "coverage:merge": "node scripts/merge-coverage.js",
     "test:rest": "vendor/bin/phpunit -c phpunit.wp.xml.dist --group restapi --log-junit build/junit-phpunit-unit.xml --coverage-clover build/coverage-phpunit-unit.xml",
     "test:frontend": "vendor/bin/phpunit -c phpunit.wp.xml.dist --testsuite Frontend --log-junit build/junit-phpunit-unit.xml --coverage-clover build/coverage-phpunit-unit.xml || vendor/bin/phpunit -c phpunit.wp.xml.dist tests/Frontend --log-junit build/junit-phpunit-unit.xml --coverage-clover build/coverage-phpunit-unit.xml",
