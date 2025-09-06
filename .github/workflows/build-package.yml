@@ -41,6 +41,7 @@ jobs:
       - name: Smoke test
         run: curl -s -o /dev/null -w "%{http_code}" http://localhost:8889/wp-admin/ > status.txt
       - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: build-package
@@ -61,8 +62,11 @@ jobs:
             **/test-results/**/*.xml
             **/logs/**
           if-no-files-found: ignore
-      - name: Job summary
+      - name: Status table
         if: always()
         run: |
-          echo "### ${{ github.workflow }} / ${{ github.job }}" >> $GITHUB_STEP_SUMMARY
-          echo "- status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          ICON="❌"
+          if [ "${{ job.status }}" = "success" ]; then ICON="✅"; fi
+          echo '| Job | Status | Artifacts |' >> $GITHUB_STEP_SUMMARY
+          echo '| --- | ------ | --------- |' >> $GITHUB_STEP_SUMMARY
+          echo "| ${{ github.job }} | $ICON | [link](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY

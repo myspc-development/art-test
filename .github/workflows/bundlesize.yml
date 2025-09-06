@@ -21,7 +21,14 @@ jobs:
       - name: Build
         run: npm run build
       - name: Bundlesize
-        run: npx size-limit || npx bundlesize
+        run: npx size-limit || npx bundlesize | tee bundlesize.txt
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundlesize
+          path: bundlesize.txt
+          if-no-files-found: ignore
       - name: Upload logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -31,8 +38,11 @@ jobs:
             **/test-results/**/*.xml
             **/logs/**
           if-no-files-found: ignore
-      - name: Job summary
+      - name: Status table
         if: always()
         run: |
-          echo "### ${{ github.workflow }} / ${{ github.job }}" >> $GITHUB_STEP_SUMMARY
-          echo "- status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          ICON="❌"
+          if [ "${{ job.status }}" = "success" ]; then ICON="✅"; fi
+          echo '| Job | Status | Artifacts |' >> $GITHUB_STEP_SUMMARY
+          echo '| --- | ------ | --------- |' >> $GITHUB_STEP_SUMMARY
+          echo "| ${{ github.job }} | $ICON | [link](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY

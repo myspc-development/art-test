@@ -21,21 +21,32 @@ jobs:
       - name: Widgets tests
         env:
           JEST_JUNIT_OUTPUT: junit.xml
-        run: npx jest --ci --runInBand --testPathPattern="(widgets|Dashboard)" --reporters=default --reporters=jest-junit
+        run: npx jest --ci --runInBand --testPathPattern="(widgets|Dashboard)" --reporters=default --reporters=jest-junit --coverage
       - name: per-file summary
         run: |
           echo '### Widgets unit summary' >> $GITHUB_STEP_SUMMARY
           if [ -f junit.xml ]; then
             jq -r '.testResults[] | "- \(.name): \(.assertionResults | map(select(.status==\"failed\")) | length) failed"' junit.xml >> $GITHUB_STEP_SUMMARY
           fi
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-widgets
+          path: coverage/
+          if-no-files-found: ignore
       - name: Upload junit
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: junit-widgets
           path: junit.xml
           if-no-files-found: ignore
-      - name: Job summary
+      - name: Status table
         if: always()
         run: |
-          echo "### ${{ github.workflow }} / ${{ github.job }}" >> $GITHUB_STEP_SUMMARY
-          echo "- status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          ICON="❌"
+          if [ "${{ job.status }}" = "success" ]; then ICON="✅"; fi
+          echo '| Job | Status | Artifacts |' >> $GITHUB_STEP_SUMMARY
+          echo '| --- | ------ | --------- |' >> $GITHUB_STEP_SUMMARY
+          echo "| ${{ github.job }} | $ICON | [link](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY
