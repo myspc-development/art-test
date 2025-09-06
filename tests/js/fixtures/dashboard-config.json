@@ -1,0 +1,6 @@
+{
+  "widget_roles": {
+    "member": ["widget_news"],
+    "artist": ["widget_sales"]
+  }
+}

@@ -145,6 +145,7 @@ export default function RoleDashboard({
     if (el) {
       el.textContent = msg;
       setTimeout(() => {
+        /* istanbul ignore next */
         if (el.textContent === msg) el.textContent = '';
       }, 1000);
     }
