@@ -27,6 +27,17 @@ npm test
 
 WordPress integration tests rely on `wp-env` and Docker; run `npm run test:php:local` to reproduce.
 
+## Local build & debug
+
+Bundle the role dashboard and widget scripts with [esbuild](https://esbuild.github.io/):
+
+```bash
+npm run build  # one-off build to assets/dist/
+npm run dev    # watch mode; rebuilds on save
+```
+
+The WordPress plugin enqueues files from `assets/dist/`, so run one of the above commands before loading dashboards or widgets locally.
+
 ## Workflow Commands
 
 ### Lint and Typecheck
