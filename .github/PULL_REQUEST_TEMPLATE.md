@@ -2,7 +2,7 @@
 -
 
 ## Testing
-See the [testing matrix](../docs/testing.md).
+See the [testing matrix](../docs/qa/testing-matrix.md).
 
 Run `npm run codex:checks` locally.
 
