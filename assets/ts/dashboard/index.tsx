@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import RoleDashboard, { Role } from './RoleDashboard';
 
-document.addEventListener('DOMContentLoaded', () => {
+const bootstrap = () => {
   const el = document.getElementById('ap-dashboard-root');
   if (!el) return;
   const roleAttr = el.getAttribute('data-role');
@@ -10,5 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const role = (roleAttr || data?.role || 'member') as Role;
   const root = createRoot(el);
   root.render(<RoleDashboard role={role} />);
-});
+};
+
+document.addEventListener('DOMContentLoaded', bootstrap);
+document.addEventListener('ap-dashboard-bootstrap', bootstrap);
 
